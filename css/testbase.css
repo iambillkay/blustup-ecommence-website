@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────
-   base.css — Reset, Variables, Typography
+  base.css — Reset, Variables, Typography
 ───────────────────────────────────── */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,7 +106,7 @@ footer {
 .footer-col ul li a:hover { color: #fff; }
 .footer-bottom {
   max-width: 1200px; margin: 40px auto 0; padding-top: 28px;
-  border-top: 1px solid rgba(255,255,255,.07);
+  border-top: 1px solid rgb(255, 255, 255, .7);
   display: flex; justify-content: space-between; align-items: center;
   font-size: .8rem; color: var(--muted);
 }

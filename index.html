@@ -16,125 +16,142 @@
   <link rel="stylesheet" href="css/cart-checkout.css">
 </head>
 <body>
+<div class="space" style="height: 10%;"></div>
+<!-- ═══════════════ NAVIGATION ═══════════════ -->
+<nav>
+  <!-- Logo -->
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-icon">
+      <img src="logos/Layer 2.png" alt="" />
+    </div>
+  </div>
 
-  <!-- ═══════════════ NAVIGATION ═══════════════ -->
-  <nav>
-    <div class="logo" onclick="showPage('home')">
-      <div class="logo-icon">
-        <img class="logo-icon" src="/logos/Edition.png" alt="AirLume logo">
-      </div>
-      <!-- Hypex -->
-    </div>
-    <div>
-      <input class="Search-bar"type="text" placeholder="Search">
-    </div>
-    <ul class="nav-links">
-      <li><a onclick="showPage('home')"     id="nav-home"     class="active-link">Home</a></li>
-      <li><a onclick="showPage('shop')"     id="nav-shop">Shop</a></li>
-    </ul>
-    <div class="nav-right">
-      <button class="cart-btn" onclick="showPage('cart')">
-        🛒 Cart
-        <span class="cart-count" id="cart-count">0</span>
-      </button>
-    </div>
-  </nav>
+  <!-- ── Jumia-style Search Bar ── -->
+  <div class="nav-search" id="navSearch">
+    <!-- Category dropdown -->
+    <select class="search-category" id="searchCategory" aria-label="Category">
+      <option value="">All</option>
+      <option value="skincare">Skincare</option>
+      <option value="haircare">Haircare</option>
+      <option value="makeup">Makeup</option>
+      <option value="fragrance">Fragrance</option>
+    </select>
+
+    <!-- Text input -->
+    <input
+      class="search-input"
+      id="searchInput"
+      type="text"
+      placeholder="Search products, brands and more…"
+      aria-label="Search"
+    />
+
+    <!-- Search button -->
+    <button class="search-submit" id="searchSubmit" aria-label="Search">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Desktop nav links -->
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')"     id="nav-home"     class="active-link">Home</a></li>
+    <li><a onclick="showPage('shop')"     id="nav-shop">Shop</a></li>
+    <li><a href="#"                       id="nav-faq">FAQ</a></li>
+  </ul>
+
+  <!-- Right side -->
+  <div class="nav-right">
+    <button class="btn-login">Log In</button>
+    <button class="cart-btn" onclick="showPage('cart')">
+      🛒 Cart
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+
+<!-- Overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <!-- Search in drawer -->
+  <div class="mobile-search">
+    <input type="text" placeholder="Search products…" aria-label="Search" id="mobileSearchInput" />
+    <button aria-label="Search" onclick="handleMobileSearch()">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+      </svg>
+    </button>
+  </div>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home'); closeMenu()" class="active-link">Home</a></li>
+    <li><a onclick="showPage('shop'); closeMenu()">Shop</a></li>
+    <li><a onclick="showPage('home'); closeMenu()">Features</a></li>
+    <li><a href="#" onclick="closeMenu()">FAQ</a></li>
+  </ul>
+
+  <div class="drawer-actions">
+    <button class="btn-login drawer-btn">Log In</button>
+    <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
+      🛒 Cart
+      <span class="cart-count" id="cart-count-mobile">0</span>
+    </button>
+    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()">Shop Now</button>
+  </div>
+</div>
+
+
+<!-- Overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+
+  <!-- Search in drawer -->
+  <div class="mobile-search">
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+    </svg>
+    <input type="text" placeholder="Search products…" aria-label="Search" />
+  </div>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home'); closeMenu()" class="active-link">Home</a></li>
+    <li><a onclick="showPage('shop'); closeMenu()">Shop</a></li>
+    <li><a onclick="showPage('home'); closeMenu()">Features</a></li>
+    <li><a href="#" onclick="closeMenu()">FAQ</a></li>
+  </ul>
+
+  <div class="drawer-actions">
+    <button class="btn-login drawer-btn">Log In</button>
+    <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
+      🛒 Cart
+      <span class="cart-count" id="cart-count-mobile">0</span>
+    </button>
+    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()">Shop Now</button>
+  </div>
+</div>
+
+</nav>
 
   <!-- ═══════════════ HOME PAGE ═══════════════ -->
   <div id="page-home" class="page active">
     <!-- Content lives in pages/home.html -->
-
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-bg"></div>
-      <div class="floor-glow"></div>
-      <div class="hero-content">
-        <h1 class="hero-title">Save Time &amp; Money<br>On Every Item You Buy
-          <span class="hero-icons">
-            <!-- <span class="icon-badge blue">✈</span> -->
-          </span>
-        </h1>
-        <p class="hero-sub">Purchase quality items at unbeatable prices with our AI-powered shopping assistant.</p>
-        <button class="search-btn" onclick="showPage('shop')">
-          Shop Now <span class="arrow">→</span>
-        </button>
+    <div class="ad-hero">
+      <div>
+        <h2>Ready to Fly Smarter?<br>Browse Our Travel Packages</h2>
+        <p>Exclusive deals on flights, lounges, luggage, and more — all powered by AI.</p>
       </div>
-      <div class="cards-row" style="position:relative;">
-        <div class="glass-card card-points">
-          <div class="label">Your Airlume Points<br><span style="font-size:.65rem;color:rgba(255,255,255,.35)">Last Update</span></div>
-          <div style="display:flex;align-items:baseline;gap:4px;margin:6px 0;">
-            <span class="points-val">13,200</span><span class="status-pill">● Ready</span>
-          </div>
-          <div class="points-label">Points Available</div>
-          <div class="reward-row">
-            <span class="reward-star">⭐</span>
-            <div class="reward-text"><strong>Next Reward</strong>$20 off at 900 pts</div>
-            <div class="reward-arrow">›</div>
-          </div>
-          <div class="toggle-row"><div class="toggle-item"></div><div class="toggle-item"></div></div>
-          <div class="toggle-circle"></div>
-        </div>
-        <div class="glass-card card-search">
-          <div class="card-label"><span class="badge-dot"></span>Airlume Smart Search</div>
-          <h3>Over <span class="scan-highlight">200+</span><br>satisfied customers worldwide</h3>
-          <div class="progress-ring-wrap">
-            <div class="progress-ring">
-              <svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64">
-                <circle class="ring-bg" cx="32" cy="32" r="26"/>
-                <circle class="ring-fill" cx="32" cy="32" r="26"/>
-              </svg>
-              <div class="ring-text">94%</div>
-            </div>
-          </div>
-          <div class="flight-img-wrap">
-            <img class="flight-img" src="logos/Ferrari.jpg" alt="car logo">
-          </div>
-        </div>
-        <div class="glass-card card-deal" style="position:relative;">
-          <div class="deal-indicator"><span class="deal-dot"></span>Best Deal Found</div>
-          <div class="deal-update">Last Update</div>
-          <div class="deal-route">NYC → LAX<br>Only <span class="deal-price">$179</span></div>
-          <div class="deal-saved">
-            <svg width="12" height="12" viewBox="0 0 12 12"><polyline points="1,7 4,4 7,6 11,2" stroke="#00c882" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            <span class="green">Saved 28%</span>&nbsp;Using AI Prediction
-          </div>
-          <div class="deal-arrow-btn" onclick="showPage('shop')">→</div>
-          <div class="booking-label">BOOKING</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- AI FEATURES -->
-    <section class="features">
-      <div class="features-inner">
-        <div class="section-badge">AI Features Section</div>
-        <h2>AI-Powered Features, Travel Effortless With Airlume</h2>
-        <p class="sub">Enjoy seamless booking, smarter flight predictions, and personalized rewards powered by Airlume's AI for smoother journeys.</p>
-        <div class="features-grid">
-          <div class="feat-card highlight"><div class="feat-icon">📊</div><div class="feat-title">Real-Time Fare Predictions</div><div class="feat-desc">Know exactly when to book to get the best prices.</div><a class="learn-more" onclick="showPage('shop')">Learn more →</a></div>
-          <div class="feat-card"><div class="feat-icon">🗺️</div><div class="feat-title">Smart Route Optimization</div><div class="feat-desc">AI suggests faster, cheaper, or more comfortable routes.</div><a class="learn-more">Learn more →</a></div>
-          <div class="feat-card"><div class="feat-icon">💎</div><div class="feat-title">Dynamic Loyalty Points Tracking</div><div class="feat-desc">See your points grow live as you fly and book.</div><a class="learn-more">Learn more →</a></div>
-          <div class="feat-card"><div class="feat-icon">🔔</div><div class="feat-title">Personalized Flight Alerts</div><div class="feat-desc">Get alerts for price drops on favorite routes.</div><a class="learn-more">Learn more →</a></div>
-        </div>
-        <div class="features-grid-2">
-          <div class="feat-card"><div class="feat-icon">🎁</div><div class="feat-title">Integrated Rewards Redemption</div><div class="feat-desc">Use points for discounts without leaving the site.</div><a class="learn-more">Learn more →</a></div>
-          <div class="feat-card"><div class="feat-icon">✈️</div><div class="feat-title">Airline Comparison Engine</div><div class="feat-desc">Compare 200+ airlines in seconds for the best deal.</div><a class="learn-more">Learn more →</a></div>
-          <div class="feat-card"><div class="feat-icon">💺</div><div class="feat-title">Seat &amp; Service Recommendations</div><div class="feat-desc">AI suggests best seats based on your preferences.</div><a class="learn-more">Learn more →</a></div>
-          <div class="feat-card"><div class="feat-icon">🛡️</div><div class="feat-title">Secure One-Click Checkout</div><div class="feat-desc">Book flights quickly with secure AI payments.</div><a class="learn-more">Learn more →</a></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROMO STRIP -->
-    <section class="promo-strip">
-      <div class="promo-inner">
-        <div>
-          <h2>Ready to Fly Smarter?<br>Browse Our Travel Packages</h2>
-          <p>Exclusive deals on flights, lounges, luggage, and more — all powered by AI.</p>
-        </div>
         <button class="btn-white" onclick="showPage('shop')">Explore the Shop →</button>
-      </div>
-    </section>
+    </div>
+
 
     <!-- FOOTER -->
     <footer>
@@ -155,8 +172,8 @@
   <div id="page-shop" class="page">
     <div class="shop-hero">
       <div class="section-badge shop-hero-badge">✈ Travel Marketplace</div>
-      <h1>Shop Smarter Travel</h1>
-      <p>AI-curated deals on flights, lounge access, upgrades &amp; travel essentials</p>
+      <h1>Welcome to the Shop</h1>
+      <p>Afica's biggest retail shop for all your essentials</p>
     </div>
     <div class="shop-body">
       <div class="shop-filters">
