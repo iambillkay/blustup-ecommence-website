@@ -1,0 +1,64 @@
+/* ─────────────────────────────────────
+  nav.css — Navigation Bar
+───────────────────────────────────── */
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px clamp(20px, 5vw, 60px);
+  background: rgba(5,11,46,0.92);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  transition: background .3s;
+}
+
+.Search-bar {
+  background: white;
+  width: clamp(200px, 25vw, 400px); height: 40px;
+  color:black; border: none; border-radius: 60px;
+  padding: 15px 20px; font-size: .88rem; font-weight: 300; font-size: .88rem; font-weight: 200;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition:opacity.2s, transform .2s;
+}
+.logo {
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: clamp(1rem, 2vw, 1.15rem);
+  display: flex; align-items: center; gap: clamp(6px, 0.8vw, 8px); cursor: pointer;
+}
+.logo-icon {
+  width: clamp(50px, 5vw, 70px); height: auto;
+  background: none;
+  border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-size: clamp(11px, 1vw, 13px);
+}
+
+.nav-links { display: flex; gap: clamp(16px, 2vw, 32px); list-style: none; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: .88rem; font-weight: 500; cursor: pointer;
+  transition: color .2s;
+}
+.nav-links a:hover,
+.nav-links a.active-link { color: #fff; }
+
+.nav-right { display: flex; align-items: center; gap: clamp(8px, 1vw, 14px); }
+
+.cart-btn {
+  position: relative;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  color: #fff; border-radius: 12px; padding: 9px clamp(8px, 1.5vw, 16px);
+  font-size: .85rem; font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: clamp(4px, 0.5vw, 7px);
+  transition: background .2s;
+}
+.cart-btn:hover { background: rgba(255,255,255,0.13); }
+
+.cart-count {
+  position: absolute; top: -6px; right: -6px;
+  background: black;
+  color: #fff; border-radius: 50%; width: clamp(14px, 1vw, 18px); height: clamp(14px, 1vw, 18px);
+  font-size: .65rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}

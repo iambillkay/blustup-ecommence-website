@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirLume.AI – Save Time & Money On Every Trip</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/test.css">
+  <link rel="stylesheet" href="css/testbase.css">
+  <link rel="stylesheet" href="css/testnav.css">
+  <link rel="stylesheet" href="css/testhome.css">
+  <link rel="stylesheet" href="css/testshop.css">
+  <link rel="stylesheet" href="css/cart-checkout.css">
+</head>
+
+<body>
+<div class="space" style="height: 5%;"></div>
+
+<!-- ═══════════════ NAVIGATION ═══════════════ -->
+<nav>
+  <!-- Logo -->
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-icon">
+      <img src="logos/Layer 2.png" alt="" />
+    </div>
+  </div>
+
+  <!-- ── Jumia-style Search Bar ── -->
+  <div class="nav-search" id="navSearch">
+    <!-- Category dropdown -->
+    <select class="search-category" id="searchCategory" aria-label="Category">
+      <option value="">All</option>
+      <option value="skincare">Skincare</option>
+      <option value="haircare">Haircare</option>
+      <option value="makeup">Makeup</option>
+      <option value="fragrance">Fragrance</option>
+    </select>
+
+    <!-- Text input -->
+    <input
+      class="search-input"
+      id="searchInput"
+      type="text"
+      placeholder="Search products, brands and more…"
+      aria-label="Search"
+    />
+
+    <!-- Search button -->
+    <button class="search-submit" id="searchSubmit" aria-label="Search">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Desktop nav links -->
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')"     id="nav-home"     class="active-link">Home</a></li>
+    <li><a onclick="showPage('shop')"     id="nav-shop">Shop</a></li>
+    <li><a href="#"                       id="nav-faq">FAQ</a></li>
+  </ul>
+
+  <!-- Right side -->
+  <div class="nav-right">
+    <button class="btn-login">Log In</button>
+    <button class="cart-btn" onclick="showPage('cart')">
+      🛒 Cart
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <!-- Search in drawer -->
+  <div class="mobile-search">
+    <input type="text" placeholder="Search products…" aria-label="Search" id="mobileSearchInput" />
+    <button aria-label="Search" onclick="handleMobileSearch()">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+      </svg>
+    </button>
+  </div>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home'); closeMenu()" class="active-link">Home</a></li>
+    <li><a onclick="showPage('shop'); closeMenu()">Shop</a></li>
+    <li><a onclick="showPage('home'); closeMenu()">Features</a></li>
+    <li><a href="#" onclick="closeMenu()">FAQ</a></li>
+  </ul>
+
+  <div class="drawer-actions">
+    <button class="btn-login drawer-btn">Log In</button>
+    <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
+      🛒 Cart
+      <span class="cart-count" id="cart-count-mobile">0</span>
+    </button>
+    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()">Shop Now</button>
+  </div>
+</div>
+
+
+<!-- Overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+
+  <!-- Search in drawer -->
+  <div class="mobile-search">
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+    </svg>
+    <input type="text" placeholder="Search products…" aria-label="Search" />
+  </div>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home'); closeMenu()" class="active-link">Home</a></li>
+    <li><a onclick="showPage('shop'); closeMenu()">Shop</a></li>
+    <li><a onclick="showPage('home'); closeMenu()">Features</a></li>
+    <li><a href="#" onclick="closeMenu()">FAQ</a></li>
+  </ul>
+
+  <div class="drawer-actions">
+    <button class="btn-login drawer-btn">Log In</button>
+    <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
+      🛒 Cart
+      <span class="cart-count" id="cart-count-mobile">0</span>
+    </button>
+    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()">Shop Now</button>
+  </div>
+</div>
+
+
+
+<div class="shop-body ">
+  <div class="shop-filters">
+    <button class="filter-btn active" onclick="filterProducts(this, 'all')">All Products</button>
+    <button class="filter-btn" onclick="filterProducts(this, 'flights')">✈ Flights</button>
+    <button class="filter-btn" onclick="filterProducts(this, 'lounge')">🛋 Lounge Access</button>
+    <button class="filter-btn" onclick="filterProducts(this, 'upgrades')">⬆ Upgrades</button>
+    <button class="filter-btn" onclick="filterProducts(this, 'essentials')">🎒 Travel Essentials</button>
+    <button class="filter-btn" onclick="filterProducts(this, 'insurance')">🛡 Insurance</button>
+  </div>
+</div>
+
+
+
+
+
+<div class="box">
+  <div>
+    <h2>Ready to Fly Smarter?<br>Browse Our Travel Packages</h2>
+    <p>Exclusive deals on flights, lounges, luggage, and more — all powered by AI.</p>
+  </div>
+    <button class="btn-white" onclick="showPage('shop')">Explore the Shop →</button>
+</div>
+
+
+  <section class="card">
+    <header>
+      <h2>Flash Deals</h2>
+        <a href="#">
+        <span>See All</span>
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+    </header>
+        <div class="products-grid" id="products-grid">
+        </div>
+  </section>
+
+  <section class="card">
+    <header>
+      <h2>Flash Deals</h2>
+        <a href="#">
+        <span>See All</span>
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+    </header>
+        <div class="products-grid" id="products-grid">
+        </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo" style="margin-bottom:16px;">
+        <div class="logo-icon"></div>Blastup
+      </div>
+      <p>Discover the cheapest fares, get personalized recommendations, and book effortlessly with our AI-powered platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a onclick="showPage('shop')">Shop</a></li>
+        <li><a>Features</a></li>
+        <li><a>Loyalty Points</a></li>
+        <li><a>How It Works</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a>About Us</a></li>
+        <li><a>Careers</a></li>
+        <li><a>Blog</a></li>
+        <li><a>Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a>FAQ</a></li>
+        <li><a>Contact Us</a></li>
+        <li><a>Privacy Policy</a></li>
+        <li><a>Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AirLume.AI. All rights reserved.</span>
+    <span>Made by Hypex-Studios</span>
+  </div>
+</footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/testnav.js"></script>
+
+</body>
+</html>
