@@ -152,19 +152,31 @@
         <button class="btn-white" onclick="showPage('shop')">Explore the Shop →</button>
     </div>
     
-    <section class="brand-day">
-      <div class="brand-header">
-        <span>Oraimo Brand Day</span>
-        <span id="timer">Time Left: 06h : 10m : 08s</span>
-        <a href="#">See All ></a>
-      </div>
-      <div class="scroll-wrapper">
-        <button class="scroll-btn left-btn" onclick="scrollLeft()">‹</button>
-        <div class="product-row" id="productRow"></div>
-        <button class="scroll-btn right-btn" onclick="scrollRight()">›</button>
-      </div>
-    </section>
+<section class="brand-day">
+  <div class="brand-header">
+    <span>Oraimo Brand Day</span>
+    <span class="timer-display">Time Left: 00h : 00m : 00s</span>
+    <a href="#">See All ></a>
+  </div>
+  <div class="scroll-wrapper">
+    <button class="scroll-btn left-btn" onclick="scrollLeft(this)">‹</button>
+  <div class="product-row" id="productRow1"></div>
+    <button class="scroll-btn right-btn" onclick="scrollRight(this)">›</button>
+  </div>
+</section>
 
+<section class="brand-day">
+  <div class="brand-header">
+    <span>Personal Care Day</span>
+    <span class="timer-display">Time Left: 00h : 00m : 00s</span>
+    <a href="#">See All ></a>
+  </div>
+  <div class="scroll-wrapper">
+    <button class="scroll-btn left-btn" onclick="scrollLeft(this)">‹</button>
+  <div class="product-row" id="productRow2"></div>
+    <button class="scroll-btn right-btn" onclick="scrollRight(this)">›</button>
+  </div>
+</section>
     <!-- FOOTER -->
     <footer>
       <div class="footer-grid">
