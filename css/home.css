@@ -281,6 +281,167 @@ h1.hero-title {
 .promo-inner h2 { font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; max-width: 420px; line-height: 1.2; }
 .promo-inner p  { color: rgba(255,255,255,.8); margin-top: 10px; font-size: .95rem; }
 
+
+
+/* SECTION */
+
+.brand-day{
+background:white;
+border-radius: 10px;
+border-inline-start:8px solid #000000;
+overflow:hidden;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+margin:20px;
+margin-left:20px;
+}
+
+/* HEADER */
+
+.brand-header{
+background:#000000;
+color:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 20px;
+font-weight:bold;
+}
+
+.brand-header a{
+color:white;
+text-decoration:none;
+font-size:14px;
+}
+
+/* PRODUCT ROW */
+
+.product-row{
+display:flex;
+overflow-x:auto;
+scroll-behavior:smooth;
+padding:20px;
+gap:20px;
+}
+
+.product-row::-webkit-scrollbar{
+display:none;
+}
+
+/* PRODUCT CARD CONTAINER */
+.product-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 20px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.product-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* INDIVIDUAL PRODUCT CARD */
+.product {
+  flex: 0 0 190px;
+  box-sizing: border-box; /* Keeps padding inside the 190px width */
+  height: 260px; /* Enforces the standard vertical size */
+  
+  /* Making the card itself a flexbox makes it easy to align internal content */
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; /* Centers the image and text horizontally */
+  
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #eee;
+  position: relative;
+  transition: 0.25s;
+  overflow: hidden;
+}
+
+/* STANDARDIZED IMAGE AREA */
+.product img {
+  width: 100%; 
+  height: 120px; /* Lock the image container height */
+  object-fit: contain; /* Scales the image to fit the 120px height without distorting it */
+  margin-bottom: 12px;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+/* DISCOUNT */
+
+.discount{
+position:absolute;
+top:8px;
+right:8px;
+background:#ffe9e5;
+color:#ff4d2d;
+font-size:12px;
+padding:3px 6px;
+border-radius:3px;
+}
+
+/* TEXT */
+
+.product-name{
+font-size:13px;
+margin-top:8px;
+height:35px;
+overflow:hidden;
+}
+
+/* PRICE */
+
+.price{
+margin-top:6px;
+}
+
+.new-price{
+font-weight:bold;
+font-size:14px;
+}
+
+.old-price{
+text-decoration:line-through;
+font-size:12px;
+color:gray;
+}
+
+/* SCROLL BUTTONS */
+
+.scroll-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+background:white;
+border:none;
+box-shadow:0 2px 8px rgba(0,0,0,0.2);
+width:35px;
+height:35px;
+border-radius:50%;
+cursor:pointer;
+}
+
+.left-btn{
+left:10px;
+}
+
+.right-btn{
+right:10px;
+}
+
+.scroll-wrapper{
+position:relative;
+}
+
+
+
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .features, .promo-strip { padding-left: 20px; padding-right: 20px; }
@@ -292,3 +453,4 @@ h1.hero-title {
 @media (max-width: 540px) {
   .features-grid, .features-grid-2 { grid-template-columns: 1fr; }
 }
+

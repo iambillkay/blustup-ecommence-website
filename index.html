@@ -146,11 +146,32 @@
     <!-- Content lives in pages/home.html -->
     <div class="ad-hero">
       <div>
-        <h2>Ready to Fly Smarter?<br>Browse Our Travel Packages</h2>
-        <p>Exclusive deals on flights, lounges, luggage, and more — all powered by AI.</p>
+        <h2>Spend. Less Save More<br>Shop With Us</h2>
+        <p>Exclusive discount sale weekly on all goods.</p>
       </div>
         <button class="btn-white" onclick="showPage('shop')">Explore the Shop →</button>
     </div>
+    
+    <section class="brand-day">
+
+<div class="brand-header">
+<span>Oraimo Brand Day</span>
+<span id="timer">Time Left: 06h : 10m : 08s</span>
+<a href="#">See All ></a>
+
+</div>
+
+<div class="scroll-wrapper">
+
+<button class="scroll-btn left-btn" onclick="scrollLeft()">‹</button>
+
+<div class="product-row" id="productRow"></div>
+
+<button class="scroll-btn right-btn" onclick="scrollRight()">›</button>
+
+</div>
+
+</section>
 
 
     <!-- FOOTER -->
@@ -320,11 +341,16 @@
     4. checkout.js  — depends on cart helpers
     5. app.js       — router + init (depends on all above)
   -->
+
   <script src="js/products.js"></script>
+  <script src="js/productData.js"></script>
+  <script src="js/producthome.js"></script>
+   <script src="js/home.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/checkout.js"></script>
   <script src="js/app.js"></script>
+  
 
 </body>
 </html>
