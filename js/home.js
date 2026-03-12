@@ -187,3 +187,97 @@ function startTimer() {
 
     }, 1000);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Array holding your different ad images and where they should link to
+const track = document.querySelector(".hero-track")
+const slides = document.querySelectorAll(".hero-slide")
+const nextBtn = document.querySelector(".hero-btn.next")
+const prevBtn = document.querySelector(".hero-btn.prev")
+const dotsContainer = document.querySelector(".hero-dots")
+
+let index = 0
+
+/* create dots */
+
+slides.forEach((_,i)=>{
+const dot=document.createElement("span")
+if(i===0) dot.classList.add("active")
+
+dot.addEventListener("click",()=>{
+index=i
+updateCarousel()
+})
+
+dotsContainer.appendChild(dot)
+})
+
+const dots=document.querySelectorAll(".hero-dots span")
+
+function updateCarousel(){
+
+track.style.transform=`translateX(-${index*100}%)`
+
+dots.forEach(d=>d.classList.remove("active"))
+dots[index].classList.add("active")
+
+}
+
+/* buttons */
+
+nextBtn.addEventListener("click",()=>{
+index=(index+1)%slides.length
+updateCarousel()
+})
+
+prevBtn.addEventListener("click",()=>{
+index=(index-1+slides.length)%slides.length
+updateCarousel()
+})
+
+/* auto slide */
+
+setInterval(()=>{
+index=(index+1)%slides.length
+updateCarousel()
+},5000)
+
+/* swipe support */
+
+let startX=0
+
+track.addEventListener("touchstart",(e)=>{
+startX=e.touches[0].clientX
+})
+
+track.addEventListener("touchend",(e)=>{
+
+let endX=e.changedTouches[0].clientX
+
+if(startX-endX>50){
+index=(index+1)%slides.length
+}
+
+if(endX-startX>50){
+index=(index-1+slides.length)%slides.length
+}
+
+updateCarousel()
+
+})

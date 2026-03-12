@@ -144,6 +144,28 @@
   <!-- ═══════════════ HOME PAGE ═══════════════ -->
   <div id="page-home" class="page active">
     <!-- Content lives in pages/home.html -->
+
+
+
+<section class="hero-banner">
+    <div class="hero-track">
+        <div class="hero-slide">
+            <img src="product-imgs/ad/ad1.png" alt="Promo 1">
+        </div>
+        <div class="hero-slide">
+            <img src="product-imgs/ad/ad2.png" alt="Promo 2">
+        </div>
+        <div class="hero-slide">
+            <img src="product-imgs/ad/ad3.png" alt="Promo 3">
+        </div>
+    </div>
+
+    <button class="hero-btn prev">❮</button>
+    <button class="hero-btn next">❯</button>
+
+    <div class="hero-dots"></div>
+</section>
+<!----
     <div class="ad-hero">
       <div>
         <h2>Spend Less - Save More<br>Shop With Us</h2>
@@ -151,12 +173,13 @@
       </div>
         <button class="btn-white" onclick="showPage('shop')">Explore the Shop →</button>
     </div>
-    
+--->
+
 <section class="brand-day">
   <div class="brand-header">
     <span>Oraimo Brand Day</span>
     <span class="timer-display">Time Left: 00h : 00m : 00s</span>
-    <a href="#">See All ></a>
+    <a href="" onclick="showPage('shop')">See All ></a>
   </div>
   <div class="scroll-wrapper">
     <button class="scroll-btn left-btn" onclick="scrollLeft(this)">‹</button>
@@ -212,12 +235,15 @@
     </div>
     <footer>
       <div class="footer-grid">
-        <div class="footer-brand"><div class="logo footer-logo"><div class="logo-icon">✦</div>AirLume.Ai</div><p>AI-powered travel deals for every kind of traveler.</p></div>
-        <div class="footer-col"><h4>Quick Links</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('shop')">Shop</a></li><li><a onclick="showPage('cart')">Cart</a></li></ul></div>
-        <div class="footer-col"><h4>Support</h4><ul><li><a>FAQ</a></li><li><a>Contact</a></li><li><a>Returns</a></li></ul></div>
-        <div class="footer-col"><h4>Legal</h4><ul><li><a>Privacy</a></li><li><a>Terms</a></li><li><a>Cookies</a></li></ul></div>
+        <div class="footer-brand">
+          <div class="logo footer-logo"><div class="logo-icon">✦</div>Blustup</div>
+          <p>Discover the cheapest fares, get personalized recommendations, and book effortlessly with our AI-powered platform.</p>
+        </div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a onclick="showPage('shop')">Shop</a></li><li><a>Features</a></li><li><a>Loyalty Points</a></li><li><a>How It Works</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a>About Us</a></li><li><a>Careers</a></li><li><a>Blog</a></li><li><a>Press</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a>FAQ</a></li><li><a>Contact Us</a></li><li><a>Privacy Policy</a></li><li><a>Terms of Service</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><span>© 2026 hypex.</span><span>All prices in Ghc.</span></div>
+      <div class="footer-bottom"><span>© 2026 Bite Theory. All rights reserved.</span><span>Made by ✦ Hypex-Studios</span></div>
     </footer>
   </div>
 
