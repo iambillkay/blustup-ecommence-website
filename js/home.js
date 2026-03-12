@@ -38,12 +38,13 @@ return `
 
 const brandProducts = [
 
-new Product("Oraimo SpaceBox Max Wireless Speaker",2631.90,4900,"product-imgs/1.jpg","-47%"),
-new Product("Oraimo SpaceBuds Lite",136.90,300,"product-imgs/magpower-15-opb-7102w-1.webp","-56%"),
-new Product("Oraimo Necklace Lite Earphones",126.98,240,"product-imgs/magpower-15-opb-7102w-1.webp","-47%"),
+new Product("Oraimo maxi watch",2631.90,4900,"product-imgs/1.jpg","-47%"),
+new Product("Oraimo Power Bank Lite",136.90,300,"product-imgs/magpower-15-opb-7102w-1.webp","-56%"),
+new Product("Oraimo  Lite Earphones",126.98,240,"product-imgs/oraimo-BoomPop-Pro-OHP-917-wireless-headphones-GREY.webp","-47%"),
 new Product("Oraimo CleanSip Faucet",217.00,400,"product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp","-42%"),
-new Product("Oraimo NutriFry Max Air Fryer",1078.92,1800,"product-imgs/oraimo-watch-muse-OSW-831N-4.webp","-39%"),
-new Product("Oraimo Smart Trimmer",183.89,350,"product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp","-47%")
+new Product("Oraimo NutriFry Max Air Watch",1078.92,1800,"product-imgs/oraimo-watch-muse-OSW-831N-4.webp","-39%"),
+new Product("Oraimo Smart Trimmer",183.89,350,"product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp","-47%"),
+new Product("Oraimo Wireless Charger",183.89,350,"product-imgs/AI-appliances_v21.avif","-47%"),
 
 ]
 const brandProducts1 = [
