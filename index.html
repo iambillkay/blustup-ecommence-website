@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AirLume.AI – Save Time & Money On Every Trip</title>
+  <title>Blustup Newest in town</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -146,39 +146,30 @@
     <!-- Content lives in pages/home.html -->
     <div class="ad-hero">
       <div>
-        <h2>Spend. Less Save More<br>Shop With Us</h2>
+        <h2>Spend Less - Save More<br>Shop With Us</h2>
         <p>Exclusive discount sale weekly on all goods.</p>
       </div>
         <button class="btn-white" onclick="showPage('shop')">Explore the Shop →</button>
     </div>
     
     <section class="brand-day">
-
-<div class="brand-header">
-<span>Oraimo Brand Day</span>
-<span id="timer">Time Left: 06h : 10m : 08s</span>
-<a href="#">See All ></a>
-
-</div>
-
-<div class="scroll-wrapper">
-
-<button class="scroll-btn left-btn" onclick="scrollLeft()">‹</button>
-
-<div class="product-row" id="productRow"></div>
-
-<button class="scroll-btn right-btn" onclick="scrollRight()">›</button>
-
-</div>
-
-</section>
-
+      <div class="brand-header">
+        <span>Oraimo Brand Day</span>
+        <span id="timer">Time Left: 06h : 10m : 08s</span>
+        <a href="#">See All ></a>
+      </div>
+      <div class="scroll-wrapper">
+        <button class="scroll-btn left-btn" onclick="scrollLeft()">‹</button>
+        <div class="product-row" id="productRow"></div>
+        <button class="scroll-btn right-btn" onclick="scrollRight()">›</button>
+      </div>
+    </section>
 
     <!-- FOOTER -->
     <footer>
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo footer-logo"><div class="logo-icon">✦</div>Bite Theory</div>
+          <div class="logo footer-logo"><div class="logo-icon">✦</div>Blustup</div>
           <p>Discover the cheapest fares, get personalized recommendations, and book effortlessly with our AI-powered platform.</p>
         </div>
         <div class="footer-col"><h4>Product</h4><ul><li><a onclick="showPage('shop')">Shop</a></li><li><a>Features</a></li><li><a>Loyalty Points</a></li><li><a>How It Works</a></li></ul></div>
@@ -192,18 +183,18 @@
   <!-- ═══════════════ SHOP PAGE ═══════════════ -->
   <div id="page-shop" class="page">
     <div class="shop-hero">
-      <div class="section-badge shop-hero-badge">✈ Travel Marketplace</div>
+      <div class="section-badge shop-hero-badge"> We Have All You Need</div>
       <h1>Welcome to the Shop</h1>
       <p>Afica's biggest retail shop for all your essentials</p>
     </div>
     <div class="shop-body">
       <div class="shop-filters">
         <button class="filter-btn active" onclick="filterProducts(this,'all')">All Products</button>
-        <button class="filter-btn" onclick="filterProducts(this,'flights')">✈ Flights</button>
-        <button class="filter-btn" onclick="filterProducts(this,'lounge')">🛋 Lounge Access</button>
-        <button class="filter-btn" onclick="filterProducts(this,'upgrades')">⬆ Upgrades</button>
-        <button class="filter-btn" onclick="filterProducts(this,'essentials')">🎒 Travel Essentials</button>
-        <button class="filter-btn" onclick="filterProducts(this,'insurance')">🛡 Insurance</button>
+        <button class="filter-btn" onclick="filterProducts(this,'flights')">Electronics</button>
+        <button class="filter-btn" onclick="filterProducts(this,'lounge')">Clothes</button>
+        <button class="filter-btn" onclick="filterProducts(this,'upgrades')">Consumables</button>
+        <button class="filter-btn" onclick="filterProducts(this,'essentials')">Travel Essentials</button>
+        <button class="filter-btn" onclick="filterProducts(this,'insurance')">Maintance Kits</button>
       </div>
       <div class="products-grid" id="products-grid"></div>
     </div>
@@ -214,7 +205,7 @@
         <div class="footer-col"><h4>Support</h4><ul><li><a>FAQ</a></li><li><a>Contact</a></li><li><a>Returns</a></li></ul></div>
         <div class="footer-col"><h4>Legal</h4><ul><li><a>Privacy</a></li><li><a>Terms</a></li><li><a>Cookies</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><span>© 2026 AirLume.AI.</span><span>All prices in USD.</span></div>
+      <div class="footer-bottom"><span>© 2026 hypex.</span><span>All prices in Ghc.</span></div>
     </footer>
   </div>
 
@@ -319,8 +310,8 @@
     <div class="success-card">
       <div class="success-icon">✓</div>
       <h1>Order Confirmed!</h1>
-      <p>Thank you for booking with AirLume.AI. Your travel details have been sent to your email. Safe travels! ✈</p>
-      <div class="success-ref">Order Reference: <span id="order-ref">#AIR-00000</span></div>
+      <p>Thank you for trusting us. Your orderl details have been sent to your email. olalaa!</p>
+      <div class="success-ref">Order Reference: <span id="order-ref">#bag-00000</span></div>
       <button class="btn-primary" style="width:100%;padding:14px;font-size:.95rem;" onclick="showPage('home')">← Back to Home</button>
       <button style="width:100%;padding:14px;font-size:.95rem;margin-top:12px;background:none;border:1.5px solid #e0e3f5;border-radius:14px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;color:var(--text-dark);" onclick="showPage('shop')">Continue Shopping</button>
     </div>
@@ -342,10 +333,11 @@
     5. app.js       — router + init (depends on all above)
   -->
 
+  <script src="js/nav.js"></script>
   <script src="js/products.js"></script>
   <script src="js/productData.js"></script>
   <script src="js/producthome.js"></script>
-   <script src="js/home.js"></script>
+  <script src="js/home.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/checkout.js"></script>
