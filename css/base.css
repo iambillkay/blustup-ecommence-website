@@ -113,6 +113,81 @@ footer {
   margin-bottom: 20px; letter-spacing: .04em;
 }
 
+/* AUTH PAGES */
+
+.auth-container{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:80vh;
+background:#f5f6fa;
+padding:40px;
+}
+
+.auth-card{
+background:white;
+padding:40px;
+border-radius:16px;
+width:100%;
+max-width:420px;
+box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+.auth-card h2{
+font-family:'Sora',sans-serif;
+margin-bottom:20px;
+}
+
+.auth-field{
+display:flex;
+flex-direction:column;
+margin-bottom:18px;
+}
+
+.auth-field label{
+font-size:.85rem;
+margin-bottom:6px;
+}
+
+.auth-field input{
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+font-family:'DM Sans',sans-serif;
+}
+
+.auth-field input:focus{
+outline:none;
+border-color:#6c63ff;
+}
+
+.auth-btn{
+width:100%;
+padding:12px;
+border:none;
+background:#6c63ff;
+color:white;
+font-weight:600;
+border-radius:12px;
+cursor:pointer;
+margin-top:10px;
+}
+
+.auth-btn:hover{
+background:#5a52e0;
+}
+
+.auth-switch{
+text-align:center;
+margin-top:18px;
+font-size:.9rem;
+}
+
+.auth-switch a{
+color:#6c63ff;
+cursor:pointer;
+font-weight:600;
+}
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   nav { padding: 14px 20px; }
