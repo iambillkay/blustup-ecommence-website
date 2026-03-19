@@ -155,38 +155,51 @@ row.scrollLeft += e.deltaY
 
 /* ================= TIMER ================= */
 
-function startTimer() {
-    let time = 6 * 60 * 60; // 6 hours in seconds
-    
-    // Select ALL timer elements
+function startTimers() {
+    // Select all elements with the class 'timer-display'
     const timers = document.querySelectorAll(".timer-display");
 
-    setInterval(() => {
-        let h = Math.floor(time / 3600);
-        let m = Math.floor((time % 3600) / 60);
-        let s = time % 60;
+    // Loop through each timer element found on the page
+    timers.forEach(timerDisplay => {
+        
+        // 1. Grab the specific time for THIS timer from the HTML attribute
+        let timeInSeconds = parseInt(timerDisplay.getAttribute("data-seconds"));
 
-        // Format numbers to 00:00:00
-        const hDisplay = h.toString().padStart(2, "0");
-        const mDisplay = m.toString().padStart(2, "0");
-        const sDisplay = s.toString().padStart(2, "0");
+        // Safety check: if there's no data-seconds attribute, skip this element
+        if (isNaN(timeInSeconds)) return;
 
-        const timeString = `Time Left: ${hDisplay}h : ${mDisplay}m : ${sDisplay}s`;
+        // 2. Start a unique interval just for this timer
+        const interval = setInterval(() => {
+            
+            // Check if time is up
+            if (timeInSeconds <= 0) {
+                timerDisplay.textContent = "Offer Expired!";
+                clearInterval(interval); // Stop this specific interval
+                return; // Exit the function for this tick
+            }
 
-        // Loop through each timer element and update its text
-        timers.forEach(timer => {
-            timer.textContent = timeString;
-        });
+            // Calculate hours, minutes, and seconds
+            let h = Math.floor(timeInSeconds / 3600);
+            let m = Math.floor((timeInSeconds % 3600) / 60);
+            let s = timeInSeconds % 60;
 
-        if (time > 0) {
-            time--;
-        } else {
-            // Optional: What happens when time hits zero?
-            timers.forEach(timer => timer.textContent = "Offer Expired!");
-        }
+            // Format numbers to always show two digits (e.g., 05 instead of 5)
+            const hDisplay = h.toString().padStart(2, "0");
+            const mDisplay = m.toString().padStart(2, "0");
+            const sDisplay = s.toString().padStart(2, "0");
 
-    }, 1000);
+            // Update the text on the screen
+            timerDisplay.textContent = `Time Left: ${hDisplay}h : ${mDisplay}m : ${sDisplay}s`;
+            
+            // Decrease the time by 1 second for the next loop
+            timeInSeconds--;
+
+        }, 1000);
+    });
 }
+
+// Start the timers once the page has loaded
+document.addEventListener("DOMContentLoaded", startTimers);
 
 
 
@@ -256,7 +269,7 @@ updateCarousel()
 setInterval(()=>{
 index=(index+1)%slides.length
 updateCarousel()
-},5000)
+},9000)
 
 /* swipe support */
 
