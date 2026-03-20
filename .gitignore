@@ -1,0 +1,13 @@
+node_modules/
+
+# local secrets
+.env
+
+# sqlite db
+Database/*.sqlite
+Database/*.db
+Database/*.sqlite3
+
+# uploaded images
+uploads/
+

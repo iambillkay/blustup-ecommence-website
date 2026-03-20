@@ -1,102 +1,124 @@
-/* SIGNUP */
-
-const signupForm = document.getElementById("signupForm")
-
-if(signupForm){
-
-signupForm.addEventListener("submit",(e)=>{
-
-e.preventDefault()
-
-const name = document.getElementById("signupName").value
-const email = document.getElementById("signupEmail").value
-const password = document.getElementById("signupPassword").value
-
-const user = {name,email,password}
-
-localStorage.setItem("blustupUser",JSON.stringify(user))
-
-alert("Account created successfully!")
-
-showPage("login")
-
-})
-
+function getToken() {
+  return localStorage.getItem("blustup_token");
 }
 
+function setAuth(token, user) {
+  localStorage.setItem("blustup_token", token);
+  localStorage.setItem("blustup_user", JSON.stringify(user));
+  updateLoginUI(user?.name, user);
+}
+
+function clearAuth() {
+  localStorage.removeItem("blustup_token");
+  localStorage.removeItem("blustup_user");
+}
+
+async function api(path, options = {}) {
+  const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+  const token = getToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(path, { ...options, headers });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
+}
+
+/* SIGNUP */
+const signupForm = document.getElementById("signupForm");
+if (signupForm) {
+  signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("signupName").value;
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+    try {
+      const { token, user } = await api("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify({ name, email, password }),
+      });
+      setAuth(token, user);
+      showToast("✓", "Account created!");
+      showPage("home");
+    } catch (err) {
+      alert(err.message || "Signup failed");
+    }
+  });
+}
 
 /* LOGIN */
-
-const loginForm = document.getElementById("loginForm")
-
-if(loginForm){
-
-loginForm.addEventListener("submit",(e)=>{
-
-e.preventDefault()
-
-const email = document.getElementById("loginEmail").value
-const password = document.getElementById("loginPassword").value
-
-const savedUser = JSON.parse(localStorage.getItem("blustupUser"))
-
-if(!savedUser){
-alert("No account found. Please sign up.")
-return
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    try {
+      const { token, user } = await api("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      setAuth(token, user);
+      showToast("✓", "Logged in!");
+      showPage("home");
+    } catch (err) {
+      alert(err.message || "Login failed");
+    }
+  });
 }
-
-if(email===savedUser.email && password===savedUser.password){
-
-localStorage.setItem("loggedIn","true")
-
-updateLoginUI(savedUser.name)
-
-showPage("home")
-
-}else{
-alert("Invalid email or password")
-}
-
-})
-
-}
-
 
 /* UPDATE NAV UI */
+function updateLoginUI(name, user) {
+  const btn = document.getElementById("loginBtn");
+  if (!btn) return;
+  if (!name) {
+    btn.textContent = "Log In";
+    btn.onclick = () => showPage("login");
+    return;
+  }
+  btn.textContent = name;
+  btn.onclick = logout;
 
-function updateLoginUI(name){
-
-const btn=document.getElementById("loginBtn")
-
-if(btn){
-btn.textContent=name
-btn.onclick=logout
+  // Admin quick-link (only visible for admins)
+  const existing = document.getElementById("adminLink");
+  if (user?.role === "admin") {
+    if (!existing) {
+      const a = document.createElement("a");
+      a.id = "adminLink";
+      a.textContent = "Admin";
+      a.style.cursor = "pointer";
+      a.onclick = () => (window.location.href = "/admin.html");
+      const navLinks = document.querySelector(".nav-links");
+      if (navLinks) {
+        const li = document.createElement("li");
+        li.appendChild(a);
+        navLinks.appendChild(li);
+      }
+    }
+  } else if (existing) {
+    existing.closest("li")?.remove();
+  }
 }
-
-}
-
 
 /* LOGOUT */
-
-function logout(){
-
-localStorage.removeItem("loggedIn")
-
-location.reload()
-
+function logout() {
+  clearAuth();
+  updateLoginUI(null);
+  location.reload();
 }
-
 
 /* AUTO LOGIN */
+document.addEventListener("DOMContentLoaded", async () => {
+  const cached = localStorage.getItem("blustup_user");
+  const token = getToken();
+  if (!token) return updateLoginUI(null);
 
-document.addEventListener("DOMContentLoaded",()=>{
-
-const loggedIn=localStorage.getItem("loggedIn")
-
-const user=JSON.parse(localStorage.getItem("blustupUser"))
-
-if(loggedIn && user){
-updateLoginUI(user.name)
-}
-
-})
+  try {
+    const { user } = await api("/api/auth/me");
+    localStorage.setItem("blustup_user", JSON.stringify(user));
+    updateLoginUI(user.name, user);
+  } catch {
+    // token invalid/expired
+    clearAuth();
+    if (cached) updateLoginUI(null);
+  }
+});

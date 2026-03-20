@@ -1,12 +1,2 @@
-const express = require("express")
-const app = express()
-
-app.use(express.json())
-
-app.get("/", (req,res)=>{
-res.send("Blustup backend running")
-})
-
-app.listen(3000, ()=>{
-console.log("Server running on port 3000")
-})
+// Entry point kept at repo root for backwards compatibility.
+require("./server/index");

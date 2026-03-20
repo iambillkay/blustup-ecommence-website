@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +21,18 @@
   },
   "homepage": "https://github.com/iambillkay/blustup-ecommence-website#readme",
   "dependencies": {
-    "body-parser": "^2.2.2",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "dotenv": "^16.6.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.3.1",
+    "multer": "^2.1.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

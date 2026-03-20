@@ -30,5 +30,9 @@ function showToast(icon, msg) {
 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded', () => {
-  renderProducts('all');
+  if (typeof loadProducts === "function") {
+    loadProducts().finally(() => renderProducts('all'));
+  } else {
+    renderProducts('all');
+  }
 });

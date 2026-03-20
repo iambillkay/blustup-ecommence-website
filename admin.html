@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Site administration</title>
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin">
+    <div class="admin-topbar">
+      <div class="admin-title">
+        <h1>Site administration</h1>
+        <div class="sub" id="whoami">Loading…</div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-admin" id="btnHome">View site</button>
+        <button class="btn-admin" id="btnRefresh">Refresh</button>
+        <button class="btn-admin danger" id="btnLogout">Log out</button>
+      </div>
+    </div>
+
+    <div class="admin-shell">
+      <main class="panel">
+        <div class="panel-header">Authentication and Authorization</div>
+        <div class="section" id="sec-auth"></div>
+
+        <div class="panel-header">Core</div>
+        <div class="section" id="sec-core"></div>
+
+        <div class="panel-header">Store</div>
+        <div class="section" id="sec-store"></div>
+      </main>
+
+      <aside class="side">
+        <div class="panel">
+          <div class="panel-header">Recent actions</div>
+          <div class="recent">
+            <h3>My actions</h3>
+            <div id="recentActions" class="muted">Loading…</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Admin modal">
+        <div class="modal-top">
+          <div class="title" id="modalTitle">Admin</div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button class="btn-admin" id="modalClose">Close</button>
+          </div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <script>
+      function getToken() { return localStorage.getItem("blustup_token"); }
+      function clearAuth() { localStorage.removeItem("blustup_token"); localStorage.removeItem("blustup_user"); }
+      async function api(path, options = {}) {
+        const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+        const token = getToken();
+        if (token) headers.Authorization = `Bearer ${token}`;
+        const res = await fetch(path, { ...options, headers });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || "Request failed");
+        return data;
+      }
+
+      const state = { me: null };
+
+      const whoami = document.getElementById("whoami");
+      const modalBackdrop = document.getElementById("modalBackdrop");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalBody = document.getElementById("modalBody");
+
+      function openModal(title, html) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = html;
+        modalBackdrop.classList.add("open");
+        modalBackdrop.setAttribute("aria-hidden", "false");
+      }
+      function closeModal() {
+        modalBackdrop.classList.remove("open");
+        modalBackdrop.setAttribute("aria-hidden", "true");
+        modalBody.innerHTML = "";
+      }
+
+      document.getElementById("modalClose").addEventListener("click", closeModal);
+      modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+      function rowLink(label, entityKey) {
+        return `
+          <div class="row-link">
+            <a href="#" class="entity-link" data-entity="${entityKey}">${label}</a>
+            <div class="controls">
+              <a href="#" class="add" data-action="add" data-entity="${entityKey}">+ Add</a>
+              <a href="#" class="chg" data-action="change" data-entity="${entityKey}">Change</a>
+            </div>
+          </div>
+        `;
+      }
+
+      function iconForAction(a) {
+        if (a === "add") return "✎";
+        if (a === "change") return "✎";
+        if (a === "delete") return "✖";
+        return "•";
+      }
+
+      async function loadRecentActions() {
+        const el = document.getElementById("recentActions");
+        try {
+          const { actions } = await api("/api/admin/actions/recent");
+          if (!actions.length) {
+            el.innerHTML = `<div class="muted">No recent actions.</div>`;
+            return;
+          }
+          el.innerHTML = actions.map(a => `
+            <div class="item">
+              <div class="icon">${iconForAction(a.action)}</div>
+              <div class="meta">
+                <div class="what">${a.summary || (a.entity_type + " #" + (a.entity_id ?? ""))}</div>
+                <div class="who">${a.action} ${a.entity_type} · ${a.actor_email || "unknown"} · ${a.created_at}</div>
+              </div>
+            </div>
+          `).join("");
+        } catch (e) {
+          el.textContent = e.message || "Failed to load";
+        }
+      }
+
+      const entities = {
+        groups: {
+          title: "Groups",
+          list: () => api("/api/admin/groups").then(d => d.groups),
+          create: (payload) => api("/api/admin/groups", { method:"POST", body: JSON.stringify(payload)}).then(d => d.group),
+          update: (id, payload) => api(`/api/admin/groups/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.group),
+          remove: (id) => api(`/api/admin/groups/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+          `,
+          getPayload: () => ({ name: document.getElementById("f_name").value })
+        },
+        users: {
+          title: "Users",
+          list: () => api("/api/admin/users").then(d => d.users),
+          create: (payload) => api("/api/admin/users", { method:"POST", body: JSON.stringify(payload)}).then(d => d.user),
+          update: (id, payload) => api(`/api/admin/users/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.user),
+          remove: (id) => api(`/api/admin/users/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="grid2">
+              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Email</label><input id="f_email" value="${(item.email||"").replaceAll('"',"&quot;")}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field">
+                <label>Role</label>
+                <select id="f_role">
+                  <option value="user" ${item.role==="user"?"selected":""}>user</option>
+                  <option value="admin" ${item.role==="admin"?"selected":""}>admin</option>
+                </select>
+              </div>
+              <div class="field"><label>Password ${item.id ? "(leave blank to keep)" : ""}</label><input id="f_password" type="password" /></div>
+            </div>
+          `,
+          getPayload: (isEdit=false) => {
+            const p = {
+              name: document.getElementById("f_name").value,
+              email: document.getElementById("f_email").value,
+              role: document.getElementById("f_role").value,
+            };
+            const pw = document.getElementById("f_password").value;
+            if (!isEdit || pw) p.password = pw;
+            return p;
+          }
+        },
+        products: {
+          title: "Products",
+          list: () => api("/api/products/admin").then(d => d.products),
+          create: (payload) => api("/api/products/admin", { method:"POST", body: JSON.stringify(payload)}).then(d => d.product),
+          update: (id, payload) => api(`/api/products/admin/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.product),
+          remove: (id) => api(`/api/products/admin/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+            <div class="field" style="margin-top:12px;"><label>Description</label><textarea id="f_desc">${item.desc||""}</textarea></div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Category</label><input id="f_cat" value="${(item.cat||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${item.price ?? ""}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Old price</label><input id="f_oldPrice" type="number" step="0.01" value="${item.oldPrice ?? ""}" /></div>
+              <div class="field"><label>Active</label>
+                <select id="f_active">
+                  <option value="1" ${(item.isActive ?? true) ? "selected" : ""}>Yes</option>
+                  <option value="0" ${(item.isActive ?? true) ? "" : "selected"}>No</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Icon</label><input id="f_icon" value="${(item.icon||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Color (CSS)</label><input id="f_color" value="${(item.color||"").replaceAll('"',"&quot;")}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Badge</label><input id="f_badge" value="${(item.badge||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Badge type</label><input id="f_badgeType" value="${(item.badgeType||"").replaceAll('"',"&quot;")}" /></div>
+            </div>
+            <div class="field" style="margin-top:12px;"><label>Image URL</label><input id="f_imageUrl" value="${(item.imageUrl||"").replaceAll('"',"&quot;")}" /></div>
+          `,
+          getPayload: () => ({
+            name: document.getElementById("f_name").value,
+            description: document.getElementById("f_desc").value,
+            cat: document.getElementById("f_cat").value,
+            price: document.getElementById("f_price").value,
+            oldPrice: document.getElementById("f_oldPrice").value,
+            icon: document.getElementById("f_icon").value,
+            color: document.getElementById("f_color").value,
+            badge: document.getElementById("f_badge").value,
+            badgeType: document.getElementById("f_badgeType").value,
+            imageUrl: document.getElementById("f_imageUrl").value,
+            isActive: document.getElementById("f_active").value === "1",
+          })
+        },
+        customers: {
+          title: "Customers",
+          list: () => api("/api/admin/customers").then(d => d.customers),
+          create: (payload) => api("/api/admin/customers", { method:"POST", body: JSON.stringify(payload)}).then(d => d.customer),
+          update: (id, payload) => api(`/api/admin/customers/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.customer),
+          remove: (id) => api(`/api/admin/customers/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="grid2">
+              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Email</label><input id="f_email" value="${(item.email||"").replaceAll('"',"&quot;")}" /></div>
+            </div>
+            <div class="field" style="margin-top:12px;"><label>Phone</label><input id="f_phone" value="${(item.phone||"").replaceAll('"',"&quot;")}" /></div>
+          `,
+          getPayload: () => ({
+            name: document.getElementById("f_name").value,
+            email: document.getElementById("f_email").value,
+            phone: document.getElementById("f_phone").value,
+          })
+        },
+        orders: {
+          title: "Orders",
+          list: () => api("/api/admin/orders").then(d => d.orders),
+          create: (payload) => api("/api/admin/orders", { method:"POST", body: JSON.stringify(payload)}).then(d => d.order),
+          update: (id, payload) => api(`/api/admin/orders/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.order),
+          remove: (id) => api(`/api/admin/orders/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="grid2">
+              <div class="field"><label>Status</label>
+                <select id="f_status">
+                  ${["pending","paid","shipped","completed","cancelled"].map(s => `<option value="${s}" ${item.status===s?"selected":""}>${s}</option>`).join("")}
+                </select>
+              </div>
+              <div class="field"><label>Currency</label><input id="f_currency" value="${(item.currency||"USD").replaceAll('"',"&quot;")}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Total</label><input id="f_total" type="number" step="0.01" value="${item.total ?? 0}" /></div>
+              <div class="field"><label>Customer ID (optional)</label><input id="f_customerId" type="number" value="${item.customer_id ?? ""}" /></div>
+            </div>
+            <div class="field" style="margin-top:12px;"><label>Notes</label><textarea id="f_notes">${item.notes||""}</textarea></div>
+          `,
+          getPayload: () => ({
+            status: document.getElementById("f_status").value,
+            currency: document.getElementById("f_currency").value,
+            total: document.getElementById("f_total").value,
+            customerId: document.getElementById("f_customerId").value || null,
+            notes: document.getElementById("f_notes").value,
+          })
+        },
+        branches: {
+          title: "Branches",
+          list: () => api("/api/admin/branches").then(d => d.branches),
+          create: (payload) => api("/api/admin/branches", { method:"POST", body: JSON.stringify(payload)}).then(d => d.branch),
+          update: (id, payload) => api(`/api/admin/branches/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.branch),
+          remove: (id) => api(`/api/admin/branches/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="grid2">
+              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Location</label><input id="f_location" value="${(item.location||"").replaceAll('"',"&quot;")}" /></div>
+            </div>
+          `,
+          getPayload: () => ({ name: document.getElementById("f_name").value, location: document.getElementById("f_location").value })
+        },
+        branchAccounts: {
+          title: "Branch accounts",
+          list: () => api("/api/admin/branch-accounts").then(d => d.branchAccounts),
+          create: (payload) => api("/api/admin/branch-accounts", { method:"POST", body: JSON.stringify(payload)}).then(d => d.account),
+          remove: (id) => api(`/api/admin/branch-accounts/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="grid2">
+              <div class="field"><label>Branch ID</label><input id="f_branchId" type="number" value="${item.branch_id ?? ""}" /></div>
+              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Email</label><input id="f_email" value="${(item.email||"").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>Password</label><input id="f_password" type="password" /></div>
+            </div>
+            <div class="muted" style="margin-top:10px;">To add a branch account, create the Branch first.</div>
+          `,
+          getPayload: () => ({
+            branchId: document.getElementById("f_branchId").value,
+            name: document.getElementById("f_name").value,
+            email: document.getElementById("f_email").value,
+            password: document.getElementById("f_password").value,
+          })
+        },
+        collections: {
+          title: "Collections",
+          list: () => api("/api/admin/collections").then(d => d.collections),
+          create: (payload) => api("/api/admin/collections", { method:"POST", body: JSON.stringify(payload)}).then(d => d.collection),
+          update: (id, payload) => api(`/api/admin/collections/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.collection),
+          remove: (id) => api(`/api/admin/collections/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
+            <div class="field" style="margin-top:12px;"><label>Description</label><textarea id="f_desc">${item.description||""}</textarea></div>
+          `,
+          getPayload: () => ({ name: document.getElementById("f_name").value, description: document.getElementById("f_desc").value })
+        },
+        carts: {
+          title: "Carts",
+          list: () => api("/api/admin/carts").then(d => d.carts),
+          create: (payload) => api("/api/admin/carts", { method:"POST", body: JSON.stringify(payload)}).then(d => d.cart),
+          update: (id, payload) => api(`/api/admin/carts/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.cart),
+          remove: (id) => api(`/api/admin/carts/${id}`, { method:"DELETE" }),
+          form: (item={}) => `
+            <div class="grid2">
+              <div class="field"><label>Status</label><input id="f_status" value="${(item.status||"open").replaceAll('"',"&quot;")}" /></div>
+              <div class="field"><label>User ID (optional)</label><input id="f_userId" type="number" value="${item.user_id ?? ""}" /></div>
+            </div>
+            <div class="field" style="margin-top:12px;"><label>Customer ID (optional)</label><input id="f_customerId" type="number" value="${item.customer_id ?? ""}" /></div>
+          `,
+          getPayload: () => ({
+            status: document.getElementById("f_status").value,
+            userId: document.getElementById("f_userId").value || null,
+            customerId: document.getElementById("f_customerId").value || null,
+          })
+        },
+      };
+
+      function renderEntityTable(entityKey, rows) {
+        const title = entities[entityKey].title;
+        const cols = Object.keys(rows[0] || {});
+        const header = cols.length ? cols : ["(empty)"];
+        const body = rows.length ? rows.map(r => `
+          <tr data-id="${r.id ?? ""}">
+            ${cols.map(c => `<td>${r[c] == null ? "" : String(r[c])}</td>`).join("")}
+            <td style="white-space:nowrap;">
+              ${r.id != null ? `<a class="link-btn" data-action="edit" data-entity="${entityKey}" data-id="${r.id}">Edit</a>` : ""}
+              ${r.id != null ? ` · <a class="link-btn" data-action="delete" data-entity="${entityKey}" data-id="${r.id}">Delete</a>` : ""}
+            </td>
+          </tr>
+        `).join("") : `<tr><td class="muted" colspan="99">No entries.</td></tr>`;
+
+        openModal(`${title} — Change`, `
+          <div class="muted">Click Edit/Delete on a row, or use “Add”.</div>
+          <table class="admin-table">
+            <thead>
+              <tr>${header.map(h => `<th>${h}</th>`).join("")}<th>Actions</th></tr>
+            </thead>
+            <tbody>${body}</tbody>
+          </table>
+        `);
+      }
+
+      function renderEntityForm(entityKey, mode, item) {
+        const def = entities[entityKey];
+        const isEdit = mode === "edit";
+        const title = `${def.title} — ${isEdit ? "Change" : "Add"}`;
+
+        openModal(title, `
+          ${def.form(item)}
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap;">
+            <div class="muted">${isEdit ? `ID: ${item.id}` : ""}</div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              ${isEdit ? `<button class="btn-admin danger" id="btnDelete">Delete</button>` : ""}
+              <button class="btn-admin primary" id="btnSave">${isEdit ? "Save" : "Add"}</button>
+            </div>
+          </div>
+        `);
+
+        document.getElementById("btnSave").addEventListener("click", async () => {
+          try {
+            const payload = def.getPayload(isEdit);
+            if (isEdit) await def.update(item.id, payload);
+            else await def.create(payload);
+            await refreshAll();
+            closeModal();
+          } catch (e) {
+            alert(e.message || "Failed");
+          }
+        });
+
+        if (isEdit && def.remove) {
+          document.getElementById("btnDelete").addEventListener("click", async () => {
+            if (!confirm("Delete this item?")) return;
+            try {
+              await def.remove(item.id);
+              await refreshAll();
+              closeModal();
+            } catch (e) {
+              alert(e.message || "Delete failed");
+            }
+          });
+        }
+      }
+
+      async function handleEntityAction(action, entityKey, id) {
+        const def = entities[entityKey];
+        if (!def) return;
+        if (action === "add") return renderEntityForm(entityKey, "add", {});
+        if (action === "change") {
+          const rows = await def.list();
+          return renderEntityTable(entityKey, rows);
+        }
+        if (action === "edit") {
+          const rows = await def.list();
+          const item = rows.find(r => String(r.id) === String(id));
+          if (!item) return alert("Not found");
+          return renderEntityForm(entityKey, "edit", item);
+        }
+        if (action === "delete") {
+          if (!def.remove) return;
+          if (!confirm("Delete this item?")) return;
+          await def.remove(id);
+          await refreshAll();
+          return;
+        }
+      }
+
+      function bindSectionClicks() {
+        document.body.addEventListener("click", async (e) => {
+          const a = e.target.closest("[data-action][data-entity]");
+          if (!a) return;
+          e.preventDefault();
+          const action = a.getAttribute("data-action");
+          const entity = a.getAttribute("data-entity");
+          const id = a.getAttribute("data-id");
+          try {
+            await handleEntityAction(action, entity, id);
+          } catch (err) {
+            alert(err.message || "Failed");
+          }
+        });
+      }
+
+      function renderDashboardSections() {
+        document.getElementById("sec-auth").innerHTML =
+          rowLink("Groups", "groups");
+        document.getElementById("sec-core").innerHTML =
+          rowLink("Users", "users");
+        document.getElementById("sec-store").innerHTML =
+          rowLink("Branch accounts", "branchAccounts") +
+          rowLink("Branches", "branches") +
+          rowLink("Carts", "carts") +
+          rowLink("Collections", "collections") +
+          rowLink("Customers", "customers") +
+          rowLink("Orders", "orders") +
+          rowLink("Products", "products");
+      }
+
+      async function refreshAll() {
+        const me = await api("/api/auth/me");
+        state.me = me.user;
+        if (me.user.role !== "admin") throw new Error("Admin access required");
+        whoami.textContent = `You are logged in as: ${me.user.email}`;
+        await loadRecentActions();
+      }
+
+      document.getElementById("btnHome").addEventListener("click", () => window.location.href = "/");
+      document.getElementById("btnRefresh").addEventListener("click", refreshAll);
+      document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = "/"; });
+
+      renderDashboardSections();
+      bindSectionClicks();
+      refreshAll().catch((e) => { whoami.textContent = e.message || "Failed to load"; });
+    </script>
+  </body>
+</html>
+
