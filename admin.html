@@ -1,482 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Site administration</title>
-    <link rel="stylesheet" href="css/admin.css" />
-  </head>
-  <body class="admin">
-    <div class="admin-topbar">
-      <div class="admin-title">
-        <h1>Site administration</h1>
-        <div class="sub" id="whoami">Loading…</div>
-      </div>
-      <div class="admin-actions">
-        <button class="btn-admin" id="btnHome">View site</button>
-        <button class="btn-admin" id="btnRefresh">Refresh</button>
-        <button class="btn-admin danger" id="btnLogout">Log out</button>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin">
+  <div class="admin-topbar">
+    <div class="admin-title">
+      <h1>Admin Dashboard</h1>
+      <div class="sub" id="whoami">Loading...</div>
     </div>
+    <div class="admin-actions">
+      <button class="btn-admin" id="btnHome">View site</button>
+      <button class="btn-admin" id="btnRefresh">Refresh</button>
+      <button class="btn-admin danger" id="btnLogout">Log out</button>
+    </div>
+  </div>
 
-    <div class="admin-shell">
-      <main class="panel">
-        <div class="panel-header">Authentication and Authorization</div>
-        <div class="section" id="sec-auth"></div>
-
-        <div class="panel-header">Core</div>
-        <div class="section" id="sec-core"></div>
-
-        <div class="panel-header">Store</div>
-        <div class="section" id="sec-store"></div>
-      </main>
-
-      <aside class="side">
-        <div class="panel">
-          <div class="panel-header">Recent actions</div>
-          <div class="recent">
-            <h3>My actions</h3>
-            <div id="recentActions" class="muted">Loading…</div>
-          </div>
+  <div class="admin-shell">
+    <main class="panel">
+      <div class="panel-header">Store</div>
+      <div class="section">
+        <div class="row-link">
+          <a href="#" data-action="list-products">Products</a>
+          <div class="controls"><a href="#" data-action="add-product">+ Add</a></div>
         </div>
-      </aside>
-    </div>
-
-    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
-      <div class="modal" role="dialog" aria-modal="true" aria-label="Admin modal">
-        <div class="modal-top">
-          <div class="title" id="modalTitle">Admin</div>
-          <div style="display:flex;gap:10px;align-items:center;">
-            <button class="btn-admin" id="modalClose">Close</button>
-          </div>
-        </div>
-        <div class="modal-body" id="modalBody"></div>
       </div>
+
+      <div class="panel-header">Shop</div>
+      <div class="section">
+        <div class="row-link"><a href="#" data-action="edit-shop">Shop title and filters</a></div>
+      </div>
+
+      <div class="panel-header">Deals</div>
+      <div class="section">
+        <div class="row-link"><a href="#" data-action="edit-deals">Simple deals setup</a></div>
+      </div>
+
+      <div class="panel-header">Home</div>
+      <div class="section">
+        <div class="row-link"><a href="#" data-action="edit-home-images">Ad images only</a></div>
+      </div>
+
+      <div class="panel-header">AI</div>
+      <div class="section">
+        <div class="row-link"><a href="#" data-action="edit-ai">AI chatbot and AI search</a></div>
+      </div>
+    </main>
+
+    <aside class="side">
+      <div class="panel">
+        <div class="panel-header">Recent actions</div>
+        <div class="recent">
+          <h3>Admin activity</h3>
+          <div id="recentActions" class="muted">Loading...</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Admin modal">
+      <div class="modal-top">
+        <div class="title" id="modalTitle">Admin</div>
+        <button class="btn-admin" id="modalClose">Close</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
+  </div>
 
-    <script>
-      function getToken() { return localStorage.getItem("blustup_token"); }
-      function clearAuth() { localStorage.removeItem("blustup_token"); localStorage.removeItem("blustup_user"); }
-      async function api(path, options = {}) {
-        const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
-        const token = getToken();
-        if (token) headers.Authorization = `Bearer ${token}`;
-        const res = await fetch(path, { ...options, headers });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || "Request failed");
-        return data;
-      }
+  <script>
+    function getToken() { return localStorage.getItem("blustup_token"); }
+    function clearAuth() { localStorage.removeItem("blustup_token"); localStorage.removeItem("blustup_user"); }
+    async function api(path, options = {}) {
+      const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+      const token = getToken();
+      if (token) headers.Authorization = `Bearer ${token}`;
+      const res = await fetch(path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      return data;
+    }
 
-      const state = { me: null };
+    async function uploadImage(file) {
+      const token = getToken();
+      const form = new FormData();
+      form.append("image", file);
+      const res = await fetch("/api/cms/home/upload-image", {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      return data.imageUrl;
+    }
 
-      const whoami = document.getElementById("whoami");
-      const modalBackdrop = document.getElementById("modalBackdrop");
-      const modalTitle = document.getElementById("modalTitle");
-      const modalBody = document.getElementById("modalBody");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    function openModal(title, html) {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = html;
+      modalBackdrop.classList.add("open");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+    function closeModal() {
+      modalBackdrop.classList.remove("open");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      modalBody.innerHTML = "";
+    }
+    function esc(v) {
+      return String(v == null ? "" : v).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+    }
 
-      function openModal(title, html) {
-        modalTitle.textContent = title;
-        modalBody.innerHTML = html;
-        modalBackdrop.classList.add("open");
-        modalBackdrop.setAttribute("aria-hidden", "false");
-      }
-      function closeModal() {
-        modalBackdrop.classList.remove("open");
-        modalBackdrop.setAttribute("aria-hidden", "true");
-        modalBody.innerHTML = "";
-      }
+    async function loadRecentActions() {
+      const el = document.getElementById("recentActions");
+      try {
+        const { actions } = await api("/api/admin/actions/recent");
+        if (!actions?.length) return (el.innerHTML = `<div class="muted">No recent actions yet.</div>`);
+        el.innerHTML = actions.map((a) => `
+          <div class="item"><div class="meta">
+            <div class="what">${esc(a.summary || a.action)}</div>
+            <div class="who">${esc(a.actor_email || "unknown")} · ${esc(a.created_at || "")}</div>
+          </div></div>`).join("");
+      } catch (e) { el.textContent = e.message || "Failed"; }
+    }
 
-      document.getElementById("modalClose").addEventListener("click", closeModal);
-      modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
-
-      function rowLink(label, entityKey) {
-        return `
-          <div class="row-link">
-            <a href="#" class="entity-link" data-entity="${entityKey}">${label}</a>
-            <div class="controls">
-              <a href="#" class="add" data-action="add" data-entity="${entityKey}">+ Add</a>
-              <a href="#" class="chg" data-action="change" data-entity="${entityKey}">Change</a>
-            </div>
-          </div>
-        `;
-      }
-
-      function iconForAction(a) {
-        if (a === "add") return "✎";
-        if (a === "change") return "✎";
-        if (a === "delete") return "✖";
-        return "•";
-      }
-
-      async function loadRecentActions() {
-        const el = document.getElementById("recentActions");
-        try {
-          const { actions } = await api("/api/admin/actions/recent");
-          if (!actions.length) {
-            el.innerHTML = `<div class="muted">No recent actions.</div>`;
-            return;
-          }
-          el.innerHTML = actions.map(a => `
-            <div class="item">
-              <div class="icon">${iconForAction(a.action)}</div>
-              <div class="meta">
-                <div class="what">${a.summary || (a.entity_type + " #" + (a.entity_id ?? ""))}</div>
-                <div class="who">${a.action} ${a.entity_type} · ${a.actor_email || "unknown"} · ${a.created_at}</div>
-              </div>
-            </div>
-          `).join("");
-        } catch (e) {
-          el.textContent = e.message || "Failed to load";
-        }
-      }
-
-      const entities = {
-        groups: {
-          title: "Groups",
-          list: () => api("/api/admin/groups").then(d => d.groups),
-          create: (payload) => api("/api/admin/groups", { method:"POST", body: JSON.stringify(payload)}).then(d => d.group),
-          update: (id, payload) => api(`/api/admin/groups/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.group),
-          remove: (id) => api(`/api/admin/groups/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-          `,
-          getPayload: () => ({ name: document.getElementById("f_name").value })
-        },
-        users: {
-          title: "Users",
-          list: () => api("/api/admin/users").then(d => d.users),
-          create: (payload) => api("/api/admin/users", { method:"POST", body: JSON.stringify(payload)}).then(d => d.user),
-          update: (id, payload) => api(`/api/admin/users/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.user),
-          remove: (id) => api(`/api/admin/users/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="grid2">
-              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Email</label><input id="f_email" value="${(item.email||"").replaceAll('"',"&quot;")}" /></div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field">
-                <label>Role</label>
-                <select id="f_role">
-                  <option value="user" ${item.role==="user"?"selected":""}>user</option>
-                  <option value="admin" ${item.role==="admin"?"selected":""}>admin</option>
-                </select>
-              </div>
-              <div class="field"><label>Password ${item.id ? "(leave blank to keep)" : ""}</label><input id="f_password" type="password" /></div>
-            </div>
-          `,
-          getPayload: (isEdit=false) => {
-            const p = {
-              name: document.getElementById("f_name").value,
-              email: document.getElementById("f_email").value,
-              role: document.getElementById("f_role").value,
-            };
-            const pw = document.getElementById("f_password").value;
-            if (!isEdit || pw) p.password = pw;
-            return p;
-          }
-        },
-        products: {
-          title: "Products",
-          list: () => api("/api/products/admin").then(d => d.products),
-          create: (payload) => api("/api/products/admin", { method:"POST", body: JSON.stringify(payload)}).then(d => d.product),
-          update: (id, payload) => api(`/api/products/admin/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.product),
-          remove: (id) => api(`/api/products/admin/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-            <div class="field" style="margin-top:12px;"><label>Description</label><textarea id="f_desc">${item.desc||""}</textarea></div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Category</label><input id="f_cat" value="${(item.cat||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${item.price ?? ""}" /></div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Old price</label><input id="f_oldPrice" type="number" step="0.01" value="${item.oldPrice ?? ""}" /></div>
-              <div class="field"><label>Active</label>
-                <select id="f_active">
-                  <option value="1" ${(item.isActive ?? true) ? "selected" : ""}>Yes</option>
-                  <option value="0" ${(item.isActive ?? true) ? "" : "selected"}>No</option>
-                </select>
-              </div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Icon</label><input id="f_icon" value="${(item.icon||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Color (CSS)</label><input id="f_color" value="${(item.color||"").replaceAll('"',"&quot;")}" /></div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Badge</label><input id="f_badge" value="${(item.badge||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Badge type</label><input id="f_badgeType" value="${(item.badgeType||"").replaceAll('"',"&quot;")}" /></div>
-            </div>
-            <div class="field" style="margin-top:12px;"><label>Image URL</label><input id="f_imageUrl" value="${(item.imageUrl||"").replaceAll('"',"&quot;")}" /></div>
-          `,
-          getPayload: () => ({
-            name: document.getElementById("f_name").value,
-            description: document.getElementById("f_desc").value,
-            cat: document.getElementById("f_cat").value,
-            price: document.getElementById("f_price").value,
-            oldPrice: document.getElementById("f_oldPrice").value,
-            icon: document.getElementById("f_icon").value,
-            color: document.getElementById("f_color").value,
-            badge: document.getElementById("f_badge").value,
-            badgeType: document.getElementById("f_badgeType").value,
-            imageUrl: document.getElementById("f_imageUrl").value,
-            isActive: document.getElementById("f_active").value === "1",
-          })
-        },
-        customers: {
-          title: "Customers",
-          list: () => api("/api/admin/customers").then(d => d.customers),
-          create: (payload) => api("/api/admin/customers", { method:"POST", body: JSON.stringify(payload)}).then(d => d.customer),
-          update: (id, payload) => api(`/api/admin/customers/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.customer),
-          remove: (id) => api(`/api/admin/customers/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="grid2">
-              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Email</label><input id="f_email" value="${(item.email||"").replaceAll('"',"&quot;")}" /></div>
-            </div>
-            <div class="field" style="margin-top:12px;"><label>Phone</label><input id="f_phone" value="${(item.phone||"").replaceAll('"',"&quot;")}" /></div>
-          `,
-          getPayload: () => ({
-            name: document.getElementById("f_name").value,
-            email: document.getElementById("f_email").value,
-            phone: document.getElementById("f_phone").value,
-          })
-        },
-        orders: {
-          title: "Orders",
-          list: () => api("/api/admin/orders").then(d => d.orders),
-          create: (payload) => api("/api/admin/orders", { method:"POST", body: JSON.stringify(payload)}).then(d => d.order),
-          update: (id, payload) => api(`/api/admin/orders/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.order),
-          remove: (id) => api(`/api/admin/orders/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="grid2">
-              <div class="field"><label>Status</label>
-                <select id="f_status">
-                  ${["pending","paid","shipped","completed","cancelled"].map(s => `<option value="${s}" ${item.status===s?"selected":""}>${s}</option>`).join("")}
-                </select>
-              </div>
-              <div class="field"><label>Currency</label><input id="f_currency" value="${(item.currency||"USD").replaceAll('"',"&quot;")}" /></div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Total</label><input id="f_total" type="number" step="0.01" value="${item.total ?? 0}" /></div>
-              <div class="field"><label>Customer ID (optional)</label><input id="f_customerId" type="number" value="${item.customer_id ?? ""}" /></div>
-            </div>
-            <div class="field" style="margin-top:12px;"><label>Notes</label><textarea id="f_notes">${item.notes||""}</textarea></div>
-          `,
-          getPayload: () => ({
-            status: document.getElementById("f_status").value,
-            currency: document.getElementById("f_currency").value,
-            total: document.getElementById("f_total").value,
-            customerId: document.getElementById("f_customerId").value || null,
-            notes: document.getElementById("f_notes").value,
-          })
-        },
-        branches: {
-          title: "Branches",
-          list: () => api("/api/admin/branches").then(d => d.branches),
-          create: (payload) => api("/api/admin/branches", { method:"POST", body: JSON.stringify(payload)}).then(d => d.branch),
-          update: (id, payload) => api(`/api/admin/branches/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.branch),
-          remove: (id) => api(`/api/admin/branches/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="grid2">
-              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Location</label><input id="f_location" value="${(item.location||"").replaceAll('"',"&quot;")}" /></div>
-            </div>
-          `,
-          getPayload: () => ({ name: document.getElementById("f_name").value, location: document.getElementById("f_location").value })
-        },
-        branchAccounts: {
-          title: "Branch accounts",
-          list: () => api("/api/admin/branch-accounts").then(d => d.branchAccounts),
-          create: (payload) => api("/api/admin/branch-accounts", { method:"POST", body: JSON.stringify(payload)}).then(d => d.account),
-          remove: (id) => api(`/api/admin/branch-accounts/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="grid2">
-              <div class="field"><label>Branch ID</label><input id="f_branchId" type="number" value="${item.branch_id ?? ""}" /></div>
-              <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Email</label><input id="f_email" value="${(item.email||"").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>Password</label><input id="f_password" type="password" /></div>
-            </div>
-            <div class="muted" style="margin-top:10px;">To add a branch account, create the Branch first.</div>
-          `,
-          getPayload: () => ({
-            branchId: document.getElementById("f_branchId").value,
-            name: document.getElementById("f_name").value,
-            email: document.getElementById("f_email").value,
-            password: document.getElementById("f_password").value,
-          })
-        },
-        collections: {
-          title: "Collections",
-          list: () => api("/api/admin/collections").then(d => d.collections),
-          create: (payload) => api("/api/admin/collections", { method:"POST", body: JSON.stringify(payload)}).then(d => d.collection),
-          update: (id, payload) => api(`/api/admin/collections/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.collection),
-          remove: (id) => api(`/api/admin/collections/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="field"><label>Name</label><input id="f_name" value="${(item.name||"").replaceAll('"',"&quot;")}" /></div>
-            <div class="field" style="margin-top:12px;"><label>Description</label><textarea id="f_desc">${item.description||""}</textarea></div>
-          `,
-          getPayload: () => ({ name: document.getElementById("f_name").value, description: document.getElementById("f_desc").value })
-        },
-        carts: {
-          title: "Carts",
-          list: () => api("/api/admin/carts").then(d => d.carts),
-          create: (payload) => api("/api/admin/carts", { method:"POST", body: JSON.stringify(payload)}).then(d => d.cart),
-          update: (id, payload) => api(`/api/admin/carts/${id}`, { method:"PATCH", body: JSON.stringify(payload)}).then(d => d.cart),
-          remove: (id) => api(`/api/admin/carts/${id}`, { method:"DELETE" }),
-          form: (item={}) => `
-            <div class="grid2">
-              <div class="field"><label>Status</label><input id="f_status" value="${(item.status||"open").replaceAll('"',"&quot;")}" /></div>
-              <div class="field"><label>User ID (optional)</label><input id="f_userId" type="number" value="${item.user_id ?? ""}" /></div>
-            </div>
-            <div class="field" style="margin-top:12px;"><label>Customer ID (optional)</label><input id="f_customerId" type="number" value="${item.customer_id ?? ""}" /></div>
-          `,
-          getPayload: () => ({
-            status: document.getElementById("f_status").value,
-            userId: document.getElementById("f_userId").value || null,
-            customerId: document.getElementById("f_customerId").value || null,
-          })
-        },
+    // Products
+    function productForm(item = {}) {
+      return `
+        <div class="field"><label>Name</label><input id="f_name" value="${esc(item.name || "")}" /></div>
+        <div class="field" style="margin-top:12px;"><label>Description</label><textarea id="f_desc">${esc(item.desc || "")}</textarea></div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field"><label>Category</label><input id="f_cat" value="${esc(item.cat || "general")}" /></div>
+          <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
+        </div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field"><label>Stock Qty</label><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" /></div>
+          <div class="field"><label>Image URL</label><input id="f_image" value="${esc(item.imageUrl || "")}" /></div>
+        </div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field"><label>Badge</label><input id="f_badge" value="${esc(item.badge || "")}" /></div>
+          <div class="field"><label>Old Price</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" /></div>
+        </div>
+        <div class="field" style="margin-top:12px;"><label>Active</label>
+          <select id="f_active"><option value="1" ${item.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${item.isActive === false ? "selected" : ""}>No</option></select>
+        </div>`;
+    }
+    function getProductPayload() {
+      return {
+        name: document.getElementById("f_name").value,
+        description: document.getElementById("f_desc").value,
+        cat: document.getElementById("f_cat").value,
+        price: Number(document.getElementById("f_price").value),
+        stockQty: Number(document.getElementById("f_stock").value),
+        imageUrl: document.getElementById("f_image").value,
+        badge: document.getElementById("f_badge").value || null,
+        oldPrice: document.getElementById("f_old_price").value || null,
+        isActive: document.getElementById("f_active").value === "1",
       };
+    }
+    async function openProductsTable() {
+      const { products } = await api("/api/products/admin");
+      openModal("Products", `
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Image</th><th>Actions</th></tr></thead>
+          <tbody>${products.map((p) => `
+            <tr>
+              <td>${esc(p.name)}</td><td>${esc(p.cat)}</td><td>$${esc(p.price)}</td>
+              <td>${p.imageUrl ? `<img src="${esc(p.imageUrl)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : "-"}</td>
+              <td><a href="#" data-action="edit-product" data-id="${esc(p.id)}">Edit</a> · <a href="#" data-action="delete-product" data-id="${esc(p.id)}">Delete</a></td>
+            </tr>`).join("")}</tbody>
+        </table>`);
+    }
+    async function openAddProduct() {
+      openModal("Add Product", `${productForm()}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct">Save</button></div>`);
+      document.getElementById("btnSaveProduct").addEventListener("click", async () => {
+        await api("/api/products/admin", { method: "POST", body: JSON.stringify(getProductPayload()) });
+        await loadRecentActions(); closeModal();
+      });
+    }
+    async function openEditProduct(id) {
+      const { products } = await api("/api/products/admin");
+      const item = products.find((p) => String(p.id) === String(id));
+      if (!item) return alert("Product not found");
+      openModal("Edit Product", `${productForm(item)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct">Save</button></div>`);
+      document.getElementById("btnSaveProduct").addEventListener("click", async () => {
+        await api(`/api/products/admin/${id}`, { method: "PATCH", body: JSON.stringify(getProductPayload()) });
+        await loadRecentActions(); closeModal();
+      });
+    }
+    async function deleteProduct(id) {
+      if (!confirm("Delete this product?")) return;
+      await api(`/api/products/admin/${id}`, { method: "DELETE" });
+      await loadRecentActions(); await openProductsTable();
+    }
 
-      function renderEntityTable(entityKey, rows) {
-        const title = entities[entityKey].title;
-        const cols = Object.keys(rows[0] || {});
-        const header = cols.length ? cols : ["(empty)"];
-        const body = rows.length ? rows.map(r => `
-          <tr data-id="${r.id ?? ""}">
-            ${cols.map(c => `<td>${r[c] == null ? "" : String(r[c])}</td>`).join("")}
-            <td style="white-space:nowrap;">
-              ${r.id != null ? `<a class="link-btn" data-action="edit" data-entity="${entityKey}" data-id="${r.id}">Edit</a>` : ""}
-              ${r.id != null ? ` · <a class="link-btn" data-action="delete" data-entity="${entityKey}" data-id="${r.id}">Delete</a>` : ""}
-            </td>
-          </tr>
-        `).join("") : `<tr><td class="muted" colspan="99">No entries.</td></tr>`;
-
-        openModal(`${title} — Change`, `
-          <div class="muted">Click Edit/Delete on a row, or use “Add”.</div>
-          <table class="admin-table">
-            <thead>
-              <tr>${header.map(h => `<th>${h}</th>`).join("")}<th>Actions</th></tr>
-            </thead>
-            <tbody>${body}</tbody>
-          </table>
-        `);
-      }
-
-      function renderEntityForm(entityKey, mode, item) {
-        const def = entities[entityKey];
-        const isEdit = mode === "edit";
-        const title = `${def.title} — ${isEdit ? "Change" : "Add"}`;
-
-        openModal(title, `
-          ${def.form(item)}
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap;">
-            <div class="muted">${isEdit ? `ID: ${item.id}` : ""}</div>
+    // Home images only
+    async function openHomeImagesCms() {
+      const { settings } = await api("/api/cms/home");
+      const images = Array.isArray(settings.adImages) ? settings.adImages : [];
+      openModal("Home Ad Images", `
+        <div class="muted">Home CMS controls only ad images.</div>
+        <div id="homeImgsList" style="display:grid;gap:10px;margin-top:10px;">
+          ${images.map((img, i) => `
             <div style="display:flex;gap:10px;align-items:center;">
-              ${isEdit ? `<button class="btn-admin danger" id="btnDelete">Delete</button>` : ""}
-              <button class="btn-admin primary" id="btnSave">${isEdit ? "Save" : "Add"}</button>
-            </div>
+              <img src="${esc(img)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;">
+              <input data-img-index="${i}" value="${esc(img)}" style="flex:1;" />
+            </div>`).join("")}
+        </div>
+        <div class="field" style="margin-top:12px;"><label>Upload new ad image</label><input id="homeImageFile" type="file" accept="image/*" /></div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button class="btn-admin" id="btnUploadHomeImage">Upload</button>
+          <button class="btn-admin primary" id="btnSaveHomeImages">Save</button>
+        </div>`);
+
+      document.getElementById("btnUploadHomeImage").addEventListener("click", async () => {
+        const file = document.getElementById("homeImageFile").files?.[0];
+        if (!file) return alert("Choose an image first");
+        const imageUrl = await uploadImage(file);
+        const list = document.getElementById("homeImgsList");
+        const nextIndex = list.querySelectorAll("[data-img-index]").length;
+        const row = document.createElement("div");
+        row.style.display = "flex"; row.style.gap = "10px"; row.style.alignItems = "center";
+        row.innerHTML = `<img src="${esc(imageUrl)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;"><input data-img-index="${nextIndex}" value="${esc(imageUrl)}" style="flex:1;">`;
+        list.appendChild(row);
+        document.getElementById("homeImageFile").value = "";
+      });
+
+      document.getElementById("btnSaveHomeImages").addEventListener("click", async () => {
+        const values = Array.from(document.querySelectorAll("[data-img-index]")).map((x) => x.value.trim()).filter(Boolean);
+        await api("/api/cms/home", { method: "PUT", body: JSON.stringify({ adImages: values }) });
+        await loadRecentActions(); closeModal();
+      });
+    }
+
+    // Shop filters (structured + add new)
+    function renderFilterRows(filters) {
+      return filters.map((f, i) => `
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;">
+          <input data-filter-row="${i}" data-k="label" placeholder="Label (e.g. Electronics)" value="${esc(f.label)}" />
+          <input data-filter-row="${i}" data-k="value" placeholder="Value (e.g. flights)" value="${esc(f.value)}" />
+          <button class="btn-admin danger" data-action="remove-filter-row" data-row="${i}">X</button>
+        </div>`).join("");
+    }
+    async function openShopCms() {
+      const { settings } = await api("/api/cms/shop");
+      const filters = Array.isArray(settings.filters) ? settings.filters : [];
+      openModal("Shop Settings", `
+        <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
+        <div class="field" style="margin-top:12px;"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
+        <div class="field" style="margin-top:12px;"><label>Filters</label>
+          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(filters)}</div>
+          <button class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
+        </div>
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveShop">Save</button></div>`);
+
+      document.getElementById("btnAddFilterRow").addEventListener("click", () => {
+        const wrap = document.getElementById("filtersWrap");
+        const next = wrap.querySelectorAll("[data-filter-row]").length;
+        const div = document.createElement("div");
+        div.style.display = "grid"; div.style.gridTemplateColumns = "1fr 1fr auto"; div.style.gap = "8px"; div.style.alignItems = "center"; div.style.marginBottom = "8px";
+        div.innerHTML = `<input data-filter-row="${next}" data-k="label" placeholder="Label"><input data-filter-row="${next}" data-k="value" placeholder="Value"><button class="btn-admin danger" data-action="remove-filter-row" data-row="${next}">X</button>`;
+        wrap.appendChild(div);
+      });
+
+      document.getElementById("saveShop").addEventListener("click", async () => {
+        const rows = Array.from(document.querySelectorAll("[data-filter-row]"));
+        const map = {};
+        rows.forEach((el) => {
+          const r = el.getAttribute("data-filter-row");
+          const k = el.getAttribute("data-k");
+          if (!map[r]) map[r] = { label: "", value: "" };
+          map[r][k] = el.value.trim();
+        });
+        const nextFilters = Object.values(map).filter((f) => f.label && f.value);
+        await api("/api/cms/shop", {
+          method: "PUT",
+          body: JSON.stringify({
+            title: document.getElementById("s_title").value,
+            subtitle: document.getElementById("s_subtitle").value,
+            filters: nextFilters,
+          }),
+        });
+        await loadRecentActions(); closeModal();
+      });
+    }
+
+    // Simplified deals with dropdowns sourced from shop filters
+    function dealRowTemplate(d, idx, filters) {
+      const options = filters.map((f) => `<option value="${esc(f.value)}" ${f.value === d.sourceCategory ? "selected" : ""}>${esc(f.label)} (${esc(f.value)})</option>`).join("");
+      const optionsSee = filters.map((f) => `<option value="${esc(f.value)}" ${f.value === d.seeMoreFilter ? "selected" : ""}>${esc(f.label)} (${esc(f.value)})</option>`).join("");
+      return `
+        <div style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:10px;">
+          <div class="grid2">
+            <div class="field"><label>Deal name</label><input data-deal="${idx}" data-k="name" value="${esc(d.name)}"></div>
+            <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${idx}" data-k="timerSeconds" value="${esc(d.timerSeconds)}"></div>
           </div>
-        `);
+          <div class="grid2" style="margin-top:8px;">
+            <div class="field"><label>Products from filter</label><select data-deal="${idx}" data-k="sourceCategory">${options}</select></div>
+            <div class="field"><label>See more goes to filter</label><select data-deal="${idx}" data-k="seeMoreFilter">${optionsSee}</select></div>
+          </div>
+          <div class="grid2" style="margin-top:8px;">
+            <div class="field"><label>Max items</label><input type="number" data-deal="${idx}" data-k="maxItems" value="${esc(d.maxItems || 8)}"></div>
+            <div class="field"><label>Active</label><select data-deal="${idx}" data-k="isActive"><option value="1" ${d.isActive ? "selected" : ""}>Yes</option><option value="0" ${!d.isActive ? "selected" : ""}>No</option></select></div>
+          </div>
+          <input type="hidden" data-deal="${idx}" data-k="id" value="${esc(d.id)}">
+          <div style="margin-top:8px;"><button class="btn-admin danger" data-action="remove-deal-row" data-row="${idx}">Remove deal</button></div>
+        </div>`;
+    }
+    async function openDealsCms() {
+      const [{ settings: deals }, { settings: shop }] = await Promise.all([api("/api/cms/deals"), api("/api/cms/shop")]);
+      const filters = Array.isArray(shop.filters) && shop.filters.length ? shop.filters : [{ label: "All", value: "all" }];
+      const rows = Array.isArray(deals) ? deals : [];
+      openModal("Deals (simple)", `
+        <div class="muted">Each deal selects source filter + where "See All" should go.</div>
+        <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, i, filters)).join("")}</div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn-admin" id="btnAddDeal">+ Add deal</button>
+          <button class="btn-admin primary" id="saveDeals">Save Deals</button>
+        </div>`);
 
-        document.getElementById("btnSave").addEventListener("click", async () => {
-          try {
-            const payload = def.getPayload(isEdit);
-            if (isEdit) await def.update(item.id, payload);
-            else await def.create(payload);
-            await refreshAll();
-            closeModal();
-          } catch (e) {
-            alert(e.message || "Failed");
-          }
+      document.getElementById("btnAddDeal").addEventListener("click", () => {
+        const wrap = document.getElementById("dealsWrap");
+        const idx = wrap.querySelectorAll("[data-deal]").length;
+        const first = filters[0]?.value || "all";
+        const d = { id: `deal-${Date.now()}`, name: "New Deal", timerSeconds: 3600, sourceCategory: first, seeMoreFilter: first, maxItems: 8, isActive: true };
+        const div = document.createElement("div");
+        div.innerHTML = dealRowTemplate(d, idx, filters);
+        wrap.appendChild(div.firstElementChild);
+      });
+
+      document.getElementById("saveDeals").addEventListener("click", async () => {
+        const nodes = Array.from(document.querySelectorAll("[data-deal]"));
+        const map = {};
+        nodes.forEach((el) => {
+          const i = el.getAttribute("data-deal");
+          const k = el.getAttribute("data-k");
+          if (!map[i]) map[i] = {};
+          map[i][k] = el.value;
         });
+        const next = Object.values(map).map((d) => ({
+          id: d.id || `deal-${Date.now()}`,
+          name: d.name,
+          timerSeconds: Number(d.timerSeconds || 0),
+          sourceCategory: d.sourceCategory,
+          seeMoreFilter: d.seeMoreFilter,
+          maxItems: Number(d.maxItems || 8),
+          isActive: d.isActive === "1",
+        })).filter((d) => d.name && d.timerSeconds > 0 && d.sourceCategory && d.seeMoreFilter);
+        await api("/api/cms/deals", { method: "PUT", body: JSON.stringify(next) });
+        await loadRecentActions(); closeModal();
+      });
+    }
 
-        if (isEdit && def.remove) {
-          document.getElementById("btnDelete").addEventListener("click", async () => {
-            if (!confirm("Delete this item?")) return;
-            try {
-              await def.remove(item.id);
-              await refreshAll();
-              closeModal();
-            } catch (e) {
-              alert(e.message || "Delete failed");
-            }
-          });
-        }
-      }
-
-      async function handleEntityAction(action, entityKey, id) {
-        const def = entities[entityKey];
-        if (!def) return;
-        if (action === "add") return renderEntityForm(entityKey, "add", {});
-        if (action === "change") {
-          const rows = await def.list();
-          return renderEntityTable(entityKey, rows);
-        }
-        if (action === "edit") {
-          const rows = await def.list();
-          const item = rows.find(r => String(r.id) === String(id));
-          if (!item) return alert("Not found");
-          return renderEntityForm(entityKey, "edit", item);
-        }
-        if (action === "delete") {
-          if (!def.remove) return;
-          if (!confirm("Delete this item?")) return;
-          await def.remove(id);
-          await refreshAll();
-          return;
-        }
-      }
-
-      function bindSectionClicks() {
-        document.body.addEventListener("click", async (e) => {
-          const a = e.target.closest("[data-action][data-entity]");
-          if (!a) return;
-          e.preventDefault();
-          const action = a.getAttribute("data-action");
-          const entity = a.getAttribute("data-entity");
-          const id = a.getAttribute("data-id");
-          try {
-            await handleEntityAction(action, entity, id);
-          } catch (err) {
-            alert(err.message || "Failed");
-          }
+    // AI
+    async function openAiSettings() {
+      const { settings } = await api("/api/cms/ai");
+      openModal("AI Settings", `
+        <div class="grid2">
+          <div class="field"><label>Chat enabled</label><select id="a_chat"><option value="1" ${settings.chatEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.chatEnabled ? "selected" : ""}>No</option></select></div>
+          <div class="field"><label>Search enabled</label><select id="a_search"><option value="1" ${settings.searchEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.searchEnabled ? "selected" : ""}>No</option></select></div>
+        </div>
+        <div class="field" style="margin-top:12px;"><label>Bot name</label><input id="a_name" value="${esc(settings.botName || "")}" /></div>
+        <div class="field" style="margin-top:12px;"><label>System prompt</label><textarea id="a_prompt" rows="8">${esc(settings.systemPrompt || "")}</textarea></div>
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAi">Save</button></div>`);
+      document.getElementById("saveAi").addEventListener("click", async () => {
+        await api("/api/cms/ai", {
+          method: "PUT",
+          body: JSON.stringify({
+            chatEnabled: document.getElementById("a_chat").value === "1",
+            searchEnabled: document.getElementById("a_search").value === "1",
+            botName: document.getElementById("a_name").value,
+            systemPrompt: document.getElementById("a_prompt").value,
+          }),
         });
+        await loadRecentActions(); closeModal();
+      });
+    }
+
+    async function init() {
+      const me = await api("/api/auth/me");
+      if (me.user.role !== "admin") throw new Error("Admin access required");
+      document.getElementById("whoami").textContent = `Logged in as ${me.user.email}`;
+      await loadRecentActions();
+    }
+
+    document.getElementById("modalClose").addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+    document.body.addEventListener("click", async (e) => {
+      const node = e.target.closest("[data-action]");
+      if (!node) return;
+      e.preventDefault();
+      const action = node.getAttribute("data-action");
+      const id = node.getAttribute("data-id");
+      const row = node.getAttribute("data-row");
+
+      if (action === "list-products") return openProductsTable();
+      if (action === "add-product") return openAddProduct();
+      if (action === "edit-product") return openEditProduct(id);
+      if (action === "delete-product") return deleteProduct(id);
+      if (action === "edit-home-images") return openHomeImagesCms();
+      if (action === "edit-shop") return openShopCms();
+      if (action === "edit-deals") return openDealsCms();
+      if (action === "edit-ai") return openAiSettings();
+      if (action === "remove-filter-row" || action === "remove-deal-row") {
+        node.closest("div[style*='grid-template-columns'], div[style*='border:1px solid']")?.remove();
+        return;
       }
+    });
 
-      function renderDashboardSections() {
-        document.getElementById("sec-auth").innerHTML =
-          rowLink("Groups", "groups");
-        document.getElementById("sec-core").innerHTML =
-          rowLink("Users", "users");
-        document.getElementById("sec-store").innerHTML =
-          rowLink("Branch accounts", "branchAccounts") +
-          rowLink("Branches", "branches") +
-          rowLink("Carts", "carts") +
-          rowLink("Collections", "collections") +
-          rowLink("Customers", "customers") +
-          rowLink("Orders", "orders") +
-          rowLink("Products", "products");
-      }
+    document.getElementById("btnHome").addEventListener("click", () => window.location.href = "/");
+    document.getElementById("btnRefresh").addEventListener("click", () => init().catch((e) => alert(e.message || "Failed")));
+    document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = "/"; });
 
-      async function refreshAll() {
-        const me = await api("/api/auth/me");
-        state.me = me.user;
-        if (me.user.role !== "admin") throw new Error("Admin access required");
-        whoami.textContent = `You are logged in as: ${me.user.email}`;
-        await loadRecentActions();
-      }
-
-      document.getElementById("btnHome").addEventListener("click", () => window.location.href = "/");
-      document.getElementById("btnRefresh").addEventListener("click", refreshAll);
-      document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = "/"; });
-
-      renderDashboardSections();
-      bindSectionClicks();
-      refreshAll().catch((e) => { whoami.textContent = e.message || "Failed to load"; });
-    </script>
-  </body>
+    init().catch((e) => { document.getElementById("whoami").textContent = e.message || "Failed to load admin"; });
+  </script>
+</body>
 </html>
 

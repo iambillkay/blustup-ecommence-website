@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Product = require("../models/Product");
 const AuditLog = require("../models/AuditLog");
+const CmsConfig = require("../models/CmsConfig");
 
 function isValidId(id) {
   return mongoose.Types.ObjectId.isValid(id);
@@ -112,6 +113,70 @@ async function listRecentAudit({ limit }) {
   };
 }
 
+const DEFAULT_HOME = {
+  adImages: [
+    "product-imgs/ad/ad1.png",
+    "product-imgs/ad/ad2.png",
+    "product-imgs/ad/ad3.png",
+  ],
+};
+
+const DEFAULT_SHOP = {
+  title: "Welcome to the Shop",
+  subtitle: "Discover products tailored to your needs",
+  filters: [
+    { label: "All Products", value: "all" },
+    { label: "Electronics", value: "flights" },
+    { label: "Clothes", value: "lounge" },
+    { label: "Consumables", value: "upgrades" },
+    { label: "Travel Essentials", value: "essentials" },
+    { label: "Maintenance Kits", value: "insurance" },
+  ],
+};
+
+const DEFAULT_AI = {
+  chatEnabled: true,
+  searchEnabled: true,
+  botName: "Blustup AI",
+  systemPrompt:
+    "You are a helpful shopping assistant for Blustup. Answer concisely and recommend relevant products.",
+};
+
+const DEFAULT_DEALS = [
+  {
+    id: "deal-1",
+    name: "Oraimo Brand Day",
+    timerSeconds: 80200,
+    seeMoreFilter: "flights",
+    sourceCategory: "flights",
+    maxItems: 8,
+    isActive: true,
+  },
+  {
+    id: "deal-2",
+    name: "Personal Care Day",
+    timerSeconds: 21600,
+    seeMoreFilter: "lounge",
+    sourceCategory: "lounge",
+    maxItems: 8,
+    isActive: true,
+  },
+];
+
+async function getCmsByKey(key, fallback) {
+  const doc = await CmsConfig.findOne({ key }).select("value");
+  return doc?.value || fallback;
+}
+
+async function upsertCmsByKey(key, value) {
+  await CmsConfig.findOneAndUpdate(
+    { key },
+    { $set: { value } },
+    { upsert: true, new: true }
+  );
+  return value;
+}
+
 module.exports = {
   mode: "mongo",
   isValidId,
@@ -122,5 +187,15 @@ module.exports = {
   },
   product: { listPublic, listAdmin, create: createProduct, update: updateProduct, delete: deleteProduct },
   audit: { add: addAuditLog, listRecent: listRecentAudit },
+  cms: {
+    getHome: () => getCmsByKey("home", DEFAULT_HOME),
+    setHome: (value) => upsertCmsByKey("home", value),
+    getShop: () => getCmsByKey("shop", DEFAULT_SHOP),
+    setShop: (value) => upsertCmsByKey("shop", value),
+    getAi: () => getCmsByKey("ai", DEFAULT_AI),
+    setAi: (value) => upsertCmsByKey("ai", value),
+    getDeals: () => getCmsByKey("deals", DEFAULT_DEALS),
+    setDeals: (value) => upsertCmsByKey("deals", value),
+  },
 };
 

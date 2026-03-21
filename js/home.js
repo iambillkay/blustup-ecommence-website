@@ -1,296 +1,186 @@
-/* ================= PRODUCT CLASS ================= */
-
-class Product {
-
-constructor(name, price, oldPrice, image, discount){
-this.name = name
-this.price = price
-this.oldPrice = oldPrice
-this.image = image
-this.discount = discount
+function homeProductCard(p) {
+  return `
+    <div class="product-card" style="min-width:220px;">
+      <div class="product-img" style="background:${p.color || "#f5f7ff"}">
+        ${p.badge ? `<div class="product-badge-tag ${p.badgeType || ""}">${p.badge}</div>` : ""}
+        ${
+          p.imageUrl
+            ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+            : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5f6b95;font-weight:600;">No image</div>`
+        }
+      </div>
+      <div class="product-info">
+        <div class="product-category">${p.cat}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">
+            ${p.oldPrice ? `<span class="old-price">$${p.oldPrice}</span>` : ""}
+            $${p.price}
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart('${p.id}', event)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-render(){
-return `
+function startCarousel(row) {
+  let autoScroll = setInterval(() => {
+    row.scrollBy({ left: 220, behavior: "smooth" });
+  }, 3000);
 
-<div class="product">
-
-<span class="discount">${this.discount}</span>
-
-<img src="${this.image}" alt="${this.name}">
-
-<p class="product-name">${this.name}</p>
-
-<div class="price">
-<span class="new-price">GH₵ ${this.price}</span><br>
-<span class="old-price">GH₵ ${this.oldPrice}</span>
-</div>
-
-</div>
-
-`
+  row.addEventListener("mouseenter", () => clearInterval(autoScroll));
+  row.addEventListener("mouseleave", () => {
+    clearInterval(autoScroll);
+    autoScroll = setInterval(() => row.scrollBy({ left: 220, behavior: "smooth" }), 3000);
+  });
 }
-
-}
-
-
-/* ================= PRODUCT DATA ================= */
-
-const brandProducts = [
-
-new Product("Oraimo maxi watch",2631.90,4900,"product-imgs/1.jpg","-47%"),
-new Product("Oraimo Power Bank Lite",136.90,300,"product-imgs/magpower-15-opb-7102w-1.webp","-56%"),
-new Product("Oraimo  Lite Earphones",126.98,240,"product-imgs/oraimo-BoomPop-Pro-OHP-917-wireless-headphones-GREY.webp","-47%"),
-new Product("Oraimo CleanSip Faucet",217.00,400,"product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp","-42%"),
-new Product("Oraimo NutriFry Max Air Watch",1078.92,1800,"product-imgs/oraimo-watch-muse-OSW-831N-4.webp","-39%"),
-new Product("Oraimo Smart Trimmer",183.89,350,"product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp","-47%"),
-new Product("Oraimo Wireless Charger",183.89,350,"product-imgs/AI-appliances_v21.avif","-47%"),
-
-]
-const brandProducts1 = [
-
-new Product("Pepsodent Tooth Paste",2631.90,4900,"product-imgs/personal-care/36024a.jpg","-47%"),
-new Product("Close Up Tooth Paste",136.90,300,"product-imgs/personal-care/67728a.jpg","-56%"),
-new Product("Kel Mouth Wash",126.98,240,"product-imgs/personal-care/70100a.jpg","-47%"),
-new Product("Oral B Tooth Brush",217.00,400,"product-imgs/personal-care/94947a.jpg","-42%"),
-new Product("Teabag",1078.92,1800,"product-imgs/personal-care/l010a.jpg","-39%"),
-new Product("Dove Soap",183.89,350,"product-imgs/personal-care/163944.png","-47%"),
-new Product("Lifebuoy Soap",183.89,350,"product-imgs/personal-care/102276b.jpg","-47%"),
-new Product("Lux Soap",183.89,350,"product-imgs/personal-care/154710.png","-47%")
-]
-
-
-/* ================= RENDER PRODUCTS ================= */
-
-let rows = []
-
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Select your rows
-    const row1 = document.getElementById("productRow1");
-    const row2 = document.getElementById("productRow2");
-
-    // 2. Render brandProducts (Oraimo) to Row 1
-    if (row1) {
-        brandProducts.forEach(product => {
-            row1.innerHTML += product.render();
-        });
-        startCarousel(row1);
-    }
-
-    // 3. Render brandProducts1 (Pepsodent/Oral B) to Row 2
-    if (row2) {
-        brandProducts1.forEach(product => {
-            row2.innerHTML += product.render();
-        });
-        startCarousel(row2);
-    }
-
-    startTimer();
-});
-
-/* ================= AUTO CAROUSEL ================= */
-
-function startCarousel(row){
-
-let autoScroll = setInterval(()=>{
-
-row.scrollBy({
-left:220,
-behavior:"smooth"
-})
-
-},3000)
-
-row.addEventListener("mouseenter",()=>{
-clearInterval(autoScroll)
-})
-
-row.addEventListener("mouseleave",()=>{
-startCarousel(row)
-})
-
-}
-
-
-/* ================= BUTTON SCROLL ================= */
-
-function scrollLeft(btn){
-
-const row = btn.parentElement.querySelector(".product-row")
-
-row.scrollBy({
-left:-300,
-behavior:"smooth"
-})
-
-}
-
-function scrollRight(btn){
-
-const row = btn.parentElement.querySelector(".product-row")
-
-row.scrollBy({
-left:300,
-behavior:"smooth"
-})
-
-}
-
-
-/* ================= MOUSE WHEEL ================= */
-
-rows.forEach(row => {
-
-if(!row) return
-
-row.addEventListener("wheel",(e)=>{
-
-e.preventDefault()
-row.scrollLeft += e.deltaY
-
-})
-
-})
-
-
-/* ================= TIMER ================= */
 
 function startTimers() {
-    // Select all elements with the class 'timer-display'
-    const timers = document.querySelectorAll(".timer-display");
+  const timers = document.querySelectorAll(".timer-display");
+  timers.forEach((timerDisplay) => {
+    let timeInSeconds = parseInt(timerDisplay.getAttribute("data-seconds"), 10);
+    if (Number.isNaN(timeInSeconds)) return;
+    const interval = setInterval(() => {
+      if (timeInSeconds <= 0) {
+        timerDisplay.textContent = "Offer Expired!";
+        clearInterval(interval);
+        return;
+      }
+      const h = Math.floor(timeInSeconds / 3600);
+      const m = Math.floor((timeInSeconds % 3600) / 60);
+      const s = timeInSeconds % 60;
+      timerDisplay.textContent = `Time Left: ${String(h).padStart(2, "0")}h : ${String(m).padStart(2, "0")}m : ${String(s).padStart(2, "0")}s`;
+      timeInSeconds -= 1;
+    }, 1000);
+  });
+}
 
-    // Loop through each timer element found on the page
-    timers.forEach(timerDisplay => {
-        
-        // 1. Grab the specific time for THIS timer from the HTML attribute
-        let timeInSeconds = parseInt(timerDisplay.getAttribute("data-seconds"));
+function goToShopFilter(filter) {
+  if (typeof showPage === "function") showPage("shop");
+  setTimeout(() => {
+    if (typeof renderProducts === "function") renderProducts(filter || "all");
+  }, 30);
+}
 
-        // Safety check: if there's no data-seconds attribute, skip this element
-        if (isNaN(timeInSeconds)) return;
+function scrollLeft(btn) {
+  const row = btn.parentElement.querySelector(".product-row");
+  if (row) row.scrollBy({ left: -300, behavior: "smooth" });
+}
 
-        // 2. Start a unique interval just for this timer
-        const interval = setInterval(() => {
-            
-            // Check if time is up
-            if (timeInSeconds <= 0) {
-                timerDisplay.textContent = "Offer Expired!";
-                clearInterval(interval); // Stop this specific interval
-                return; // Exit the function for this tick
-            }
+function scrollRight(btn) {
+  const row = btn.parentElement.querySelector(".product-row");
+  if (row) row.scrollBy({ left: 300, behavior: "smooth" });
+}
 
-            // Calculate hours, minutes, and seconds
-            let h = Math.floor(timeInSeconds / 3600);
-            let m = Math.floor((timeInSeconds % 3600) / 60);
-            let s = timeInSeconds % 60;
+function renderDeals(deals, productList) {
+  const sections = Array.from(document.querySelectorAll("#page-home .brand-day"));
+  const activeDeals = (deals || []).filter((d) => d.isActive).slice(0, sections.length);
 
-            // Format numbers to always show two digits (e.g., 05 instead of 5)
-            const hDisplay = h.toString().padStart(2, "0");
-            const mDisplay = m.toString().padStart(2, "0");
-            const sDisplay = s.toString().padStart(2, "0");
+  sections.forEach((section, i) => {
+    const deal = activeDeals[i];
+    if (!deal) {
+      section.style.display = "none";
+      return;
+    }
+    section.style.display = "";
+    const header = section.querySelector(".brand-header");
+    const titleEl = header?.querySelector("span");
+    const timerEl = header?.querySelector(".timer-display");
+    const seeMoreEl = header?.querySelector("a");
+    const rowEl = section.querySelector(".product-row");
 
-            // Update the text on the screen
-            timerDisplay.textContent = `Time Left: ${hDisplay}h : ${mDisplay}m : ${sDisplay}s`;
-            
-            // Decrease the time by 1 second for the next loop
-            timeInSeconds--;
+    if (titleEl) titleEl.textContent = deal.name;
+    if (timerEl) timerEl.setAttribute("data-seconds", String(deal.timerSeconds || 0));
+    if (seeMoreEl) {
+      seeMoreEl.onclick = (e) => {
+        e.preventDefault();
+        goToShopFilter(deal.seeMoreFilter || "all");
+      };
+    }
+    if (rowEl) {
+      const items = productList
+        .filter((p) => !deal.sourceCategory || p.cat === deal.sourceCategory)
+        .slice(0, deal.maxItems || 8);
+      rowEl.innerHTML = items.map(homeProductCard).join("");
+      startCarousel(rowEl);
+    }
+  });
+}
 
-        }, 1000);
+function setupHeroSlider(adImages) {
+  const track = document.querySelector(".hero-track");
+  const nextBtn = document.querySelector(".hero-btn.next");
+  const prevBtn = document.querySelector(".hero-btn.prev");
+  const dotsContainer = document.querySelector(".hero-dots");
+  if (!track || !nextBtn || !prevBtn || !dotsContainer) return;
+
+  const images = Array.isArray(adImages) && adImages.length ? adImages : [
+    "product-imgs/ad/ad1.png",
+    "product-imgs/ad/ad2.png",
+    "product-imgs/ad/ad3.png",
+  ];
+
+  track.innerHTML = images
+    .map((src, i) => `<div class="hero-slide"><img src="${src}" alt="Promo ${i + 1}"></div>`)
+    .join("");
+  dotsContainer.innerHTML = "";
+
+  const slides = Array.from(track.querySelectorAll(".hero-slide"));
+  let index = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement("span");
+    if (i === 0) dot.classList.add("active");
+    dot.addEventListener("click", () => {
+      index = i;
+      update();
     });
+    dotsContainer.appendChild(dot);
+  });
+
+  function update() {
+    const dots = Array.from(dotsContainer.querySelectorAll("span"));
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d) => d.classList.remove("active"));
+    if (dots[index]) dots[index].classList.add("active");
+  }
+
+  nextBtn.onclick = () => {
+    index = (index + 1) % slides.length;
+    update();
+  };
+  prevBtn.onclick = () => {
+    index = (index - 1 + slides.length) % slides.length;
+    update();
+  };
+  setInterval(() => {
+    index = (index + 1) % slides.length;
+    update();
+  }, 9000);
 }
 
-// Start the timers once the page has loaded
-document.addEventListener("DOMContentLoaded", startTimers);
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!products.length && typeof loadProducts === "function") {
+    await loadProducts();
+  }
 
+  let homeSettings = null;
+  let deals = null;
+  try {
+    const [homeRes, dealsRes] = await Promise.all([
+      fetch("/api/cms/home"),
+      fetch("/api/cms/deals"),
+    ]);
+    const homeData = await homeRes.json().catch(() => ({}));
+    const dealsData = await dealsRes.json().catch(() => ({}));
+    homeSettings = homeData?.settings || null;
+    deals = dealsData?.settings || null;
+  } catch (_e) {}
 
+  setupHeroSlider(homeSettings?.adImages || []);
+  renderDeals(deals || [], products || []);
+  startTimers();
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Array holding your different ad images and where they should link to
-const track = document.querySelector(".hero-track")
-const slides = document.querySelectorAll(".hero-slide")
-const nextBtn = document.querySelector(".hero-btn.next")
-const prevBtn = document.querySelector(".hero-btn.prev")
-const dotsContainer = document.querySelector(".hero-dots")
-
-let index = 0
-
-/* create dots */
-
-slides.forEach((_,i)=>{
-const dot=document.createElement("span")
-if(i===0) dot.classList.add("active")
-
-dot.addEventListener("click",()=>{
-index=i
-updateCarousel()
-})
-
-dotsContainer.appendChild(dot)
-})
-
-const dots=document.querySelectorAll(".hero-dots span")
-
-function updateCarousel(){
-
-track.style.transform=`translateX(-${index*100}%)`
-
-dots.forEach(d=>d.classList.remove("active"))
-dots[index].classList.add("active")
-
-}
-
-/* buttons */
-
-nextBtn.addEventListener("click",()=>{
-index=(index+1)%slides.length
-updateCarousel()
-})
-
-prevBtn.addEventListener("click",()=>{
-index=(index-1+slides.length)%slides.length
-updateCarousel()
-})
-
-/* auto slide */
-
-setInterval(()=>{
-index=(index+1)%slides.length
-updateCarousel()
-},9000)
-
-/* swipe support */
-
-let startX=0
-
-track.addEventListener("touchstart",(e)=>{
-startX=e.touches[0].clientX
-})
-
-track.addEventListener("touchend",(e)=>{
-
-let endX=e.changedTouches[0].clientX
-
-if(startX-endX>50){
-index=(index+1)%slides.length
-}
-
-if(endX-startX>50){
-index=(index-1+slides.length)%slides.length
-}
-
-updateCarousel()
-
-})

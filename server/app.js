@@ -6,6 +6,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const productRoutes = require("./routes/products");
+const cmsRoutes = require("./routes/cms");
+const aiRoutes = require("./routes/ai");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const rootDir = path.join(__dirname, "..");
@@ -29,6 +31,8 @@ app.get("/api/health", (_req, res) => res.json({ ok: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cms", cmsRoutes);
+app.use("/api/ai", aiRoutes);
 
 // SPA-ish fallback: serve index for unknown routes (except /api)
 app.get(/^\/(?!api\/).*/, (_req, res) => {
