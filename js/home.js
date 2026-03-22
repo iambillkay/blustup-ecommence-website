@@ -18,7 +18,7 @@ function homeProductCard(p) {
             ${p.oldPrice ? `<span class="old-price">$${p.oldPrice}</span>` : ""}
             $${p.price}
           </div>
-          <button class="add-to-cart-btn" onclick="addToCart('${p.id}', event)">+ Add</button>
+          <button class="add-to-cart-btn" onclick="addToCart('${String(p.id).replace(/'/g, "\\'")}', event)">+ Add</button>
         </div>
       </div>
     </div>
@@ -60,7 +60,8 @@ function startTimers() {
 function goToShopFilter(filter) {
   if (typeof showPage === "function") showPage("shop");
   setTimeout(() => {
-    if (typeof renderProducts === "function") renderProducts(filter || "all");
+    if (typeof window.setShopFilter === "function") window.setShopFilter(filter || "all");
+    else if (typeof renderProducts === "function") renderProducts(filter || "all");
   }, 30);
 }
 
@@ -72,6 +73,18 @@ function scrollLeft(btn) {
 function scrollRight(btn) {
   const row = btn.parentElement.querySelector(".product-row");
   if (row) row.scrollBy({ left: 300, behavior: "smooth" });
+}
+
+function resolveDealProducts(deal, productList) {
+  const ids = Array.isArray(deal.productIds) ? deal.productIds.map(String) : [];
+  const max = deal.maxItems || 8;
+  if (ids.length) {
+    const byId = new Map(productList.map((p) => [String(p.id), p]));
+    return ids.map((id) => byId.get(id)).filter(Boolean).slice(0, max);
+  }
+  return productList
+    .filter((p) => !deal.sourceCategory || p.cat === deal.sourceCategory)
+    .slice(0, max);
 }
 
 function renderDeals(deals, productList) {
@@ -100,9 +113,7 @@ function renderDeals(deals, productList) {
       };
     }
     if (rowEl) {
-      const items = productList
-        .filter((p) => !deal.sourceCategory || p.cat === deal.sourceCategory)
-        .slice(0, deal.maxItems || 8);
+      const items = resolveDealProducts(deal, productList);
       rowEl.innerHTML = items.map(homeProductCard).join("");
       startCarousel(rowEl);
     }
@@ -183,4 +194,3 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderDeals(deals || [], products || []);
   startTimers();
 });
-

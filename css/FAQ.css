@@ -90,6 +90,83 @@ display:block;
 font-size:14px;
 }
 
+.faq-intro{
+  margin-top:12px;
+  font-size:15px;
+  color:#444;
+  line-height:1.6;
+  max-width:420px;
+}
+
+.faq-board-section{
+  padding:48px 10% 80px;
+  background:linear-gradient(180deg,#ffffff 0%,#f2f3f7 100%);
+  border-top:1px solid #e5e7eb;
+}
+.faq-board-heading{
+  font-family:'Sora',sans-serif;
+  font-size:1.75rem;
+  font-weight:800;
+  color:#0a1040;
+  margin-bottom:8px;
+}
+.faq-board-lead{
+  color:#6b7280;
+  font-size:0.95rem;
+  margin-bottom:28px;
+  max-width:640px;
+}
+.board-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:24px;
+}
+.board-card{
+  background:#fff;
+  border-radius:16px;
+  border:1px solid #e8eaf5;
+  overflow:hidden;
+  box-shadow:0 8px 28px rgba(15,23,42,.06);
+  display:flex;
+  flex-direction:column;
+}
+.board-photo{
+  width:100%;
+  aspect-ratio:4/3;
+  object-fit:cover;
+  background:#f3f4f6;
+}
+.board-photo-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2.5rem;
+  color:#9ca3af;
+  background:linear-gradient(135deg,#e8edff,#f5f7ff);
+}
+.board-body{
+  padding:18px 18px 22px;
+}
+.board-name{
+  font-family:'Sora',sans-serif;
+  font-weight:800;
+  font-size:1.05rem;
+  color:#0a1040;
+}
+.board-role{
+  font-size:0.8rem;
+  font-weight:700;
+  color:#3d5eff;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin:6px 0 10px;
+}
+.board-bio{
+  font-size:0.88rem;
+  color:#4b5563;
+  line-height:1.55;
+}
+
 @media(max-width:900px){
 
 .faq-container{

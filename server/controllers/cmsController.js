@@ -13,6 +13,8 @@ const shopSchema = z.object({
       z.object({
         label: z.string().trim().min(1).max(40),
         value: z.string().trim().min(1).max(40),
+        /** When false, filter is kept for admin/deals but hidden on the shop UI */
+        showInShop: z.boolean().optional(),
       })
     )
     .min(1)
@@ -35,8 +37,55 @@ const dealsSchema = z.array(
     sourceCategory: z.string().trim().min(1).max(40),
     maxItems: z.number().int().min(1).max(50),
     isActive: z.boolean(),
+    /** If non-empty, home page shows these products (by id) instead of category filter */
+    productIds: z.array(z.string().trim().min(1).max(80)).max(40).optional(),
   })
 ).min(1).max(20);
+
+const faqSchema = z.object({
+  pageTitle: z.string().trim().min(1).max(120),
+  label: z.string().trim().max(80).optional(),
+  intro: z.string().trim().max(500).optional(),
+  helpTitle: z.string().trim().min(1).max(120),
+  helpText: z.string().trim().min(1).max(800),
+  contactEmail: z.union([z.string().email().max(120), z.literal("")]).optional(),
+  faqs: z
+    .array(
+      z.object({
+        question: z.string().trim().min(1).max(300),
+        answer: z.string().trim().min(1).max(2000),
+      })
+    )
+    .max(50),
+  boardTitle: z.string().trim().min(1).max(120),
+  board: z
+    .array(
+      z.object({
+        name: z.string().trim().min(1).max(80),
+        role: z.string().trim().min(1).max(120),
+        bio: z.string().trim().min(1).max(800),
+        imageUrl: z.union([z.string().trim().max(500), z.literal(""), z.null()]).optional(),
+      })
+    )
+    .max(20),
+});
+
+function normalizeShop(value) {
+  return {
+    ...value,
+    filters: (value.filters || []).map((f) => ({
+      ...f,
+      showInShop: f.showInShop !== false,
+    })),
+  };
+}
+
+function normalizeDeals(list) {
+  return (list || []).map((d) => ({
+    ...d,
+    productIds: Array.isArray(d.productIds) ? d.productIds : [],
+  }));
+}
 
 async function getHome(_req, res) {
   return res.json({ settings: await storage.cms.getHome() });
@@ -49,12 +98,12 @@ async function setHome(req, res) {
 }
 
 async function getShop(_req, res) {
-  return res.json({ settings: await storage.cms.getShop() });
+  return res.json({ settings: normalizeShop(await storage.cms.getShop()) });
 }
 async function setShop(req, res) {
   const parsed = shopSchema.safeParse(req.body || {});
   if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
-  const settings = await storage.cms.setShop(parsed.data);
+  const settings = await storage.cms.setShop(normalizeShop(parsed.data));
   return res.json({ settings });
 }
 
@@ -69,12 +118,22 @@ async function setAi(req, res) {
 }
 
 async function getDeals(_req, res) {
-  return res.json({ settings: await storage.cms.getDeals() });
+  return res.json({ settings: normalizeDeals(await storage.cms.getDeals()) });
 }
 async function setDeals(req, res) {
   const parsed = dealsSchema.safeParse(req.body || []);
   if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
-  const settings = await storage.cms.setDeals(parsed.data);
+  const settings = await storage.cms.setDeals(normalizeDeals(parsed.data));
+  return res.json({ settings });
+}
+
+async function getFaq(_req, res) {
+  return res.json({ settings: await storage.cms.getFaq() });
+}
+async function setFaq(req, res) {
+  const parsed = faqSchema.safeParse(req.body || {});
+  if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
+  const settings = await storage.cms.setFaq(parsed.data);
   return res.json({ settings });
 }
 
@@ -83,5 +142,22 @@ async function uploadHomeImage(req, res) {
   return res.status(201).json({ imageUrl: `/uploads/${req.file.filename}` });
 }
 
-module.exports = { getHome, setHome, getShop, setShop, getAi, setAi, getDeals, setDeals, uploadHomeImage };
+async function uploadCmsImage(req, res) {
+  if (!req.file) return res.status(400).json({ error: "Image file is required" });
+  return res.status(201).json({ imageUrl: `/uploads/${req.file.filename}` });
+}
 
+module.exports = {
+  getHome,
+  setHome,
+  getShop,
+  setShop,
+  getAi,
+  setAi,
+  getDeals,
+  setDeals,
+  getFaq,
+  setFaq,
+  uploadHomeImage,
+  uploadCmsImage,
+};

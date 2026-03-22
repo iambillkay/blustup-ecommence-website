@@ -1,9 +1,14 @@
 async function runAISearch() {
   const input = document.getElementById("searchInput");
+  const searchCat = document.getElementById("searchCategory");
   const query = String(input?.value || "").trim();
+  const category = searchCat ? String(searchCat.value || "").trim() : "";
+
   if (!query) {
     if (typeof resetProductsFromSearch === "function") resetProductsFromSearch();
-    if (typeof renderProducts === "function") renderProducts("all");
+    if (typeof showPage === "function") showPage("shop");
+    if (typeof window.setShopFilter === "function") window.setShopFilter(category || "all");
+    else if (typeof renderProducts === "function") renderProducts(category || "all");
     return;
   }
 
@@ -15,10 +20,17 @@ async function runAISearch() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "AI search failed");
-    if (typeof setProductsFromSearch === "function") setProductsFromSearch(data.products || []);
+    let found = data.products || [];
+    if (category) {
+      found = found.filter((p) => p.cat === category);
+    }
+    if (typeof setProductsFromSearch === "function") setProductsFromSearch(found);
     if (typeof showPage === "function") showPage("shop");
-    if (typeof renderProducts === "function") renderProducts("all");
-    if (typeof showToast === "function") showToast("🔎", `Found ${data.products?.length || 0} results`);
+    if (typeof window.setShopFilter === "function") window.setShopFilter(category || "all");
+    else if (typeof renderProducts === "function") renderProducts(category || "all");
+    if (typeof showToast === "function") {
+      showToast("🔎", found.length ? `Found ${found.length} result(s)` : "No matches in that category");
+    }
   } catch (e) {
     if (typeof showToast === "function") showToast("⚠️", e.message || "AI search failed");
   }
@@ -37,4 +49,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-

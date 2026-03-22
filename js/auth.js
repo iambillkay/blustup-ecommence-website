@@ -30,11 +30,12 @@ if (signupForm) {
     e.preventDefault();
     const name = document.getElementById("signupName").value;
     const email = document.getElementById("signupEmail").value;
+    const phone = document.getElementById("signupPhone")?.value?.trim() || "";
     const password = document.getElementById("signupPassword").value;
     try {
       const { token, user } = await api("/api/auth/signup", {
         method: "POST",
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, phone, password }),
       });
       setAuth(token, user);
       showToast("✓", "Account created!");

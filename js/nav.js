@@ -36,26 +36,25 @@
   const searchCat    = document.getElementById('searchCategory');
 
   function handleSearch() {
-    const query    = searchInput.value.trim();
-    const category = searchCat ? searchCat.value : '';
-    if (!query) return;
-    console.log('Search:', query, '| Category:', category || 'All');
-    // TODO: wire to your search/filter logic e.g.:
-    // showPage('shop'); filterProducts(query, category);
+    if (typeof runAISearch === 'function') runAISearch();
   }
 
   searchSubmit.addEventListener('click', handleSearch);
   searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSearch();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
+    }
   });
 
   /* ── Mobile search ── */
   function handleMobileSearch() {
-    const query = document.getElementById('mobileSearchInput').value.trim();
+    const query = document.getElementById('mobileSearchInput')?.value.trim() || '';
     if (!query) return;
-    console.log('Mobile Search:', query);
+    const si = document.getElementById('searchInput');
+    if (si) si.value = query;
     closeMenu();
-    // TODO: showPage('shop'); filterProducts(query);
+    if (typeof runAISearch === 'function') runAISearch();
   }
 
   document.getElementById('mobileSearchInput')?.addEventListener('keydown', (e) => {

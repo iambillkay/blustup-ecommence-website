@@ -19,5 +19,9 @@ router.put("/ai", ...adminOnly, cmsController.setAi);
 router.get("/deals", cmsController.getDeals);
 router.put("/deals", ...adminOnly, cmsController.setDeals);
 
+router.get("/faq", cmsController.getFaq);
+router.put("/faq", ...adminOnly, cmsController.setFaq);
+router.post("/upload-image", ...adminOnly, upload.single("image"), cmsController.uploadCmsImage);
+
 module.exports = router;
 

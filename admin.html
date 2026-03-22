@@ -34,6 +34,11 @@
         <div class="row-link"><a href="#" data-action="edit-shop">Shop title and filters</a></div>
       </div>
 
+      <div class="panel-header">Content</div>
+      <div class="section">
+        <div class="row-link"><a href="#" data-action="edit-faq">FAQ &amp; board of directors</a></div>
+      </div>
+
       <div class="panel-header">Deals</div>
       <div class="section">
         <div class="row-link"><a href="#" data-action="edit-deals">Simple deals setup</a></div>
@@ -89,6 +94,20 @@
       const form = new FormData();
       form.append("image", file);
       const res = await fetch("/api/cms/home/upload-image", {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      return data.imageUrl;
+    }
+
+    async function uploadCmsImage(file) {
+      const token = getToken();
+      const form = new FormData();
+      form.append("image", file);
+      const res = await fetch("/api/cms/upload-image", {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,
@@ -238,44 +257,72 @@
       });
     }
 
-    // Shop filters (structured + add new)
-    function renderFilterRows(filters) {
+    // Shop filters — label, value (dropdown), visibility (dropdown)
+    function filterValueOptions(current, cats) {
+      const merged = ["all", ...new Set([...(cats || []), current].filter(Boolean))];
+      const seen = new Set();
+      const opts = [];
+      for (const v of merged) {
+        if (seen.has(v)) continue;
+        seen.add(v);
+        opts.push(`<option value="${esc(v)}" ${String(current) === String(v) ? "selected" : ""}>${esc(v)}</option>`);
+      }
+      return opts.join("");
+    }
+    function renderFilterRows(filters, cats) {
       return filters.map((f, i) => `
-        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;">
+        <div class="admin-filter-row" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;">
           <input data-filter-row="${i}" data-k="label" placeholder="Label (e.g. Electronics)" value="${esc(f.label)}" />
-          <input data-filter-row="${i}" data-k="value" placeholder="Value (e.g. flights)" value="${esc(f.value)}" />
-          <button class="btn-admin danger" data-action="remove-filter-row" data-row="${i}">X</button>
+          <select data-filter-row="${i}" data-k="value">${filterValueOptions(f.value, cats)}</select>
+          <select data-filter-row="${i}" data-k="showInShop">
+            <option value="1" ${f.showInShop !== false ? "selected" : ""}>Visible on shop</option>
+            <option value="0" ${f.showInShop === false ? "selected" : ""}>Hidden on shop</option>
+          </select>
+          <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>
         </div>`).join("");
     }
     async function openShopCms() {
-      const { settings } = await api("/api/cms/shop");
+      const [{ settings }, { products }] = await Promise.all([api("/api/cms/shop"), api("/api/products")]);
       const filters = Array.isArray(settings.filters) ? settings.filters : [];
+      const cats = [...new Set((products || []).map((p) => p.cat).filter(Boolean))].sort();
       openModal("Shop Settings", `
+        <div class="muted">Filter <strong>value</strong> must match product <strong>category</strong>. Hidden filters stay available for deals / admin.</div>
         <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
         <div class="field" style="margin-top:12px;"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
         <div class="field" style="margin-top:12px;"><label>Filters</label>
-          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(filters)}</div>
-          <button class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
+          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(filters, cats)}</div>
+          <button type="button" class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
         </div>
-        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveShop">Save</button></div>`);
+        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveShop">Save</button></div>`);
 
       document.getElementById("btnAddFilterRow").addEventListener("click", () => {
         const wrap = document.getElementById("filtersWrap");
-        const next = wrap.querySelectorAll("[data-filter-row]").length;
+        const rows = wrap.querySelectorAll(".admin-filter-row");
+        const next = rows.length;
+        const firstCat = cats[0] || "all";
         const div = document.createElement("div");
-        div.style.display = "grid"; div.style.gridTemplateColumns = "1fr 1fr auto"; div.style.gap = "8px"; div.style.alignItems = "center"; div.style.marginBottom = "8px";
-        div.innerHTML = `<input data-filter-row="${next}" data-k="label" placeholder="Label"><input data-filter-row="${next}" data-k="value" placeholder="Value"><button class="btn-admin danger" data-action="remove-filter-row" data-row="${next}">X</button>`;
+        div.className = "admin-filter-row";
+        div.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;";
+        div.innerHTML = `
+          <input data-filter-row="${next}" data-k="label" placeholder="Label">
+          <select data-filter-row="${next}" data-k="value">${filterValueOptions(firstCat, cats)}</select>
+          <select data-filter-row="${next}" data-k="showInShop">
+            <option value="1" selected>Visible on shop</option>
+            <option value="0">Hidden on shop</option>
+          </select>
+          <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>`;
         wrap.appendChild(div);
       });
 
       document.getElementById("saveShop").addEventListener("click", async () => {
-        const rows = Array.from(document.querySelectorAll("[data-filter-row]"));
+        const controls = Array.from(document.querySelectorAll("#filtersWrap [data-filter-row]"));
         const map = {};
-        rows.forEach((el) => {
+        controls.forEach((el) => {
           const r = el.getAttribute("data-filter-row");
           const k = el.getAttribute("data-k");
-          if (!map[r]) map[r] = { label: "", value: "" };
-          map[r][k] = el.value.trim();
+          if (!map[r]) map[r] = { label: "", value: "", showInShop: true };
+          if (k === "showInShop") map[r][k] = el.value === "1";
+          else map[r][k] = el.value.trim();
         });
         const nextFilters = Object.values(map).filter((f) => f.label && f.value);
         await api("/api/cms/shop", {
@@ -290,26 +337,32 @@
       });
     }
 
-    // Simplified deals with dropdowns sourced from shop filters
+    // Deals — dropdowns + optional product IDs for home rows
     function dealRowTemplate(d, idx, filters) {
       const options = filters.map((f) => `<option value="${esc(f.value)}" ${f.value === d.sourceCategory ? "selected" : ""}>${esc(f.label)} (${esc(f.value)})</option>`).join("");
       const optionsSee = filters.map((f) => `<option value="${esc(f.value)}" ${f.value === d.seeMoreFilter ? "selected" : ""}>${esc(f.label)} (${esc(f.value)})</option>`).join("");
+      const pids = Array.isArray(d.productIds) ? d.productIds.join("\n") : "";
       return `
-        <div style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:10px;">
+        <div class="deal-admin-row" style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:10px;">
           <div class="grid2">
             <div class="field"><label>Deal name</label><input data-deal="${idx}" data-k="name" value="${esc(d.name)}"></div>
             <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${idx}" data-k="timerSeconds" value="${esc(d.timerSeconds)}"></div>
           </div>
           <div class="grid2" style="margin-top:8px;">
-            <div class="field"><label>Products from filter</label><select data-deal="${idx}" data-k="sourceCategory">${options}</select></div>
-            <div class="field"><label>See more goes to filter</label><select data-deal="${idx}" data-k="seeMoreFilter">${optionsSee}</select></div>
+            <div class="field"><label>Fallback: products from category</label><select data-deal="${idx}" data-k="sourceCategory">${options}</select></div>
+            <div class="field"><label>See more → shop filter</label><select data-deal="${idx}" data-k="seeMoreFilter">${optionsSee}</select></div>
+          </div>
+          <div class="field" style="margin-top:8px;">
+            <label>Featured product IDs (optional)</label>
+            <div class="muted" style="font-size:12px;margin-bottom:6px;">One per line. When set, the home deal row shows these products (still in their categories in the shop).</div>
+            <textarea rows="3" data-deal="${idx}" data-k="productIds" style="width:100%;font-family:monospace;font-size:12px;">${esc(pids)}</textarea>
           </div>
           <div class="grid2" style="margin-top:8px;">
             <div class="field"><label>Max items</label><input type="number" data-deal="${idx}" data-k="maxItems" value="${esc(d.maxItems || 8)}"></div>
             <div class="field"><label>Active</label><select data-deal="${idx}" data-k="isActive"><option value="1" ${d.isActive ? "selected" : ""}>Yes</option><option value="0" ${!d.isActive ? "selected" : ""}>No</option></select></div>
           </div>
           <input type="hidden" data-deal="${idx}" data-k="id" value="${esc(d.id)}">
-          <div style="margin-top:8px;"><button class="btn-admin danger" data-action="remove-deal-row" data-row="${idx}">Remove deal</button></div>
+          <div style="margin-top:8px;"><button type="button" class="btn-admin danger" data-action="remove-deal-row">Remove deal</button></div>
         </div>`;
     }
     async function openDealsCms() {
@@ -326,22 +379,26 @@
 
       document.getElementById("btnAddDeal").addEventListener("click", () => {
         const wrap = document.getElementById("dealsWrap");
-        const idx = wrap.querySelectorAll("[data-deal]").length;
+        const idx = wrap.querySelectorAll(".deal-admin-row").length;
         const first = filters[0]?.value || "all";
-        const d = { id: `deal-${Date.now()}`, name: "New Deal", timerSeconds: 3600, sourceCategory: first, seeMoreFilter: first, maxItems: 8, isActive: true };
+        const d = { id: `deal-${Date.now()}`, name: "New Deal", timerSeconds: 3600, sourceCategory: first, seeMoreFilter: first, maxItems: 8, isActive: true, productIds: [] };
         const div = document.createElement("div");
         div.innerHTML = dealRowTemplate(d, idx, filters);
         wrap.appendChild(div.firstElementChild);
       });
 
       document.getElementById("saveDeals").addEventListener("click", async () => {
-        const nodes = Array.from(document.querySelectorAll("[data-deal]"));
+        const nodes = Array.from(document.querySelectorAll(".deal-admin-row [data-deal]"));
         const map = {};
         nodes.forEach((el) => {
           const i = el.getAttribute("data-deal");
           const k = el.getAttribute("data-k");
           if (!map[i]) map[i] = {};
-          map[i][k] = el.value;
+          if (k === "productIds") {
+            map[i][k] = el.value.split("\n").map((s) => s.trim()).filter(Boolean);
+          } else {
+            map[i][k] = el.value;
+          }
         });
         const next = Object.values(map).map((d) => ({
           id: d.id || `deal-${Date.now()}`,
@@ -351,8 +408,127 @@
           seeMoreFilter: d.seeMoreFilter,
           maxItems: Number(d.maxItems || 8),
           isActive: d.isActive === "1",
+          productIds: Array.isArray(d.productIds) ? d.productIds : [],
         })).filter((d) => d.name && d.timerSeconds > 0 && d.sourceCategory && d.seeMoreFilter);
         await api("/api/cms/deals", { method: "PUT", body: JSON.stringify(next) });
+        await loadRecentActions(); closeModal();
+      });
+    }
+
+    // FAQ + board
+    function faqQaRow(q, a, i) {
+      return `
+        <div class="faq-edit-row" style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:8px;">
+          <div class="field"><label>Question</label><input data-faq="${i}" data-k="question" value="${esc(q)}"></div>
+          <div class="field"><label>Answer</label><textarea data-faq="${i}" data-k="answer" rows="3">${esc(a)}</textarea></div>
+          <button type="button" class="btn-admin danger" data-action="remove-faq-qa">Remove</button>
+        </div>`;
+    }
+    function boardRow(m, i) {
+      return `
+        <div class="board-edit-row" style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:8px;">
+          <div class="grid2">
+            <div class="field"><label>Name</label><input data-board="${i}" data-k="name" value="${esc(m.name)}"></div>
+            <div class="field"><label>Role</label><input data-board="${i}" data-k="role" value="${esc(m.role)}"></div>
+          </div>
+          <div class="field"><label>Bio</label><textarea data-board="${i}" data-k="bio" rows="3">${esc(m.bio)}</textarea></div>
+          <div class="field"><label>Image URL</label><input data-board="${i}" data-k="imageUrl" value="${esc(m.imageUrl || "")}"></div>
+          <div class="field"><label>Upload portrait</label><input type="file" accept="image/*" data-board-upload="${i}"></div>
+          <button type="button" class="btn-admin danger" data-action="remove-board-row">Remove</button>
+        </div>`;
+    }
+    async function openFaqCms() {
+      const { settings: s } = await api("/api/cms/faq");
+      const faqs = Array.isArray(s.faqs) ? s.faqs : [];
+      const board = Array.isArray(s.board) ? s.board : [];
+      openModal("FAQ & board", `
+        <div class="field"><label>Page title (use line breaks)</label><textarea id="fq_title" rows="2">${esc(s.pageTitle || "")}</textarea></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Label pill</label><input id="fq_label" value="${esc(s.label || "")}"></div>
+          <div class="field"><label>Contact email</label><input id="fq_email" type="email" value="${esc(s.contactEmail || "")}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Intro (short)</label><input id="fq_intro" value="${esc(s.intro || "")}"></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Help box title</label><input id="fq_help_title" value="${esc(s.helpTitle || "")}"></div>
+          <div class="field"><label>Board section title</label><input id="fq_board_title" value="${esc(s.boardTitle || "")}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Help box text</label><textarea id="fq_help_text" rows="3">${esc(s.helpText || "")}</textarea></div>
+        <div class="panel-header" style="margin-top:16px;">Questions</div>
+        <div id="faqItemsWrap">${faqs.map((x, i) => faqQaRow(x.question, x.answer, i)).join("")}</div>
+        <button type="button" class="btn-admin" id="btnAddFaq">+ Add question</button>
+        <div class="panel-header" style="margin-top:16px;">Board</div>
+        <div id="faqBoardWrap">${board.map((m, i) => boardRow(m, i)).join("")}</div>
+        <button type="button" class="btn-admin" id="btnAddBoard">+ Add director</button>
+        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveFaq">Save</button></div>`);
+
+      document.getElementById("btnAddFaq").addEventListener("click", () => {
+        const wrap = document.getElementById("faqItemsWrap");
+        const i = wrap.querySelectorAll(".faq-edit-row").length;
+        const div = document.createElement("div");
+        div.innerHTML = faqQaRow("New question", "Answer…", i);
+        wrap.appendChild(div.firstElementChild);
+      });
+      document.getElementById("btnAddBoard").addEventListener("click", () => {
+        const wrap = document.getElementById("faqBoardWrap");
+        const i = wrap.querySelectorAll(".board-edit-row").length;
+        const div = document.createElement("div");
+        div.innerHTML = boardRow({ name: "Name", role: "Role", bio: "Bio", imageUrl: "" }, i);
+        wrap.appendChild(div.firstElementChild);
+      });
+      document.getElementById("faqBoardWrap").addEventListener("change", async (e) => {
+        const t = e.target;
+        if (t.matches("[data-board-upload]")) {
+          const file = t.files?.[0];
+          if (!file) return;
+          const idx = t.getAttribute("data-board-upload");
+          const url = await uploadCmsImage(file);
+          const input = document.querySelector(`#faqBoardWrap [data-board="${idx}"][data-k="imageUrl"]`);
+          if (input) input.value = url;
+          t.value = "";
+        }
+      });
+      document.getElementById("saveFaq").addEventListener("click", async () => {
+        const fq = Array.from(document.querySelectorAll("#faqItemsWrap [data-faq]"));
+        const fmap = {};
+        fq.forEach((el) => {
+          const i = el.getAttribute("data-faq");
+          const k = el.getAttribute("data-k");
+          if (!fmap[i]) fmap[i] = {};
+          fmap[i][k] = el.value.trim();
+        });
+        const nextFaqs = Object.values(fmap)
+          .map((x) => ({ question: x.question, answer: x.answer }))
+          .filter((x) => x.question && x.answer);
+        const bq = Array.from(document.querySelectorAll("#faqBoardWrap [data-board]"));
+        const bmap = {};
+        bq.forEach((el) => {
+          const i = el.getAttribute("data-board");
+          const k = el.getAttribute("data-k");
+          if (!bmap[i]) bmap[i] = {};
+          bmap[i][k] = el.value.trim();
+        });
+        const nextBoard = Object.values(bmap)
+          .map((x) => ({
+            name: x.name,
+            role: x.role,
+            bio: x.bio,
+            imageUrl: x.imageUrl || null,
+          }))
+          .filter((x) => x.name && x.role && x.bio);
+        await api("/api/cms/faq", {
+          method: "PUT",
+          body: JSON.stringify({
+            pageTitle: document.getElementById("fq_title").value,
+            label: document.getElementById("fq_label").value,
+            intro: document.getElementById("fq_intro").value,
+            helpTitle: document.getElementById("fq_help_title").value,
+            helpText: document.getElementById("fq_help_text").value,
+            contactEmail: document.getElementById("fq_email").value,
+            boardTitle: document.getElementById("fq_board_title").value,
+            faqs: nextFaqs,
+            board: nextBoard,
+          }),
+        });
         await loadRecentActions(); closeModal();
       });
     }
@@ -408,9 +584,22 @@
       if (action === "edit-home-images") return openHomeImagesCms();
       if (action === "edit-shop") return openShopCms();
       if (action === "edit-deals") return openDealsCms();
+      if (action === "edit-faq") return openFaqCms();
       if (action === "edit-ai") return openAiSettings();
-      if (action === "remove-filter-row" || action === "remove-deal-row") {
-        node.closest("div[style*='grid-template-columns'], div[style*='border:1px solid']")?.remove();
+      if (action === "remove-filter-row") {
+        node.closest(".admin-filter-row")?.remove();
+        return;
+      }
+      if (action === "remove-deal-row") {
+        node.closest(".deal-admin-row")?.remove();
+        return;
+      }
+      if (action === "remove-faq-qa") {
+        node.closest(".faq-edit-row")?.remove();
+        return;
+      }
+      if (action === "remove-board-row") {
+        node.closest(".board-edit-row")?.remove();
         return;
       }
     });

@@ -125,12 +125,12 @@ const DEFAULT_SHOP = {
   title: "Welcome to the Shop",
   subtitle: "Discover products tailored to your needs",
   filters: [
-    { label: "All Products", value: "all" },
-    { label: "Electronics", value: "flights" },
-    { label: "Clothes", value: "lounge" },
-    { label: "Consumables", value: "upgrades" },
-    { label: "Travel Essentials", value: "essentials" },
-    { label: "Maintenance Kits", value: "insurance" },
+    { label: "All Products", value: "all", showInShop: true },
+    { label: "Electronics", value: "flights", showInShop: true },
+    { label: "Clothes", value: "lounge", showInShop: true },
+    { label: "Consumables", value: "upgrades", showInShop: true },
+    { label: "Travel Essentials", value: "essentials", showInShop: true },
+    { label: "Maintenance Kits", value: "insurance", showInShop: true },
   ],
 };
 
@@ -139,7 +139,7 @@ const DEFAULT_AI = {
   searchEnabled: true,
   botName: "Blustup AI",
   systemPrompt:
-    "You are a helpful shopping assistant for Blustup. Answer concisely and recommend relevant products.",
+    "You are Blustup's shopping assistant. Give brief, direct answers. Recommend products when relevant.",
 };
 
 const DEFAULT_DEALS = [
@@ -151,6 +151,7 @@ const DEFAULT_DEALS = [
     sourceCategory: "flights",
     maxItems: 8,
     isActive: true,
+    productIds: [],
   },
   {
     id: "deal-2",
@@ -160,8 +161,67 @@ const DEFAULT_DEALS = [
     sourceCategory: "lounge",
     maxItems: 8,
     isActive: true,
+    productIds: [],
   },
 ];
+
+const DEFAULT_FAQ = {
+  pageTitle: "Frequently asked\nquestions",
+  label: "Have Questions?",
+  intro: "Find answers about orders, shipping, and your Blustup account.",
+  helpTitle: "Still have a questions?",
+  helpText:
+    "Can't find the answer to your question? Send us an email and we'll get back to you as soon as possible.",
+  contactEmail: "support@blustup.local",
+  faqs: [
+    {
+      question: "How do I create an account?",
+      answer:
+        'Click on "Create account" from the login page, enter your name, email, and password, then click "Create Account". You\'ll be logged in automatically!',
+    },
+    {
+      question: "How do I add products to my cart?",
+      answer:
+        'Browse the shop, find a product you like, and click the "+ Add" button. Your cart count will update at the top right.',
+    },
+    {
+      question: "Is my personal information secure?",
+      answer:
+        "Yes! We use 256-bit SSL encryption to protect all your data. Your password is hashed with bcryptjs for extra security.",
+    },
+    {
+      question: "Can I use promo codes?",
+      answer:
+        'Yes! Enter a valid promo code in your cart summary and click "Apply" to get discounts on your order.',
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer:
+        "We accept credit/debit cards, PayPal, Apple Pay, and Google Pay at checkout. Pay on delivery is also available.",
+    },
+  ],
+  boardTitle: "Board of directors",
+  board: [
+    {
+      name: "Amina Osei",
+      role: "Chair & CEO",
+      bio: "Leads strategy and partnerships across retail and logistics for Blustup.",
+      imageUrl: null,
+    },
+    {
+      name: "Jordan Mensah",
+      role: "Chief Operating Officer",
+      bio: "Oversees day-to-day operations, vendor relationships, and customer experience.",
+      imageUrl: null,
+    },
+    {
+      name: "Priya Nair",
+      role: "Chief Technology Officer",
+      bio: "Drives platform security, payments infrastructure, and product engineering.",
+      imageUrl: null,
+    },
+  ],
+};
 
 async function getCmsByKey(key, fallback) {
   const doc = await CmsConfig.findOne({ key }).select("value");
@@ -196,6 +256,8 @@ module.exports = {
     setAi: (value) => upsertCmsByKey("ai", value),
     getDeals: () => getCmsByKey("deals", DEFAULT_DEALS),
     setDeals: (value) => upsertCmsByKey("deals", value),
+    getFaq: () => getCmsByKey("faq", DEFAULT_FAQ),
+    setFaq: (value) => upsertCmsByKey("faq", value),
   },
 };
 

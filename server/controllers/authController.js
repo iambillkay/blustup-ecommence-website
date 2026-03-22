@@ -8,6 +8,7 @@ const signupSchema = z.object({
   name: z.string().trim().min(1).max(100),
   email: z.string().trim().email().max(200).transform((v) => v.toLowerCase()),
   password: z.string().min(8).max(200),
+  phone: z.string().trim().min(8).max(20),
 });
 
 const loginSchema = z.object({
@@ -40,6 +41,7 @@ async function signup(req, res, next) {
       email: body.email,
       passwordHash,
       role: "user",
+      phone: (body.phone || "").trim() || null,
     });
 
     const token = signJwt({ sub: user._id.toString(), email: user.email, name: user.name, role: user.role });
