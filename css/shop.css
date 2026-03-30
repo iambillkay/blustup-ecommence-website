@@ -53,14 +53,16 @@
 
 /* ── PRODUCTS GRID ── */
 .products-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  align-items: stretch;
 }
 .product-card {
   background: #fff; border-radius: 20px; overflow: hidden;
   display: flex; 
   flex-direction: column;
-  height: auto;
-  overflow: visible;
+  height: 100%;
   border: 1px solid #e8eaf5;
   transition: box-shadow .25s, transform .25s; cursor: pointer;
 }
@@ -89,15 +91,61 @@
 
 .product-info { 
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.product-category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 28px;
+}
+.product-category-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eef3fb;
+  color: #2c3750;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 .product-category {
-  display: none;
-  font-size: .72rem; font-weight: 700; color: #000000;
-  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eef3fb;
+  color: #2c3750;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
-.product-name { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
-.product-desc { font-size: .8rem; color: var(--text-light); line-height: 1.5; margin-bottom: 14px; }
-.product-footer { display: flex; align-items: center; justify-content: space-between; }
+.product-name { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-dark); min-height: 48px; }
+.product-desc {
+  font-size: .82rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3.9em;
+}
+.product-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
 .product-price { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--text-dark); }
 .product-price .old-price {
   font-size: .8rem; color: var(--text-light);
@@ -109,6 +157,7 @@
   padding: 9px 16px; font-size: .82rem; font-weight: 600;
   cursor: pointer; font-family: 'DM Sans', sans-serif;
   transition: opacity .2s, transform .2s;
+  white-space: nowrap;
 }
 .add-to-cart-btn:hover { opacity: .88; transform: scale(1.04); }
 

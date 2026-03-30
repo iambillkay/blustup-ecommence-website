@@ -17,11 +17,55 @@ function toBooleanLike(v) {
   return undefined;
 }
 
+function normalizeCategoryToken(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function normalizeCategoryList(value, fallbackValue, options = {}) {
+  const source = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? (() => {
+          const trimmed = value.trim();
+          if (!trimmed) return [];
+          if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              return Array.isArray(parsed) ? parsed : [trimmed];
+            } catch (_e) {
+              return trimmed.split(",");
+            }
+          }
+          return trimmed.split(",");
+        })()
+      : [];
+  const seen = new Set();
+  const categories = source
+    .map((entry) => String(entry || "").trim())
+    .filter((entry) => {
+      const token = normalizeCategoryToken(entry);
+      if (!entry || seen.has(token)) return false;
+      seen.add(token);
+      return true;
+    });
+
+  if (categories.length) return categories;
+  if (options.allowEmpty) return [];
+
+  const fallback = String(fallbackValue || "").trim() || "general";
+  return [fallback];
+}
+
+function getProductCategories(product) {
+  return normalizeCategoryList(product?.categories, product?.cat || product?.category);
+}
+
 function toBaseFields(body) {
   return {
     name: body?.name,
     description: body?.description ?? body?.desc,
     category: body?.category ?? body?.cat,
+    categories: body?.categories ?? body?.cats,
     price: body?.price,
     oldPrice: body?.oldPrice,
     imageUrl: body?.imageUrl,
@@ -36,11 +80,94 @@ function toBaseFields(body) {
   };
 }
 
+function formatCategoryLabel(value) {
+  return String(value || "")
+    .trim()
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+async function ensureShopFiltersForCategories(categories) {
+  const values = normalizeCategoryList(categories, null, { allowEmpty: true });
+  const current = await storage.cms.getShop();
+  const filters = Array.isArray(current?.filters) ? [...current.filters] : [];
+  const existingTokens = new Set(filters.map((filter) => normalizeCategoryToken(filter?.value)).filter(Boolean));
+  const missing = values.filter((value) => {
+    const token = normalizeCategoryToken(value);
+    return token && token !== "all" && !existingTokens.has(token);
+  });
+
+  if (!missing.length) return false;
+
+  await storage.cms.setShop({
+    title: current?.title || "Welcome to the Shop",
+    subtitle: current?.subtitle || "Discover products tailored to your needs",
+    filters: [
+      ...filters,
+      ...missing.map((value) => ({
+        label: formatCategoryLabel(value),
+        value,
+        showInShop: true,
+      })),
+    ],
+  });
+
+  return true;
+}
+
+async function pruneDealsForProduct(productId) {
+  const [currentDeals, productData] = await Promise.all([
+    storage.cms.getDeals(),
+    storage.product.listAdmin(),
+  ]);
+  const deals = Array.isArray(currentDeals) ? currentDeals : [];
+  const products = Array.isArray(productData?.products) ? productData.products : [];
+  const activeProducts = products.filter((product) => product && product.isActive !== false);
+  const activeProductIds = new Set(activeProducts.map((product) => String(product.id)));
+  const activeCategories = new Set(
+    activeProducts.flatMap((product) => getProductCategories(product).map(normalizeCategoryToken)).filter(Boolean)
+  );
+  let changed = false;
+
+  const nextDeals = deals.map((deal) => {
+    const ids = Array.isArray(deal?.productIds) ? deal.productIds.map(String) : [];
+    const filteredIds = [...new Set(
+      ids.filter((id) => id !== String(productId) && activeProductIds.has(String(id)))
+    )].slice(0, Math.max(1, Number(deal?.maxItems || 1)));
+    const fallbackCategories = normalizeCategoryList(deal?.sourceCategories, deal?.sourceCategory, { allowEmpty: true });
+    const hasFallbackCategory = fallbackCategories.some((category) => activeCategories.has(normalizeCategoryToken(category)));
+    const nextIsActive = deal?.isActive !== false && (filteredIds.length > 0 || hasFallbackCategory);
+    const normalizedFallbackPrimary = fallbackCategories[0] || "";
+    const previousFallbackCategories = Array.isArray(deal?.sourceCategories)
+      ? deal.sourceCategories.map(normalizeCategoryToken)
+      : [];
+    const normalizedFallbackUnchanged =
+      normalizeCategoryToken(deal?.sourceCategory) === normalizeCategoryToken(normalizedFallbackPrimary)
+      && JSON.stringify(previousFallbackCategories) === JSON.stringify(fallbackCategories.map(normalizeCategoryToken));
+    if (filteredIds.length === ids.length && nextIsActive === deal?.isActive && normalizedFallbackUnchanged) return deal;
+    changed = true;
+    return {
+      ...deal,
+      sourceCategory: normalizedFallbackPrimary,
+      sourceCategories: fallbackCategories,
+      productIds: filteredIds,
+      isActive: nextIsActive,
+    };
+  });
+
+  if (changed) {
+    await storage.cms.setDeals(nextDeals);
+  }
+
+  return changed;
+}
+
 const createProductSchema = z.object({
   name: z.string().trim().min(1).max(160),
   price: z.number().min(0),
   description: z.string().trim().min(0).max(5000),
-  category: z.string().trim().min(1).max(80),
+  category: z.string().trim().min(1).max(80).optional(),
+  categories: z.array(z.string().trim().min(1).max(80)).min(1).max(12),
   stockQty: z.number().min(0).default(0),
 
   // Optional UI extras
@@ -80,6 +207,7 @@ async function createProduct(req, res) {
     price: body.price,
     description: body.description,
     category: body.category,
+    categories: normalizeCategoryList(body.categories, body.category),
     stockQty: body.stockQty == null ? 0 : body.stockQty,
     oldPrice: body.oldPrice,
     imageUrl: imageUrlFromUpload ?? body.imageUrl,
@@ -92,6 +220,8 @@ async function createProduct(req, res) {
 
   const parsed = createProductSchema.safeParse({
     ...payload,
+    category: payload.categories?.[0] || payload.category,
+    categories: payload.categories,
     price: Number(payload.price),
     stockQty: Number(payload.stockQty),
     oldPrice: payload.oldPrice == null || payload.oldPrice === "" ? null : Number(payload.oldPrice),
@@ -111,7 +241,8 @@ async function createProduct(req, res) {
     name: parsed.data.name,
     price: parsed.data.price,
     description: parsed.data.description,
-    category: parsed.data.category,
+    category: parsed.data.categories[0],
+    categories: parsed.data.categories,
     stockQty: parsed.data.stockQty,
     oldPrice: parsed.data.oldPrice ?? null,
     imageUrl: parsed.data.imageUrl ?? null,
@@ -121,6 +252,8 @@ async function createProduct(req, res) {
     color: parsed.data.color ?? null,
     isActive: parsed.data.isActive,
   });
+
+  await ensureShopFiltersForCategories(created.categories);
 
   await storage.audit.add({
     actorId: req.user?.sub || null,
@@ -144,6 +277,9 @@ async function updateProduct(req, res) {
     name: body.name,
     description: body.description,
     category: body.category,
+    categories: body.categories === undefined && body.category === undefined
+      ? undefined
+      : normalizeCategoryList(body.categories, body.category),
     price: body.price == null ? undefined : Number(body.price),
     stockQty: body.stockQty == null ? undefined : Number(body.stockQty),
     oldPrice:
@@ -175,7 +311,13 @@ async function updateProduct(req, res) {
   if (parsed.data.name !== undefined) updatePayload.name = parsed.data.name;
   if (parsed.data.price !== undefined) updatePayload.price = parsed.data.price;
   if (parsed.data.description !== undefined) updatePayload.description = parsed.data.description;
-  if (parsed.data.category !== undefined) updatePayload.category = parsed.data.category;
+  if (parsed.data.categories !== undefined) {
+    updatePayload.categories = parsed.data.categories;
+    updatePayload.category = parsed.data.categories[0];
+  } else if (parsed.data.category !== undefined) {
+    updatePayload.categories = normalizeCategoryList(parsed.data.category, parsed.data.category);
+    updatePayload.category = updatePayload.categories[0];
+  }
   if (parsed.data.stockQty !== undefined) updatePayload.stockQty = parsed.data.stockQty;
   if (parsed.data.oldPrice !== undefined) updatePayload.oldPrice = parsed.data.oldPrice;
   if (parsed.data.imageUrl !== undefined) updatePayload.imageUrl = parsed.data.imageUrl;
@@ -187,6 +329,9 @@ async function updateProduct(req, res) {
 
   const updated = await storage.product.update(id, updatePayload);
   if (!updated) return res.status(404).json({ error: "Not found" });
+
+  await ensureShopFiltersForCategories(updated.categories);
+  await pruneDealsForProduct(updated.id);
 
   await storage.audit.add({
     actorId: req.user?.sub || null,
@@ -206,6 +351,8 @@ async function deleteProduct(req, res) {
   const existing = await storage.product.delete(id);
   if (!existing) return res.status(404).json({ error: "Not found" });
 
+  await pruneDealsForProduct(id);
+
   await storage.audit.add({
     actorId: req.user?.sub || null,
     action: "delete",
@@ -218,4 +365,3 @@ async function deleteProduct(req, res) {
 }
 
 module.exports = { listPublic, listAdmin, createProduct, updateProduct, deleteProduct };
-

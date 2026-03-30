@@ -8,16 +8,21 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+function setFaqItemState(item, isActive) {
+  item.classList.toggle("active", isActive);
+  const icon = item.querySelector(".faq-icon");
+  if (icon) icon.innerHTML = isActive ? "&#9650;" : "&#9660;";
+}
 function wireFaqAccordion(container) {
-  const items = container.querySelectorAll(".faq-item");
-  items.forEach((item) => {
-    item.addEventListener("click", () => {
-      items.forEach((el) => {
-        if (el !== item) el.classList.remove("active");
-      });
-      item.classList.toggle("active");
+  const items = Array.from(container.querySelectorAll(".faq-item"));
+  items.forEach((item, index) => {
+    const trigger = item.querySelector(".faq-question") || item;
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      items.forEach((el, idx) => setFaqItemState(el, idx === index));
     });
   });
+  items.forEach((item, index) => setFaqItemState(item, index === 0));
 }
 
 function renderFaqPage(settings) {
@@ -61,10 +66,10 @@ function renderFaqPage(settings) {
     .map(
       (item, i) => `
     <div class="faq-item ${i === 0 ? "active" : ""}">
-      <div class="faq-question">
-        ${escapeHtml(item.question)}
-        <span class="faq-icon">${i === 0 ? "▲" : "▼"}</span>
-      </div>
+      <button class="faq-question" type="button">
+        <span>${escapeHtml(item.question)}</span>
+        <span class="faq-icon">${i === 0 ? "&#9650;" : "&#9660;"}</span>
+      </button>
       <div class="faq-answer">${escapeHtml(item.answer)}</div>
     </div>`
     )
@@ -95,7 +100,7 @@ function renderFaqPage(settings) {
 
 async function loadFaqCms() {
   try {
-    const res = await fetch("/api/cms/faq");
+    const res = await apiFetch("/api/cms/faq", { cache: "no-store" });
     const data = await res.json();
     if (!res.ok || !data?.settings) return;
     renderFaqPage(data.settings);
@@ -103,6 +108,8 @@ async function loadFaqCms() {
     /* static HTML fallback */
   }
 }
+
+window.loadFaqCms = loadFaqCms;
 
 document.addEventListener("DOMContentLoaded", () => {
   loadFaqCms();

@@ -1,15 +1,64 @@
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const bcrypt = require("bcrypt");
+
+const STATE_FILE = path.join(__dirname, "memory-state.json");
+const DEFAULT_AI = {
+  chatEnabled: true,
+  searchEnabled: true,
+  botName: "Blustup AI",
+  userPersona: "everyday online shoppers in Ghana who want reliable value and clear guidance",
+  systemPrompt:
+    "You are Blustup's shopping assistant. Give brief, direct answers. Recommend products when relevant.",
+};
 
 function makeId() {
   return crypto.randomUUID();
 }
 
-const state = {
-  users: [],
-  products: [],
-  audit: [],
-  cms: {
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
+function normalizeCategoryList(categories, fallbackCategory) {
+  const source = Array.isArray(categories)
+    ? categories
+    : typeof categories === "string"
+      ? categories.split(",")
+      : [];
+  const seen = new Set();
+  const values = source
+    .map((value) => String(value || "").trim())
+    .filter((value) => {
+      const token = value.toLowerCase();
+      if (!value || seen.has(token)) return false;
+      seen.add(token);
+      return true;
+    });
+
+  if (values.length) return values;
+
+  const fallback = String(fallbackCategory || "").trim() || "general";
+  return [fallback];
+}
+
+function normalizeCategoryToken(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function toDate(value) {
+  if (value instanceof Date) return value;
+  const date = new Date(value || Date.now());
+  return Number.isNaN(date.getTime()) ? new Date() : date;
+}
+
+function toISO(value) {
+  return toDate(value).toISOString();
+}
+
+function createDefaultCmsState() {
+  return {
     home: {
       adImages: [
         "product-imgs/ad/ad1.png",
@@ -36,6 +85,7 @@ const state = {
         timerSeconds: 80200,
         seeMoreFilter: "flights",
         sourceCategory: "flights",
+        sourceCategories: ["flights", "essentials"],
         maxItems: 8,
         isActive: true,
         productIds: [],
@@ -46,6 +96,7 @@ const state = {
         timerSeconds: 21600,
         seeMoreFilter: "lounge",
         sourceCategory: "lounge",
+        sourceCategories: ["lounge", "insurance"],
         maxItems: 8,
         isActive: true,
         productIds: [],
@@ -55,7 +106,7 @@ const state = {
       pageTitle: "Frequently asked\nquestions",
       label: "● Have Questions?",
       intro: "",
-      helpTitle: "Still have a questions?",
+      helpTitle: "Still have a question?",
       helpText:
         "Can't find the answer to your question? Send us an email and we'll get back to you as soon as possible.",
       contactEmail: "support@blustup.local",
@@ -108,206 +159,177 @@ const state = {
         },
       ],
     },
+    ai: { ...DEFAULT_AI },
+  };
+}
+
+function createDefaultState() {
+  return {
+    users: [],
+    products: [],
+    audit: [],
+    cms: createDefaultCmsState(),
+  };
+}
+
+function normalizeProductRecord(product = {}) {
+  const categories = normalizeCategoryList(product.categories, product.category);
+  const createdAt = toDate(product.createdAt);
+  const updatedAt = toDate(product.updatedAt || product.createdAt);
+
+  return {
+    _id: String(product._id || makeId()),
+    name: String(product.name || "").trim(),
+    price: Number(product.price || 0),
+    description: String(product.description || "").trim(),
+    category: categories[0],
+    categories,
+    stockQty: Math.max(0, Number(product.stockQty || 0)),
+    imageUrl: product.imageUrl ? String(product.imageUrl) : null,
+    oldPrice:
+      product.oldPrice == null || product.oldPrice === ""
+        ? null
+        : Math.max(0, Number(product.oldPrice || 0)),
+    badge: product.badge ? String(product.badge) : null,
+    badgeType: product.badgeType ? String(product.badgeType) : null,
+    icon: product.icon ? String(product.icon) : null,
+    color: product.color ? String(product.color) : null,
+    isActive: product.isActive !== false,
+    createdAt,
+    updatedAt,
+  };
+}
+
+function normalizeUserRecord(user = {}) {
+  const createdAt = toDate(user.createdAt);
+  const updatedAt = toDate(user.updatedAt || user.createdAt);
+  return {
+    _id: String(user._id || makeId()),
+    name: String(user.name || "").trim(),
+    email: normalizeEmail(user.email),
+    passwordHash: String(user.passwordHash || ""),
+    role: String(user.role || "user").trim() || "user",
+    phone: user.phone ? String(user.phone) : null,
+    createdAt,
+    updatedAt,
+  };
+}
+
+function normalizeAuditRecord(record = {}) {
+  return {
+    _id: String(record._id || makeId()),
+    actorId: record.actorId ? String(record.actorId) : null,
+    action: String(record.action || "").trim(),
+    entityType: String(record.entityType || "").trim(),
+    entityId: record.entityId ? String(record.entityId) : null,
+    summary: String(record.summary || ""),
+    actorEmail: record.actorEmail ? String(record.actorEmail) : null,
+    createdAt: toDate(record.createdAt),
+  };
+}
+
+function normalizeCmsState(cms = {}) {
+  const defaults = createDefaultCmsState();
+  return {
+    home: {
+      adImages: Array.isArray(cms?.home?.adImages) && cms.home.adImages.length ? cms.home.adImages : defaults.home.adImages,
+    },
+    shop: {
+      title: String(cms?.shop?.title || defaults.shop.title),
+      subtitle: String(cms?.shop?.subtitle || defaults.shop.subtitle),
+      filters: Array.isArray(cms?.shop?.filters) && cms.shop.filters.length
+        ? cms.shop.filters.map((filter) => ({
+            label: String(filter?.label || filter?.value || "").trim(),
+            value: String(filter?.value || "").trim(),
+            showInShop: filter?.showInShop !== false,
+          })).filter((filter) => filter.label && filter.value)
+        : defaults.shop.filters,
+    },
+    deals: Array.isArray(cms?.deals)
+      ? cms.deals.map((deal) => ({
+          id: String(deal?.id || makeId()),
+          name: String(deal?.name || "").trim(),
+          timerSeconds: Math.max(1, Number(deal?.timerSeconds || 1)),
+          seeMoreFilter: String(deal?.seeMoreFilter || "").trim(),
+          sourceCategory: normalizeCategoryList(deal?.sourceCategories, deal?.sourceCategory)[0] || "",
+          sourceCategories: normalizeCategoryList(deal?.sourceCategories, deal?.sourceCategory),
+          maxItems: Math.max(1, Number(deal?.maxItems || 1)),
+          isActive: deal?.isActive !== false,
+          productIds: Array.isArray(deal?.productIds) ? deal.productIds.map((id) => String(id)) : [],
+        }))
+      : defaults.deals,
+    faq: cms?.faq && typeof cms.faq === "object"
+      ? {
+          pageTitle: String(cms.faq.pageTitle || defaults.faq.pageTitle),
+          label: String(cms.faq.label || defaults.faq.label),
+          intro: String(cms.faq.intro || defaults.faq.intro),
+          helpTitle: String(cms.faq.helpTitle || defaults.faq.helpTitle),
+          helpText: String(cms.faq.helpText || defaults.faq.helpText),
+          contactEmail: String(cms.faq.contactEmail || defaults.faq.contactEmail),
+          faqs: Array.isArray(cms.faq.faqs) ? cms.faq.faqs : defaults.faq.faqs,
+          boardTitle: String(cms.faq.boardTitle || defaults.faq.boardTitle),
+          board: Array.isArray(cms.faq.board) ? cms.faq.board : defaults.faq.board,
+        }
+      : defaults.faq,
     ai: {
-      chatEnabled: true,
-      searchEnabled: true,
-      botName: "Blustup AI",
-      systemPrompt:
-        "You are Blustup's shopping assistant. Give brief, direct answers. Recommend products when relevant.",
+      ...DEFAULT_AI,
+      ...(cms?.ai && typeof cms.ai === "object" ? cms.ai : {}),
     },
-  },
-};
+  };
+}
 
-async function seedDefaultProductsIfEmpty() {
-  if (state.products.length > 0) return;
+function hydrateState(rawState = {}) {
+  const defaults = createDefaultState();
+  return {
+    users: Array.isArray(rawState.users) ? rawState.users.map(normalizeUserRecord) : defaults.users,
+    products: Array.isArray(rawState.products) ? rawState.products.map(normalizeProductRecord) : defaults.products,
+    audit: Array.isArray(rawState.audit) ? rawState.audit.map(normalizeAuditRecord) : defaults.audit,
+    cms: normalizeCmsState(rawState.cms),
+  };
+}
 
-  // A small usable catalog so the shop page renders on first run.
-  // (Matches your existing UI fields: `cat`, `desc`, `oldPrice`, `imageUrl`, etc.)
-  const now = new Date();
-  const seed = [
-    {
-      name: "Oraimo Maxi Watch",
-      description: "Smart wearable with advanced battery life.",
-      category: "flights",
-      price: 2631.9,
-      oldPrice: 4900,
-      badge: "-47%",
-      badgeType: null,
-      icon: null,
-      color: "linear-gradient(135deg,#e8f0ff,#d0dcff)",
-      stockQty: 25,
-      isActive: true,
-      imageUrl: "product-imgs/1.jpg",
-    },
-    {
-      name: "Oraimo Power Bank Lite",
-      description: "Portable, durable power backup for daily use.",
-      category: "flights",
-      price: 136.9,
-      oldPrice: 300,
-      badge: "-56%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#e8f0ff,#d0dcff)",
-      stockQty: 10,
-      isActive: true,
-      imageUrl: "product-imgs/magpower-15-opb-7102w-1.webp",
-    },
-    {
-      name: "Oraimo Lite Earphones",
-      description: "Wireless comfort with crisp sound output.",
-      category: "lounge",
-      price: 126.98,
-      oldPrice: 240,
-      badge: "-47%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#fff0f5,#ffd6e8)",
-      stockQty: 18,
-      isActive: true,
-      imageUrl: "product-imgs/oraimo-BoomPop-Pro-OHP-917-wireless-headphones-GREY.webp",
-    },
-    {
-      name: "Oraimo CleanSip Faucet",
-      description: "Smart faucet accessory for cleaner water flow.",
-      category: "lounge",
-      price: 217,
-      oldPrice: 400,
-      badge: "-42%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#fff8e8,#ffecc0)",
-      stockQty: 60,
-      isActive: true,
-      imageUrl: "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp",
-    },
-    {
-      name: "Oraimo NutriFry Max Air",
-      description: "Efficient air-fryer technology for quick meals.",
-      category: "upgrades",
-      price: 1078.92,
-      oldPrice: 1800,
-      badge: "-39%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#f0e8ff,#dcc0ff)",
-      stockQty: 50,
-      isActive: true,
-      imageUrl: "product-imgs/oraimo-watch-muse-OSW-831N-4.webp",
-    },
-    {
-      name: "Oraimo Smart Trimmer",
-      description: "Precision grooming with long-lasting blades.",
-      category: "upgrades",
-      price: 183.89,
-      oldPrice: 350,
-      badge: "-47%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#e8fff5,#c0f5e0)",
-      stockQty: 20,
-      isActive: true,
-      imageUrl: "product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp",
-    },
-    {
-      name: "Oraimo Wireless Charger",
-      description: "Fast wireless charging for multiple devices.",
-      category: "essentials",
-      price: 183.89,
-      oldPrice: 350,
-      badge: "-47%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#e8f5ff,#c0e0ff)",
-      stockQty: 100,
-      isActive: true,
-      imageUrl: "product-imgs/AI-appliances_v21.avif",
-    },
-    {
-      name: "Pepsodent Tooth Paste",
-      description: "Daily oral care essential for the whole family.",
-      category: "insurance",
-      price: 2631.9,
-      oldPrice: 4900,
-      badge: "-47%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#e8ffee,#c0f0ce)",
-      stockQty: 80,
-      isActive: true,
-      imageUrl: "product-imgs/personal-care/36024a.jpg",
-    },
-    {
-      name: "Close Up Tooth Paste",
-      description: "Fresh breath toothpaste with active formula.",
-      category: "insurance",
-      price: 136.9,
-      oldPrice: 300,
-      badge: "-56%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#ffe8e8,#ffc0c0)",
-      stockQty: 70,
-      isActive: true,
-      imageUrl: "product-imgs/personal-care/67728a.jpg",
-    },
-    {
-      name: "Kel Mouth Wash",
-      description: "Deep-clean mouthwash for complete care.",
-      category: "insurance",
-      price: 126.98,
-      oldPrice: 240,
-      badge: "-47%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#f6e8ff,#e6c7ff)",
-      stockQty: 70,
-      isActive: true,
-      imageUrl: "product-imgs/personal-care/70100a.jpg",
-    },
-    {
-      name: "Oral B Tooth Brush",
-      description: "Durable toothbrush designed for comfort.",
-      category: "insurance",
-      price: 217,
-      oldPrice: 400,
-      badge: "-42%",
-      badgeType: "sale",
-      icon: null,
-      color: "linear-gradient(135deg,#e8f7ff,#c7e9ff)",
-      stockQty: 70,
-      isActive: true,
-      imageUrl: "product-imgs/personal-care/94947a.jpg",
-    },
-  ];
+function serializeState(currentState) {
+  return {
+    users: currentState.users.map((user) => ({
+      ...user,
+      createdAt: toISO(user.createdAt),
+      updatedAt: toISO(user.updatedAt),
+    })),
+    products: currentState.products.map((product) => ({
+      ...product,
+      createdAt: toISO(product.createdAt),
+      updatedAt: toISO(product.updatedAt),
+    })),
+    audit: currentState.audit.map((record) => ({
+      ...record,
+      createdAt: toISO(record.createdAt),
+    })),
+    cms: currentState.cms,
+  };
+}
 
-  for (const item of seed) {
-    state.products.push({
-      _id: makeId(),
-      name: item.name,
-      price: item.price,
-      description: item.description,
-      category: item.category,
-      stockQty: item.stockQty ?? 0,
-      imageUrl: item.imageUrl ?? null,
-      oldPrice: item.oldPrice ?? null,
-      badge: item.badge ? String(item.badge) : null,
-      badgeType: item.badgeType ? String(item.badgeType) : null,
-      icon: item.icon ? String(item.icon) : null,
-      color: item.color ? String(item.color) : null,
-      isActive: item.isActive ?? true,
-      createdAt: now,
-      updatedAt: now,
-    });
+let state = createDefaultState();
+try {
+  if (fs.existsSync(STATE_FILE)) {
+    state = hydrateState(JSON.parse(fs.readFileSync(STATE_FILE, "utf8")));
   }
+} catch (error) {
+  console.warn("Failed to load memory storage state:", error?.message || error);
+  state = createDefaultState();
 }
 
-function normalizeEmail(email) {
-  return String(email || "").trim().toLowerCase();
-}
-
-function toISO(d) {
-  return d instanceof Date ? d.toISOString() : new Date(d).toISOString();
+let persistQueue = Promise.resolve();
+function persistState() {
+  const payload = JSON.stringify(serializeState(state), null, 2);
+  persistQueue = persistQueue
+    .then(async () => {
+      await fs.promises.mkdir(path.dirname(STATE_FILE), { recursive: true });
+      await fs.promises.writeFile(STATE_FILE, payload, "utf8");
+    })
+    .catch((error) => {
+      console.error("Failed to persist memory storage state:", error?.message || error);
+    });
+  return persistQueue;
 }
 
 function getAuthUserResponse(user) {
@@ -319,77 +341,227 @@ function getAuthUserResponse(user) {
   };
 }
 
+async function seedDefaultProductsIfEmpty() {
+  if (state.products.length > 0) return;
+
+  const now = new Date();
+  const seed = [
+    {
+      name: "Oraimo Maxi Watch",
+      description: "Smart wearable with advanced battery life.",
+      categories: ["flights", "essentials"],
+      price: 2631.9,
+      oldPrice: 4900,
+      badge: "-47%",
+      color: "linear-gradient(135deg,#e8f0ff,#d0dcff)",
+      stockQty: 25,
+      isActive: true,
+      imageUrl: "product-imgs/1.jpg",
+    },
+    {
+      name: "Oraimo Power Bank Lite",
+      description: "Portable, durable power backup for daily use.",
+      categories: ["flights", "essentials"],
+      price: 136.9,
+      oldPrice: 300,
+      badge: "-56%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#e8f0ff,#d0dcff)",
+      stockQty: 10,
+      isActive: true,
+      imageUrl: "product-imgs/magpower-15-opb-7102w-1.webp",
+    },
+    {
+      name: "Oraimo Lite Earphones",
+      description: "Wireless comfort with crisp sound output.",
+      categories: ["lounge", "flights"],
+      price: 126.98,
+      oldPrice: 240,
+      badge: "-47%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#fff0f5,#ffd6e8)",
+      stockQty: 18,
+      isActive: true,
+      imageUrl: "product-imgs/oraimo-BoomPop-Pro-OHP-917-wireless-headphones-GREY.webp",
+    },
+    {
+      name: "Oraimo CleanSip Faucet",
+      description: "Smart faucet accessory for cleaner water flow.",
+      categories: ["lounge", "insurance"],
+      price: 217,
+      oldPrice: 400,
+      badge: "-42%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#fff8e8,#ffecc0)",
+      stockQty: 60,
+      isActive: true,
+      imageUrl: "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp",
+    },
+    {
+      name: "Oraimo NutriFry Max Air",
+      description: "Efficient air-fryer technology for quick meals.",
+      categories: ["upgrades", "essentials"],
+      price: 1078.92,
+      oldPrice: 1800,
+      badge: "-39%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#f0e8ff,#dcc0ff)",
+      stockQty: 50,
+      isActive: true,
+      imageUrl: "product-imgs/oraimo-watch-muse-OSW-831N-4.webp",
+    },
+    {
+      name: "Oraimo Smart Trimmer",
+      description: "Precision grooming with long-lasting blades.",
+      categories: ["upgrades", "insurance"],
+      price: 183.89,
+      oldPrice: 350,
+      badge: "-47%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#e8fff5,#c0f5e0)",
+      stockQty: 20,
+      isActive: true,
+      imageUrl: "product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp",
+    },
+    {
+      name: "Oraimo Wireless Charger",
+      description: "Fast wireless charging for multiple devices.",
+      categories: ["essentials", "flights"],
+      price: 183.89,
+      oldPrice: 350,
+      badge: "-47%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#e8f5ff,#c0e0ff)",
+      stockQty: 100,
+      isActive: true,
+      imageUrl: "product-imgs/AI-appliances_v21.avif",
+    },
+    {
+      name: "Pepsodent Tooth Paste",
+      description: "Daily oral care essential for the whole family.",
+      categories: ["insurance", "essentials"],
+      price: 2631.9,
+      oldPrice: 4900,
+      badge: "-47%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#e8ffee,#c0f0ce)",
+      stockQty: 80,
+      isActive: true,
+      imageUrl: "product-imgs/personal-care/36024a.jpg",
+    },
+    {
+      name: "Close Up Tooth Paste",
+      description: "Fresh breath toothpaste with active formula.",
+      categories: ["insurance", "essentials"],
+      price: 136.9,
+      oldPrice: 300,
+      badge: "-56%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#ffe8e8,#ffc0c0)",
+      stockQty: 70,
+      isActive: true,
+      imageUrl: "product-imgs/personal-care/67728a.jpg",
+    },
+    {
+      name: "Kel Mouth Wash",
+      description: "Deep-clean mouthwash for complete care.",
+      categories: ["insurance", "essentials"],
+      price: 126.98,
+      oldPrice: 240,
+      badge: "-47%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#f6e8ff,#e6c7ff)",
+      stockQty: 70,
+      isActive: true,
+      imageUrl: "product-imgs/personal-care/70100a.jpg",
+    },
+    {
+      name: "Oral B Tooth Brush",
+      description: "Durable toothbrush designed for comfort.",
+      categories: ["insurance", "essentials"],
+      price: 217,
+      oldPrice: 400,
+      badge: "-42%",
+      badgeType: "sale",
+      color: "linear-gradient(135deg,#e8f7ff,#c7e9ff)",
+      stockQty: 70,
+      isActive: true,
+      imageUrl: "product-imgs/personal-care/94947a.jpg",
+    },
+  ];
+
+  state.products = seed.map((item) =>
+    normalizeProductRecord({
+      ...item,
+      _id: makeId(),
+      createdAt: now,
+      updatedAt: now,
+    })
+  );
+
+  await persistState();
+}
+
 async function seedAdminIfConfigured() {
   const email = process.env.ADMIN_EMAIL;
   if (!email) return;
 
   const normalizedEmail = normalizeEmail(email);
-  const existing = state.users.find((u) => u.email === normalizedEmail);
+  const existing = state.users.find((user) => user.email === normalizedEmail);
   if (existing && existing.role === "admin") return;
 
   const passwordHash = process.env.ADMIN_PASSWORD_HASH || null;
   const password = process.env.ADMIN_PASSWORD || null;
-
   if (!passwordHash && !password) {
     throw new Error("In memory mode, set ADMIN_PASSWORD or ADMIN_PASSWORD_HASH.");
   }
 
   const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 12);
-  // If ADMIN_PASSWORD is provided, prefer it (easier local setup even if ADMIN_PASSWORD_HASH exists).
-  const hash = password
-    ? await bcrypt.hash(String(password), saltRounds)
-    : String(passwordHash);
+  const hash = password ? await bcrypt.hash(String(password), saltRounds) : String(passwordHash);
 
   const user = existing || {
     _id: makeId(),
     name: process.env.ADMIN_NAME ? String(process.env.ADMIN_NAME).trim() : "Admin",
     email: normalizedEmail,
     role: "admin",
+    createdAt: new Date(),
   };
 
   user.name = user.name || (process.env.ADMIN_NAME ? String(process.env.ADMIN_NAME).trim() : "Admin");
   user.role = "admin";
   user.passwordHash = hash;
+  user.updatedAt = new Date();
 
-  if (!existing) state.users.push(user);
+  if (!existing) state.users.push(normalizeUserRecord(user));
+  await persistState();
 }
 
-function isActiveFilter(product) {
-  return product.isActive === true;
-}
-
-function productMatchesQuery(product, q) {
-  if (!q) return true;
-  const needle = String(q).trim().toLowerCase();
+function productMatchesQuery(product, query) {
+  if (!query) return true;
+  const needle = String(query).trim().toLowerCase();
   if (!needle) return true;
-  const hay = `${product.name} ${product.description} ${product.category}`.toLowerCase();
+  const hay = `${product.name} ${product.description} ${product.category} ${product.categories.join(" ")}`.toLowerCase();
   return hay.includes(needle);
 }
 
-async function findUserByEmail(email) {
-  const e = normalizeEmail(email);
-  return state.users.find((u) => u.email === e) || null;
-}
-
-async function findUserById(id) {
-  const s = String(id);
-  return state.users.find((u) => String(u._id) === s) || null;
-}
-
-async function createUser({ name, email, passwordHash, role, phone }) {
-  const now = new Date();
-  const user = {
-    _id: makeId(),
-    name: String(name).trim(),
-    email: normalizeEmail(email),
-    passwordHash,
-    role: role || "user",
-    phone: phone || null,
-    createdAt: now,
-    updatedAt: now,
+function mapProductOut(product) {
+  const categories = normalizeCategoryList(product.categories, product.category);
+  return {
+    id: String(product._id),
+    name: product.name,
+    price: product.price,
+    desc: product.description,
+    cat: categories[0],
+    categories,
+    oldPrice: product.oldPrice ?? null,
+    imageUrl: product.imageUrl ?? null,
+    badge: product.badge ?? null,
+    badgeType: product.badgeType ?? null,
+    icon: product.icon ?? null,
+    color: product.color ?? null,
+    isActive: Boolean(product.isActive),
+    stockQty: product.stockQty ?? 0,
   };
-  state.users.push(user);
-  return user;
 }
 
 async function ensureAdminSeed() {
@@ -397,49 +569,67 @@ async function ensureAdminSeed() {
   await seedDefaultProductsIfEmpty();
 }
 
+async function findUserByEmail(email) {
+  const target = normalizeEmail(email);
+  return state.users.find((user) => user.email === target) || null;
+}
+
+async function findUserById(id) {
+  const target = String(id);
+  return state.users.find((user) => String(user._id) === target) || null;
+}
+
+async function createUser({ name, email, passwordHash, role, phone }) {
+  const now = new Date();
+  const user = normalizeUserRecord({
+    _id: makeId(),
+    name,
+    email,
+    passwordHash,
+    role,
+    phone,
+    createdAt: now,
+    updatedAt: now,
+  });
+  state.users.push(user);
+  await persistState();
+  return user;
+}
+
 async function listProductsPublic({ page, limit, q, category, minPrice, maxPrice }) {
-  const p = Math.max(1, page || 1);
-  const l = Math.min(Math.max(1, limit || 12), 50);
+  const currentPage = Math.max(1, page || 1);
+  const pageSize = Math.min(Math.max(1, limit || 12), 50);
 
-  let filtered = state.products.filter(isActiveFilter);
+  let filtered = state.products.filter((product) => product.isActive === true);
 
-  if (category) filtered = filtered.filter((x) => x.category === category);
+  if (category) {
+    const categoryToken = normalizeCategoryToken(category);
+    filtered = filtered.filter((product) =>
+      normalizeCategoryList(product.categories, product.category).some(
+        (value) => normalizeCategoryToken(value) === categoryToken
+      )
+    );
+  }
+
   if (minPrice != null || maxPrice != null) {
-    filtered = filtered.filter((x) => {
-      if (minPrice != null && x.price < minPrice) return false;
-      if (maxPrice != null && x.price > maxPrice) return false;
+    filtered = filtered.filter((product) => {
+      if (minPrice != null && product.price < minPrice) return false;
+      if (maxPrice != null && product.price > maxPrice) return false;
       return true;
     });
   }
-  if (q) filtered = filtered.filter((x) => productMatchesQuery(x, q));
+
+  if (q) filtered = filtered.filter((product) => productMatchesQuery(product, q));
 
   filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const totalItems = filtered.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / l));
-  const items = filtered.slice((p - 1) * l, (p - 1) * l + l);
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const items = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return {
     products: items.map(mapProductOut),
-    pagination: { page: p, limit: l, totalPages, totalItems },
-  };
-}
-
-function mapProductOut(p) {
-  return {
-    id: String(p._id),
-    name: p.name,
-    price: p.price,
-    desc: p.description,
-    cat: p.category,
-    oldPrice: p.oldPrice ?? null,
-    imageUrl: p.imageUrl,
-    badge: p.badge ?? null,
-    badgeType: p.badgeType ?? null,
-    icon: p.icon ?? null,
-    color: p.color ?? null,
-    isActive: Boolean(p.isActive),
-    stockQty: p.stockQty ?? 0,
+    pagination: { page: currentPage, limit: pageSize, totalPages, totalItems },
   };
 }
 
@@ -452,101 +642,101 @@ async function listProductsAdmin() {
 
 async function createProduct(payload) {
   const now = new Date();
-  const product = {
+  const product = normalizeProductRecord({
     _id: makeId(),
-    name: payload.name,
-    price: payload.price,
-    description: payload.description,
-    category: payload.category,
-    stockQty: payload.stockQty ?? 0,
-    imageUrl: payload.imageUrl ?? null,
-    oldPrice: payload.oldPrice ?? null,
-    badge: payload.badge ?? null,
-    badgeType: payload.badgeType ?? null,
-    icon: payload.icon ?? null,
-    color: payload.color ?? null,
-    isActive: payload.isActive ?? true,
+    ...payload,
     createdAt: now,
     updatedAt: now,
-  };
+  });
   state.products.push(product);
+  await persistState();
   return mapProductOut(product);
 }
 
 async function updateProduct(id, payload) {
-  const s = String(id);
-  const p = state.products.find((x) => String(x._id) === s);
-  if (!p) return null;
+  const target = String(id);
+  const product = state.products.find((item) => String(item._id) === target);
+  if (!product) return null;
 
-  // Apply only provided fields.
-  if (payload.name != null) p.name = payload.name;
-  if (payload.price != null) p.price = payload.price;
-  if (payload.description != null) p.description = payload.description;
-  if (payload.category != null) p.category = payload.category;
-  if (payload.stockQty != null) p.stockQty = payload.stockQty;
-  if (payload.oldPrice !== undefined) p.oldPrice = payload.oldPrice; // allow null
-  if (payload.imageUrl !== undefined) p.imageUrl = payload.imageUrl; // allow null
-  if (payload.badge !== undefined) p.badge = payload.badge; // allow null
-  if (payload.badgeType !== undefined) p.badgeType = payload.badgeType; // allow null
-  if (payload.icon !== undefined) p.icon = payload.icon; // allow null
-  if (payload.color !== undefined) p.color = payload.color; // allow null
-  if (payload.isActive !== undefined) p.isActive = payload.isActive;
+  const nextCategories =
+    payload.categories !== undefined || payload.category !== undefined
+      ? normalizeCategoryList(payload.categories, payload.category || product.category)
+      : normalizeCategoryList(product.categories, product.category);
 
-  p.updatedAt = new Date();
-  return mapProductOut(p);
+  Object.assign(product, {
+    ...(payload.name !== undefined ? { name: payload.name } : {}),
+    ...(payload.price !== undefined ? { price: payload.price } : {}),
+    ...(payload.description !== undefined ? { description: payload.description } : {}),
+    ...(payload.stockQty !== undefined ? { stockQty: payload.stockQty } : {}),
+    ...(payload.oldPrice !== undefined ? { oldPrice: payload.oldPrice } : {}),
+    ...(payload.imageUrl !== undefined ? { imageUrl: payload.imageUrl } : {}),
+    ...(payload.badge !== undefined ? { badge: payload.badge } : {}),
+    ...(payload.badgeType !== undefined ? { badgeType: payload.badgeType } : {}),
+    ...(payload.icon !== undefined ? { icon: payload.icon } : {}),
+    ...(payload.color !== undefined ? { color: payload.color } : {}),
+    ...(payload.isActive !== undefined ? { isActive: payload.isActive } : {}),
+    category: nextCategories[0],
+    categories: nextCategories,
+    updatedAt: new Date(),
+  });
+
+  await persistState();
+  return mapProductOut(product);
 }
 
 async function deleteProduct(id) {
-  const s = String(id);
-  const idx = state.products.findIndex((x) => String(x._id) === s);
-  if (idx === -1) return null;
-  const [removed] = state.products.splice(idx, 1);
+  const target = String(id);
+  const index = state.products.findIndex((product) => String(product._id) === target);
+  if (index === -1) return null;
+  const [removed] = state.products.splice(index, 1);
+  await persistState();
   return mapProductOut(removed);
 }
 
 async function addAuditLog({ actorId, action, entityType, entityId, summary }) {
   const actor = actorId ? await findUserById(actorId) : null;
-  state.audit.push({
-    _id: makeId(),
-    actorId: actorId || null,
-    action,
-    entityType,
-    entityId: entityId || null,
-    summary: summary || "",
-    actorEmail: actor ? actor.email : null,
-    createdAt: new Date(),
-  });
+  state.audit.push(
+    normalizeAuditRecord({
+      _id: makeId(),
+      actorId: actorId || null,
+      action,
+      entityType,
+      entityId: entityId || null,
+      summary: summary || "",
+      actorEmail: actor ? actor.email : null,
+      createdAt: new Date(),
+    })
+  );
+  await persistState();
 }
 
 async function listRecentAudit({ limit }) {
-  const l = Math.min(Number(limit || 20), 100);
+  const pageSize = Math.min(Number(limit || 20), 100);
   const rows = [...state.audit]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, l);
+    .slice(0, pageSize);
 
   return {
-    actions: rows.map((a) => ({
-      action: a.action,
-      entity_type: a.entityType,
-      entity_id: a.entityId,
-      summary: a.summary,
-      actor_email: a.actorEmail,
-      created_at: toISO(a.createdAt),
+    actions: rows.map((record) => ({
+      action: record.action,
+      entity_type: record.entityType,
+      entity_id: record.entityId,
+      summary: record.summary,
+      actor_email: record.actorEmail,
+      created_at: toISO(record.createdAt),
     })),
   };
 }
 
 module.exports = {
   mode: "memory",
-  ensureAdminSeed: ensureAdminSeed,
+  ensureAdminSeed,
   isValidId: () => true,
-
   user: {
     findByEmail: findUserByEmail,
     findById: findUserById,
     create: createUser,
   },
-
   product: {
     listPublic: listProductsPublic,
     listAdmin: listProductsAdmin,
@@ -554,7 +744,6 @@ module.exports = {
     update: updateProduct,
     delete: deleteProduct,
   },
-
   audit: {
     add: addAuditLog,
     listRecent: listRecentAudit,
@@ -563,31 +752,33 @@ module.exports = {
     getHome: async () => state.cms.home,
     setHome: async (value) => {
       state.cms.home = value;
+      await persistState();
       return state.cms.home;
     },
     getShop: async () => state.cms.shop,
     setShop: async (value) => {
       state.cms.shop = value;
+      await persistState();
       return state.cms.shop;
     },
     getAi: async () => state.cms.ai,
     setAi: async (value) => {
       state.cms.ai = value;
+      await persistState();
       return state.cms.ai;
     },
     getDeals: async () => state.cms.deals,
     setDeals: async (value) => {
       state.cms.deals = value;
+      await persistState();
       return state.cms.deals;
     },
     getFaq: async () => state.cms.faq,
     setFaq: async (value) => {
       state.cms.faq = value;
+      await persistState();
       return state.cms.faq;
     },
   },
-
-  // helper
   getAuthUserResponse,
 };
-

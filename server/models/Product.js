@@ -8,6 +8,16 @@ const productSchema = new mongoose.Schema(
 
     // Keep the naming close to your frontend terminology.
     category: { type: String, required: true, trim: true, default: "general", maxlength: 80 },
+    categories: {
+      type: [String],
+      default: ["general"],
+      validate: {
+        validator(values) {
+          return Array.isArray(values) && values.length > 0 && values.every((value) => typeof value === "string" && value.trim());
+        },
+        message: "At least one category is required",
+      },
+    },
     stockQty: { type: Number, required: true, min: 0, default: 0 },
 
     imageUrl: { type: String, default: null },
@@ -23,5 +33,21 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Product", productSchema);
+productSchema.pre("validate", function syncPrimaryCategory(next) {
+  const categories = Array.isArray(this.categories)
+    ? [...new Set(this.categories.map((value) => String(value || "").trim()).filter(Boolean))]
+    : [];
 
+  if (categories.length) {
+    this.categories = categories;
+    this.category = categories[0];
+  } else {
+    const fallback = String(this.category || "general").trim() || "general";
+    this.category = fallback;
+    this.categories = [fallback];
+  }
+
+  next();
+});
+
+module.exports = mongoose.model("Product", productSchema);

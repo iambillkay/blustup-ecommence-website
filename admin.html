@@ -7,62 +7,207 @@
   <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body class="admin">
-  <div class="admin-topbar">
-    <div class="admin-title">
-      <h1>Admin Dashboard</h1>
-      <div class="sub" id="whoami">Loading...</div>
-    </div>
-    <div class="admin-actions">
-      <button class="btn-admin" id="btnHome">View site</button>
-      <button class="btn-admin" id="btnRefresh">Refresh</button>
-      <button class="btn-admin danger" id="btnLogout">Log out</button>
-    </div>
-  </div>
+  <div class="admin-app-shell">
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-lockup">
+          <div>
+            <img class="brand-mark" src="logos\Layer 2.png" alt="Blustup"  />
+            <div class="brand-subtitle">Commerce Admin</div>
+          </div>
+        </div>
+        <span class="sidebar-status">Live console</span>
+      </div>
 
-  <div class="admin-shell">
-    <main class="panel">
-      <div class="panel-header">Store</div>
-      <div class="section">
-        <div class="row-link">
-          <a href="#" data-action="list-products">Products</a>
-          <div class="controls"><a href="#" data-action="add-product">+ Add</a></div>
+      <nav class="sidebar-nav" aria-label="Admin sections">
+        <a href="#" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon"></span><span>Dashboard</span></a>
+        <a href="#" class="sidebar-link" data-action="list-products"><span class="nav-icon"></span><span>Products</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-shop"><span class="nav-icon"></span><span>Shop setup</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Homepage media</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-deals"><span class="nav-icon"></span><span>Deals</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-faq"><span class="nav-icon"></span><span>FAQ and board</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-ai"><span class="nav-icon"></span><span>AI settings</span></a>
+      </nav>
+
+      <div class="sidebar-support">
+        <p class="eyebrow">Customer support</p>
+        <h3>Need a quick hand?</h3>
+        <p>Jump to the live storefront or tune your help content without leaving the console.</p>
+        <div class="sidebar-support-actions">
+          <button class="btn-admin primary" id="btnHome" type="button">View site</button>
+          <button class="btn-admin ghost" type="button" data-action="edit-faq">Help content</button>
         </div>
       </div>
+    </aside>
 
-      <div class="panel-header">Shop</div>
-      <div class="section">
-        <div class="row-link"><a href="#" data-action="edit-shop">Shop title and filters</a></div>
-      </div>
+    <main class="admin-workspace">
+      <header class="workspace-topbar">
+        <label class="admin-search" for="adminSearch">
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M10.5 4a6.5 6.5 0 1 1 0 13a6.5 6.5 0 0 1 0-13Zm0 1.8a4.7 4.7 0 1 0 0 9.4a4.7 4.7 0 0 0 0-9.4Zm8.37 11.8l2.63 2.63l-1.27 1.27l-2.63-2.63z" />
+            </svg>
+          </span>
+          <input id="adminSearch" type="search" placeholder="Search products, tools or recent changes" />
+        </label>
 
-      <div class="panel-header">Content</div>
-      <div class="section">
-        <div class="row-link"><a href="#" data-action="edit-faq">FAQ &amp; board of directors</a></div>
-      </div>
+        <div class="workspace-actions">
+          <button class="icon-btn" id="btnRefresh" type="button" aria-label="Refresh dashboard">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M17.65 6.35A7.95 7.95 0 0 0 12 4V1L7 6l5 5V7a5 5 0 1 1-4.9 6.01H5.02A7 7 0 1 0 17.65 6.35Z" />
+            </svg>
+          </button>
 
-      <div class="panel-header">Deals</div>
-      <div class="section">
-        <div class="row-link"><a href="#" data-action="edit-deals">Simple deals setup</a></div>
-      </div>
+          <div class="workspace-profile">
+            <div class="workspace-avatar" id="adminAvatar">B</div>
+            <div class="workspace-profile-copy">
+              <div class="workspace-profile-name" id="adminDisplayName">Admin team</div>
+              <div class="workspace-profile-sub" id="whoami">Loading...</div>
+            </div>
+          </div>
 
-      <div class="panel-header">Home</div>
-      <div class="section">
-        <div class="row-link"><a href="#" data-action="edit-home-images">Ad images only</a></div>
-      </div>
+          <button class="btn-admin danger" id="btnLogout" type="button">Log out</button>
+        </div>
+      </header>
 
-      <div class="panel-header">AI</div>
-      <div class="section">
-        <div class="row-link"><a href="#" data-action="edit-ai">AI chatbot and AI search</a></div>
-      </div>
+      <section class="workspace-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Admin cockpit</p>
+          <h1 id="adminGreeting">Hi, Blustup team</h1>
+          <p id="adminGreetingSub">Manage products, storefront content, and automation from one calm workspace.</p>
+        </div>
+        <div class="hero-controls">
+          <button class="hero-arrow" type="button" data-action="edit-home-images" aria-label="Edit home images">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M14 7l-5 5l5 5v-3h7v-4h-7z" /></svg>
+          </button>
+          <button class="hero-arrow" type="button" data-action="edit-deals" aria-label="Edit deals">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M10 7l5 5l-5 5v-3H3v-4h7z" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="product-strip" id="dashboardPreview">
+        <article class="product-card placeholder-card">
+          <div class="product-card-media"></div>
+          <div class="product-card-body">
+            <div class="product-card-title">Loading catalog</div>
+            <div class="product-card-meta">Pulling your latest products into the dashboard.</div>
+          </div>
+        </article>
+        <article class="product-card placeholder-card">
+          <div class="product-card-media"></div>
+          <div class="product-card-body">
+            <div class="product-card-title">Syncing updates</div>
+            <div class="product-card-meta">Recent admin activity will appear here in a moment.</div>
+          </div>
+        </article>
+        <article class="product-card placeholder-card">
+          <div class="product-card-media"></div>
+          <div class="product-card-body">
+            <div class="product-card-title">Preparing insights</div>
+            <div class="product-card-meta">Quick metrics will refresh as soon as the console loads.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="command-board">
+        <article class="command-card command-card-primary" data-search-text="products catalog inventory add edit">
+          <div class="command-card-top"><div><p class="eyebrow">Store</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
+          <p>Review product listings, add new inventory, and keep the storefront catalog clean.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-products">Open catalog</a><a href="#" class="btn-admin ghost" data-action="add-product">Add product</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="shop filters categories title subtitle">
+          <div class="command-card-top"><div><p class="eyebrow">Shop</p><h2>Filter and category setup</h2></div><span class="command-stat" id="shopStat">0 categories</span></div>
+          <p>Adjust the shop title, subtitle, and category filter system that drives discovery.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-shop">Edit shop</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="faq board directors help content">
+          <div class="command-card-top"><div><p class="eyebrow">Content</p><h2>FAQ and leadership section</h2></div><span class="command-stat">Support content</span></div>
+          <p>Maintain the FAQ experience, board profiles, and support messaging shown to customers.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-faq">Open content</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="deals promotions timers campaigns offers">
+          <div class="command-card-top"><div><p class="eyebrow">Deals</p><h2>Campaign scheduling</h2></div><span class="command-stat" id="dealsStat">Promotions ready</span></div>
+          <p>Control featured deals, timers, and the product rows highlighted on the homepage.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-deals">Manage deals</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="home hero media images banners upload">
+          <div class="command-card-top"><div><p class="eyebrow">Homepage</p><h2>Media rotation</h2></div><span class="command-stat" id="homeStat">Hero media</span></div>
+          <p>Refresh the homepage ad imagery and keep your visual merchandising aligned with campaigns.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-home-images">Edit media</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="ai chatbot search automation bot prompt">
+          <div class="command-card-top"><div><p class="eyebrow">Automation</p><h2>AI assistant controls</h2></div><span class="command-stat" id="aiStat">Assistant online</span></div>
+          <p>Update chatbot availability, search behavior, and the prompt that guides the AI experience.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-ai">Tune AI</a></div>
+        </article>
+      </section>
+
+      <div class="search-empty" id="searchEmptyState" hidden>No modules or product previews match that search yet.</div>
+
+      <section class="history-panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">Operations history</p><h2>Recent admin activity</h2></div>
+          <button class="text-link" id="btnActivityRefresh" type="button">Refresh feed</button>
+        </div>
+        <div class="history-table-wrap">
+          <table class="admin-table admin-history-table">
+            <thead><tr><th>Workspace</th><th>Activity</th><th>Owner</th><th>Time</th></tr></thead>
+            <tbody id="activityTable"><tr><td colspan="4" class="muted">Loading recent admin activity...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
-    <aside class="side">
-      <div class="panel">
-        <div class="panel-header">Recent actions</div>
-        <div class="recent">
-          <h3>Admin activity</h3>
-          <div id="recentActions" class="muted">Loading...</div>
+    <aside class="admin-rail">
+      <section class="rail-card profile-card">
+        <div class="profile-card-top">
+          <!-- <div class="workspace-avatar large" id="adminAvatarLarge">B</div> -->
+          <div>
+            <div class="profile-card-name" id="adminDisplayNameLarge">Admin team</div>
+            <div class="profile-card-sub" id="adminRoleLabel">Operations lead</div>
+          </div>
         </div>
-      </div>
+        <div class="profile-card-meta">
+          <span class="meta-pill">Secure session</span>
+          <span class="meta-pill muted" id="adminLastSync">Syncing...</span>
+        </div>
+      </section>
+
+      <section class="rail-card finance-card">
+        <div class="finance-card-top"><span>Store pulse</span><span class="finance-chip"></span></div>
+        <div class="finance-card-value" id="catalogValue">₵0.00</div>
+        <div class="finance-card-label">Estimated live catalog value</div>
+        <div class="finance-card-footer"><span id="activeProductCount">0 products</span><span id="lowStockCount">0 low stock</span></div>
+      </section>
+
+      <section class="rail-card metrics-card">
+        <div class="section-heading compact"><div><p class="eyebrow">Console health</p><h2>Quick stats</h2></div></div>
+        <div class="metric-list" id="adminMetrics"><div class="muted">Loading dashboard metrics...</div></div>
+      </section>
+
+      <section class="rail-card quick-actions-card">
+        <div class="section-heading compact"><div><p class="eyebrow">Shortcuts</p><h2>Quick actions</h2></div></div>
+        <div class="quick-actions-grid">
+          <button class="mini-action" type="button" data-action="add-product">Add product</button>
+          <button class="mini-action" type="button" data-action="edit-home-images">Home media</button>
+          <button class="mini-action" type="button" data-action="edit-deals">Deals</button>
+          <button class="mini-action" type="button" data-action="edit-faq">FAQ</button>
+        </div>
+      </section>
+
+      <section class="rail-card recent-card">
+        <div class="section-heading compact">
+          <div><p class="eyebrow">Activity stream</p><h2>Recent actions</h2></div>
+          <button class="text-link" id="btnRecentRefresh" type="button">Refresh</button>
+        </div>
+        <div id="recentActions" class="recent-feed muted">Loading...</div>
+      </section>
     </aside>
   </div>
 
@@ -70,30 +215,52 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="Admin modal">
       <div class="modal-top">
         <div class="title" id="modalTitle">Admin</div>
-        <button class="btn-admin" id="modalClose">Close</button>
+        <button class="btn-admin" id="modalClose" type="button">Close</button>
       </div>
       <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
+  <script src="js/api.js"></script>
   <script>
-    function getToken() { return localStorage.getItem("blustup_token"); }
-    function clearAuth() { localStorage.removeItem("blustup_token"); localStorage.removeItem("blustup_user"); }
+    if (typeof redirectToHostedLocalApp === "function") redirectToHostedLocalApp("/admin.html");
+  </script>
+  <script>
+    function getToken() { return localStorage.getItem("blustup_token") || sessionStorage.getItem("blustup_token"); }
+    function clearAuth() {
+      localStorage.removeItem("blustup_token");
+      localStorage.removeItem("blustup_user");
+      sessionStorage.removeItem("blustup_token");
+      sessionStorage.removeItem("blustup_user");
+    }
     async function api(path, options = {}) {
-      const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+      const method = String(options.method || "GET").toUpperCase();
+      const isFormData = options.body instanceof FormData;
+      const headers = { ...(options.headers || {}) };
+      if (!isFormData && options.body != null && method !== "GET" && method !== "HEAD" && !headers["Content-Type"]) {
+        headers["Content-Type"] = "application/json";
+      }
       const token = getToken();
       if (token) headers.Authorization = `Bearer ${token}`;
-      const res = await fetch(path, { ...options, headers });
+      const res = await apiFetch(path, { ...options, headers });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Request failed");
       return data;
+    }
+    async function backendLooksReachable() {
+      try {
+        const res = await apiFetch("/api/health", { cache: "no-store" });
+        return res.ok;
+      } catch (_e) {
+        return false;
+      }
     }
 
     async function uploadImage(file) {
       const token = getToken();
       const form = new FormData();
       form.append("image", file);
-      const res = await fetch("/api/cms/home/upload-image", {
+      const res = await fetch(buildApiUrl("/api/cms/home/upload-image"), {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,
@@ -107,7 +274,7 @@
       const token = getToken();
       const form = new FormData();
       form.append("image", file);
-      const res = await fetch("/api/cms/upload-image", {
+      const res = await fetch(buildApiUrl("/api/cms/upload-image"), {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,
@@ -120,6 +287,31 @@
     const modalBackdrop = document.getElementById("modalBackdrop");
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
+    const whoami = document.getElementById("whoami");
+    const dashboardPreview = document.getElementById("dashboardPreview");
+    const activityTable = document.getElementById("activityTable");
+    const recentActionsEl = document.getElementById("recentActions");
+    const adminMetrics = document.getElementById("adminMetrics");
+    const adminSearch = document.getElementById("adminSearch");
+    const searchEmptyState = document.getElementById("searchEmptyState");
+    const adminGreeting = document.getElementById("adminGreeting");
+    const adminGreetingSub = document.getElementById("adminGreetingSub");
+    const adminDisplayName = document.getElementById("adminDisplayName");
+    const adminDisplayNameLarge = document.getElementById("adminDisplayNameLarge");
+    const adminAvatar = document.getElementById("adminAvatar");
+    const adminAvatarLarge = document.getElementById("adminAvatarLarge");
+    const adminRoleLabel = document.getElementById("adminRoleLabel");
+    const adminLastSync = document.getElementById("adminLastSync");
+    const catalogValue = document.getElementById("catalogValue");
+    const activeProductCount = document.getElementById("activeProductCount");
+    const lowStockCount = document.getElementById("lowStockCount");
+    const catalogStat = document.getElementById("catalogStat");
+    const shopStat = document.getElementById("shopStat");
+    const dealsStat = document.getElementById("dealsStat");
+    const homeStat = document.getElementById("homeStat");
+    const aiStat = document.getElementById("aiStat");
+    const dashboardState = { user: null, actions: [], products: [] };
+
     function openModal(title, html) {
       modalTitle.textContent = title;
       modalBody.innerHTML = html;
@@ -130,92 +322,623 @@
       modalBackdrop.classList.remove("open");
       modalBackdrop.setAttribute("aria-hidden", "true");
       modalBody.innerHTML = "";
+      releaseProductPreviewObjectUrl();
     }
     function esc(v) {
       return String(v == null ? "" : v).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
     }
+    const ADMIN_CURRENCY_SYMBOL = "\u20B5";
+    const adminMoneyFormatter = new Intl.NumberFormat("en-GH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function formatCurrency(value) {
+      const num = Number(value || 0);
+      return `${ADMIN_CURRENCY_SYMBOL}${adminMoneyFormatter.format(Number.isFinite(num) ? num : 0)}`;
+    }
+    function formatDateTime(value) {
+      if (!value) return "Just now";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(date);
+    }
+    function setNodeText(node, value) {
+      if (node) node.textContent = value;
+    }
+    function rememberAdminAuth(token, user, remember) {
+      clearAuth();
+      const storage = remember ? localStorage : sessionStorage;
+      storage.setItem("blustup_token", token);
+      storage.setItem("blustup_user", JSON.stringify(user));
+    }
+    function isAdminAuthError(message) {
+      const text = String(message || "").trim();
+      return text === "Missing token" || text === "Invalid or expired token" || text === "Admin access required";
+    }
+    function renderAdminUnavailableState(title, message) {
+      whoami.textContent = title;
+      adminGreeting.textContent = title;
+      adminGreetingSub.textContent = message;
+      dashboardPreview.innerHTML = `
+        <article class="product-card product-card-empty">
+          <div class="product-card-body">
+            <div class="product-card-title">${esc(title)}</div>
+            <div class="product-card-meta">${esc(message)}</div>
+          </div>
+        </article>`;
+      recentActionsEl.innerHTML = `<div class="muted">${esc(message)}</div>`;
+      activityTable.innerHTML = `<tr><td colspan="4" class="muted">${esc(message)}</td></tr>`;
+      adminMetrics.innerHTML = `<div class="muted">${esc(message)}</div>`;
+      setSyncLabel("Offline");
+    }
+    function showAdminLoginModal(message) {
+      openModal("Admin Sign In", `
+        <form id="adminLoginForm" style="display:grid;gap:12px;">
+          <div class="muted">${esc(message || "Sign in with your admin account to connect the dashboard.")}</div>
+          <div class="field">
+            <label for="adminLoginEmail">Admin email</label>
+            <input id="adminLoginEmail" type="email" value="admin@blustup.local" autocomplete="username">
+          </div>
+          <div class="field">
+            <label for="adminLoginPassword">Password</label>
+            <input id="adminLoginPassword" type="password" value="change-me" autocomplete="current-password">
+          </div>
+          <label style="display:flex;gap:8px;align-items:center;font-size:14px;color:#54627b;">
+            <input id="adminLoginRemember" type="checkbox" checked>
+            <span>Keep me signed in on this device</span>
+          </label>
+          <div id="adminLoginError" class="muted" style="color:#b42318;"></div>
+          <button class="btn-admin primary" id="adminLoginSubmit" type="submit">Sign In</button>
+        </form>`);
 
+      document.getElementById("adminLoginForm")?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const submit = document.getElementById("adminLoginSubmit");
+        const error = document.getElementById("adminLoginError");
+        const email = document.getElementById("adminLoginEmail")?.value.trim() || "";
+        const password = document.getElementById("adminLoginPassword")?.value || "";
+        const remember = document.getElementById("adminLoginRemember")?.checked !== false;
+
+        if (!email || !password) {
+          if (error) error.textContent = "Enter your admin email and password.";
+          return;
+        }
+
+        if (submit) submit.disabled = true;
+        if (error) error.textContent = "";
+
+        try {
+          const { token, user } = await api("/api/admin/login", {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+          });
+          rememberAdminAuth(token, user, remember);
+          await bootstrapAdminSession(user);
+          closeModal();
+        } catch (loginError) {
+          if (error) error.textContent = loginError.message || "Admin sign-in failed.";
+        } finally {
+          if (submit) submit.disabled = false;
+        }
+      });
+    }
+    function getDisplayName(user) {
+      const raw = user?.name || user?.fullName || user?.email || "Admin team";
+      return raw
+        .split("@")[0]
+        .replace(/[._-]+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    function getInitials(value) {
+      return String(value || "BT")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase() || "")
+        .join("") || "BT";
+    }
+    function getActionWorkspace(action) {
+      const raw = String(action?.entity_type || action?.action || "general").toLowerCase();
+      const map = {
+        product: "Catalog",
+        products: "Catalog",
+        shop: "Shop",
+        home: "Homepage",
+        faq: "FAQ",
+        board: "Board",
+        ai: "AI",
+        deal: "Deals",
+        deals: "Deals",
+      };
+      return map[raw] || raw.replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    function setSyncLabel(message) {
+      adminLastSync.textContent = message;
+    }
+    function syncActiveNav(action) {
+      const links = document.querySelectorAll(".sidebar-link[data-action], .sidebar-link[data-nav]");
+      links.forEach((link) => {
+        const isDashboard = action === "dashboard" && link.getAttribute("data-nav") === "dashboard";
+        const isMatch = link.getAttribute("data-action") === action;
+        link.classList.toggle("active", Boolean(isDashboard || isMatch));
+      });
+    }
+    function syncNavForAction(action) {
+      if (["list-products", "edit-shop", "edit-home-images", "edit-deals", "edit-faq", "edit-ai", "dashboard"].includes(action)) {
+        syncActiveNav(action);
+        return;
+      }
+      if (["add-product", "edit-product", "delete-product"].includes(action)) {
+        syncActiveNav("list-products");
+      }
+    }
+    function renderProductShowcase(products) {
+      const items = (products || []).filter((item) => item.isActive !== false).slice(0, 3);
+      if (!items.length) {
+        dashboardPreview.innerHTML = `
+          <article class="product-card product-card-empty" data-search-text="products catalog empty add">
+            <div class="product-card-body">
+              <div class="product-card-title">No active products yet</div>
+              <div class="product-card-meta">Add your first product to start filling this dashboard preview.</div>
+              <div class="product-card-footer"><a href="#" class="btn-admin primary" data-action="add-product">Add product</a></div>
+            </div>
+          </article>`;
+        return;
+      }
+
+      dashboardPreview.innerHTML = items.map((item) => `
+        <article class="product-card" data-search-text="${esc(`${item.name || ""} ${formatAdminProductCategories(item).join(" ")} product catalog inventory`)}">
+          <div class="product-card-media">
+            ${item.imageUrl ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name || "Product image")}" />` : `<span class="image-fallback">${esc((item.name || "P").slice(0, 1).toUpperCase())}</span>`}
+          </div>
+          <div class="product-card-body">
+            <div class="product-card-title">${esc(item.name || "Untitled product")}</div>
+            <div class="product-card-meta">${esc(formatAdminProductCategories(item).map(humanizeAdminValue).join(" • ") || "General merchandise")}</div>
+            <div class="product-card-footer">
+              <strong>${esc(formatCurrency(item.price))}</strong>
+              <span>${esc(`${Number(item.stockQty || 0)} in stock`)}</span>
+            </div>
+          </div>
+        </article>`).join("");
+    }
+    function renderActivityTable(actions) {
+      if (!actions.length) {
+        activityTable.innerHTML = `<tr><td colspan="4" class="muted">No recent admin activity yet.</td></tr>`;
+        return;
+      }
+
+      activityTable.innerHTML = actions.slice(0, 6).map((action) => `
+        <tr>
+          <td><span class="table-chip">${esc(getActionWorkspace(action))}</span></td>
+          <td>${esc(action.summary || action.action || "Updated content")}</td>
+          <td>${esc(action.actor_email || "Unknown user")}</td>
+          <td>${esc(formatDateTime(action.created_at))}</td>
+        </tr>`).join("");
+    }
+    function renderRecentActions(actions) {
+      if (!actions.length) {
+        recentActionsEl.innerHTML = `<div class="muted">No recent actions yet.</div>`;
+        return;
+      }
+
+      recentActionsEl.innerHTML = actions.slice(0, 5).map((action) => `
+        <div class="recent-item">
+          <div class="recent-icon">${esc(getActionWorkspace(action).slice(0, 1))}</div>
+          <div class="recent-copy">
+            <div class="recent-title">${esc(action.summary || action.action || "Updated content")}</div>
+            <div class="recent-meta">${esc(action.actor_email || "Unknown user")} - ${esc(formatDateTime(action.created_at))}</div>
+          </div>
+        </div>`).join("");
+    }
+    function renderMetrics(products, actions) {
+      const activeProducts = (products || []).filter((item) => item.isActive !== false);
+      const lowStock = activeProducts.filter((item) => Number(item.stockQty || 0) <= 5);
+      const categoryCount = new Set(activeProducts.flatMap((item) => formatAdminProductCategories(item))).size;
+      const catalogTotal = activeProducts.reduce((sum, item) => sum + Number(item.price || 0), 0);
+      const metrics = [
+        { label: "Active catalog", value: `${activeProducts.length} items`, progress: Math.min(activeProducts.length / 12, 1) || 0.08 },
+        { label: "Category coverage", value: `${categoryCount} groups`, progress: Math.min(categoryCount / 8, 1) || 0.08 },
+        { label: "Recent updates", value: `${actions.length} changes`, progress: Math.min(actions.length / 10, 1) || 0.08 },
+        { label: "Low stock watch", value: `${lowStock.length} flagged`, progress: activeProducts.length ? Math.min(lowStock.length / activeProducts.length, 1) : 0.08 },
+      ];
+
+      adminMetrics.innerHTML = metrics.map((metric) => `
+        <div class="metric-row">
+          <div class="metric-row-top">
+            <span>${esc(metric.label)}</span>
+            <strong>${esc(metric.value)}</strong>
+          </div>
+          <div class="metric-bar"><span style="width:${Math.max(8, Math.round(metric.progress * 100))}%"></span></div>
+        </div>`).join("");
+
+      catalogValue.textContent = formatCurrency(catalogTotal);
+      activeProductCount.textContent = `${activeProducts.length} products`;
+      lowStockCount.textContent = `${lowStock.length} low stock`;
+      catalogStat.textContent = `${activeProducts.length} active products`;
+      shopStat.textContent = `${categoryCount} categories`;
+      dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
+      homeStat.textContent = activeProducts.length ? "Media synced" : "Hero media";
+      aiStat.textContent = "Assistant online";
+
+      if (dashboardState.user) {
+        const name = getDisplayName(dashboardState.user);
+        adminGreeting.textContent = `Hi, ${name}`;
+        adminGreetingSub.textContent = `${activeProducts.length} products are live across ${categoryCount || 0} categories, and ${actions.length} recent admin changes are ready to review.`;
+      }
+    }
+    function renderUser(user) {
+      const name = getDisplayName(user);
+      const initials = getInitials(name);
+      setNodeText(adminDisplayName, name);
+      setNodeText(adminDisplayNameLarge, name);
+      setNodeText(adminAvatar, initials);
+      setNodeText(adminAvatarLarge, initials);
+      setNodeText(whoami, user?.email ? `Signed in as ${user.email}` : "Admin session active");
+      setNodeText(
+        adminRoleLabel,
+        user?.role ? `${String(user.role).charAt(0).toUpperCase()}${String(user.role).slice(1)} access` : "Operations lead"
+      );
+      setNodeText(adminGreeting, `Hi, ${name}`);
+    }
+    function applyAdminSearch() {
+      const term = adminSearch.value.trim().toLowerCase();
+      const searchable = Array.from(document.querySelectorAll("[data-search-text]"));
+      let visibleCount = 0;
+      searchable.forEach((node) => {
+        const haystack = String(node.getAttribute("data-search-text") || "").toLowerCase();
+        const match = !term || haystack.includes(term);
+        node.classList.toggle("is-filtered-out", !match);
+        if (match) visibleCount += 1;
+      });
+      searchEmptyState.hidden = visibleCount > 0;
+    }
+    async function refreshDashboard() {
+      setSyncLabel("Syncing...");
+
+      const [actionsResult, productsResult] = await Promise.allSettled([
+        api("/api/admin/actions/recent"),
+        api("/api/products/admin"),
+      ]);
+
+      const hasActionData = actionsResult.status === "fulfilled";
+      const hasProductData = productsResult.status === "fulfilled";
+
+      if (hasActionData) {
+        dashboardState.actions = Array.isArray(actionsResult.value.actions) ? actionsResult.value.actions : [];
+        renderRecentActions(dashboardState.actions);
+        renderActivityTable(dashboardState.actions);
+      } else if (!dashboardState.actions.length) {
+        recentActionsEl.innerHTML = `<div class="muted">${esc(actionsResult.reason?.message || "Failed to load recent actions.")}</div>`;
+        activityTable.innerHTML = `<tr><td colspan="4" class="muted">${esc(actionsResult.reason?.message || "Failed to load recent actions.")}</td></tr>`;
+      }
+
+      if (hasProductData) {
+        dashboardState.products = Array.isArray(productsResult.value.products) ? productsResult.value.products : [];
+        renderProductShowcase(dashboardState.products);
+      } else if (!dashboardState.products.length) {
+        dashboardPreview.innerHTML = `
+          <article class="product-card product-card-empty">
+            <div class="product-card-body">
+              <div class="product-card-title">Catalog preview unavailable</div>
+              <div class="product-card-meta">${esc(productsResult.reason?.message || "Failed to load products.")}</div>
+            </div>
+          </article>`;
+      }
+
+      renderMetrics(dashboardState.products, dashboardState.actions);
+      applyAdminSearch();
+      const syncStamp = formatDateTime(new Date().toISOString());
+      setSyncLabel(hasActionData && hasProductData ? `Updated ${syncStamp}` : `Partial sync ${syncStamp}`);
+
+      if (!hasActionData && !hasProductData) {
+        throw new Error(actionsResult.reason?.message || productsResult.reason?.message || "Failed to load dashboard");
+      }
+    }
     async function loadRecentActions() {
-      const el = document.getElementById("recentActions");
-      try {
-        const { actions } = await api("/api/admin/actions/recent");
-        if (!actions?.length) return (el.innerHTML = `<div class="muted">No recent actions yet.</div>`);
-        el.innerHTML = actions.map((a) => `
-          <div class="item"><div class="meta">
-            <div class="what">${esc(a.summary || a.action)}</div>
-            <div class="who">${esc(a.actor_email || "unknown")} · ${esc(a.created_at || "")}</div>
-          </div></div>`).join("");
-      } catch (e) { el.textContent = e.message || "Failed"; }
+      return refreshDashboard();
     }
 
     // Products
-    function productForm(item = {}) {
+    function uniqueAdminValues(values) {
+      return [...new Set((values || []).map((value) => String(value || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    }
+    function parseAdminCategoryInput(value) {
+      const source = Array.isArray(value) ? value : String(value || "").split(",");
+      const seen = new Set();
+      const categories = source
+        .map((entry) => String(entry || "").trim())
+        .filter((entry) => {
+          const token = entry.toLowerCase();
+          if (!entry || seen.has(token)) return false;
+          seen.add(token);
+          return true;
+        });
+      return categories.length ? categories : ["general"];
+    }
+    function formatAdminProductCategories(product) {
+      return parseAdminCategoryInput(Array.isArray(product?.categories) ? product.categories : [product?.cat || product?.category]);
+    }
+    function humanizeAdminValue(value) {
+      return String(value || "")
+        .trim()
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    async function loadAdminCatalogContext() {
+      const [{ products }, { settings: shop }] = await Promise.all([api("/api/products/admin"), api("/api/cms/shop")]);
+      const productList = Array.isArray(products) ? products : [];
+      const shopSettings = shop && typeof shop === "object" ? shop : { filters: [] };
+      const filterList = Array.isArray(shopSettings.filters) ? shopSettings.filters : [];
+      const categories = uniqueAdminValues([
+        ...productList.flatMap((product) => formatAdminProductCategories(product)),
+        ...filterList.map((filter) => filter?.value).filter((value) => String(value || "").trim().toLowerCase() !== "all"),
+      ]);
+      const activeCategories = uniqueAdminValues(
+        productList.filter((product) => product && product.isActive !== false).flatMap((product) => formatAdminProductCategories(product))
+      );
+      const seeMoreFilters = uniqueAdminValues(["all", ...filterList.map((filter) => filter?.value)]).map((value) => {
+        const matchingFilter = filterList.find((filter) => String(filter?.value || "").trim() === value);
+        return {
+          value,
+          label: matchingFilter?.label || (value === "all" ? "All Products" : humanizeAdminValue(value)),
+        };
+      });
+      return { products: productList, shop: shopSettings, categories, activeCategories, seeMoreFilters };
+    }
+    function productCategoryOptions(values, currentValue) {
+      return uniqueAdminValues([...(values || []), ...parseAdminCategoryInput(currentValue || "")]).map((value) => `<option value="${esc(value)}"></option>`).join("");
+    }
+    let productPreviewObjectUrl = null;
+    function releaseProductPreviewObjectUrl() {
+      if (productPreviewObjectUrl) {
+        URL.revokeObjectURL(productPreviewObjectUrl);
+        productPreviewObjectUrl = null;
+      }
+    }
+    function getProductPreviewImageSrc() {
+      const file = document.getElementById("f_image_file")?.files?.[0];
+      if (file) {
+        releaseProductPreviewObjectUrl();
+        productPreviewObjectUrl = URL.createObjectURL(file);
+        return productPreviewObjectUrl;
+      }
+      releaseProductPreviewObjectUrl();
+      return document.getElementById("f_image")?.value.trim() || "";
+    }
+    function createProductPreviewMarkup() {
+      const name = document.getElementById("f_name")?.value.trim() || "Product name";
+      const desc = document.getElementById("f_desc")?.value.trim() || "Short product description appears here.";
+      const categories = parseAdminCategoryInput(document.getElementById("f_categories")?.value.trim() || "general");
+      const price = Number(document.getElementById("f_price")?.value || 0);
+      const oldPrice = document.getElementById("f_old_price")?.value;
+      const badge = document.getElementById("f_badge")?.value.trim();
+      const stockQty = Number(document.getElementById("f_stock")?.value || 0);
+      const imageSrc = getProductPreviewImageSrc();
       return `
-        <div class="field"><label>Name</label><input id="f_name" value="${esc(item.name || "")}" /></div>
-        <div class="field" style="margin-top:12px;"><label>Description</label><textarea id="f_desc">${esc(item.desc || "")}</textarea></div>
-        <div class="grid2" style="margin-top:12px;">
-          <div class="field"><label>Category</label><input id="f_cat" value="${esc(item.cat || "general")}" /></div>
-          <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
-        </div>
-        <div class="grid2" style="margin-top:12px;">
-          <div class="field"><label>Stock Qty</label><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" /></div>
-          <div class="field"><label>Image URL</label><input id="f_image" value="${esc(item.imageUrl || "")}" /></div>
-        </div>
-        <div class="grid2" style="margin-top:12px;">
-          <div class="field"><label>Badge</label><input id="f_badge" value="${esc(item.badge || "")}" /></div>
-          <div class="field"><label>Old Price</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" /></div>
-        </div>
-        <div class="field" style="margin-top:12px;"><label>Active</label>
-          <select id="f_active"><option value="1" ${item.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${item.isActive === false ? "selected" : ""}>No</option></select>
+        <div style="border:1px solid #e4eaf8;border-radius:22px;background:#ffffff;overflow:hidden;box-shadow:0 16px 32px rgba(24,39,75,0.06);">
+          <div style="position:relative;min-height:220px;background:linear-gradient(135deg,#eff4ff 0%,#f7f9fe 100%);display:grid;place-items:center;">
+            ${badge ? `<div style="position:absolute;top:14px;left:14px;padding:6px 10px;border-radius:999px;background:#172033;color:#fff;font-size:12px;font-weight:700;">${esc(badge)}</div>` : ""}
+            ${imageSrc ? `<img src="${esc(imageSrc)}" alt="${esc(name)}" style="width:100%;height:220px;object-fit:cover;">` : `<div style="display:grid;gap:6px;justify-items:center;color:#6f7d98;"><strong style="font-size:42px;line-height:1;">${esc(name.slice(0, 1).toUpperCase() || "P")}</strong><span style="font-size:12px;">No image selected</span></div>`}
+          </div>
+          <div style="padding:16px 16px 18px;display:grid;gap:8px;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">${categories.map((category) => `<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4a5672;background:#eef3fb;padding:6px 10px;border-radius:999px;">${esc(humanizeAdminValue(category))}</span>`).join("")}</div>
+            <div style="font-size:18px;font-weight:800;letter-spacing:-0.02em;color:#172033;">${esc(name)}</div>
+            <div style="font-size:13px;line-height:1.55;color:#7f8aa3;">${esc(desc)}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:6px;">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;">
+                <strong style="font-size:18px;color:#172033;">${esc(formatCurrency(price))}</strong>
+                ${oldPrice ? `<span style="font-size:13px;color:#9aa6bf;text-decoration:line-through;">${esc(formatCurrency(oldPrice))}</span>` : ""}
+              </div>
+              <span style="font-size:12px;color:#7f8aa3;">${esc(`${stockQty} in stock`)}</span>
+            </div>
+          </div>
+        </div>`;
+    }
+    function renderProductPreview() {
+      const node = document.getElementById("productPreviewCard");
+      if (node) node.innerHTML = createProductPreviewMarkup();
+    }
+    function bindProductFormPreview() {
+      const previewFields = ["f_name", "f_desc", "f_categories", "f_price", "f_stock", "f_image", "f_badge", "f_old_price"];
+      previewFields.forEach((id) => document.getElementById(id)?.addEventListener("input", renderProductPreview));
+      document.getElementById("f_image_file")?.addEventListener("change", () => {
+        const fileName = document.getElementById("f_image_file_name");
+        const file = document.getElementById("f_image_file")?.files?.[0];
+        if (fileName) fileName.textContent = file ? file.name : "No file selected";
+        renderProductPreview();
+      });
+      document.getElementById("btnSuggestProductDescription")?.addEventListener("click", requestProductDescriptionSuggestion);
+      renderProductPreview();
+    }
+    function setProductDescriptionStatus(message, tone = "muted") {
+      const node = document.getElementById("f_desc_ai_status");
+      if (!node) return;
+      node.textContent = message;
+      node.style.color = tone === "error" ? "#c2410c" : tone === "success" ? "#25603b" : "#6f7d98";
+    }
+    async function requestProductDescriptionSuggestion() {
+      const nameInput = document.getElementById("f_name");
+      const descriptionInput = document.getElementById("f_desc");
+      const button = document.getElementById("btnSuggestProductDescription");
+      if (!nameInput || !descriptionInput || !button) return;
+      if (!nameInput.value.trim()) {
+        setProductDescriptionStatus("Add a product name first so AI has something to work from.", "error");
+        nameInput.focus();
+        return;
+      }
+
+      const originalLabel = button.textContent;
+      button.disabled = true;
+      button.textContent = "Suggesting...";
+      setProductDescriptionStatus("Generating a product description from the current item details...");
+
+      try {
+        const payload = getProductPayload();
+        const { description, provider } = await api("/api/ai/product-description", {
+          method: "POST",
+          body: JSON.stringify({
+            name: payload.name,
+            category: payload.cat || "general",
+            categories: payload.categories || [],
+            price: Number.isFinite(payload.price) ? payload.price : undefined,
+            badge: payload.badge || "",
+            stockQty: Number.isFinite(payload.stockQty) ? payload.stockQty : undefined,
+            currentDescription: payload.description || "",
+          }),
+        });
+        descriptionInput.value = description || "";
+        renderProductPreview();
+        setProductDescriptionStatus(
+          provider === "openai"
+            ? "AI suggestion ready. You can edit the wording before saving."
+            : "Draft created from the product details. You can refine it before saving.",
+          "success"
+        );
+      } catch (e) {
+        setProductDescriptionStatus(e.message || "Failed to generate a description suggestion.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = originalLabel;
+      }
+    }
+    function buildProductRequestOptions() {
+      const payload = getProductPayload();
+      const imageFile = document.getElementById("f_image_file")?.files?.[0];
+      if (!imageFile) {
+        return { body: JSON.stringify(payload) };
+      }
+
+      const form = new FormData();
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value == null) return;
+        form.append(key, value);
+      });
+      form.append("image", imageFile);
+      return { body: form };
+    }
+    function productForm(item = {}, context = {}) {
+      const categoryValue = formatAdminProductCategories(item).join(", ") || context.categories?.[0] || "general";
+      return `
+        <div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.95fr);gap:18px;align-items:start;">
+          <div>
+            <div class="field"><label>Name</label><input id="f_name" value="${esc(item.name || "")}" /></div>
+            <div class="field" style="margin-top:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+                <label for="f_desc" style="margin:0;">Description</label>
+                <button class="btn-admin ghost" id="btnSuggestProductDescription" type="button">Suggest with AI</button>
+              </div>
+              <textarea id="f_desc">${esc(item.description || item.desc || "")}</textarea>
+              <div class="muted" id="f_desc_ai_status" style="font-size:12px;margin-top:6px;">Use the current product details to draft a clean storefront description.</div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field">
+                <label>Categories</label>
+                <input id="f_categories" list="adminProductCategories" value="${esc(categoryValue)}" placeholder="electronics, essentials, travel" />
+                <datalist id="adminProductCategories">${productCategoryOptions(context.categories || [], categoryValue)}</datalist>
+                <div class="muted" style="font-size:12px;">Separate categories with commas. The first category becomes the primary label, and every category can appear in shop filters.</div>
+              </div>
+              <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Stock Qty</label><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" /></div>
+              <div class="field"><label>Old Price</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Badge</label><input id="f_badge" value="${esc(item.badge || "")}" /></div>
+              <div class="field"><label>Active</label>
+                <select id="f_active"><option value="1" ${item.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${item.isActive === false ? "selected" : ""}>No</option></select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px;"><label>Image URL</label><input id="f_image" value="${esc(item.imageUrl || "")}" placeholder="https://example.com/product.jpg or /uploads/my-image.jpg" /></div>
+            <div class="field" style="margin-top:12px;">
+              <label>Upload image file</label>
+              <input id="f_image_file" type="file" accept="image/*" />
+              <div class="muted" id="f_image_file_name" style="font-size:12px;">No file selected</div>
+              <div class="muted" style="font-size:12px;">You can use either a direct image URL or an uploaded file. If both are provided, the uploaded file wins.</div>
+            </div>
+          </div>
+          <aside style="display:grid;gap:10px;">
+            <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:0.12em;">Product preview</div>
+            <div id="productPreviewCard"></div>
+          </aside>
         </div>`;
     }
     function getProductPayload() {
+      const categories = parseAdminCategoryInput(document.getElementById("f_categories").value.trim());
       return {
-        name: document.getElementById("f_name").value,
-        description: document.getElementById("f_desc").value,
-        cat: document.getElementById("f_cat").value,
+        name: document.getElementById("f_name").value.trim(),
+        description: document.getElementById("f_desc").value.trim(),
+        cat: categories[0],
+        categories,
         price: Number(document.getElementById("f_price").value),
         stockQty: Number(document.getElementById("f_stock").value),
-        imageUrl: document.getElementById("f_image").value,
-        badge: document.getElementById("f_badge").value || null,
+        imageUrl: document.getElementById("f_image").value.trim(),
+        badge: document.getElementById("f_badge").value.trim() || null,
         oldPrice: document.getElementById("f_old_price").value || null,
         isActive: document.getElementById("f_active").value === "1",
       };
     }
     async function openProductsTable() {
-      const { products } = await api("/api/products/admin");
+      const { products } = await loadAdminCatalogContext();
       openModal("Products", `
+        <div class="muted" style="margin-bottom:12px;">Categories now sync with the shop filter system automatically, and deals remove deleted or hidden featured products.</div>
         <table class="admin-table">
-          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Image</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody>${products.map((p) => `
             <tr>
-              <td>${esc(p.name)}</td><td>${esc(p.cat)}</td><td>$${esc(p.price)}</td>
-              <td>${p.imageUrl ? `<img src="${esc(p.imageUrl)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : "-"}</td>
-              <td><a href="#" data-action="edit-product" data-id="${esc(p.id)}">Edit</a> · <a href="#" data-action="delete-product" data-id="${esc(p.id)}">Delete</a></td>
+              <td>${esc(p.name)}</td>
+              <td>${esc(formatAdminProductCategories(p).map(humanizeAdminValue).join(", "))}</td>
+              <td>${esc(formatCurrency(p.price))}</td>
+              <td>${esc(String(Number(p.stockQty || 0)))}</td>
+              <td>${esc(p.isActive !== false ? "Live" : "Hidden")}</td>
+              <td><a href="#" data-action="edit-product" data-id="${esc(p.id)}">Edit</a> - <a href="#" data-action="delete-product" data-id="${esc(p.id)}">Delete</a></td>
             </tr>`).join("")}</tbody>
         </table>`);
     }
     async function openAddProduct() {
-      openModal("Add Product", `${productForm()}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct">Save</button></div>`);
+      const context = await loadAdminCatalogContext();
+      const draft = { categories: [context.categories?.[0] || "general"], isActive: true };
+      openModal("Add Product", `${productForm(draft, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
+      bindProductFormPreview();
       document.getElementById("btnSaveProduct").addEventListener("click", async () => {
-        await api("/api/products/admin", { method: "POST", body: JSON.stringify(getProductPayload()) });
-        await loadRecentActions(); closeModal();
+        try {
+          await api("/api/products/admin", { method: "POST", ...buildProductRequestOptions() });
+          releaseProductPreviewObjectUrl();
+          await refreshDashboard();
+          await openProductsTable();
+        } catch (e) {
+          alert(e.message || "Failed to save product");
+        }
       });
     }
     async function openEditProduct(id) {
-      const { products } = await api("/api/products/admin");
-      const item = products.find((p) => String(p.id) === String(id));
+      const context = await loadAdminCatalogContext();
+      const item = context.products.find((product) => String(product.id) === String(id));
       if (!item) return alert("Product not found");
-      openModal("Edit Product", `${productForm(item)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct">Save</button></div>`);
+      openModal("Edit Product", `${productForm(item, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
+      bindProductFormPreview();
       document.getElementById("btnSaveProduct").addEventListener("click", async () => {
-        await api(`/api/products/admin/${id}`, { method: "PATCH", body: JSON.stringify(getProductPayload()) });
-        await loadRecentActions(); closeModal();
+        try {
+          await api(`/api/products/admin/${id}`, { method: "PATCH", ...buildProductRequestOptions() });
+          releaseProductPreviewObjectUrl();
+          await refreshDashboard();
+          await openProductsTable();
+        } catch (e) {
+          alert(e.message || "Failed to update product");
+        }
       });
     }
     async function deleteProduct(id) {
       if (!confirm("Delete this product?")) return;
-      await api(`/api/products/admin/${id}`, { method: "DELETE" });
-      await loadRecentActions(); await openProductsTable();
+      try {
+        await api(`/api/products/admin/${id}`, { method: "DELETE" });
+        await refreshDashboard();
+        await openProductsTable();
+      } catch (e) {
+        alert(e.message || "Failed to delete product");
+      }
     }
 
     // Home images only
@@ -227,14 +950,14 @@
         <div id="homeImgsList" style="display:grid;gap:10px;margin-top:10px;">
           ${images.map((img, i) => `
             <div style="display:flex;gap:10px;align-items:center;">
-              <img src="${esc(img)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;">
+              <img src="${esc(img)}" alt="Home ad image" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;">
               <input data-img-index="${i}" value="${esc(img)}" style="flex:1;" />
             </div>`).join("")}
         </div>
         <div class="field" style="margin-top:12px;"><label>Upload new ad image</label><input id="homeImageFile" type="file" accept="image/*" /></div>
         <div style="margin-top:14px;display:flex;gap:8px;">
-          <button class="btn-admin" id="btnUploadHomeImage">Upload</button>
-          <button class="btn-admin primary" id="btnSaveHomeImages">Save</button>
+          <button class="btn-admin" id="btnUploadHomeImage" type="button">Upload</button>
+          <button class="btn-admin primary" id="btnSaveHomeImages" type="button">Save</button>
         </div>`);
 
       document.getElementById("btnUploadHomeImage").addEventListener("click", async () => {
@@ -244,8 +967,10 @@
         const list = document.getElementById("homeImgsList");
         const nextIndex = list.querySelectorAll("[data-img-index]").length;
         const row = document.createElement("div");
-        row.style.display = "flex"; row.style.gap = "10px"; row.style.alignItems = "center";
-        row.innerHTML = `<img src="${esc(imageUrl)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;"><input data-img-index="${nextIndex}" value="${esc(imageUrl)}" style="flex:1;">`;
+        row.style.display = "flex";
+        row.style.gap = "10px";
+        row.style.alignItems = "center";
+        row.innerHTML = `<img src="${esc(imageUrl)}" alt="Home ad image" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;"><input data-img-index="${nextIndex}" value="${esc(imageUrl)}" style="flex:1;">`;
         list.appendChild(row);
         document.getElementById("homeImageFile").value = "";
       });
@@ -253,21 +978,63 @@
       document.getElementById("btnSaveHomeImages").addEventListener("click", async () => {
         const values = Array.from(document.querySelectorAll("[data-img-index]")).map((x) => x.value.trim()).filter(Boolean);
         await api("/api/cms/home", { method: "PUT", body: JSON.stringify({ adImages: values }) });
-        await loadRecentActions(); closeModal();
+        await refreshDashboard();
+        closeModal();
       });
     }
 
-    // Shop filters — label, value (dropdown), visibility (dropdown)
+    // Shop filters - label, value (dropdown), visibility (dropdown)
     function filterValueOptions(current, cats) {
-      const merged = ["all", ...new Set([...(cats || []), current].filter(Boolean))];
-      const seen = new Set();
-      const opts = [];
-      for (const v of merged) {
-        if (seen.has(v)) continue;
-        seen.add(v);
-        opts.push(`<option value="${esc(v)}" ${String(current) === String(v) ? "selected" : ""}>${esc(v)}</option>`);
-      }
-      return opts.join("");
+      const values = uniqueAdminValues([...(cats || []), current]).filter((value) => value.toLowerCase() !== "all");
+      if (!values.length) return `<option value="">No active categories yet</option>`;
+      return values.map((value) => `<option value="${esc(value)}" ${String(current) === String(value) ? "selected" : ""}>${esc(humanizeAdminValue(value))}</option>`).join("");
+    }
+    function normalizeShopFiltersDraft(filters, categories) {
+      const seen = new Set(["all"]);
+      const next = [{ label: "All Products", value: "all", showInShop: true }];
+      (filters || []).forEach((filter) => {
+        const value = String(filter?.value || "").trim();
+        if (!value || value.toLowerCase() === "all" || seen.has(value)) return;
+        seen.add(value);
+        next.push({
+          label: String(filter?.label || humanizeAdminValue(value)).trim() || humanizeAdminValue(value),
+          value,
+          showInShop: filter?.showInShop !== false,
+        });
+      });
+      uniqueAdminValues(categories || []).forEach((category) => {
+        if (seen.has(category)) return;
+        seen.add(category);
+        next.push({
+          label: humanizeAdminValue(category),
+          value: category,
+          showInShop: true,
+        });
+      });
+      return next;
+    }
+    function buildShopFiltersFromEditor(categories) {
+      const controls = Array.from(document.querySelectorAll("#filtersWrap [data-filter-row]"));
+      const map = {};
+      controls.forEach((el) => {
+        const row = el.getAttribute("data-filter-row");
+        const key = el.getAttribute("data-k");
+        if (!map[row]) map[row] = { label: "", value: "", showInShop: true };
+        if (key === "showInShop") map[row][key] = el.value === "1";
+        else map[row][key] = el.value.trim();
+      });
+      return normalizeShopFiltersDraft(Object.values(map).filter((filter) => filter.value), categories);
+    }
+    function renderShopFilterPreview(categories) {
+      const preview = document.getElementById("shopFilterPreview");
+      if (!preview) return;
+      const filters = buildShopFiltersFromEditor(categories);
+      const visible = filters.filter((filter) => filter.showInShop !== false);
+      preview.innerHTML = `
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          ${visible.map((filter) => `<span style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;background:#f3f6fc;border:1px solid #e2e9f8;font-size:13px;font-weight:700;color:#172033;">${esc(filter.label)}</span>`).join("") || `<span class="muted">No visible filters yet.</span>`}
+        </div>
+        <div class="muted" style="font-size:12px;margin-top:8px;">"All Products" is pinned automatically, duplicate values are merged, and missing live categories are added for you.</div>`;
     }
     function renderFilterRows(filters, cats) {
       return filters.map((f, i) => `
@@ -282,49 +1049,49 @@
         </div>`).join("");
     }
     async function openShopCms() {
-      const [{ settings }, { products }] = await Promise.all([api("/api/cms/shop"), api("/api/products")]);
-      const filters = Array.isArray(settings.filters) ? settings.filters : [];
-      const cats = [...new Set((products || []).map((p) => p.cat).filter(Boolean))].sort();
+      const context = await loadAdminCatalogContext();
+      const settings = context.shop || { title: "", subtitle: "", filters: [] };
+      const filters = normalizeShopFiltersDraft(Array.isArray(settings.filters) ? settings.filters : [], context.activeCategories);
+      const editableFilters = filters.filter((filter) => String(filter.value || "").trim().toLowerCase() !== "all");
       openModal("Shop Settings", `
-        <div class="muted">Filter <strong>value</strong> must match product <strong>category</strong>. Hidden filters stay available for deals / admin.</div>
+        <div class="muted">Filters now follow the real active product categories. "All Products" is always included, and hidden filters stay available for deals and admin links.</div>
         <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
         <div class="field" style="margin-top:12px;"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
+        <div class="field" style="margin-top:12px;">
+          <label>Live category preview</label>
+          <div id="shopFilterPreview" style="padding:14px;border:1px solid #e4eaf8;border-radius:16px;background:#fff;"></div>
+        </div>
         <div class="field" style="margin-top:12px;"><label>Filters</label>
-          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(filters, cats)}</div>
+          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(editableFilters, context.activeCategories)}</div>
           <button type="button" class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
         </div>
         <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveShop">Save</button></div>`);
+      renderShopFilterPreview(context.activeCategories);
 
       document.getElementById("btnAddFilterRow").addEventListener("click", () => {
         const wrap = document.getElementById("filtersWrap");
         const rows = wrap.querySelectorAll(".admin-filter-row");
         const next = rows.length;
-        const firstCat = cats[0] || "all";
+        const firstCat = context.activeCategories[0] || "";
         const div = document.createElement("div");
         div.className = "admin-filter-row";
         div.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;";
         div.innerHTML = `
           <input data-filter-row="${next}" data-k="label" placeholder="Label">
-          <select data-filter-row="${next}" data-k="value">${filterValueOptions(firstCat, cats)}</select>
+          <select data-filter-row="${next}" data-k="value">${filterValueOptions(firstCat, context.activeCategories)}</select>
           <select data-filter-row="${next}" data-k="showInShop">
             <option value="1" selected>Visible on shop</option>
             <option value="0">Hidden on shop</option>
           </select>
           <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>`;
         wrap.appendChild(div);
+        renderShopFilterPreview(context.activeCategories);
       });
+      document.getElementById("filtersWrap").addEventListener("input", () => renderShopFilterPreview(context.activeCategories));
+      document.getElementById("filtersWrap").addEventListener("change", () => renderShopFilterPreview(context.activeCategories));
 
       document.getElementById("saveShop").addEventListener("click", async () => {
-        const controls = Array.from(document.querySelectorAll("#filtersWrap [data-filter-row]"));
-        const map = {};
-        controls.forEach((el) => {
-          const r = el.getAttribute("data-filter-row");
-          const k = el.getAttribute("data-k");
-          if (!map[r]) map[r] = { label: "", value: "", showInShop: true };
-          if (k === "showInShop") map[r][k] = el.value === "1";
-          else map[r][k] = el.value.trim();
-        });
-        const nextFilters = Object.values(map).filter((f) => f.label && f.value);
+        const nextFilters = buildShopFiltersFromEditor(context.activeCategories);
         await api("/api/cms/shop", {
           method: "PUT",
           body: JSON.stringify({
@@ -333,29 +1100,62 @@
             filters: nextFilters,
           }),
         });
-        await loadRecentActions(); closeModal();
+        await refreshDashboard();
+        closeModal();
       });
     }
 
-    // Deals — dropdowns + optional product IDs for home rows
-    function dealRowTemplate(d, idx, filters) {
-      const options = filters.map((f) => `<option value="${esc(f.value)}" ${f.value === d.sourceCategory ? "selected" : ""}>${esc(f.label)} (${esc(f.value)})</option>`).join("");
-      const optionsSee = filters.map((f) => `<option value="${esc(f.value)}" ${f.value === d.seeMoreFilter ? "selected" : ""}>${esc(f.label)} (${esc(f.value)})</option>`).join("");
-      const pids = Array.isArray(d.productIds) ? d.productIds.join("\n") : "";
+    // Deals - category-aware fallback + product picker
+    function dealSourceCategoryValue(deal, context) {
+      const source = parseAdminCategoryInput(Array.isArray(deal?.sourceCategories) ? deal.sourceCategories : [deal?.sourceCategory || context.activeCategories?.[0] || ""]);
+      return source.join(", ");
+    }
+    function dealSeeMoreOptions(filters, currentValue) {
+      return (filters || []).map((filter) => `<option value="${esc(filter.value)}" ${filter.value === currentValue ? "selected" : ""}>${esc(filter.label)} (${esc(filter.value)})</option>`).join("");
+    }
+    function dealProductPicker(idx, deal, products) {
+      const activeProducts = (products || []).filter((product) => product && product.isActive !== false);
+      if (!activeProducts.length) {
+        return `<div class="muted" style="font-size:12px;">Add or activate products before pinning featured items into a deal.</div>`;
+      }
+      const selectedIds = new Set((deal.productIds || []).map(String));
       return `
-        <div class="deal-admin-row" style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:10px;">
+        <div style="display:grid;gap:8px;max-height:220px;overflow:auto;padding:10px;border:1px solid #e7eaff;border-radius:14px;background:#fbfcff;">
+          ${activeProducts.map((product) => {
+            const productId = String(product.id);
+            return `
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid ${selectedIds.has(productId) ? "#cdddff" : "#edf1fb"};background:${selectedIds.has(productId) ? "#f5f8ff" : "#ffffff"};">
+                <input type="checkbox" data-deal-product="${idx}" value="${esc(productId)}" ${selectedIds.has(productId) ? "checked" : ""} style="margin-top:3px;">
+                <span style="display:grid;gap:4px;">
+                  <strong style="font-size:14px;">${esc(product.name)}</strong>
+                  <span class="muted" style="font-size:12px;">${esc(formatAdminProductCategories(product).map(humanizeAdminValue).join(", "))} - ${esc(formatCurrency(product.price))} - ${esc(`${Number(product.stockQty || 0)} in stock`)}</span>
+                </span>
+              </label>`;
+          }).join("")}
+        </div>`;
+    }
+    function dealRowTemplate(d, idx, context) {
+      const sourceCategoryValue = dealSourceCategoryValue(d, context);
+      const seeMoreFilter = d.seeMoreFilter || context.seeMoreFilters?.[0]?.value || "all";
+      return `
+        <div class="deal-admin-row" style="border:1px solid #e7eaff;padding:12px;border-radius:14px;margin-bottom:10px;background:#fff;">
           <div class="grid2">
             <div class="field"><label>Deal name</label><input data-deal="${idx}" data-k="name" value="${esc(d.name)}"></div>
-            <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${idx}" data-k="timerSeconds" value="${esc(d.timerSeconds)}"></div>
+            <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${idx}" data-k="timerSeconds" value="${esc(d.timerSeconds || 3600)}"></div>
           </div>
           <div class="grid2" style="margin-top:8px;">
-            <div class="field"><label>Fallback: products from category</label><select data-deal="${idx}" data-k="sourceCategory">${options}</select></div>
-            <div class="field"><label>See more → shop filter</label><select data-deal="${idx}" data-k="seeMoreFilter">${optionsSee}</select></div>
+            <div class="field">
+              <label>Fallback source categories</label>
+              <input data-deal="${idx}" data-k="sourceCategories" list="dealSourceCategories_${idx}" value="${esc(sourceCategoryValue)}" placeholder="electronics, essentials, travel" />
+              <datalist id="dealSourceCategories_${idx}">${productCategoryOptions(context.activeCategories || [], sourceCategoryValue)}</datalist>
+              <div class="muted" style="font-size:12px;">Separate categories with commas. If no featured products are pinned, the deal will pull from any matching category.</div>
+            </div>
+            <div class="field"><label>See more shop filter</label><select data-deal="${idx}" data-k="seeMoreFilter">${dealSeeMoreOptions(context.seeMoreFilters, seeMoreFilter)}</select></div>
           </div>
           <div class="field" style="margin-top:8px;">
-            <label>Featured product IDs (optional)</label>
-            <div class="muted" style="font-size:12px;margin-bottom:6px;">One per line. When set, the home deal row shows these products (still in their categories in the shop).</div>
-            <textarea rows="3" data-deal="${idx}" data-k="productIds" style="width:100%;font-family:monospace;font-size:12px;">${esc(pids)}</textarea>
+            <label>Featured products (optional)</label>
+            <div class="muted" style="font-size:12px;margin-bottom:6px;">Selected products are pinned into the deal. If none are selected, the deal falls back to the source category.</div>
+            ${dealProductPicker(idx, d, context.products)}
           </div>
           <div class="grid2" style="margin-top:8px;">
             <div class="field"><label>Max items</label><input type="number" data-deal="${idx}" data-k="maxItems" value="${esc(d.maxItems || 8)}"></div>
@@ -366,52 +1166,74 @@
         </div>`;
     }
     async function openDealsCms() {
-      const [{ settings: deals }, { settings: shop }] = await Promise.all([api("/api/cms/deals"), api("/api/cms/shop")]);
-      const filters = Array.isArray(shop.filters) && shop.filters.length ? shop.filters : [{ label: "All", value: "all" }];
+      const [{ settings: deals }, context] = await Promise.all([api("/api/cms/deals"), loadAdminCatalogContext()]);
       const rows = Array.isArray(deals) ? deals : [];
-      openModal("Deals (simple)", `
-        <div class="muted">Each deal selects source filter + where "See All" should go.</div>
-        <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, i, filters)).join("")}</div>
+      openModal("Deals", `
+        <div class="muted">Each deal now uses a real product category for fallback, a real shop filter for the "See more" link, and optional featured products from the live catalog.</div>
+        ${context.activeCategories.length ? "" : `<div class="muted" style="margin-top:10px;">No active product categories are available yet. Add or activate products before creating a fallback deal.</div>`}
+        <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, i, context)).join("")}</div>
         <div style="display:flex;gap:8px;margin-top:10px;">
-          <button class="btn-admin" id="btnAddDeal">+ Add deal</button>
-          <button class="btn-admin primary" id="saveDeals">Save Deals</button>
+          <button class="btn-admin" id="btnAddDeal" type="button">+ Add deal</button>
+          <button class="btn-admin primary" id="saveDeals" type="button">Save Deals</button>
         </div>`);
 
       document.getElementById("btnAddDeal").addEventListener("click", () => {
+        if (!context.activeCategories.length) return alert("Add at least one active product before creating a deal.");
         const wrap = document.getElementById("dealsWrap");
         const idx = wrap.querySelectorAll(".deal-admin-row").length;
-        const first = filters[0]?.value || "all";
-        const d = { id: `deal-${Date.now()}`, name: "New Deal", timerSeconds: 3600, sourceCategory: first, seeMoreFilter: first, maxItems: 8, isActive: true, productIds: [] };
+        const d = {
+          id: `deal-${Date.now()}`,
+          name: "New Deal",
+          timerSeconds: 3600,
+          sourceCategory: context.activeCategories[0],
+          sourceCategories: [context.activeCategories[0]],
+          seeMoreFilter: context.seeMoreFilters[0]?.value || "all",
+          maxItems: 8,
+          isActive: true,
+          productIds: [],
+        };
         const div = document.createElement("div");
-        div.innerHTML = dealRowTemplate(d, idx, filters);
+        div.innerHTML = dealRowTemplate(d, idx, context);
         wrap.appendChild(div.firstElementChild);
       });
 
       document.getElementById("saveDeals").addEventListener("click", async () => {
-        const nodes = Array.from(document.querySelectorAll(".deal-admin-row [data-deal]"));
-        const map = {};
-        nodes.forEach((el) => {
-          const i = el.getAttribute("data-deal");
-          const k = el.getAttribute("data-k");
-          if (!map[i]) map[i] = {};
-          if (k === "productIds") {
-            map[i][k] = el.value.split("\n").map((s) => s.trim()).filter(Boolean);
-          } else {
+        try {
+          const nodes = Array.from(document.querySelectorAll(".deal-admin-row [data-deal]"));
+          const map = {};
+          nodes.forEach((el) => {
+            const i = el.getAttribute("data-deal");
+            const k = el.getAttribute("data-k");
+            if (!map[i]) map[i] = {};
             map[i][k] = el.value;
-          }
-        });
-        const next = Object.values(map).map((d) => ({
-          id: d.id || `deal-${Date.now()}`,
-          name: d.name,
-          timerSeconds: Number(d.timerSeconds || 0),
-          sourceCategory: d.sourceCategory,
-          seeMoreFilter: d.seeMoreFilter,
-          maxItems: Number(d.maxItems || 8),
-          isActive: d.isActive === "1",
-          productIds: Array.isArray(d.productIds) ? d.productIds : [],
-        })).filter((d) => d.name && d.timerSeconds > 0 && d.sourceCategory && d.seeMoreFilter);
-        await api("/api/cms/deals", { method: "PUT", body: JSON.stringify(next) });
-        await loadRecentActions(); closeModal();
+          });
+          document.querySelectorAll(".deal-admin-row input[data-deal-product]:checked").forEach((el) => {
+            const i = el.getAttribute("data-deal-product");
+            if (!map[i]) map[i] = {};
+            if (!Array.isArray(map[i].productIds)) map[i].productIds = [];
+            map[i].productIds.push(el.value);
+          });
+          const next = Object.values(map).map((d) => {
+            const maxItems = Math.max(1, Number(d.maxItems || 8));
+            const sourceCategories = parseAdminCategoryInput(d.sourceCategories || d.sourceCategory || "");
+            return {
+              id: d.id || `deal-${Date.now()}`,
+              name: String(d.name || "").trim(),
+              timerSeconds: Number(d.timerSeconds || 0),
+              sourceCategory: sourceCategories[0] || "",
+              sourceCategories,
+              seeMoreFilter: String(d.seeMoreFilter || "").trim(),
+              maxItems,
+              isActive: d.isActive === "1",
+              productIds: [...new Set(Array.isArray(d.productIds) ? d.productIds : [])].slice(0, maxItems),
+            };
+          }).filter((d) => d.name && d.timerSeconds > 0 && d.seeMoreFilter && d.sourceCategories.length);
+          await api("/api/cms/deals", { method: "PUT", body: JSON.stringify(next) });
+          await refreshDashboard();
+          closeModal();
+        } catch (e) {
+          alert(e.message || "Failed to save deals");
+        }
       });
     }
 
@@ -445,12 +1267,12 @@
         <div class="field"><label>Page title (use line breaks)</label><textarea id="fq_title" rows="2">${esc(s.pageTitle || "")}</textarea></div>
         <div class="grid2" style="margin-top:10px;">
           <div class="field"><label>Label pill</label><input id="fq_label" value="${esc(s.label || "")}"></div>
-          <div class="field"><label>Contact email</label><input id="fq_email" type="email" value="${esc(s.contactEmail || "")}"></div>
+          <div class="field"><label>Contact email</label><input id="fq_email" type="email" value="${esc(s.contactEmail || "")}" /></div>
         </div>
-        <div class="field" style="margin-top:10px;"><label>Intro (short)</label><input id="fq_intro" value="${esc(s.intro || "")}"></div>
+        <div class="field" style="margin-top:10px;"><label>Intro (short)</label><input id="fq_intro" value="${esc(s.intro || "")}" /></div>
         <div class="grid2" style="margin-top:10px;">
-          <div class="field"><label>Help box title</label><input id="fq_help_title" value="${esc(s.helpTitle || "")}"></div>
-          <div class="field"><label>Board section title</label><input id="fq_board_title" value="${esc(s.boardTitle || "")}"></div>
+          <div class="field"><label>Help box title</label><input id="fq_help_title" value="${esc(s.helpTitle || "")}" /></div>
+          <div class="field"><label>Board section title</label><input id="fq_board_title" value="${esc(s.boardTitle || "")}" /></div>
         </div>
         <div class="field" style="margin-top:10px;"><label>Help box text</label><textarea id="fq_help_text" rows="3">${esc(s.helpText || "")}</textarea></div>
         <div class="panel-header" style="margin-top:16px;">Questions</div>
@@ -465,7 +1287,7 @@
         const wrap = document.getElementById("faqItemsWrap");
         const i = wrap.querySelectorAll(".faq-edit-row").length;
         const div = document.createElement("div");
-        div.innerHTML = faqQaRow("New question", "Answer…", i);
+        div.innerHTML = faqQaRow("New question", "Answer...", i);
         wrap.appendChild(div.firstElementChild);
       });
       document.getElementById("btnAddBoard").addEventListener("click", () => {
@@ -496,9 +1318,7 @@
           if (!fmap[i]) fmap[i] = {};
           fmap[i][k] = el.value.trim();
         });
-        const nextFaqs = Object.values(fmap)
-          .map((x) => ({ question: x.question, answer: x.answer }))
-          .filter((x) => x.question && x.answer);
+        const nextFaqs = Object.values(fmap).map((x) => ({ question: x.question, answer: x.answer })).filter((x) => x.question && x.answer);
         const bq = Array.from(document.querySelectorAll("#faqBoardWrap [data-board]"));
         const bmap = {};
         bq.forEach((el) => {
@@ -507,14 +1327,12 @@
           if (!bmap[i]) bmap[i] = {};
           bmap[i][k] = el.value.trim();
         });
-        const nextBoard = Object.values(bmap)
-          .map((x) => ({
-            name: x.name,
-            role: x.role,
-            bio: x.bio,
-            imageUrl: x.imageUrl || null,
-          }))
-          .filter((x) => x.name && x.role && x.bio);
+        const nextBoard = Object.values(bmap).map((x) => ({
+          name: x.name,
+          role: x.role,
+          bio: x.bio,
+          imageUrl: x.imageUrl || null,
+        })).filter((x) => x.name && x.role && x.bio);
         await api("/api/cms/faq", {
           method: "PUT",
           body: JSON.stringify({
@@ -529,7 +1347,8 @@
             board: nextBoard,
           }),
         });
-        await loadRecentActions(); closeModal();
+        await refreshDashboard();
+        closeModal();
       });
     }
 
@@ -542,8 +1361,13 @@
           <div class="field"><label>Search enabled</label><select id="a_search"><option value="1" ${settings.searchEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.searchEnabled ? "selected" : ""}>No</option></select></div>
         </div>
         <div class="field" style="margin-top:12px;"><label>Bot name</label><input id="a_name" value="${esc(settings.botName || "")}" /></div>
+        <div class="field" style="margin-top:12px;">
+          <label>User persona</label>
+          <textarea id="a_persona" rows="3">${esc(settings.userPersona || "")}</textarea>
+          <div class="muted" style="font-size:12px;">Describe the kind of shopper the assistant should focus on, for example value-conscious gadget buyers or busy parents shopping essentials.</div>
+        </div>
         <div class="field" style="margin-top:12px;"><label>System prompt</label><textarea id="a_prompt" rows="8">${esc(settings.systemPrompt || "")}</textarea></div>
-        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAi">Save</button></div>`);
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAi" type="button">Save</button></div>`);
       document.getElementById("saveAi").addEventListener("click", async () => {
         await api("/api/cms/ai", {
           method: "PUT",
@@ -551,23 +1375,38 @@
             chatEnabled: document.getElementById("a_chat").value === "1",
             searchEnabled: document.getElementById("a_search").value === "1",
             botName: document.getElementById("a_name").value,
+            userPersona: document.getElementById("a_persona").value,
             systemPrompt: document.getElementById("a_prompt").value,
           }),
         });
-        await loadRecentActions(); closeModal();
+        await refreshDashboard();
+        closeModal();
       });
+    }
+
+    async function bootstrapAdminSession(user) {
+      if (!user || user.role !== "admin") throw new Error("Admin access required");
+      dashboardState.user = user;
+      renderUser(user);
+      await refreshDashboard();
     }
 
     async function init() {
       const me = await api("/api/auth/me");
-      if (me.user.role !== "admin") throw new Error("Admin access required");
-      document.getElementById("whoami").textContent = `Logged in as ${me.user.email}`;
-      await loadRecentActions();
+      await bootstrapAdminSession(me.user);
     }
 
     document.getElementById("modalClose").addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+    adminSearch.addEventListener("input", applyAdminSearch);
+    document.getElementById("btnDashboardRefresh").addEventListener("click", async (e) => {
+      e.preventDefault();
+      syncActiveNav("dashboard");
+      await refreshDashboard().catch((err) => alert(err.message || "Failed"));
+    });
+    document.getElementById("btnActivityRefresh").addEventListener("click", () => refreshDashboard().catch((err) => alert(err.message || "Failed")));
+    document.getElementById("btnRecentRefresh").addEventListener("click", () => refreshDashboard().catch((err) => alert(err.message || "Failed")));
 
     document.body.addEventListener("click", async (e) => {
       const node = e.target.closest("[data-action]");
@@ -575,7 +1414,8 @@
       e.preventDefault();
       const action = node.getAttribute("data-action");
       const id = node.getAttribute("data-id");
-      const row = node.getAttribute("data-row");
+
+      syncNavForAction(action);
 
       if (action === "list-products") return openProductsTable();
       if (action === "add-product") return openAddProduct();
@@ -588,28 +1428,39 @@
       if (action === "edit-ai") return openAiSettings();
       if (action === "remove-filter-row") {
         node.closest(".admin-filter-row")?.remove();
+        const categoryValues = uniqueAdminValues(
+          Array.from(document.querySelectorAll("#filtersWrap select[data-k=\"value\"] option"))
+            .map((el) => el.value)
+        );
+        renderShopFilterPreview(categoryValues);
         return;
       }
-      if (action === "remove-deal-row") {
-        node.closest(".deal-admin-row")?.remove();
-        return;
-      }
-      if (action === "remove-faq-qa") {
-        node.closest(".faq-edit-row")?.remove();
-        return;
-      }
-      if (action === "remove-board-row") {
-        node.closest(".board-edit-row")?.remove();
-        return;
-      }
+      if (action === "remove-deal-row") return node.closest(".deal-admin-row")?.remove();
+      if (action === "remove-faq-qa") return node.closest(".faq-edit-row")?.remove();
+      if (action === "remove-board-row") return node.closest(".board-edit-row")?.remove();
     });
 
-    document.getElementById("btnHome").addEventListener("click", () => window.location.href = "/");
-    document.getElementById("btnRefresh").addEventListener("click", () => init().catch((e) => alert(e.message || "Failed")));
-    document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = "/"; });
+    document.getElementById("btnHome").addEventListener("click", () => window.location.href = buildSiteUrl("/"));
+    document.getElementById("btnRefresh").addEventListener("click", () => refreshDashboard().catch((e) => alert(e.message || "Failed")));
+    document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = buildSiteUrl("/"); });
 
-    init().catch((e) => { document.getElementById("whoami").textContent = e.message || "Failed to load admin"; });
+    init().catch((e) => {
+      const message = e.message || "Failed to load admin";
+      if (isAdminAuthError(message)) {
+        renderAdminUnavailableState("Admin sign-in required", "Sign in with an admin account to connect the dashboard.");
+        showAdminLoginModal(message);
+        return;
+      }
+      backendLooksReachable().then((isReachable) => {
+        if (isReachable) {
+          renderAdminUnavailableState("Admin sign-in required", "The backend is reachable. Sign in with your admin account to connect the dashboard.");
+          showAdminLoginModal(message);
+          return;
+        }
+        const apiHint = typeof getSiteBaseUrl === "function" ? `${getSiteBaseUrl()}/api/health` : "http://127.0.0.1:3000/api/health";
+        renderAdminUnavailableState("Admin console unavailable", `We couldn't reach the admin API. Make sure the backend server is running and check ${apiHint}.`);
+      });
+    });
   </script>
 </body>
 </html>
-

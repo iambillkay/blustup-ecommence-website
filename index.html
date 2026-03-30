@@ -33,11 +33,7 @@
   <div class="nav-search" id="navSearch">
     <!-- Category dropdown -->
     <select class="search-category" id="searchCategory" aria-label="Category">
-      <option value="">All</option>
-      <option value="skincare">Skincare</option>
-      <option value="haircare">Haircare</option>
-      <option value="makeup">Makeup</option>
-      <option value="fragrance">Fragrance</option>
+      <option value="all">All Products</option>
     </select>
 
     <!-- Text input -->
@@ -59,11 +55,9 @@
 
   <!-- Desktop nav links -->
   <ul class="nav-links">
-    <li><a onclick="showPage('home')"     id="nav-home"     class="active-link">Home</a></li>
-    <li><a onclick="showPage('shop')"     id="nav-shop">Shop</a></li>
-<li>
-<a href="#" onclick="showPage('faq')" id="nav-faq">FAQ</a>
-</li>
+    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home')" id="nav-home" class="active-link">Home</a></li>
+    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop')" id="nav-shop">Shop</a></li>
+    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq')" id="nav-faq">FAQ</a></li>
   </ul>
 
   <!-- Right side -->
@@ -75,7 +69,7 @@ Log In
       <span class="cart-count" id="cart-count">0</span>
     </button>
     <!-- Hamburger (mobile only) -->
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -97,14 +91,14 @@ Log In
   </div>
 
   <ul class="nav-links">
-    <li><a onclick="showPage('home'); closeMenu()" class="active-link">Home</a></li>
-    <li><a onclick="showPage('shop'); closeMenu()">Shop</a></li>
-    <li><a onclick="showPage('home'); closeMenu()">Features</a></li>
-    <li><a href="#" onclick="showPage('faq'); closeMenu()">FAQ</a></li>
+    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link">Home</a></li>
+    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()">Shop</a></li>
+    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()">Features</a></li>
+    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()">FAQ</a></li>
   </ul>
 
   <div class="drawer-actions">
-    <button class="btn-login drawer-btn">Log In</button>
+    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile">Log In</button>
     <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
       🛒 Cart
       <span class="cart-count" id="cart-count-mobile">0</span>
@@ -179,7 +173,7 @@ Log In
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="logo footer-logo"><div class="logo-icon">✦</div>Blustup</div>
-          <p>Discover the cheapest fares, get personalized recommendations, and book effortlessly with our powered platform.</p>
+          <p>Discover the cheapest fares, get personalized recommendations, and book effortlessly with our platform.</p>
         </div>
         <div class="footer-col"><h4>Product</h4><ul><li><a onclick="showPage('shop')">Shop</a></li><li><a>Loyalty Points</a></li><li><a>How It Works</a></li></ul></div>
         <div class="footer-col"><h4>Company</h4><ul><li><a>About Us</a></li><li><a>Careers</a></li><li><a>Blog</a></li><li><a>Press</a></li></ul></div>
@@ -194,7 +188,7 @@ Log In
     <div class="shop-hero">
       <div class="section-badge shop-hero-badge"> We Have All You Need</div>
       <h1></h1>
-      <p>Afica's biggest retail shop for all your essentials</p>
+      <p>Africa's biggest retail shop for all your essentials</p>
     </div>
     <div class="shop-body">
       <div class="shop-filters">
@@ -216,7 +210,7 @@ Log In
     </footer>
   </div>
 
-<!-- ═══════════════ FAQ PAGE (CMS: /api/cms/faq) ═══════════════ -->
+  <!-- ═══════════════ FAQ PAGE (CMS: /api/cms/faq) ═══════════════ -->
   <div id="page-faq" class="page">
     <section class="faq-container">
       <div class="faq-left">
@@ -229,58 +223,64 @@ Log In
           <button class="faq-email-btn" type="button" id="faq-email-btn">Send email</button>
         </div>
       </div>
-
       <div class="faq-right">
-        <div class="faq-item active">
-          <div class="faq-question">
-            How do I create an account?
-            <span class="faq-icon">▲</span>
+        <div class="faq-list" id="faq-list-root">
+          <div class="faq-item active">
+            <button class="faq-question" type="button">
+              <span>How do I create an account?</span>
+              <span class="faq-icon">&#9650;</span>
+            </button>
+            <div class="faq-answer">
+              Click on "Create account" from the login page, enter your name, email, and password, then click "Create Account". You'll be logged in automatically!
+            </div>
           </div>
-          <div class="faq-answer">
-            Click on "Create account" from the login page, enter your name, email, and password, then click "Create Account". You'll be logged in automatically!
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <div class="faq-question">
-            How do I add products to my cart?
-            <span class="faq-icon">▼</span>
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>How do I add products to my cart?</span>
+              <span class="faq-icon">&#9660;</span>
+            </button>
+            <div class="faq-answer">
+              Browse the shop, find a product you like, and click the "+ Add" button. Your cart count will update at the top right.
+            </div>
           </div>
-          <div class="faq-answer">
-            Browse the shop, find a product you like, and click the "+ Add" button. Your cart count will update at the top right.
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <div class="faq-question">
-            Is my personal information secure?
-            <span class="faq-icon">▼</span>
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>Is my personal information secure?</span>
+              <span class="faq-icon">&#9660;</span>
+            </button>
+            <div class="faq-answer">
+              Yes! We use 256-bit SSL encryption to protect all your data. Your password is hashed with bcryptjs for extra security.
+            </div>
           </div>
-          <div class="faq-answer">
-            Yes! We use 256-bit SSL encryption to protect all your data. Your password is hashed with bcryptjs for extra security.
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <div class="faq-question">
-            Can I use promo codes?
-            <span class="faq-icon">▼</span>
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>Can I use promo codes?</span>
+              <span class="faq-icon">&#9660;</span>
+            </button>
+            <div class="faq-answer">
+              Yes! Enter a valid promo code in your cart summary and click "Apply" to get discounts on your order.
+            </div>
           </div>
-          <div class="faq-answer">
-            Yes! Enter a valid promo code in your cart summary and click "Apply" to get discounts on your order.
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <div class="faq-question">
-            What payment methods do you accept?
-            <span class="faq-icon">▼</span>
-          </div>
-          <div class="faq-answer">
-            We accept credit/debit cards, PayPal, Apple Pay, and Google Pay at checkout.
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>What payment methods do you accept?</span>
+              <span class="faq-icon">&#9660;</span>
+            </button>
+            <div class="faq-answer">
+              We accept credit/debit cards, PayPal, Apple Pay, and Google Pay at checkout.
+            </div>
           </div>
         </div>
       </div>
+    </section>
+    <section class="faq-board-section">
+      <h2 class="faq-board-heading" id="faq-board-title">Board of directors</h2>
+      <p class="faq-board-lead">Meet the team guiding Blustup.</p>
+      <div class="board-grid" id="faq-board-grid"></div>
     </section>
   </div>
 
@@ -303,11 +303,14 @@ Log In
           <div id="cart-summary-rows"></div>
           <div class="promo-input">
             <input type="text" placeholder="Promo code" id="promo-input" autocomplete="off">
-            <button type="button" onclick="applyPromo()">Apply</button>
+            <button type="button" id="promoApplyBtn" onclick="applyPromo()">Apply</button>
           </div>
           <p class="promo-hint" id="promo-status">Try AIRLUME20, BLUSTUP10, or FREESHIP</p>
-          <div class="summary-row total"><span>Total</span><span id="cart-total-display">$0.00</span></div>
-          <button class="checkout-btn" onclick="showPage('checkout')">Proceed to Checkout →</button>
+          <div class="summary-row total"><span>Total</span><span id="cart-total-display">₵0.00</span></div>
+          <div class="cart-summary-actions">
+            <button class="checkout-btn" id="cartCheckoutBtn" onclick="showPage('checkout')">Proceed to Checkout →</button>
+            <button type="button" class="cart-secondary-btn" id="clearCartBtn">Clear Cart</button>
+          </div>
           <div class="secure-note">🔒 Secure &amp; encrypted checkout</div>
         </div>
       </div>
@@ -368,7 +371,7 @@ Log In
               </div>
             </div>
           </div>
-          <button class="place-order-btn" onclick="placeOrder()">🔒 Place Order &amp; Pay</button>
+          <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">🔒 Place Order &amp; Pay</button>
         </div>
         <div class="checkout-summary">
           <div class="cart-summary">
@@ -376,7 +379,7 @@ Log In
             <div id="checkout-mini-cart"></div>
             <div style="height:1px;background:#f0f1fa;margin:16px 0;"></div>
             <div id="checkout-summary-rows"></div>
-            <div class="summary-row total"><span>Total</span><span id="checkout-total-display">$0.00</span></div>
+            <div class="summary-row total"><span>Total</span><span id="checkout-total-display">₵0.00</span></div>
             <div class="secure-note" style="margin-top:16px;">🔒 256-bit SSL encryption</div>
           </div>
         </div>
@@ -392,54 +395,127 @@ Log In
 
 <div class="login-wrapper">
 
+<div class="login-shell">
+
+<div class="login-browser-bar" aria-hidden="true">
+<div class="login-browser-actions">
+<span class="login-browser-dot is-red"></span>
+<span class="login-browser-dot is-yellow"></span>
+<span class="login-browser-dot is-green"></span>
+</div>
+<div class="login-browser-arrows">
+<span class="login-browser-arrow">&lt;</span>
+<span class="login-browser-arrow">&gt;</span>
+</div>
+<div class="login-browser-address">https://blustup.com/signin</div>
+<div class="login-browser-tools">
+<span class="login-browser-tool">+</span>
+<span class="login-browser-tool">[]</span>
+</div>
+</div>
+
+<div class="login-stage">
+
+<aside class="login-panel" aria-label="Sign-in guide">
+<div class="login-brand">
+<span class="login-brand-mark"></span>
+<span>Blustup</span>
+</div>
+
+<div class="login-panel-copy-block">
+<h2>Get Started with Us</h2>
+<p class="login-panel-copy">Sign in with your Blustup account to continue shopping, manage orders, and return to checkout faster.</p>
+</div>
+
+<div class="login-panel-list">
+<div class="login-panel-item is-active">
+<span class="login-panel-step">1</span>
+<div class="login-panel-text">
+<strong>Sign in to your account</strong>
+<span>Use your registered email and password to access your profile.</span>
+</div>
+</div>
+<div class="login-panel-item">
+<span class="login-panel-step">2</span>
+<div class="login-panel-text">
+<strong>Review your saved activity</strong>
+<span>Pick up your cart, previous orders, and account details in one place.</span>
+</div>
+</div>
+<div class="login-panel-item">
+<span class="login-panel-step">3</span>
+<div class="login-panel-text">
+<strong>Continue securely</strong>
+<span>Move through checkout quickly with your protected Blustup session.</span>
+</div>
+</div>
+</div>
+
+<div class="login-support">
+<span>Need help accessing your account?</span>
+<button type="button" class="login-support-link" id="loginSupportBtn">Get sign-in help</button>
+</div>
+</aside>
+
 <div class="login-card">
 
 <div class="login-header">
-<h2>Welcome Back</h2>
-<p>Sign in to continue to Blustup</p>
+<h2>Sign In Account</h2>
+<p>Enter your email and password to continue to your Blustup account.</p>
 </div>
 
-<form id="loginForm">
+<form id="loginForm" class="login-form" novalidate>
 
-<div class="form-group">
-<label>Email Address</label>
-<input type="email" id="loginEmail" placeholder="you@example.com" required>
-</div>
+<div id="loginAlert" class="auth-alert" role="alert" aria-live="polite" hidden></div>
 
-<div class="form-group">
-<label>Password</label>
-<input type="password" id="loginPassword" placeholder="Enter your password" required>
-</div>
+<div class="social-login social-login-disabled">
 
-<div class="login-options">
-<label class="remember">
-<input type="checkbox">
-<span style="color: black;">Remember me</span>
-</label>
-
-<a class="forgot">Forgot password?</a>
-</div>
-
-<button class="login-btn" type="submit">Sign In</button>
-
-<div class="divider">
-<span>or continue with</span>
-</div>
-
-<div class="social-login">
-
-<button class="social-btn google" type="button" onclick="showToast('Google login coming soon!')">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google">
+<button class="social-btn google" type="button" disabled aria-disabled="true" title="Google sign-in is not available in this local build">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="">
 Google
 </button>
 
-<button class="social-btn apple" type="button" onclick="showToast('Apple login coming soon!')"> 
-<svg class="apple-icon" viewBox="0 0 170 170" width="20" height="20">
-    <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.35-3.17-4.58 0-9.49 1.05-14.7 3.17-5.22 2.13-9.41 3.24-12.58 3.35-5.27.12-10.09-1.99-14.46-6.35-2.89-2.51-6.66-7.03-11.31-13.56-4.7-6.61-8.4-14.02-11.12-22.21-2.71-8.19-4.07-16.85-4.07-25.98 0-14.82 3.72-27.14 11.17-36.94 7.45-9.8 17.18-14.7 29.21-14.7 4.02 0 8.96 1.13 14.82 3.39 5.86 2.26 10.03 3.39 12.53 3.39 2.13 0 6.62-1.25 13.48-3.76 6.85-2.51 12.04-3.76 15.56-3.76 10.15 0 18.66 3.12 25.55 9.36 5.22 4.71 9.07 10.6 11.56 17.66-10.54 6.33-15.82 15.15-15.82 26.47 0 9.1 3.2 16.7 9.59 22.81 3.26 3.01 7.27 5.4 12.03 7.17-.63 1.95-1.38 3.95-2.26 6zM110.16 34.79c0 6.16-2.25 12.25-6.75 18.25-5.38 7.03-12.88 11.05-20.25 10.5-.5-6.62 2.75-13.5 7.5-19.12 4.9-5.62 12.12-10.12 20-10.12.25 2.5.5 5 1.1 7.5-.1 0-.1 0 0 0z" fill="currentColor"/>
-  </svg>Apple
+<button class="social-btn github" type="button" disabled aria-disabled="true" title="GitHub sign-in is not available in this local build">
+<svg class="github-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+<path d="M12 .5A12 12 0 0 0 8.21 23.89c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.13-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.25 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z" fill="currentColor"/>
+</svg>
+GitHub
 </button>
 
 </div>
+
+<div class="divider">
+<span>Or</span>
+</div>
+
+<div class="login-field">
+<label for="loginEmail">Email</label>
+<input type="email" id="loginEmail" placeholder="eg. john@example.com" autocomplete="username" inputmode="email" spellcheck="false" required>
+</div>
+
+<div class="login-field">
+<div class="login-field-head">
+<label for="loginPassword">Password</label>
+<button type="button" class="field-link" id="forgotPasswordBtn">Forgot password?</button>
+</div>
+<div class="input-with-action">
+<input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
+<button type="button" class="input-action" id="toggleLoginPassword" aria-label="Show password" aria-pressed="false">Show</button>
+</div>
+<p class="field-note">Use the password linked to your Blustup account.</p>
+</div>
+
+<div class="login-meta">
+<label class="remember" for="rememberMe">
+<input type="checkbox" id="rememberMe" checked>
+<span>Keep me signed in on this device</span>
+</label>
+</div>
+
+<button class="login-btn" type="submit" id="loginSubmitBtn">
+<span class="login-btn-label">Sign In</span>
+</button>
+<p class="login-method-note">Google and GitHub sign-in are not active in this local build yet.</p>
 
 <p class="signup-link">
 Don't have an account?
@@ -454,45 +530,167 @@ Don't have an account?
 
 </div>
 
+</div>
+
+</div>
+
 <!-- ═══════════════ SIGNUP PAGE ═══════════════ -->
 <div id="page-signup" class="page">
 
-<div class="auth-container">
+<div class="signup-wrapper">
 
-<div class="auth-card">
+<div class="signup-shell">
 
-<h2 style="color:#0000;">Create Account</h2>
-
-<form id="signupForm">
-
-<div class="auth-field">
-<label>Name</label>
-<input type="text" id="signupName" placeholder="Enter your full name" title="Enter your full name" required>
+<div class="login-browser-bar" aria-hidden="true">
+<div class="login-browser-actions">
+<span class="login-browser-dot is-red"></span>
+<span class="login-browser-dot is-yellow"></span>
+<span class="login-browser-dot is-green"></span>
+</div>
+<div class="login-browser-arrows">
+<span class="login-browser-arrow">&lt;</span>
+<span class="login-browser-arrow">&gt;</span>
+</div>
+<div class="login-browser-address">https://blustup.com/register</div>
+<div class="login-browser-tools">
+<span class="login-browser-tool">+</span>
+<span class="login-browser-tool">[]</span>
+</div>
 </div>
 
-<div class="auth-field">
-<label>Email</label>
-<input type="email" id="signupEmail" placeholder="Enter your email" title="Enter your email address" required>
+<div class="signup-stage">
+
+<aside class="signup-panel" aria-label="Create account guide">
+<div class="signup-brand">
+<span class="signup-brand-mark"></span>
+<span>Blustup</span>
 </div>
 
-<div class="auth-field">
-<label>Phone number</label>
-<input type="tel" id="signupPhone" placeholder="e.g. +1 234 567 8900" title="Enter your phone number" required>
+<div class="signup-panel-copy-block">
+<h2>Get Started with Us</h2>
+<p class="signup-panel-copy">Create your Blustup account to save your preferences, manage orders, and move through checkout faster.</p>
 </div>
 
-<div class="auth-field">
-<label>Password</label>
-<input type="password" id="signupPassword" placeholder="Create a password (min 8 characters)" title="Enter a strong password" required minlength="8">
+<div class="signup-panel-list">
+<div class="signup-panel-item is-active">
+<span class="signup-panel-step">1</span>
+<div class="signup-panel-text">
+<strong>Create your account</strong>
+<span>Enter your personal details to open your secure Blustup profile.</span>
+</div>
+</div>
+<div class="signup-panel-item">
+<span class="signup-panel-step">2</span>
+<div class="signup-panel-text">
+<strong>Secure your sign-in details</strong>
+<span>Choose a strong password so your saved information stays protected.</span>
+</div>
+</div>
+<div class="signup-panel-item">
+<span class="signup-panel-step">3</span>
+<div class="signup-panel-text">
+<strong>Start shopping faster</strong>
+<span>Keep your order details ready for future checkout and account access.</span>
+</div>
+</div>
 </div>
 
-<button type="submit" class="auth-btn">Create Account</button>
+<button type="button" class="signup-panel-link" id="signupHelpBtn">Need help creating an account?</button>
+</aside>
 
-<p class="auth-switch">
+<div class="signup-card">
+
+<div class="signup-header">
+<h2>Sign Up Account</h2>
+<p>Enter your personal data to create your Blustup account.</p>
+</div>
+
+<form id="signupForm" class="signup-form" novalidate>
+
+<div id="signupAlert" class="auth-alert" role="alert" aria-live="polite" hidden></div>
+
+<div class="social-login social-login-disabled">
+
+<button class="social-btn google" type="button" disabled aria-disabled="true" title="Google sign-up is not available in this local build">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="">
+Google
+</button>
+
+<button class="social-btn github" type="button" disabled aria-disabled="true" title="GitHub sign-up is not available in this local build">
+<svg class="github-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+<path d="M12 .5A12 12 0 0 0 8.21 23.89c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.13-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.25 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z" fill="currentColor"/>
+</svg>
+GitHub
+</button>
+
+</div>
+
+<div class="divider">
+<span>Or</span>
+</div>
+
+<div class="signup-grid">
+<div class="signup-field">
+<label for="signupName">Full name</label>
+<input type="text" id="signupName" placeholder="Jane Doe" autocomplete="name" required>
+</div>
+
+<div class="signup-field">
+<label for="signupPhone">Phone number</label>
+<input type="tel" id="signupPhone" placeholder="+1 234 567 8900" autocomplete="tel" inputmode="tel" required>
+</div>
+</div>
+
+<div class="signup-field">
+<label for="signupEmail">Email</label>
+<input type="email" id="signupEmail" placeholder="eg. jane@example.com" autocomplete="email" inputmode="email" spellcheck="false" required>
+</div>
+
+<div class="signup-grid">
+<div class="signup-field">
+<label for="signupPassword">Password</label>
+<div class="input-with-action">
+<input type="password" id="signupPassword" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+<button type="button" class="input-action" id="toggleSignupPassword" aria-label="Show password" aria-pressed="false">Show</button>
+</div>
+<p class="field-note">Use at least 8 characters.</p>
+</div>
+
+<div class="signup-field">
+<label for="signupConfirmPassword">Confirm password</label>
+<div class="input-with-action">
+<input type="password" id="signupConfirmPassword" placeholder="Re-enter your password" autocomplete="new-password" minlength="8" required>
+<button type="button" class="input-action" id="toggleSignupConfirmPassword" aria-label="Show confirm password" aria-pressed="false">Show</button>
+</div>
+<p class="field-note">Re-enter the same password to confirm.</p>
+</div>
+</div>
+
+<div class="signup-checks">
+<label class="signup-check" for="signupTerms">
+<input type="checkbox" id="signupTerms" required>
+<span>I agree to the Terms of Service and Privacy Policy.</span>
+</label>
+<label class="signup-check" for="signupUpdates">
+<input type="checkbox" id="signupUpdates">
+<span>Send me occasional product updates and store offers.</span>
+</label>
+</div>
+
+<button type="submit" class="signup-btn" id="signupSubmitBtn">
+<span class="signup-btn-label">Sign Up</span>
+</button>
+
+<p class="signup-switch">
 Already have an account?
-<a onclick="showPage('login')">Login</a>
+<a onclick="showPage('login')">Log in</a>
 </p>
 
 </form>
+
+</div>
+
+</div>
 
 </div>
 
@@ -529,6 +727,10 @@ Already have an account?
   -->
 
   <script src="js/nav.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    if (typeof redirectToHostedLocalApp === "function") redirectToHostedLocalApp("/");
+  </script>
   <script src="js/products.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ai-search.js"></script>

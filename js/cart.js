@@ -1,25 +1,64 @@
-// ─────────────────────────────────────
-// cart.js — Cart state, persistence, promos, totals
-// ─────────────────────────────────────
-
 const CART_KEY = "blustup_cart_v2";
 const PROMO_KEY = "blustup_cart_promo";
+const CART_CURRENCY_SYMBOL = "\u20B5";
+const cartMoneyFormatter = new Intl.NumberFormat("en-GH", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
 let cart = [];
-/** @type {{ code: string|null, percent: number, label: string, freeShip?: boolean }} */
 let appliedPromo = { code: null, percent: 0, label: "", freeShip: false };
 
-function cartItemFromProduct(p, qty) {
+function formatCartMoney(value) {
+  const amount = Number(value || 0);
+  return `${CART_CURRENCY_SYMBOL}${cartMoneyFormatter.format(Number.isFinite(amount) ? amount : 0)}`;
+}
+
+function escapeCartHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function getProductCatalog() {
+  if (Array.isArray(allProducts) && allProducts.length) return allProducts;
+  if (Array.isArray(products) && products.length) return products;
+  return [];
+}
+
+function findProductById(id) {
+  const pid = String(id);
+  return getProductCatalog().find((product) => String(product.id) === pid) || null;
+}
+
+function getCartProductCategories(product) {
+  const source = Array.isArray(product?.categories) ? product.categories : [product?.cat];
+  const seen = new Set();
+  return source
+    .map((value) => String(value || "").trim())
+    .filter((value) => {
+      const token = value.toLowerCase();
+      if (!value || seen.has(token)) return false;
+      seen.add(token);
+      return true;
+    });
+}
+
+function cartItemFromProduct(product, qty) {
+  const categories = getCartProductCategories(product);
   return {
-    id: String(p.id),
-    name: p.name,
-    desc: p.desc,
-    cat: p.cat,
-    price: Number(p.price),
-    color: p.color,
-    icon: p.icon,
-    imageUrl: p.imageUrl,
-    qty: qty || 1,
+    id: String(product.id),
+    name: product.name,
+    desc: product.desc,
+    cat: categories[0] || product.cat,
+    categories,
+    price: Number(product.price),
+    color: product.color,
+    icon: product.icon,
+    imageUrl: product.imageUrl,
+    qty: Math.max(1, Number(qty) || 1),
   };
 }
 
@@ -52,7 +91,7 @@ function loadPromoFromStorage() {
     if (!raw) return;
     appliedPromo = JSON.parse(raw);
   } catch (_e) {
-    appliedPromo = { code: null, percent: 0, label: "" };
+    appliedPromo = { code: null, percent: 0, label: "", freeShip: false };
   }
 }
 
@@ -62,39 +101,63 @@ function savePromoToStorage() {
   } catch (_e) {}
 }
 
-function addToCart(id, e) {
-  e && e.stopPropagation();
-  const pid = String(id);
-  const product = products.find((p) => String(p.id) === pid);
-  if (!product) return;
-  const existing = cart.find((i) => String(i.id) === pid);
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push(cartItemFromProduct(product, 1));
-  }
+function updateCartCount() {
+  const count = String(getTotalItems());
+  const desktop = document.getElementById("cart-count");
+  const mobile = document.getElementById("cart-count-mobile");
+  if (desktop) desktop.textContent = count;
+  if (mobile) mobile.textContent = count;
+}
+
+function syncDependentViews() {
   updateCartCount();
   saveCartToStorage();
-  showToast("✓", `${product.name} added to cart`);
+  if (typeof renderCart === "function") renderCart();
+  if (typeof renderCheckout === "function") renderCheckout();
+}
+
+function addToCart(id, e) {
+  e?.stopPropagation?.();
+  const product = findProductById(id);
+  if (!product) {
+    showToast("!", "This product is currently unavailable.");
+    return;
+  }
+
+  const pid = String(product.id);
+  const existing = cart.find((item) => String(item.id) === pid);
+  if (existing) existing.qty += 1;
+  else cart.push(cartItemFromProduct(product, 1));
+
+  syncDependentViews();
+  showToast("OK", `${product.name} added to cart`);
 }
 
 function changeQty(id, delta) {
   const pid = String(id);
-  const item = cart.find((i) => String(i.id) === pid);
+  const item = cart.find((entry) => String(entry.id) === pid);
   if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter((i) => String(i.id) !== pid);
-  updateCartCount();
-  saveCartToStorage();
-  renderCart();
+
+  item.qty += Number(delta) || 0;
+  if (item.qty <= 0) {
+    cart = cart.filter((entry) => String(entry.id) !== pid);
+  }
+
+  syncDependentViews();
 }
 
 function removeFromCart(id) {
   const pid = String(id);
-  cart = cart.filter((i) => String(i.id) !== pid);
-  updateCartCount();
-  saveCartToStorage();
-  renderCart();
+  cart = cart.filter((item) => String(item.id) !== pid);
+  syncDependentViews();
+}
+
+function clearCart() {
+  if (!cart.length) return;
+  cart = [];
+  appliedPromo = { code: null, percent: 0, label: "", freeShip: false };
+  savePromoToStorage();
+  syncDependentViews();
 }
 
 const KNOWN_PROMOS = {
@@ -104,22 +167,31 @@ const KNOWN_PROMOS = {
 };
 
 function applyPromo() {
-  const val = document.getElementById("promo-input")?.value.trim().toUpperCase() || "";
-  if (!val) {
+  const input = document.getElementById("promo-input");
+  const value = String(input?.value || "").trim().toUpperCase();
+
+  if (!value) {
     showToast("!", "Enter a promo code");
     return;
   }
-  const p = KNOWN_PROMOS[val];
-  if (!p) {
+
+  const promo = KNOWN_PROMOS[value];
+  if (!promo) {
     appliedPromo = { code: null, percent: 0, label: "", freeShip: false };
     savePromoToStorage();
-    showToast("✕", "Invalid or expired promo code");
+    showToast("X", "Invalid or expired promo code");
     renderCart();
     return;
   }
-  appliedPromo = { code: val, percent: p.percent, label: p.label, freeShip: !!p.freeShip };
+
+  appliedPromo = {
+    code: value,
+    percent: promo.percent,
+    label: promo.label,
+    freeShip: !!promo.freeShip,
+  };
   savePromoToStorage();
-  showToast("🎉", p.label + " applied");
+  showToast("OK", `${promo.label} applied`);
   renderCart();
 }
 
@@ -132,12 +204,12 @@ function clearPromo() {
 }
 
 function getSubtotal() {
-  return cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
 function getDiscount() {
-  const sub = getSubtotal();
-  return Math.min(sub, sub * (appliedPromo.percent || 0));
+  const subtotal = getSubtotal();
+  return Math.min(subtotal, subtotal * (appliedPromo.percent || 0));
 }
 
 function getSubtotalAfterDiscount() {
@@ -145,13 +217,15 @@ function getSubtotalAfterDiscount() {
 }
 
 function getShipping() {
-  const sub = getSubtotalAfterDiscount();
+  const subtotalAfterDiscount = getSubtotalAfterDiscount();
+  if (!cart.length) return 0;
   if (appliedPromo.freeShip) return 0;
-  if (sub >= 50) return 0;
+  if (subtotalAfterDiscount >= 50) return 0;
   return 5.99;
 }
 
 function getTax() {
+  if (!cart.length) return 0;
   const taxable = getSubtotalAfterDiscount() + getShipping();
   return taxable * 0.08;
 }
@@ -161,18 +235,22 @@ function getTotal() {
 }
 
 function getTotalItems() {
-  return cart.reduce((sum, i) => sum + i.qty, 0);
+  return cart.reduce((sum, item) => sum + item.qty, 0);
 }
 
-function updateCartCount() {
-  const n = String(getTotalItems());
-  const el = document.getElementById("cart-count");
-  const mob = document.getElementById("cart-count-mobile");
-  if (el) el.textContent = n;
-  if (mob) mob.textContent = n;
-}
+function reconcileCartWithProducts() {
+  if (!cart.length) return;
 
-/** Clears cart + promo (e.g. after successful checkout) */
+  cart = cart.map((item) => {
+    const latest = findProductById(item.id);
+    if (!latest) return item;
+    return cartItemFromProduct(latest, item.qty);
+  });
+
+  syncDependentViews();
+}
+window.reconcileCartWithProducts = reconcileCartWithProducts;
+
 function resetCartState() {
   cart = [];
   appliedPromo = { code: null, percent: 0, label: "", freeShip: false };
@@ -188,75 +266,105 @@ function renderCart() {
   const summaryRows = document.getElementById("cart-summary-rows");
   const totalEl = document.getElementById("cart-total-display");
   const promoHint = document.getElementById("promo-status");
+  const promoInput = document.getElementById("promo-input");
+  const promoApplyButton = document.getElementById("promoApplyBtn");
+  const checkoutButton = document.getElementById("cartCheckoutBtn");
+  const clearButton = document.getElementById("clearCartBtn");
 
   if (!container || !summaryRows || !totalEl) return;
 
-  if (cart.length === 0) {
+  if (!cart.length) {
     container.style.display = "none";
     if (empty) empty.style.display = "block";
-    summaryRows.innerHTML = "";
-    totalEl.textContent = "$0.00";
-    if (promoHint) promoHint.textContent = "";
+    summaryRows.innerHTML = `
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>${formatCartMoney(0)}</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>${formatCartMoney(0)}</span>
+      </div>
+      <div class="summary-row">
+        <span>Estimated tax</span>
+        <span>${formatCartMoney(0)}</span>
+      </div>
+    `;
+    totalEl.textContent = formatCartMoney(0);
+    if (promoHint) promoHint.textContent = "Add items to your cart to apply a promo code.";
+    if (promoInput) {
+      promoInput.disabled = true;
+      promoInput.value = "";
+    }
+    if (promoApplyButton) promoApplyButton.disabled = true;
+    if (checkoutButton) checkoutButton.disabled = true;
+    if (clearButton) clearButton.disabled = true;
     return;
   }
 
   container.style.display = "flex";
   if (empty) empty.style.display = "none";
 
+  if (promoInput) promoInput.disabled = false;
+  if (promoApplyButton) promoApplyButton.disabled = false;
+  if (checkoutButton) checkoutButton.disabled = false;
+  if (clearButton) clearButton.disabled = false;
+
   container.innerHTML = cart
-    .map(
-      (item) => `
-    <div class="cart-item" id="cart-item-${String(item.id).replace(/[^a-z0-9_-]/gi, "")}">
-      <div class="cart-item-thumb">
-        ${
-          item.imageUrl
-            ? `<img src="${item.imageUrl}" alt="">`
-            : `<div class="cart-thumb-fallback" style="background:${item.color || "#e8ebff"}">${item.icon || "◆"}</div>`
-        }
-      </div>
-      <div class="cart-item-info">
-        <div class="cat">${item.cat}</div>
-        <div class="name">${item.name}</div>
-        <div class="desc">${item.desc}</div>
-        <div class="qty-control">
-          <button type="button" class="qty-btn" onclick="changeQty('${String(item.id).replace(/'/g, "\\'")}', -1)">−</button>
-          <span class="qty-val">${item.qty}</span>
-          <button type="button" class="qty-btn" onclick="changeQty('${String(item.id).replace(/'/g, "\\'")}', 1)">+</button>
+    .map((item) => {
+      const safeId = String(item.id).replace(/'/g, "\\'");
+      return `
+        <div class="cart-item" id="cart-item-${String(item.id).replace(/[^a-z0-9_-]/gi, "")}">
+          <div class="cart-item-thumb">
+            ${
+              item.imageUrl
+                ? `<img src="${escapeCartHtml(item.imageUrl)}" alt="${escapeCartHtml(item.name)}">`
+                : `<div class="cart-thumb-fallback" style="background:${escapeCartHtml(item.color || "#e8ebff")}">${escapeCartHtml(item.icon || "*")}</div>`
+            }
+          </div>
+          <div class="cart-item-info">
+            <div class="cat">${escapeCartHtml(item.cat)}</div>
+            <div class="name">${escapeCartHtml(item.name)}</div>
+            <div class="desc">${escapeCartHtml(item.desc)}</div>
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('${safeId}', -1)">-</button>
+              <span class="qty-val">${item.qty}</span>
+              <button type="button" class="qty-btn" onclick="changeQty('${safeId}', 1)">+</button>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="cart-item-price">${formatCartMoney(item.price * item.qty)}</div>
+            <button type="button" class="remove-btn" onclick="removeFromCart('${safeId}')">Remove</button>
+          </div>
         </div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-        <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
-        <button type="button" class="remove-btn" onclick="removeFromCart('${String(item.id).replace(/'/g, "\\'")}')">Remove</button>
-      </div>
-    </div>
-  `
-    )
+      `;
+    })
     .join("");
 
-  const ship = getShipping();
-  const disc = getDiscount();
-  const promoLine =
-    appliedPromo.code && disc > 0
-      ? `<div class="summary-row discount"><span>Discount (${appliedPromo.code})</span><span>−$${disc.toFixed(2)}</span></div>`
+  const shipping = getShipping();
+  const discount = getDiscount();
+  const discountLine =
+    appliedPromo.code && discount > 0
+      ? `<div class="summary-row discount"><span>Discount (${escapeCartHtml(appliedPromo.code)})</span><span>-${formatCartMoney(discount)}</span></div>`
       : "";
-  const shipNote = ship === 0 ? "FREE" : `$${ship.toFixed(2)}`;
 
   summaryRows.innerHTML = `
     <div class="summary-row">
       <span>Subtotal (${getTotalItems()} items)</span>
-      <span>$${getSubtotal().toFixed(2)}</span>
+      <span>${formatCartMoney(getSubtotal())}</span>
     </div>
-    ${promoLine}
+    ${discountLine}
     <div class="summary-row">
-      <span>Shipping ${getSubtotalAfterDiscount() < 50 && !appliedPromo.freeShip ? "(free over $50)" : ""}</span>
-      <span>${shipNote}</span>
+      <span>Shipping ${getSubtotalAfterDiscount() < 50 && !appliedPromo.freeShip ? `(free over ${formatCartMoney(50)})` : ""}</span>
+      <span>${shipping === 0 ? "FREE" : formatCartMoney(shipping)}</span>
     </div>
     <div class="summary-row">
       <span>Estimated tax (8%)</span>
-      <span>$${getTax().toFixed(2)}</span>
+      <span>${formatCartMoney(getTax())}</span>
     </div>
   `;
-  totalEl.textContent = "$" + getTotal().toFixed(2);
+
+  totalEl.textContent = formatCartMoney(getTotal());
   if (promoHint) {
     promoHint.textContent = appliedPromo.code
       ? appliedPromo.label || `Promo ${appliedPromo.code} applied`
@@ -268,4 +376,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCartFromStorage();
   loadPromoFromStorage();
   updateCartCount();
+  renderCart();
+  document.getElementById("clearCartBtn")?.addEventListener("click", clearCart);
 });

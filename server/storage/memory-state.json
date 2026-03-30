@@ -1,0 +1,423 @@
+{
+  "users": [
+    {
+      "_id": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "name": "Admin",
+      "email": "admin@blustup.local",
+      "passwordHash": "$2b$12$szIDZ0c4TMd.3uQ0tPAQeu4FiCP7eM0GxBJu981xsPWKqzRrUeNEa",
+      "role": "admin",
+      "phone": null,
+      "createdAt": "2026-03-30T02:25:35.388Z",
+      "updatedAt": "2026-03-30T02:25:35.388Z"
+    }
+  ],
+  "products": [
+    {
+      "_id": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+      "name": "Oraimo Maxi Watch",
+      "price": 2631.9,
+      "description": "Oraimo Maxi Watch is a essentials option designed for dependable everyday use and easy comparison while shopping online. It stands out with -47% appeal and a clear value story for everyday online shoppers in Ghana who want reliable value and clear guidance. Available stock is ready for new orders.",
+      "category": "oriamo",
+      "categories": [
+        "oriamo"
+      ],
+      "stockQty": 25,
+      "imageUrl": "product-imgs/1.jpg",
+      "oldPrice": 4900,
+      "badge": "-47%",
+      "badgeType": null,
+      "icon": null,
+      "color": "linear-gradient(135deg,#e8f0ff,#d0dcff)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-30T02:48:11.520Z"
+    },
+    {
+      "_id": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
+      "name": "Oraimo Power Bank Lite",
+      "price": 136.9,
+      "description": "Portable, durable power backup for daily use.",
+      "category": "oriamo",
+      "categories": [
+        "oriamo"
+      ],
+      "stockQty": 10,
+      "imageUrl": "product-imgs/magpower-15-opb-7102w-1.webp",
+      "oldPrice": 300,
+      "badge": "-56%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#e8f0ff,#d0dcff)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-30T02:38:12.666Z"
+    },
+    {
+      "_id": "63d2296c-6d8c-499b-98fe-b674aca89cb6",
+      "name": "Oraimo Lite Earphones",
+      "price": 126.98,
+      "description": "Wireless comfort with crisp sound output.",
+      "category": "oriamo",
+      "categories": [
+        "oriamo"
+      ],
+      "stockQty": 18,
+      "imageUrl": "product-imgs/oraimo-BoomPop-Pro-OHP-917-wireless-headphones-GREY.webp",
+      "oldPrice": 240,
+      "badge": "-47%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#fff0f5,#ffd6e8)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-30T02:38:35.337Z"
+    },
+    {
+      "_id": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+      "name": "Oraimo CleanSip Faucet",
+      "price": 217,
+      "description": "Smart faucet accessory for cleaner water flow.",
+      "category": "lounge",
+      "categories": [
+        "lounge",
+        "insurance"
+      ],
+      "stockQty": 60,
+      "imageUrl": "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp",
+      "oldPrice": 400,
+      "badge": "-42%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#fff8e8,#ffecc0)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "a7e01eae-3b98-41de-83e3-092f1d870d84",
+      "name": "Oraimo NutriFry Max Air",
+      "price": 1078.92,
+      "description": "Efficient air-fryer technology for quick meals.",
+      "category": "upgrades",
+      "categories": [
+        "upgrades",
+        "essentials"
+      ],
+      "stockQty": 50,
+      "imageUrl": "product-imgs/oraimo-watch-muse-OSW-831N-4.webp",
+      "oldPrice": 1800,
+      "badge": "-39%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#f0e8ff,#dcc0ff)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "a8b88dda-45b4-4705-94a5-8959b0f4ed4d",
+      "name": "Oraimo Smart Trimmer",
+      "price": 183.89,
+      "description": "Precision grooming with long-lasting blades.",
+      "category": "upgrades",
+      "categories": [
+        "upgrades",
+        "insurance"
+      ],
+      "stockQty": 20,
+      "imageUrl": "product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp",
+      "oldPrice": 350,
+      "badge": "-47%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#e8fff5,#c0f5e0)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "28472a3c-40a2-4058-aa78-e89e233c1d85",
+      "name": "Oraimo Wireless Charger",
+      "price": 183.89,
+      "description": "Fast wireless charging for multiple devices.",
+      "category": "essentials",
+      "categories": [
+        "essentials",
+        "flights"
+      ],
+      "stockQty": 100,
+      "imageUrl": "product-imgs/AI-appliances_v21.avif",
+      "oldPrice": 350,
+      "badge": "-47%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#e8f5ff,#c0e0ff)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "d91615ef-3107-4c1b-8c11-ee5fa3faadb9",
+      "name": "Pepsodent Tooth Paste",
+      "price": 2631.9,
+      "description": "Daily oral care essential for the whole family.",
+      "category": "insurance",
+      "categories": [
+        "insurance",
+        "essentials"
+      ],
+      "stockQty": 80,
+      "imageUrl": "product-imgs/personal-care/36024a.jpg",
+      "oldPrice": 4900,
+      "badge": "-47%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#e8ffee,#c0f0ce)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "abbacd8c-2971-4de8-87be-fa1e2377b66a",
+      "name": "Close Up Tooth Paste",
+      "price": 136.9,
+      "description": "Fresh breath toothpaste with active formula.",
+      "category": "insurance",
+      "categories": [
+        "insurance",
+        "essentials"
+      ],
+      "stockQty": 70,
+      "imageUrl": "product-imgs/personal-care/67728a.jpg",
+      "oldPrice": 300,
+      "badge": "-56%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#ffe8e8,#ffc0c0)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
+      "name": "Kel Mouth Wash",
+      "price": 126.98,
+      "description": "Deep-clean mouthwash for complete care.",
+      "category": "insurance",
+      "categories": [
+        "insurance",
+        "essentials"
+      ],
+      "stockQty": 70,
+      "imageUrl": "product-imgs/personal-care/70100a.jpg",
+      "oldPrice": 240,
+      "badge": "-47%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#f6e8ff,#e6c7ff)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    },
+    {
+      "_id": "da86e3d7-1da9-4d01-8e3c-1f138048a3d4",
+      "name": "Oral B Tooth Brush",
+      "price": 217,
+      "description": "Durable toothbrush designed for comfort.",
+      "category": "insurance",
+      "categories": [
+        "insurance",
+        "essentials"
+      ],
+      "stockQty": 70,
+      "imageUrl": "product-imgs/personal-care/94947a.jpg",
+      "oldPrice": 400,
+      "badge": "-42%",
+      "badgeType": "sale",
+      "icon": null,
+      "color": "linear-gradient(135deg,#e8f7ff,#c7e9ff)",
+      "isActive": true,
+      "createdAt": "2026-03-29T23:44:41.174Z",
+      "updatedAt": "2026-03-29T23:44:41.174Z"
+    }
+  ],
+  "audit": [
+    {
+      "_id": "1721a527-3885-4ab7-aeb5-ddd6f57de0aa",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+      "summary": "Updated product: Oraimo Maxi Watch",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T02:37:29.402Z"
+    },
+    {
+      "_id": "56181eeb-a65c-4e5f-8d21-5c659c47434b",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
+      "summary": "Updated product: Oraimo Power Bank Lite",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T02:38:12.678Z"
+    },
+    {
+      "_id": "5717d8d2-3fba-4b32-95b9-39d3c60bfe51",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "63d2296c-6d8c-499b-98fe-b674aca89cb6",
+      "summary": "Updated product: Oraimo Lite Earphones",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T02:38:35.340Z"
+    },
+    {
+      "_id": "451f0f1a-bb19-4cd8-a012-ffad2d31edef",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+      "summary": "Updated product: Oraimo Maxi Watch",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T02:48:11.524Z"
+    }
+  ],
+  "cms": {
+    "home": {
+      "adImages": [
+        "product-imgs/ad/ad1.png",
+        "product-imgs/ad/ad2.png",
+        "product-imgs/ad/ad3.png",
+        "/uploads/our-ad-mnclnykm.jpg"
+      ]
+    },
+    "shop": {
+      "title": "Welcome to the Shop",
+      "subtitle": "Discover products tailored to your needs",
+      "filters": [
+        {
+          "label": "All Products",
+          "value": "all",
+          "showInShop": true
+        },
+        {
+          "label": "Electronics",
+          "value": "oriamo",
+          "showInShop": true
+        },
+        {
+          "label": "Clothes",
+          "value": "lounge",
+          "showInShop": true
+        },
+        {
+          "label": "Consumables",
+          "value": "upgrades",
+          "showInShop": true
+        },
+        {
+          "label": "Travel Essentials",
+          "value": "essentials",
+          "showInShop": true
+        },
+        {
+          "label": "Maintenance Kits",
+          "value": "insurance",
+          "showInShop": true
+        },
+        {
+          "label": "Flights",
+          "value": "flights",
+          "showInShop": true
+        }
+      ]
+    },
+    "deals": [
+      {
+        "id": "deal-1",
+        "name": "Oraimo Brand Day",
+        "timerSeconds": 80200,
+        "seeMoreFilter": "flights",
+        "sourceCategory": "flights",
+        "sourceCategories": [
+          "flights"
+        ],
+        "maxItems": 8,
+        "isActive": true,
+        "productIds": []
+      },
+      {
+        "id": "deal-2",
+        "name": "Personal Care Day",
+        "timerSeconds": 21600,
+        "seeMoreFilter": "lounge",
+        "sourceCategory": "lounge",
+        "sourceCategories": [
+          "lounge"
+        ],
+        "maxItems": 8,
+        "isActive": true,
+        "productIds": []
+      }
+    ],
+    "faq": {
+      "pageTitle": "Frequently asked\nquestions",
+      "label": "● Have Questions?",
+      "intro": "",
+      "helpTitle": "Still have a question?",
+      "helpText": "Can't find the answer to your question? Send us an email and we'll get back to you as soon as possible.",
+      "contactEmail": "support@blustup.local",
+      "faqs": [
+        {
+          "question": "How do I create an account?",
+          "answer": "Click on \"Create account\" from the login page, enter your name, email, and password, then click \"Create Account\". You'll be logged in automatically!"
+        },
+        {
+          "question": "How do I add products to my cart?",
+          "answer": "Browse the shop, find a product you like, and click the \"+ Add\" button. Your cart count will update at the top right."
+        },
+        {
+          "question": "Is my personal information secure?",
+          "answer": "Yes! We use 256-bit SSL encryption to protect all your data. Your password is hashed with bcryptjs for extra security."
+        },
+        {
+          "question": "Can I use promo codes?",
+          "answer": "Yes! Enter a valid promo code in your cart summary and click \"Apply\" to get discounts on your order."
+        },
+        {
+          "question": "What payment methods do you accept?",
+          "answer": "We accept credit/debit cards, PayPal, Apple Pay, and Google Pay at checkout. Pay on delivery is also available."
+        }
+      ],
+      "boardTitle": "Board of directors",
+      "board": [
+        {
+          "name": "Amina Osei",
+          "role": "Chair & CEO",
+          "bio": "Leads strategy and partnerships across retail and logistics for Blustup.",
+          "imageUrl": null
+        },
+        {
+          "name": "Jordan Mensah",
+          "role": "Chief Operating Officer",
+          "bio": "Oversees day-to-day operations, vendor relationships, and customer experience.",
+          "imageUrl": null
+        },
+        {
+          "name": "Priya Nair",
+          "role": "Chief Technology Officer",
+          "bio": "Drives platform security, payments infrastructure, and product engineering.",
+          "imageUrl": null
+        }
+      ]
+    },
+    "ai": {
+      "chatEnabled": false,
+      "searchEnabled": true,
+      "botName": "Blustup AI",
+      "userPersona": "everyday online shoppers in Ghana who want reliable value and clear guidance",
+      "systemPrompt": "You are Blustup's shopping assistant. Give brief, direct answers. Recommend products when relevant."
+    }
+  }
+}

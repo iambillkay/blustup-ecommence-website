@@ -1,38 +1,106 @@
-// ─────────────────────────────────────
-// app.js — Router, Toast & App Init
-// ─────────────────────────────────────
+// Router, toast, and base app initialization
 
-/* ── PAGE ROUTER ── */
+function syncNavState(pageName) {
+  document.querySelectorAll("[data-nav-page]").forEach((link) => {
+    link.classList.toggle("active-link", link.getAttribute("data-nav-page") === pageName);
+  });
+}
+
+async function refreshLivePageData(pageName, options = {}) {
+  const activePage = String(pageName || "").trim().toLowerCase();
+  const shouldRefreshCatalog = ["home", "shop", "cart", "checkout"].includes(activePage);
+
+  try {
+    if (shouldRefreshCatalog && typeof loadProducts === "function") {
+      await loadProducts({ force: options?.force === true });
+    }
+
+    if (activePage === "home" && typeof loadHomeContent === "function") {
+      await loadHomeContent();
+      return;
+    }
+
+    if (activePage === "shop" && typeof loadShopSettings === "function") {
+      await loadShopSettings();
+      return;
+    }
+
+    if (activePage === "faq" && typeof loadFaqCms === "function") {
+      await loadFaqCms();
+      return;
+    }
+
+    if (activePage === "cart" && typeof renderCart === "function") {
+      renderCart();
+    }
+
+    if (activePage === "checkout" && typeof renderCheckout === "function") {
+      renderCheckout();
+    }
+  } catch (error) {
+    console.warn(`Failed to refresh live data for ${activePage || "page"}`, error);
+  }
+}
+
 function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+  const target = document.getElementById(`page-${name}`);
+  if (!target) return;
 
-  // Update active nav link
-  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
-  const navEl = document.getElementById('nav-' + name);
-  if (navEl) navEl.classList.add('active-link');
+  document.querySelectorAll(".page").forEach((page) => page.classList.remove("active"));
+  target.classList.add("active");
 
+  syncNavState(name);
+  document.body.dataset.page = name;
+  if (typeof window.closeMenu === "function") window.closeMenu();
   window.scrollTo(0, 0);
 
-  // Trigger page-specific renderers
-  if (name === 'cart')     renderCart();
-  if (name === 'checkout') renderCheckout();
+  if (name === "cart" && typeof renderCart === "function") renderCart();
+  if (name === "checkout" && typeof renderCheckout === "function") renderCheckout();
+  refreshLivePageData(name, { force: true });
 }
 
-/* ── TOAST ── */
-function showToast(icon, msg) {
-  const t = document.getElementById('toast');
-  document.getElementById('toast-icon').textContent = icon;
-  document.getElementById('toast-msg').textContent  = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+function showToast(iconOrMessage, maybeMessage) {
+  const toast = document.getElementById("toast");
+  const iconEl = document.getElementById("toast-icon");
+  const msgEl = document.getElementById("toast-msg");
+  if (!toast || !iconEl || !msgEl) return;
+
+  const hasExplicitMessage = typeof maybeMessage !== "undefined";
+  const icon = hasExplicitMessage ? iconOrMessage : "!";
+  const message = hasExplicitMessage ? maybeMessage : iconOrMessage;
+
+  iconEl.textContent = icon;
+  msgEl.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2800);
 }
 
-/* ── INIT ── */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+  syncNavState("home");
+  document.body.dataset.page = "home";
+
   if (typeof loadProducts === "function") {
-    loadProducts().finally(() => renderProducts('all'));
+    loadProducts().finally(() => renderProducts("all"));
   } else {
-    renderProducts('all');
+    renderProducts("all");
+  }
+});
+
+let lastFocusRefreshAt = 0;
+
+function refreshCurrentPageOnFocus() {
+  const now = Date.now();
+  if (now - lastFocusRefreshAt < 1200) return;
+  lastFocusRefreshAt = now;
+
+  const activePage = document.body?.dataset?.page;
+  if (!activePage) return;
+  refreshLivePageData(activePage, { force: true });
+}
+
+window.addEventListener("focus", refreshCurrentPageOnFocus);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    refreshCurrentPageOnFocus();
   }
 });

@@ -1,15 +1,19 @@
-/* Blustup assistant — matches site theme, multi-turn, quick prompts */
-
 const CHAT_HISTORY_KEY = "blustup_ai_chat_v1";
+const CHAT_OPEN_KEY = "blustup_ai_chat_open_v1";
 const MAX_TURNS = 12;
 
 let chatMessages = [];
-let aiUi = { botName: "Blustup Assistant", chatEnabled: true };
+let chatSending = false;
+let aiUi = {
+  botName: "Blustup Assistant",
+  chatEnabled: true,
+  userPersona: "everyday online shoppers who want reliable value",
+};
 
 function loadChatHistory() {
   try {
     const raw = sessionStorage.getItem(CHAT_HISTORY_KEY);
-    if (raw) chatMessages = JSON.parse(raw);
+    chatMessages = raw ? JSON.parse(raw) : [];
     if (!Array.isArray(chatMessages)) chatMessages = [];
   } catch (_e) {
     chatMessages = [];
@@ -22,18 +26,32 @@ function saveChatHistory() {
   } catch (_e) {}
 }
 
+function loadChatOpenState() {
+  try {
+    return sessionStorage.getItem(CHAT_OPEN_KEY) === "1";
+  } catch (_e) {
+    return false;
+  }
+}
+
+function saveChatOpenState(isOpen) {
+  try {
+    sessionStorage.setItem(CHAT_OPEN_KEY, isOpen ? "1" : "0");
+  } catch (_e) {}
+}
+
 async function loadAiSettings() {
   try {
-    const res = await fetch("/api/cms/ai");
-    const data = await res.json();
+    const res = await apiFetch("/api/cms/ai");
+    const data = await res.json().catch(() => ({}));
     if (res.ok && data?.settings) {
       aiUi = { ...aiUi, ...data.settings };
     }
   } catch (_e) {}
 }
 
-function escapeHtml(s) {
-  return String(s)
+function escapeChatHtml(value) {
+  return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -48,22 +66,25 @@ function createChatWidget() {
   root.id = "aiChatRoot";
   root.innerHTML = `
     <button type="button" id="aiChatToggle" class="ai-chat-fab" aria-expanded="false" aria-controls="aiChatPanel">
-      <span class="ai-fab-icon" aria-hidden="true">✦</span>
+      <span class="ai-fab-icon" aria-hidden="true">&#10022;</span>
       <span class="ai-fab-label">Help</span>
     </button>
     <div id="aiChatPanel" class="ai-chat-panel" role="dialog" aria-label="Chat assistant" hidden>
       <header class="ai-chat-head">
         <div>
           <div class="ai-chat-title" id="aiChatTitle">Assistant</div>
-          <div class="ai-chat-sub">Ask about products, deals, or checkout</div>
+          <div class="ai-chat-sub" id="aiChatSubtitle">Ask about products, deals, or checkout</div>
         </div>
-        <button type="button" id="aiChatClear" class="ai-chat-clear" title="Clear chat">Clear</button>
+        <div class="ai-chat-head-actions">
+          <button type="button" id="aiChatClear" class="ai-chat-clear" title="Clear chat">Clear</button>
+          <button type="button" id="aiChatClose" class="ai-chat-close" title="Close chat" aria-label="Close chat">Close</button>
+        </div>
       </header>
       <div id="aiChatQuick" class="ai-chat-quick"></div>
-      <div id="aiChatMessages" class="ai-chat-messages" role="log"></div>
+      <div id="aiChatMessages" class="ai-chat-messages" role="log" aria-live="polite"></div>
       <div id="aiChatTyping" class="ai-chat-typing" hidden><span></span><span></span><span></span></div>
       <footer class="ai-chat-foot">
-        <input id="aiChatInput" type="text" class="ai-chat-input" placeholder="Message…" autocomplete="off" />
+        <input id="aiChatInput" type="text" class="ai-chat-input" placeholder="Ask about products, deals, or checkout" autocomplete="off" />
         <button type="button" id="aiChatSend" class="ai-chat-send">Send</button>
       </footer>
     </div>
@@ -74,83 +95,129 @@ function createChatWidget() {
 function renderQuickChips() {
   const wrap = document.getElementById("aiChatQuick");
   if (!wrap) return;
+
   const chips = [
-    { t: "Show me electronics", q: "What electronics deals do you have?" },
-    { t: "Shipping & delivery", q: "How does shipping and delivery work?" },
-    { t: "Go to checkout help", q: "How do I pay and place an order?" },
+    { label: "Best deals", query: "What deals do you recommend right now?" },
+    { label: "Find electronics", query: "Show me electronics or gadget recommendations." },
+    { label: "Checkout help", query: "How do I place an order and pay?" },
   ];
+
   wrap.innerHTML = chips
     .map(
-      (c) =>
-        `<button type="button" class="ai-chip" data-q="${escapeHtml(c.q).replace(/"/g, "&quot;")}">${escapeHtml(c.t)}</button>`
+      (chip) =>
+        `<button type="button" class="ai-chip" data-q="${escapeChatHtml(chip.query)}">${escapeChatHtml(chip.label)}</button>`
     )
     .join("");
 }
 
-function addMessage(role, text) {
-  const el = document.getElementById("aiChatMessages");
-  if (!el) return;
-  const row = document.createElement("div");
-  row.className = `ai-msg ai-msg-${role}`;
-  row.innerHTML = `<div class="ai-msg-bubble">${escapeHtml(text)}</div>`;
-  el.appendChild(row);
-  el.scrollTop = el.scrollHeight;
+function setPanelOpen(isOpen) {
+  const panel = document.getElementById("aiChatPanel");
+  const toggle = document.getElementById("aiChatToggle");
+  const input = document.getElementById("aiChatInput");
+  if (!panel || !toggle) return;
+
+  panel.hidden = !isOpen;
+  toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  saveChatOpenState(isOpen);
+
+  if (isOpen) input?.focus();
 }
 
-function setTyping(on) {
-  const t = document.getElementById("aiChatTyping");
-  if (t) t.hidden = !on;
+function updateChatHeader() {
+  const title = document.getElementById("aiChatTitle");
+  const subtitle = document.getElementById("aiChatSubtitle");
+  if (title) title.textContent = aiUi.botName || "Assistant";
+  if (subtitle) subtitle.textContent = "Ask about products, deals, or checkout";
+}
+
+function addMessage(role, text) {
+  const list = document.getElementById("aiChatMessages");
+  if (!list) return;
+  const row = document.createElement("div");
+  row.className = `ai-msg ai-msg-${role}`;
+  row.innerHTML = `<div class="ai-msg-bubble">${escapeChatHtml(text)}</div>`;
+  list.appendChild(row);
+  list.scrollTop = list.scrollHeight;
+}
+
+function hydrateFromHistory() {
+  const list = document.getElementById("aiChatMessages");
+  if (!list) return;
+
+  list.innerHTML = "";
+  if (!chatMessages.length) {
+    addMessage(
+      "assistant",
+      `Hi, I'm ${aiUi.botName}. I can help you discover products, compare options, and answer checkout questions.`
+    );
+    return;
+  }
+
+  chatMessages.forEach((message) => {
+    if (message.role === "user" || message.role === "assistant") {
+      addMessage(message.role, message.content);
+    }
+  });
+}
+
+function setTyping(isTyping) {
+  const typing = document.getElementById("aiChatTyping");
+  if (typing) typing.hidden = !isTyping;
+}
+
+function setComposerDisabled(disabled) {
+  const input = document.getElementById("aiChatInput");
+  const send = document.getElementById("aiChatSend");
+  if (input) input.disabled = disabled;
+  if (send) {
+    send.disabled = disabled;
+    send.textContent = disabled ? "Sending..." : "Send";
+  }
 }
 
 async function sendChatMessage(prefill) {
+  if (chatSending) return;
   if (!aiUi.chatEnabled) {
     addMessage("assistant", "Chat is turned off by the store admin.");
     return;
   }
+
   const input = document.getElementById("aiChatInput");
   const text = String(prefill != null ? prefill : input?.value || "").trim();
   if (!text) return;
-  if (input) input.value = "";
-  addMessage("user", text);
 
-  const payloadMessages = [...chatMessages, { role: "user", content: text }];
-  chatMessages = payloadMessages;
+  if (input && prefill == null) input.value = "";
+  addMessage("user", text);
+  setPanelOpen(true);
+
+  chatMessages = [...chatMessages, { role: "user", content: text }].slice(-MAX_TURNS);
   saveChatHistory();
 
+  chatSending = true;
   setTyping(true);
+  setComposerDisabled(true);
+
   try {
-    const res = await fetch("/api/ai/chat", {
+    const res = await apiFetch("/api/ai/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: payloadMessages.slice(-10) }),
+      body: JSON.stringify({ messages: chatMessages.slice(-10) }),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || "Chat failed");
-    const reply = data.reply || "No response.";
-    addMessage("assistant", reply);
-    chatMessages.push({ role: "assistant", content: reply });
-    saveChatHistory();
-  } catch (e) {
-    addMessage("assistant", e.message || "Chat unavailable.");
-  } finally {
-    setTyping(false);
-  }
-}
 
-function hydrateFromHistory() {
-  const el = document.getElementById("aiChatMessages");
-  if (!el) return;
-  el.innerHTML = "";
-  if (!chatMessages.length) {
-    addMessage(
-      "assistant",
-      `Hi — I'm ${aiUi.botName}. Search the shop, ask for recommendations, or say what you're looking for.`
-    );
-    return;
+    const reply = data.reply || "I could not generate a response right now.";
+    addMessage("assistant", reply);
+    chatMessages = [...chatMessages, { role: "assistant", content: reply }].slice(-MAX_TURNS);
+    saveChatHistory();
+  } catch (error) {
+    addMessage("assistant", error.message || "Chat is unavailable right now.");
+  } finally {
+    chatSending = false;
+    setTyping(false);
+    setComposerDisabled(false);
+    input?.focus();
   }
-  chatMessages.forEach((m) => {
-    if (m.role === "user" || m.role === "assistant") addMessage(m.role, m.content);
-  });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -159,58 +226,61 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadChatHistory();
   createChatWidget();
-  const title = document.getElementById("aiChatTitle");
-  if (title) title.textContent = aiUi.botName || "Assistant";
-
+  updateChatHeader();
   renderQuickChips();
   hydrateFromHistory();
 
   const toggle = document.getElementById("aiChatToggle");
   const panel = document.getElementById("aiChatPanel");
-  const send = document.getElementById("aiChatSend");
-  const input = document.getElementById("aiChatInput");
+  const close = document.getElementById("aiChatClose");
   const clear = document.getElementById("aiChatClear");
   const quick = document.getElementById("aiChatQuick");
+  const send = document.getElementById("aiChatSend");
+  const input = document.getElementById("aiChatInput");
 
-  if (toggle && panel) {
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = !panel.hasAttribute("hidden");
-      if (isOpen) {
-        panel.setAttribute("hidden", "hidden");
-        toggle.setAttribute("aria-expanded", "false");
-      } else {
-        panel.removeAttribute("hidden");
-        toggle.setAttribute("aria-expanded", "true");
-        input?.focus();
-      }
-    });
-    document.addEventListener("click", (e) => {
-      if (!panel.hasAttribute("hidden") && !panel.contains(e.target) && !toggle.contains(e.target)) {
-        panel.setAttribute("hidden", "hidden");
-        toggle.setAttribute("aria-expanded", "false");
-      }
-    });
-  }
-  if (clear) {
-    clear.addEventListener("click", () => {
-      chatMessages = [];
-      saveChatHistory();
-      hydrateFromHistory();
-    });
-  }
-  if (quick) {
-    quick.addEventListener("click", (e) => {
-      const btn = e.target.closest(".ai-chip");
-      if (!btn) return;
-      const q = btn.getAttribute("data-q");
-      if (q) sendChatMessage(q);
-    });
-  }
-  if (send) send.addEventListener("click", () => sendChatMessage());
-  if (input) {
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendChatMessage();
-    });
-  }
+  if (loadChatOpenState()) setPanelOpen(true);
+
+  toggle?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setPanelOpen(panel?.hidden !== false);
+  });
+
+  close?.addEventListener("click", () => setPanelOpen(false));
+
+  clear?.addEventListener("click", () => {
+    chatMessages = [];
+    saveChatHistory();
+    hydrateFromHistory();
+  });
+
+  quick?.addEventListener("click", (event) => {
+    const button = event.target.closest(".ai-chip");
+    if (!button) return;
+    const query = button.getAttribute("data-q");
+    if (query) sendChatMessage(query);
+  });
+
+  send?.addEventListener("click", () => sendChatMessage());
+
+  input?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendChatMessage();
+    }
+    if (event.key === "Escape") {
+      setPanelOpen(false);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!panel || panel.hidden) return;
+    if (panel.contains(event.target) || toggle?.contains(event.target)) return;
+    setPanelOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && panel && !panel.hidden) {
+      setPanelOpen(false);
+    }
+  });
 });

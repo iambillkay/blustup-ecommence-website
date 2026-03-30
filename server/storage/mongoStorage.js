@@ -9,13 +9,45 @@ function isValidId(id) {
   return mongoose.Types.ObjectId.isValid(id);
 }
 
+function escapeRegex(value) {
+  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function normalizeCategoryList(categories, fallbackCategory) {
+  const source = Array.isArray(categories)
+    ? categories
+    : typeof categories === "string"
+      ? categories.split(",")
+      : [];
+  const seen = new Set();
+  const normalized = source
+    .map((value) => String(value || "").trim())
+    .filter((value) => {
+      const token = value.toLowerCase();
+      if (!value || seen.has(token)) return false;
+      seen.add(token);
+      return true;
+    });
+
+  if (normalized.length) return normalized;
+
+  const fallback = String(fallbackCategory || "").trim() || "general";
+  return [fallback];
+}
+
+function getProductCategories(product) {
+  return normalizeCategoryList(product?.categories, product?.category);
+}
+
 function mapProductOut(p) {
+  const categories = getProductCategories(p);
   return {
     id: p._id.toString(),
     name: p.name,
     price: p.price,
     desc: p.description,
-    cat: p.category,
+    cat: categories[0],
+    categories,
     oldPrice: p.oldPrice ?? null,
     imageUrl: p.imageUrl ?? null,
     badge: p.badge ?? null,
@@ -32,7 +64,10 @@ async function listPublic({ page, limit, q, category, minPrice, maxPrice }) {
   const l = Math.min(Number(limit || 12), 50);
 
   const query = { isActive: true };
-  if (category) query.category = category;
+  if (category) {
+    const exactCategory = { $regex: `^${escapeRegex(String(category).trim())}$`, $options: "i" };
+    query.$and = [...(query.$and || []), { $or: [{ category: exactCategory }, { categories: exactCategory }] }];
+  }
   if (minPrice != null || maxPrice != null) {
     query.price = {};
     if (minPrice != null) query.price.$gte = minPrice;
@@ -45,6 +80,7 @@ async function listPublic({ page, limit, q, category, minPrice, maxPrice }) {
         { name: { $regex: needle, $options: "i" } },
         { description: { $regex: needle, $options: "i" } },
         { category: { $regex: needle, $options: "i" } },
+        { categories: { $regex: needle, $options: "i" } },
       ];
     }
   }
@@ -67,12 +103,23 @@ async function listAdmin() {
 }
 
 async function createProduct(payload) {
-  const created = await Product.create(payload);
+  const categories = normalizeCategoryList(payload?.categories, payload?.category);
+  const created = await Product.create({
+    ...payload,
+    category: categories[0],
+    categories,
+  });
   return mapProductOut(created);
 }
 
 async function updateProduct(id, payload) {
-  const updated = await Product.findByIdAndUpdate(id, payload, { new: true });
+  const nextPayload = { ...payload };
+  if (payload?.categories !== undefined || payload?.category !== undefined) {
+    const categories = normalizeCategoryList(payload?.categories, payload?.category);
+    nextPayload.category = categories[0];
+    nextPayload.categories = categories;
+  }
+  const updated = await Product.findByIdAndUpdate(id, nextPayload, { new: true });
   if (!updated) return null;
   return mapProductOut(updated);
 }
@@ -138,6 +185,7 @@ const DEFAULT_AI = {
   chatEnabled: true,
   searchEnabled: true,
   botName: "Blustup AI",
+  userPersona: "everyday online shoppers in Ghana who want reliable value and clear guidance",
   systemPrompt:
     "You are Blustup's shopping assistant. Give brief, direct answers. Recommend products when relevant.",
 };
@@ -149,6 +197,7 @@ const DEFAULT_DEALS = [
     timerSeconds: 80200,
     seeMoreFilter: "flights",
     sourceCategory: "flights",
+    sourceCategories: ["flights", "essentials"],
     maxItems: 8,
     isActive: true,
     productIds: [],
@@ -159,6 +208,7 @@ const DEFAULT_DEALS = [
     timerSeconds: 21600,
     seeMoreFilter: "lounge",
     sourceCategory: "lounge",
+    sourceCategories: ["lounge", "insurance"],
     maxItems: 8,
     isActive: true,
     productIds: [],
@@ -169,7 +219,7 @@ const DEFAULT_FAQ = {
   pageTitle: "Frequently asked\nquestions",
   label: "Have Questions?",
   intro: "Find answers about orders, shipping, and your Blustup account.",
-  helpTitle: "Still have a questions?",
+  helpTitle: "Still have a question?",
   helpText:
     "Can't find the answer to your question? Send us an email and we'll get back to you as soon as possible.",
   contactEmail: "support@blustup.local",
@@ -260,4 +310,3 @@ module.exports = {
     setFaq: (value) => upsertCmsByKey("faq", value),
   },
 };
-

@@ -62,6 +62,12 @@ flex-direction:column;
 gap:20px;
 }
 
+.faq-list{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
 .faq-item{
 background:#e7e1d4;
 padding:18px;
@@ -72,7 +78,16 @@ cursor:pointer;
 .faq-question{
 display:flex;
 justify-content:space-between;
+align-items:center;
+width:100%;
+padding:0;
+border:none;
+background:transparent;
+color:inherit;
+font:inherit;
+text-align:left;
 font-weight:500;
+cursor:pointer;
 }
 
 .faq-answer{

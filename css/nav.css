@@ -31,6 +31,7 @@ nav {
 .nav-search {
   flex: 1;
   max-width: 560px;
+  min-width: 0;
   display: flex;
   align-items: center;
   height: 42px;
@@ -265,6 +266,9 @@ nav {
   .logo-icon img { width: 120px; }
   .nav-links  { display: none; }
   .btn-primary { display: none; }
+  .hamburger { display: flex; }
+  .mobile-overlay { display: block; }
+  .mobile-drawer  { display: block; }
   .search-category { display: none; } /* simplify on tablet */
 }
 
@@ -296,13 +300,6 @@ nav {
   .btn-login   { display: none; }
   .btn-primary { display: none; }
   .search-category { display: none; }
-
-  /* Show hamburger */
-  .hamburger { display: flex; }
-
-  /* Show mobile elements */
-  .mobile-overlay { display: block; }
-  .mobile-drawer  { display: block; }
 
   .nav-right .cart-btn {
     padding: 7px 11px;
