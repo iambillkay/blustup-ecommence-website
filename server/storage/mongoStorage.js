@@ -2,8 +2,11 @@ const mongoose = require("mongoose");
 
 const User = require("../models/User");
 const Product = require("../models/Product");
+const Order = require("../models/Order");
+const Tracking = require("../models/Tracking");
 const AuditLog = require("../models/AuditLog");
 const CmsConfig = require("../models/CmsConfig");
+const { normalizeProductReviews, buildLoyaltyProfile } = require("../utils/storefront");
 
 function isValidId(id) {
   return mongoose.Types.ObjectId.isValid(id);
@@ -39,8 +42,22 @@ function getProductCategories(product) {
   return normalizeCategoryList(product?.categories, product?.category);
 }
 
+function normalizeBillingProfile(profile = {}) {
+  const source = profile && typeof profile === "object" ? profile : {};
+  return {
+    firstName: source.firstName ? String(source.firstName).trim() : null,
+    lastName: source.lastName ? String(source.lastName).trim() : null,
+    street: source.street ? String(source.street).trim() : null,
+    city: source.city ? String(source.city).trim() : null,
+    state: source.state ? String(source.state).trim() : null,
+    zip: source.zip ? String(source.zip).trim() : null,
+    country: source.country ? String(source.country).trim() : null,
+  };
+}
+
 function mapProductOut(p) {
   const categories = getProductCategories(p);
+  const reviewSummary = normalizeProductReviews(p);
   return {
     id: p._id.toString(),
     name: p.name,
@@ -54,8 +71,72 @@ function mapProductOut(p) {
     badgeType: p.badgeType ?? null,
     icon: p.icon ?? null,
     color: p.color ?? null,
+    ratingAverage: reviewSummary.averageRating,
+    reviewCount: reviewSummary.reviewCount,
+    reviews: reviewSummary.reviews,
     isActive: Boolean(p.isActive),
     stockQty: p.stockQty ?? 0,
+  };
+}
+
+function mapUserOut(user) {
+  const loyalty = buildLoyaltyProfile(user.loyaltyPoints);
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    phone: user.phone || null,
+    loyaltyPoints: loyalty.points,
+    loyalty,
+    billingProfile: normalizeBillingProfile(user.billingProfile),
+    role: user.role,
+    createdAt: user.createdAt?.toISOString?.() || null,
+    updatedAt: user.updatedAt?.toISOString?.() || null,
+  };
+}
+
+function mapOrderOut(order) {
+  return {
+    id: order._id.toString(),
+    reference: order.reference,
+    userId: order.userId ? order.userId.toString() : null,
+    sessionId: order.sessionId || null,
+    customerName: order.customerName,
+    customerEmail: order.customerEmail,
+    customerPhone: order.customerPhone || null,
+    billingAddress: normalizeBillingProfile(order.billingAddress),
+    items: Array.isArray(order.items)
+      ? order.items.map((item) => ({
+          productId: String(item.productId),
+          name: item.name,
+          price: Number(item.price || 0),
+          qty: Number(item.qty || 0),
+          imageUrl: item.imageUrl || null,
+        }))
+      : [],
+    paymentMethod: order.paymentMethod,
+    promoCode: order.promoCode ?? null,
+    promoLabel: order.promoLabel ?? null,
+    subtotal: Number(order.subtotal || 0),
+    discount: Number(order.discount || 0),
+    shipping: Number(order.shipping || 0),
+    tax: Number(order.tax || 0),
+    total: Number(order.total || 0),
+    loyaltyEarned: Number(order.loyaltyEarned || 0),
+    loyaltyBalanceAfter: Number(order.loyaltyBalanceAfter || 0),
+    loyaltyTierAfter: order.loyaltyTierAfter || null,
+    status: order.status,
+    statusHistory: Array.isArray(order.statusHistory)
+      ? order.statusHistory.map((entry) => ({
+          status: entry.status,
+          note: entry.note || "",
+          actorId: entry.actorId ? entry.actorId.toString() : null,
+          actorEmail: entry.actorEmail || null,
+          createdAt: entry.createdAt?.toISOString?.() || null,
+        }))
+      : [],
+    createdAt: order.createdAt?.toISOString?.() || null,
+    updatedAt: order.updatedAt?.toISOString?.() || null,
   };
 }
 
@@ -158,6 +239,76 @@ async function listRecentAudit({ limit }) {
       created_at: a.createdAt.toISOString(),
     })),
   };
+}
+
+async function createOrder(payload) {
+  const created = await Order.create({
+    ...payload,
+    statusHistory: [
+      {
+        status: payload.status || "placed",
+        note: payload.initialNote || "Order placed",
+        actorId: payload.userId || null,
+        actorEmail: payload.customerEmail || null,
+        createdAt: new Date(),
+      },
+    ],
+  });
+  return mapOrderOut(created);
+}
+
+async function listOrdersForUser({ userId, email }) {
+  const orConditions = [];
+  if (userId && isValidId(userId)) orConditions.push({ userId });
+  if (email) orConditions.push({ customerEmail: String(email).trim().toLowerCase() });
+  if (!orConditions.length) return { orders: [] };
+
+  const orders = await Order.find({ $or: orConditions }).sort({ createdAt: -1 });
+  return { orders: orders.map(mapOrderOut) };
+}
+
+async function lookupOrderByReference({ reference, email }) {
+  const order = await Order.findOne({
+    reference: String(reference || "").trim(),
+    customerEmail: String(email || "").trim().toLowerCase(),
+  });
+  return order ? mapOrderOut(order) : null;
+}
+
+async function listOrdersAdmin({ status, q, limit }) {
+  const pageSize = Math.min(Math.max(1, Number(limit || 50)), 100);
+  const query = {};
+
+  if (status) query.status = String(status).trim().toLowerCase();
+  if (q) {
+    const needle = String(q).trim();
+    if (needle) {
+      query.$or = [
+        { reference: { $regex: needle, $options: "i" } },
+        { customerName: { $regex: needle, $options: "i" } },
+        { customerEmail: { $regex: needle, $options: "i" } },
+      ];
+    }
+  }
+
+  const orders = await Order.find(query).sort({ createdAt: -1 }).limit(pageSize);
+  return { orders: orders.map(mapOrderOut) };
+}
+
+async function updateOrderStatus(id, { status, note, actorId, actorEmail }) {
+  const order = await Order.findById(id);
+  if (!order) return null;
+
+  order.status = String(status || order.status).trim() || order.status;
+  order.statusHistory.push({
+    status: order.status,
+    note: note || "",
+    actorId: actorId && isValidId(actorId) ? actorId : null,
+    actorEmail: actorEmail || null,
+    createdAt: new Date(),
+  });
+  await order.save();
+  return mapOrderOut(order);
 }
 
 const DEFAULT_HOME = {
@@ -290,12 +441,47 @@ async function upsertCmsByKey(key, value) {
 module.exports = {
   mode: "mongo",
   isValidId,
+  getAuthUserResponse: (user) => {
+    const loyalty = buildLoyaltyProfile(user.loyaltyPoints);
+    return {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      phone: user.phone || null,
+      loyaltyPoints: loyalty.points,
+      loyalty,
+      billingProfile: normalizeBillingProfile(user.billingProfile),
+      role: user.role,
+    };
+  },
   user: {
-    findByEmail: (email) => User.findOne({ email }).select("_id name email role passwordHash"),
-    findById: (id) => User.findById(id).select("_id name email role passwordHash"),
+    findByEmail: (email) => User.findOne({ email }).select("_id name email role passwordHash phone loyaltyPoints billingProfile"),
+    findById: (id) => User.findById(id).select("_id name email role passwordHash phone loyaltyPoints billingProfile"),
     create: (payload) => User.create(payload),
+    updateProfile: async (id, payload = {}) => {
+      const update = {};
+      if (payload.name !== undefined) update.name = payload.name;
+      if (payload.phone !== undefined) update.phone = payload.phone || null;
+      if (payload.loyaltyPoints !== undefined) update.loyaltyPoints = Math.max(0, Math.floor(Number(payload.loyaltyPoints || 0)));
+      if (payload.billingProfile !== undefined) update.billingProfile = normalizeBillingProfile(payload.billingProfile);
+      return User.findByIdAndUpdate(id, update, { new: true }).select("_id name email role passwordHash phone loyaltyPoints billingProfile");
+    },
+    listAdmin: async () => {
+      const users = await User.find({}).sort({ createdAt: -1 }).select("_id name email role phone loyaltyPoints billingProfile createdAt updatedAt");
+      return { users: users.map(mapUserOut) };
+    },
   },
   product: { listPublic, listAdmin, create: createProduct, update: updateProduct, delete: deleteProduct },
+  order: {
+    create: createOrder,
+    listForUser: listOrdersForUser,
+    lookupByReference: lookupOrderByReference,
+    listAdmin: listOrdersAdmin,
+    updateStatus: updateOrderStatus,
+  },
+  tracking: {
+    add: (payload) => Tracking.create(payload),
+  },
   audit: { add: addAuditLog, listRecent: listRecentAudit },
   cms: {
     getHome: () => getCmsByKey("home", DEFAULT_HOME),

@@ -766,6 +766,12 @@
   cursor: pointer;
 }
 
+.signup-check a {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .signup-check input {
   width: 18px;
   height: 18px;

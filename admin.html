@@ -21,6 +21,8 @@
 
       <nav class="sidebar-nav" aria-label="Admin sections">
         <a href="#" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon"></span><span>Dashboard</span></a>
+        <a href="#" class="sidebar-link" data-action="list-orders"><span class="nav-icon"></span><span>Orders</span></a>
+        <a href="#" class="sidebar-link" data-action="list-users"><span class="nav-icon"></span><span>Customers</span></a>
         <a href="#" class="sidebar-link" data-action="list-products"><span class="nav-icon"></span><span>Products</span></a>
         <a href="#" class="sidebar-link" data-action="edit-shop"><span class="nav-icon"></span><span>Shop setup</span></a>
         <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Homepage media</span></a>
@@ -111,6 +113,18 @@
       </section>
 
       <section class="command-board">
+        <article class="command-card" data-search-text="orders shipping delivery fulfillment status tracking">
+          <div class="command-card-top"><div><p class="eyebrow">Orders</p><h2>Fulfillment board</h2></div><span class="command-stat" id="ordersStat">0 active orders</span></div>
+          <p>Track new purchases, update order status, and keep delivery progress visible for your team.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-orders">Open orders</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="customers consumers users accounts billing profile">
+          <div class="command-card-top"><div><p class="eyebrow">Customers</p><h2>Customer desk</h2></div><span class="command-stat" id="customersStat">0 shoppers</span></div>
+          <p>Review customer accounts, saved billing details, and who has been ordering most recently.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-users">Open customers</a></div>
+        </article>
+
         <article class="command-card command-card-primary" data-search-text="products catalog inventory add edit">
           <div class="command-card-top"><div><p class="eyebrow">Store</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
           <p>Review product listings, add new inventory, and keep the storefront catalog clean.</p>
@@ -194,6 +208,8 @@
       <section class="rail-card quick-actions-card">
         <div class="section-heading compact"><div><p class="eyebrow">Shortcuts</p><h2>Quick actions</h2></div></div>
         <div class="quick-actions-grid">
+          <button class="mini-action" type="button" data-action="list-orders">Orders</button>
+          <button class="mini-action" type="button" data-action="list-users">Customers</button>
           <button class="mini-action" type="button" data-action="add-product">Add product</button>
           <button class="mini-action" type="button" data-action="edit-home-images">Home media</button>
           <button class="mini-action" type="button" data-action="edit-deals">Deals</button>
@@ -306,11 +322,15 @@
     const activeProductCount = document.getElementById("activeProductCount");
     const lowStockCount = document.getElementById("lowStockCount");
     const catalogStat = document.getElementById("catalogStat");
+    const ordersStat = document.getElementById("ordersStat");
+    const customersStat = document.getElementById("customersStat");
     const shopStat = document.getElementById("shopStat");
     const dealsStat = document.getElementById("dealsStat");
     const homeStat = document.getElementById("homeStat");
     const aiStat = document.getElementById("aiStat");
-    const dashboardState = { user: null, actions: [], products: [] };
+    const dashboardState = { user: null, actions: [], products: [], orders: [], users: [] };
+    const adminOrderFilters = { status: "", q: "" };
+    const ADMIN_ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
 
     function openModal(title, html) {
       modalTitle.textContent = title;
@@ -343,6 +363,60 @@
         hour: "numeric",
         minute: "2-digit",
       }).format(date);
+    }
+    function humanizeOrderStatus(status) {
+      const value = String(status || "").trim().toLowerCase();
+      if (!value) return "Placed";
+      return value.replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    function orderStatusOptions(selectedValue) {
+      return ADMIN_ORDER_STATUSES.map((status) => `
+        <option value="${esc(status)}" ${String(selectedValue || "").trim().toLowerCase() === status ? "selected" : ""}>
+          ${esc(humanizeOrderStatus(status))}
+        </option>`).join("");
+    }
+    function humanizePaymentMethod(method) {
+      const labels = {
+        card: "Card",
+        cod: "Pay on delivery",
+        paypal: "PayPal",
+        apple: "Apple Pay",
+        google: "Google Pay",
+      };
+      const value = String(method || "").trim().toLowerCase();
+      return labels[value] || humanizeOrderStatus(value || "card");
+    }
+    function getLatestOrderHistoryEntry(order) {
+      const history = Array.isArray(order?.statusHistory) ? order.statusHistory : [];
+      return history.length ? history[history.length - 1] : null;
+    }
+    function getOrderStatusTone(status) {
+      const value = String(status || "").trim().toLowerCase();
+      if (value === "delivered") return { background: "#eafaf1", color: "#15803d" };
+      if (value === "shipped") return { background: "#e8f8ff", color: "#0369a1" };
+      if (value === "processing") return { background: "#fff7e8", color: "#a16207" };
+      if (value === "cancelled") return { background: "#fff0f0", color: "#b91c1c" };
+      return { background: "#eef2ff", color: "#3955d6" };
+    }
+    function renderOrderStatusPill(status) {
+      const tone = getOrderStatusTone(status);
+      return `<span style="display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:${tone.background};color:${tone.color};font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">${esc(humanizeOrderStatus(status))}</span>`;
+    }
+    function getAdminOrderCounts(orders) {
+      return (Array.isArray(orders) ? orders : []).reduce((acc, order) => {
+        const key = String(order?.status || "").trim().toLowerCase();
+        if (key) acc[key] = (acc[key] || 0) + 1;
+        acc.all += 1;
+        return acc;
+      }, { all: 0, placed: 0, processing: 0, shipped: 0, delivered: 0, cancelled: 0 });
+    }
+    function buildAdminOrdersQuery() {
+      const query = new URLSearchParams();
+      query.set("limit", "100");
+      if (adminOrderFilters.status) query.set("status", adminOrderFilters.status);
+      if (adminOrderFilters.q) query.set("q", adminOrderFilters.q);
+      const value = query.toString();
+      return value ? `?${value}` : "";
     }
     function setNodeText(node, value) {
       if (node) node.textContent = value;
@@ -466,12 +540,16 @@
       });
     }
     function syncNavForAction(action) {
-      if (["list-products", "edit-shop", "edit-home-images", "edit-deals", "edit-faq", "edit-ai", "dashboard"].includes(action)) {
+      if (["list-orders", "list-users", "list-products", "edit-shop", "edit-home-images", "edit-deals", "edit-faq", "edit-ai", "dashboard"].includes(action)) {
         syncActiveNav(action);
         return;
       }
       if (["add-product", "edit-product", "delete-product"].includes(action)) {
         syncActiveNav("list-products");
+        return;
+      }
+      if (["save-order-status"].includes(action)) {
+        syncActiveNav("list-orders");
       }
     }
     function renderProductShowcase(products) {
@@ -532,15 +610,18 @@
           </div>
         </div>`).join("");
     }
-    function renderMetrics(products, actions) {
+    function renderMetrics(products, actions, orders, users) {
       const activeProducts = (products || []).filter((item) => item.isActive !== false);
       const lowStock = activeProducts.filter((item) => Number(item.stockQty || 0) <= 5);
       const categoryCount = new Set(activeProducts.flatMap((item) => formatAdminProductCategories(item))).size;
       const catalogTotal = activeProducts.reduce((sum, item) => sum + Number(item.price || 0), 0);
+      const orderList = Array.isArray(orders) ? orders : [];
+      const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
+      const openOrders = orderList.filter((order) => !["delivered", "cancelled"].includes(String(order.status || "").trim().toLowerCase()));
       const metrics = [
         { label: "Active catalog", value: `${activeProducts.length} items`, progress: Math.min(activeProducts.length / 12, 1) || 0.08 },
-        { label: "Category coverage", value: `${categoryCount} groups`, progress: Math.min(categoryCount / 8, 1) || 0.08 },
-        { label: "Recent updates", value: `${actions.length} changes`, progress: Math.min(actions.length / 10, 1) || 0.08 },
+        { label: "Orders in motion", value: `${openOrders.length} active`, progress: Math.min(openOrders.length / 12, 1) || 0.08 },
+        { label: "Customer base", value: `${userList.length} shoppers`, progress: Math.min(userList.length / 20, 1) || 0.08 },
         { label: "Low stock watch", value: `${lowStock.length} flagged`, progress: activeProducts.length ? Math.min(lowStock.length / activeProducts.length, 1) : 0.08 },
       ];
 
@@ -557,6 +638,8 @@
       activeProductCount.textContent = `${activeProducts.length} products`;
       lowStockCount.textContent = `${lowStock.length} low stock`;
       catalogStat.textContent = `${activeProducts.length} active products`;
+      if (ordersStat) ordersStat.textContent = `${openOrders.length} active orders`;
+      if (customersStat) customersStat.textContent = `${userList.length} shoppers`;
       shopStat.textContent = `${categoryCount} categories`;
       dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
       homeStat.textContent = activeProducts.length ? "Media synced" : "Hero media";
@@ -565,7 +648,7 @@
       if (dashboardState.user) {
         const name = getDisplayName(dashboardState.user);
         adminGreeting.textContent = `Hi, ${name}`;
-        adminGreetingSub.textContent = `${activeProducts.length} products are live across ${categoryCount || 0} categories, and ${actions.length} recent admin changes are ready to review.`;
+        adminGreetingSub.textContent = `${openOrders.length} orders are active, ${userList.length} shoppers are on file, and ${activeProducts.length} products are live across ${categoryCount || 0} categories.`;
       }
     }
     function renderUser(user) {
@@ -597,13 +680,17 @@
     async function refreshDashboard() {
       setSyncLabel("Syncing...");
 
-      const [actionsResult, productsResult] = await Promise.allSettled([
+      const [actionsResult, productsResult, ordersResult, usersResult] = await Promise.allSettled([
         api("/api/admin/actions/recent"),
         api("/api/products/admin"),
+        api("/api/admin/orders?limit=100"),
+        api("/api/admin/users"),
       ]);
 
       const hasActionData = actionsResult.status === "fulfilled";
       const hasProductData = productsResult.status === "fulfilled";
+      const hasOrderData = ordersResult.status === "fulfilled";
+      const hasUserData = usersResult.status === "fulfilled";
 
       if (hasActionData) {
         dashboardState.actions = Array.isArray(actionsResult.value.actions) ? actionsResult.value.actions : [];
@@ -622,22 +709,177 @@
           <article class="product-card product-card-empty">
             <div class="product-card-body">
               <div class="product-card-title">Catalog preview unavailable</div>
-              <div class="product-card-meta">${esc(productsResult.reason?.message || "Failed to load products.")}</div>
-            </div>
-          </article>`;
+            <div class="product-card-meta">${esc(productsResult.reason?.message || "Failed to load products.")}</div>
+          </div>
+        </article>`;
       }
 
-      renderMetrics(dashboardState.products, dashboardState.actions);
+      if (hasOrderData) {
+        dashboardState.orders = Array.isArray(ordersResult.value.orders) ? ordersResult.value.orders : [];
+      }
+
+      if (hasUserData) {
+        dashboardState.users = Array.isArray(usersResult.value.users) ? usersResult.value.users : [];
+      }
+
+      renderMetrics(dashboardState.products, dashboardState.actions, dashboardState.orders, dashboardState.users);
       applyAdminSearch();
       const syncStamp = formatDateTime(new Date().toISOString());
-      setSyncLabel(hasActionData && hasProductData ? `Updated ${syncStamp}` : `Partial sync ${syncStamp}`);
+      setSyncLabel(hasActionData && hasProductData && hasOrderData && hasUserData ? `Updated ${syncStamp}` : `Partial sync ${syncStamp}`);
 
-      if (!hasActionData && !hasProductData) {
-        throw new Error(actionsResult.reason?.message || productsResult.reason?.message || "Failed to load dashboard");
+      if (!hasActionData && !hasProductData && !hasOrderData && !hasUserData) {
+        throw new Error(
+          actionsResult.reason?.message
+          || productsResult.reason?.message
+          || ordersResult.reason?.message
+          || usersResult.reason?.message
+          || "Failed to load dashboard"
+        );
       }
     }
     async function loadRecentActions() {
       return refreshDashboard();
+    }
+
+    async function openOrdersTable(nextFilters = {}) {
+      if (nextFilters.status !== undefined) adminOrderFilters.status = String(nextFilters.status || "").trim().toLowerCase();
+      if (nextFilters.q !== undefined) adminOrderFilters.q = String(nextFilters.q || "").trim();
+
+      const { orders } = await api(`/api/admin/orders${buildAdminOrdersQuery()}`);
+      const orderList = Array.isArray(orders) ? orders : [];
+      const counts = getAdminOrderCounts(Array.isArray(dashboardState.orders) && dashboardState.orders.length ? dashboardState.orders : orderList);
+      const statusButtons = [
+        { key: "", label: "All" },
+        ...ADMIN_ORDER_STATUSES.map((status) => ({ key: status, label: humanizeOrderStatus(status) })),
+      ];
+
+      openModal("Orders", `
+        <div class="muted" style="margin-bottom:12px;">Update order progress here so customers and admins see the latest delivery status immediately.</div>
+        <div style="display:grid;gap:14px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;">
+            ${statusButtons.map((button) => {
+              const tone = button.key ? getOrderStatusTone(button.key) : { background: "#f3f6fc", color: "#172033" };
+              const count = button.key ? counts[button.key] || 0 : counts.all || 0;
+              const isActive = adminOrderFilters.status === button.key;
+              return `
+                <button
+                  type="button"
+                  data-order-quick-filter="${esc(button.key)}"
+                  style="text-align:left;padding:12px 14px;border-radius:16px;border:1px solid ${isActive ? tone.color : "#dfe5f2"};background:${isActive ? tone.background : "#fff"};cursor:pointer;"
+                >
+                  <div style="font-size:12px;color:${tone.color};font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">${esc(button.label)}</div>
+                  <div style="margin-top:6px;font-size:22px;font-weight:800;color:#172033;">${esc(String(count))}</div>
+                </button>
+              `;
+            }).join("")}
+          </div>
+          <form id="adminOrdersFilterForm" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+            <input id="adminOrderSearchInput" value="${esc(adminOrderFilters.q)}" placeholder="Search reference, customer, or email" style="flex:1;min-width:220px;">
+            <select id="adminOrderStatusFilter" style="min-width:180px;">
+              <option value="">All statuses</option>
+              ${orderStatusOptions(adminOrderFilters.status)}
+            </select>
+            <button class="btn-admin primary" type="submit">Apply</button>
+            <button class="btn-admin" id="adminOrderResetBtn" type="button">Reset</button>
+          </form>
+          <div class="muted">${esc(orderList.length ? `Showing ${orderList.length} order(s).` : "No orders match the current filter.")}</div>
+        </div>
+        <table class="admin-table" style="margin-top:14px;">
+          <thead><tr><th>Reference</th><th>Customer</th><th>Tracking</th><th>Commercial</th><th>Actions</th></tr></thead>
+          <tbody>${orderList.length ? orderList.map((order) => {
+            const latestEntry = getLatestOrderHistoryEntry(order);
+            const totalItems = (order.items || []).reduce((sum, item) => sum + Number(item.qty || 0), 0);
+            return `
+            <tr>
+              <td>
+                <strong>${esc(order.reference)}</strong>
+                <div class="muted">${esc(`${totalItems} item(s)`)}${order.promoCode ? ` · ${esc(order.promoCode)}` : ""}</div>
+              </td>
+              <td>
+                ${esc(order.customerName || "Guest order")}
+                <div class="muted">${esc(order.customerEmail || "")}</div>
+                <div class="muted">${esc(order.customerPhone || "No phone")}</div>
+              </td>
+              <td>
+                ${renderOrderStatusPill(order.status)}
+                <div class="muted" style="margin-top:8px;">${esc(latestEntry?.note || "No status note yet.")}</div>
+                <div class="muted">${esc(formatDateTime(order.updatedAt || order.createdAt))}</div>
+              </td>
+              <td>
+                <strong>${esc(formatCurrency(order.total || 0))}</strong>
+                <div class="muted">${esc(humanizePaymentMethod(order.paymentMethod))}</div>
+                <div class="muted">${Number(order.loyaltyEarned || 0) > 0 ? esc(`+${Math.floor(Number(order.loyaltyEarned || 0))} pts earned`) : "Guest / no points earned"}</div>
+              </td>
+              <td>
+                <div style="display:grid;gap:8px;min-width:240px;">
+                  <select data-order-status="${esc(order.id)}">${orderStatusOptions(order.status)}</select>
+                  <input data-order-note="${esc(order.id)}" placeholder="${esc(latestEntry?.note || "Optional status note")}" />
+                  <button class="btn-admin primary" type="button" data-action="save-order-status" data-id="${esc(order.id)}">Save status</button>
+                </div>
+              </td>
+            </tr>`;
+          }).join("") : `<tr><td colspan="5" class="muted">No orders have been placed yet.</td></tr>`}</tbody>
+        </table>`);
+
+      document.getElementById("adminOrdersFilterForm")?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        openOrdersTable({
+          status: document.getElementById("adminOrderStatusFilter")?.value || "",
+          q: document.getElementById("adminOrderSearchInput")?.value || "",
+        }).catch((error) => alert(error.message || "Failed to filter orders"));
+      });
+      document.getElementById("adminOrderStatusFilter")?.addEventListener("change", (event) => {
+        openOrdersTable({
+          status: event.target?.value || "",
+          q: document.getElementById("adminOrderSearchInput")?.value || "",
+        }).catch((error) => alert(error.message || "Failed to filter orders"));
+      });
+      document.getElementById("adminOrderResetBtn")?.addEventListener("click", () => {
+        openOrdersTable({ status: "", q: "" }).catch((error) => alert(error.message || "Failed to reset filters"));
+      });
+      document.querySelectorAll("[data-order-quick-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          openOrdersTable({
+            status: button.getAttribute("data-order-quick-filter") || "",
+            q: document.getElementById("adminOrderSearchInput")?.value || "",
+          }).catch((error) => alert(error.message || "Failed to filter orders"));
+        });
+      });
+    }
+
+    async function saveOrderStatus(id) {
+      const status = document.querySelector(`[data-order-status="${String(id)}"]`)?.value;
+      const note = document.querySelector(`[data-order-note="${String(id)}"]`)?.value || "";
+      if (!status) return alert("Choose a status first.");
+      await api(`/api/admin/orders/${id}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({ status, note }),
+      });
+      await refreshDashboard();
+      await openOrdersTable();
+    }
+
+    async function openUsersTable() {
+      const { users } = await api("/api/admin/users");
+      const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
+      openModal("Customers", `
+        <div class="muted" style="margin-bottom:12px;">Saved billing profiles help checkout move faster because returning shoppers do not need to re-enter the same details.</div>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Loyalty</th><th>Orders</th><th>Total spent</th><th>Latest order</th></tr></thead>
+          <tbody>${userList.length ? userList.map((user) => `
+            <tr>
+              <td>
+                ${esc(user.name || "Customer")}
+                <div class="muted">${esc(user.billingProfile?.city ? `${user.billingProfile.city}, ${user.billingProfile.country || ""}` : "No saved billing city yet")}</div>
+              </td>
+              <td>${esc(user.email || "")}</td>
+              <td>${esc(user.phone || "Not provided")}</td>
+              <td>${esc(String(user.loyaltyPoints || 0))} pts<div class="muted">${esc(user.loyalty?.tierName || "Starter")}</div></td>
+              <td>${esc(String(user.orderCount || 0))}</td>
+              <td>${esc(formatCurrency(user.totalSpent || 0))}</td>
+              <td>${esc(user.latestOrderReference || "No orders yet")}<div class="muted">${esc(user.latestOrderStatus ? humanizeOrderStatus(user.latestOrderStatus) : "")}</div></td>
+            </tr>`).join("") : `<tr><td colspan="7" class="muted">No customer accounts have been created yet.</td></tr>`}</tbody>
+        </table>`);
     }
 
     // Products
@@ -1417,10 +1659,13 @@
 
       syncNavForAction(action);
 
+      if (action === "list-orders") return openOrdersTable();
+      if (action === "list-users") return openUsersTable();
       if (action === "list-products") return openProductsTable();
       if (action === "add-product") return openAddProduct();
       if (action === "edit-product") return openEditProduct(id);
       if (action === "delete-product") return deleteProduct(id);
+      if (action === "save-order-status") return saveOrderStatus(id).catch((e) => alert(e.message || "Failed to update order"));
       if (action === "edit-home-images") return openHomeImagesCms();
       if (action === "edit-shop") return openShopCms();
       if (action === "edit-deals") return openDealsCms();

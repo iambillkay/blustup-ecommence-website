@@ -30,5 +30,24 @@ function requireRole(...roles) {
   };
 }
 
-module.exports = { requireAuth, requireRole };
+function attachAuthIfPresent(req, _res, next) {
+  const header = req.headers.authorization || "";
+  const token = String(header).startsWith("Bearer ") ? String(header).slice(7) : null;
+  if (!token) return next();
 
+  try {
+    const decoded = verifyJwt(token);
+    req.user = {
+      sub: decoded.sub,
+      email: decoded.email,
+      name: decoded.name,
+      role: decoded.role,
+    };
+  } catch (_e) {
+    // Ignore invalid optional tokens so public routes still work.
+  }
+
+  return next();
+}
+
+module.exports = { requireAuth, requireRole, attachAuthIfPresent };

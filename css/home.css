@@ -283,7 +283,7 @@ display:none;
   gap: 16px;
   padding: 20px;
   scroll-behavior: smooth;
-  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .product-row::-webkit-scrollbar {
@@ -325,6 +325,16 @@ display:none;
 .product-row .product-footer {
   align-items: center;
   gap: 8px;
+}
+
+.product-row .product-rating-row {
+  gap: 6px;
+  font-size: 0.72rem;
+}
+
+.product-row .product-review-quote {
+  padding: 8px 10px;
+  font-size: 0.71rem;
 }
 
 .product-row .add-to-cart-btn {

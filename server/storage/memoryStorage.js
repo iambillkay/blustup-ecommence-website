@@ -3,6 +3,12 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 
+const {
+  normalizeProductReviews,
+  normalizeStoredReview,
+  buildLoyaltyProfile,
+} = require("../utils/storefront");
+
 const STATE_FILE = path.join(__dirname, "memory-state.json");
 const DEFAULT_AI = {
   chatEnabled: true,
@@ -167,8 +173,23 @@ function createDefaultState() {
   return {
     users: [],
     products: [],
+    orders: [],
+    tracking: [],
     audit: [],
     cms: createDefaultCmsState(),
+  };
+}
+
+function normalizeBillingProfile(profile = {}) {
+  const source = profile && typeof profile === "object" ? profile : {};
+  return {
+    firstName: source.firstName ? String(source.firstName).trim() : null,
+    lastName: source.lastName ? String(source.lastName).trim() : null,
+    street: source.street ? String(source.street).trim() : null,
+    city: source.city ? String(source.city).trim() : null,
+    state: source.state ? String(source.state).trim() : null,
+    zip: source.zip ? String(source.zip).trim() : null,
+    country: source.country ? String(source.country).trim() : null,
   };
 }
 
@@ -176,6 +197,11 @@ function normalizeProductRecord(product = {}) {
   const categories = normalizeCategoryList(product.categories, product.category);
   const createdAt = toDate(product.createdAt);
   const updatedAt = toDate(product.updatedAt || product.createdAt);
+  const ratingAverageRaw =
+    product.ratingAverage == null || product.ratingAverage === "" ? null : Math.max(1, Math.min(5, Number(product.ratingAverage)));
+  const reviewCountRaw =
+    product.reviewCount == null || product.reviewCount === "" ? 0 : Math.max(0, Math.floor(Number(product.reviewCount)));
+  const reviews = Array.isArray(product.reviews) ? product.reviews.map(normalizeStoredReview).filter((review) => review.author && review.comment) : [];
 
   return {
     _id: String(product._id || makeId()),
@@ -194,6 +220,9 @@ function normalizeProductRecord(product = {}) {
     badgeType: product.badgeType ? String(product.badgeType) : null,
     icon: product.icon ? String(product.icon) : null,
     color: product.color ? String(product.color) : null,
+    ratingAverage: Number.isFinite(ratingAverageRaw) ? ratingAverageRaw : null,
+    reviewCount: Number.isFinite(reviewCountRaw) ? reviewCountRaw : 0,
+    reviews,
     isActive: product.isActive !== false,
     createdAt,
     updatedAt,
@@ -210,8 +239,76 @@ function normalizeUserRecord(user = {}) {
     passwordHash: String(user.passwordHash || ""),
     role: String(user.role || "user").trim() || "user",
     phone: user.phone ? String(user.phone) : null,
+    loyaltyPoints: Math.max(0, Math.floor(Number(user.loyaltyPoints || 0))),
+    billingProfile: normalizeBillingProfile(user.billingProfile),
     createdAt,
     updatedAt,
+  };
+}
+
+function normalizeOrderItem(item = {}) {
+  return {
+    productId: String(item.productId || item.id || "").trim(),
+    name: String(item.name || "").trim(),
+    price: Math.max(0, Number(item.price || 0)),
+    qty: Math.max(1, Number(item.qty || 1)),
+    imageUrl: item.imageUrl ? String(item.imageUrl) : null,
+  };
+}
+
+function normalizeStatusHistoryEntry(entry = {}) {
+  return {
+    status: String(entry.status || "placed").trim() || "placed",
+    note: String(entry.note || "").trim(),
+    actorId: entry.actorId ? String(entry.actorId) : null,
+    actorEmail: entry.actorEmail ? String(entry.actorEmail) : null,
+    createdAt: toDate(entry.createdAt),
+  };
+}
+
+function normalizeOrderRecord(order = {}) {
+  const createdAt = toDate(order.createdAt);
+  const updatedAt = toDate(order.updatedAt || order.createdAt);
+  return {
+    _id: String(order._id || makeId()),
+    reference: String(order.reference || "").trim(),
+    userId: order.userId ? String(order.userId) : null,
+    sessionId: order.sessionId ? String(order.sessionId) : null,
+    customerName: String(order.customerName || "").trim(),
+    customerEmail: normalizeEmail(order.customerEmail),
+    customerPhone: order.customerPhone ? String(order.customerPhone).trim() : null,
+    billingAddress: normalizeBillingProfile(order.billingAddress),
+    items: Array.isArray(order.items) ? order.items.map(normalizeOrderItem).filter((item) => item.productId) : [],
+    paymentMethod: String(order.paymentMethod || "card").trim(),
+    promoCode: order.promoCode ? String(order.promoCode).trim() : null,
+    promoLabel: order.promoLabel ? String(order.promoLabel).trim() : null,
+    subtotal: Math.max(0, Number(order.subtotal || 0)),
+    discount: Math.max(0, Number(order.discount || 0)),
+    shipping: Math.max(0, Number(order.shipping || 0)),
+    tax: Math.max(0, Number(order.tax || 0)),
+    total: Math.max(0, Number(order.total || 0)),
+    loyaltyEarned: Math.max(0, Number(order.loyaltyEarned || 0)),
+    loyaltyBalanceAfter: Math.max(0, Number(order.loyaltyBalanceAfter || 0)),
+    loyaltyTierAfter: order.loyaltyTierAfter ? String(order.loyaltyTierAfter).trim() : null,
+    status: String(order.status || "placed").trim() || "placed",
+    statusHistory: Array.isArray(order.statusHistory)
+      ? order.statusHistory.map(normalizeStatusHistoryEntry)
+      : [],
+    createdAt,
+    updatedAt,
+  };
+}
+
+function normalizeTrackingRecord(entry = {}) {
+  return {
+    _id: String(entry._id || makeId()),
+    userId: entry.userId ? String(entry.userId) : null,
+    sessionId: entry.sessionId ? String(entry.sessionId) : null,
+    eventType: String(entry.eventType || "").trim(),
+    eventData: entry.eventData && typeof entry.eventData === "object" ? entry.eventData : {},
+    ipAddress: entry.ipAddress ? String(entry.ipAddress) : null,
+    userAgent: entry.userAgent ? String(entry.userAgent) : null,
+    createdAt: toDate(entry.createdAt),
   };
 }
 
@@ -283,6 +380,8 @@ function hydrateState(rawState = {}) {
   return {
     users: Array.isArray(rawState.users) ? rawState.users.map(normalizeUserRecord) : defaults.users,
     products: Array.isArray(rawState.products) ? rawState.products.map(normalizeProductRecord) : defaults.products,
+    orders: Array.isArray(rawState.orders) ? rawState.orders.map(normalizeOrderRecord) : defaults.orders,
+    tracking: Array.isArray(rawState.tracking) ? rawState.tracking.map(normalizeTrackingRecord) : defaults.tracking,
     audit: Array.isArray(rawState.audit) ? rawState.audit.map(normalizeAuditRecord) : defaults.audit,
     cms: normalizeCmsState(rawState.cms),
   };
@@ -297,8 +396,27 @@ function serializeState(currentState) {
     })),
     products: currentState.products.map((product) => ({
       ...product,
+      reviews: Array.isArray(product.reviews)
+        ? product.reviews.map((review) => ({
+            ...review,
+            createdAt: review.createdAt ? toISO(review.createdAt) : null,
+          }))
+        : [],
       createdAt: toISO(product.createdAt),
       updatedAt: toISO(product.updatedAt),
+    })),
+    orders: currentState.orders.map((order) => ({
+      ...order,
+      statusHistory: order.statusHistory.map((entry) => ({
+        ...entry,
+        createdAt: toISO(entry.createdAt),
+      })),
+      createdAt: toISO(order.createdAt),
+      updatedAt: toISO(order.updatedAt),
+    })),
+    tracking: currentState.tracking.map((entry) => ({
+      ...entry,
+      createdAt: toISO(entry.createdAt),
     })),
     audit: currentState.audit.map((record) => ({
       ...record,
@@ -333,11 +451,48 @@ function persistState() {
 }
 
 function getAuthUserResponse(user) {
+  const loyalty = buildLoyaltyProfile(user.loyaltyPoints);
   return {
     id: String(user._id),
     name: user.name,
     email: user.email,
+    phone: user.phone || null,
+    loyaltyPoints: loyalty.points,
+    loyalty,
+    billingProfile: normalizeBillingProfile(user.billingProfile),
     role: user.role,
+  };
+}
+
+function mapOrderOut(order) {
+  return {
+    id: String(order._id),
+    reference: order.reference,
+    userId: order.userId,
+    sessionId: order.sessionId,
+    customerName: order.customerName,
+    customerEmail: order.customerEmail,
+    customerPhone: order.customerPhone || null,
+    billingAddress: normalizeBillingProfile(order.billingAddress),
+    items: order.items.map((item) => ({ ...item })),
+    paymentMethod: order.paymentMethod,
+    promoCode: order.promoCode ?? null,
+    promoLabel: order.promoLabel ?? null,
+    subtotal: order.subtotal,
+    discount: order.discount,
+    shipping: order.shipping,
+    tax: order.tax,
+    total: order.total,
+    loyaltyEarned: order.loyaltyEarned,
+    loyaltyBalanceAfter: order.loyaltyBalanceAfter,
+    loyaltyTierAfter: order.loyaltyTierAfter ?? null,
+    status: order.status,
+    statusHistory: order.statusHistory.map((entry) => ({
+      ...entry,
+      createdAt: toISO(entry.createdAt),
+    })),
+    createdAt: toISO(order.createdAt),
+    updatedAt: toISO(order.updatedAt),
   };
 }
 
@@ -546,6 +701,7 @@ function productMatchesQuery(product, query) {
 
 function mapProductOut(product) {
   const categories = normalizeCategoryList(product.categories, product.category);
+  const reviewSummary = normalizeProductReviews(product);
   return {
     id: String(product._id),
     name: product.name,
@@ -559,6 +715,9 @@ function mapProductOut(product) {
     badgeType: product.badgeType ?? null,
     icon: product.icon ?? null,
     color: product.color ?? null,
+    ratingAverage: reviewSummary.averageRating,
+    reviewCount: reviewSummary.reviewCount,
+    reviews: reviewSummary.reviews,
     isActive: Boolean(product.isActive),
     stockQty: product.stockQty ?? 0,
   };
@@ -579,7 +738,7 @@ async function findUserById(id) {
   return state.users.find((user) => String(user._id) === target) || null;
 }
 
-async function createUser({ name, email, passwordHash, role, phone }) {
+async function createUser({ name, email, passwordHash, role, phone, loyaltyPoints }) {
   const now = new Date();
   const user = normalizeUserRecord({
     _id: makeId(),
@@ -588,12 +747,53 @@ async function createUser({ name, email, passwordHash, role, phone }) {
     passwordHash,
     role,
     phone,
+    loyaltyPoints,
     createdAt: now,
     updatedAt: now,
   });
   state.users.push(user);
   await persistState();
   return user;
+}
+
+async function updateUserProfile(id, payload = {}) {
+  const user = await findUserById(id);
+  if (!user) return null;
+
+  if (payload.phone !== undefined) {
+    user.phone = payload.phone ? String(payload.phone).trim() : null;
+  }
+  if (payload.billingProfile !== undefined) {
+    user.billingProfile = normalizeBillingProfile(payload.billingProfile);
+  }
+  if (payload.name !== undefined) {
+    user.name = String(payload.name || "").trim() || user.name;
+  }
+  if (payload.loyaltyPoints !== undefined) {
+    user.loyaltyPoints = Math.max(0, Math.floor(Number(payload.loyaltyPoints || 0)));
+  }
+
+  user.updatedAt = new Date();
+  await persistState();
+  return user;
+}
+
+async function listUsersAdmin() {
+  const users = [...state.users].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return {
+    users: users.map((user) => ({
+      id: String(user._id),
+      name: user.name,
+      email: user.email,
+      phone: user.phone || null,
+      loyaltyPoints: Math.max(0, Math.floor(Number(user.loyaltyPoints || 0))),
+      loyalty: buildLoyaltyProfile(user.loyaltyPoints),
+      billingProfile: normalizeBillingProfile(user.billingProfile),
+      role: user.role,
+      createdAt: toISO(user.createdAt),
+      updatedAt: toISO(user.updatedAt),
+    })),
+  };
 }
 
 async function listProductsPublic({ page, limit, q, category, minPrice, maxPrice }) {
@@ -693,6 +893,102 @@ async function deleteProduct(id) {
   return mapProductOut(removed);
 }
 
+async function createOrder(payload) {
+  const now = new Date();
+  const order = normalizeOrderRecord({
+    _id: makeId(),
+    ...payload,
+    statusHistory: [
+      normalizeStatusHistoryEntry({
+        status: payload.status || "placed",
+        note: payload.initialNote || "Order placed",
+        actorId: payload.userId || null,
+        actorEmail: payload.customerEmail || null,
+        createdAt: now,
+      }),
+    ],
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  state.orders.push(order);
+  await persistState();
+  return mapOrderOut(order);
+}
+
+function orderMatchesSearch(order, query) {
+  if (!query) return true;
+  const needle = String(query).trim().toLowerCase();
+  if (!needle) return true;
+  const haystack = `${order.reference} ${order.customerName} ${order.customerEmail} ${order.status}`.toLowerCase();
+  return haystack.includes(needle);
+}
+
+async function listOrdersForUser({ userId, email }) {
+  const normalizedEmail = normalizeEmail(email);
+  const rows = state.orders
+    .filter((order) => (
+      (userId && String(order.userId || "") === String(userId))
+      || (normalizedEmail && order.customerEmail === normalizedEmail)
+    ))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  return { orders: rows.map(mapOrderOut) };
+}
+
+async function lookupOrderByReference({ reference, email }) {
+  const normalizedReference = String(reference || "").trim().toUpperCase();
+  const normalizedEmail = normalizeEmail(email);
+  const order = state.orders.find((entry) =>
+    String(entry.reference || "").trim().toUpperCase() === normalizedReference
+    && entry.customerEmail === normalizedEmail
+  );
+  return order ? mapOrderOut(order) : null;
+}
+
+async function listOrdersAdmin({ status, q, limit }) {
+  const pageSize = Math.min(Math.max(1, Number(limit || 50)), 100);
+  let rows = [...state.orders];
+  if (status) {
+    const targetStatus = String(status).trim().toLowerCase();
+    rows = rows.filter((order) => String(order.status || "").trim().toLowerCase() === targetStatus);
+  }
+  if (q) rows = rows.filter((order) => orderMatchesSearch(order, q));
+  rows.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return { orders: rows.slice(0, pageSize).map(mapOrderOut) };
+}
+
+async function updateOrderStatus(id, { status, note, actorId, actorEmail }) {
+  const order = state.orders.find((entry) => String(entry._id) === String(id));
+  if (!order) return null;
+
+  order.status = String(status || order.status).trim() || order.status;
+  order.statusHistory.push(
+    normalizeStatusHistoryEntry({
+      status: order.status,
+      note: note || "",
+      actorId: actorId || null,
+      actorEmail: actorEmail || null,
+      createdAt: new Date(),
+    })
+  );
+  order.updatedAt = new Date();
+  await persistState();
+  return mapOrderOut(order);
+}
+
+async function addTrackingEvent(payload) {
+  state.tracking.push(
+    normalizeTrackingRecord({
+      _id: makeId(),
+      ...payload,
+      createdAt: new Date(),
+    })
+  );
+  await persistState();
+  return { ok: true };
+}
+
 async function addAuditLog({ actorId, action, entityType, entityId, summary }) {
   const actor = actorId ? await findUserById(actorId) : null;
   state.audit.push(
@@ -736,6 +1032,8 @@ module.exports = {
     findByEmail: findUserByEmail,
     findById: findUserById,
     create: createUser,
+    updateProfile: updateUserProfile,
+    listAdmin: listUsersAdmin,
   },
   product: {
     listPublic: listProductsPublic,
@@ -747,6 +1045,16 @@ module.exports = {
   audit: {
     add: addAuditLog,
     listRecent: listRecentAudit,
+  },
+  order: {
+    create: createOrder,
+    listForUser: listOrdersForUser,
+    lookupByReference: lookupOrderByReference,
+    listAdmin: listOrdersAdmin,
+    updateStatus: updateOrderStatus,
+  },
+  tracking: {
+    add: addTrackingEvent,
   },
   cms: {
     getHome: async () => state.cms.home,

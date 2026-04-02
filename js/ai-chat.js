@@ -4,6 +4,7 @@ const MAX_TURNS = 12;
 
 let chatMessages = [];
 let chatSending = false;
+let chatBootstrapped = false;
 let aiUi = {
   botName: "Blustup Assistant",
   chatEnabled: true,
@@ -90,6 +91,60 @@ function createChatWidget() {
     </div>
   `;
   document.body.appendChild(root);
+}
+
+function bindChatEvents() {
+  const toggle = document.getElementById("aiChatToggle");
+  const panel = document.getElementById("aiChatPanel");
+  const close = document.getElementById("aiChatClose");
+  const clear = document.getElementById("aiChatClear");
+  const quick = document.getElementById("aiChatQuick");
+  const send = document.getElementById("aiChatSend");
+  const input = document.getElementById("aiChatInput");
+
+  toggle?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setPanelOpen(panel?.hidden !== false);
+  });
+
+  close?.addEventListener("click", () => setPanelOpen(false));
+
+  clear?.addEventListener("click", () => {
+    chatMessages = [];
+    saveChatHistory();
+    hydrateFromHistory();
+  });
+
+  quick?.addEventListener("click", (event) => {
+    const button = event.target.closest(".ai-chip");
+    if (!button) return;
+    const query = button.getAttribute("data-q");
+    if (query) sendChatMessage(query);
+  });
+
+  send?.addEventListener("click", () => sendChatMessage());
+
+  input?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendChatMessage();
+    }
+    if (event.key === "Escape") {
+      setPanelOpen(false);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!panel || panel.hidden) return;
+    if (panel.contains(event.target) || toggle?.contains(event.target)) return;
+    setPanelOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && panel && !panel.hidden) {
+      setPanelOpen(false);
+    }
+  });
 }
 
 function renderQuickChips() {
@@ -220,9 +275,9 @@ async function sendChatMessage(prefill) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function initializeAiChat() {
   await loadAiSettings();
-  if (!aiUi.chatEnabled) return;
+  if (!aiUi.chatEnabled) return false;
 
   loadChatHistory();
   createChatWidget();
@@ -230,57 +285,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderQuickChips();
   hydrateFromHistory();
 
-  const toggle = document.getElementById("aiChatToggle");
-  const panel = document.getElementById("aiChatPanel");
-  const close = document.getElementById("aiChatClose");
-  const clear = document.getElementById("aiChatClear");
-  const quick = document.getElementById("aiChatQuick");
-  const send = document.getElementById("aiChatSend");
-  const input = document.getElementById("aiChatInput");
-
   if (loadChatOpenState()) setPanelOpen(true);
+  if (!chatBootstrapped) {
+    bindChatEvents();
+    chatBootstrapped = true;
+  }
+  return true;
+}
 
-  toggle?.addEventListener("click", (event) => {
-    event.stopPropagation();
-    setPanelOpen(panel?.hidden !== false);
-  });
+async function openAiChat(prefill = "") {
+  const ready = await initializeAiChat();
+  if (!ready) {
+    if (typeof showToast === "function") showToast("!", "AI chat is unavailable right now.");
+    return false;
+  }
 
-  close?.addEventListener("click", () => setPanelOpen(false));
+  setPanelOpen(true);
+  const input = document.getElementById("aiChatInput");
+  if (input && prefill) input.value = String(prefill);
+  input?.focus();
+  return true;
+}
 
-  clear?.addEventListener("click", () => {
-    chatMessages = [];
-    saveChatHistory();
-    hydrateFromHistory();
-  });
+window.openAiChat = openAiChat;
+window.closeAiChat = () => setPanelOpen(false);
 
-  quick?.addEventListener("click", (event) => {
-    const button = event.target.closest(".ai-chip");
-    if (!button) return;
-    const query = button.getAttribute("data-q");
-    if (query) sendChatMessage(query);
-  });
-
-  send?.addEventListener("click", () => sendChatMessage());
-
-  input?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      sendChatMessage();
-    }
-    if (event.key === "Escape") {
-      setPanelOpen(false);
-    }
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!panel || panel.hidden) return;
-    if (panel.contains(event.target) || toggle?.contains(event.target)) return;
-    setPanelOpen(false);
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && panel && !panel.hidden) {
-      setPanelOpen(false);
-    }
-  });
+document.addEventListener("DOMContentLoaded", async () => {
+  await initializeAiChat();
 });

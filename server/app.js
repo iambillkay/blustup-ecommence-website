@@ -8,14 +8,39 @@ const adminRoutes = require("./routes/admin");
 const productRoutes = require("./routes/products");
 const cmsRoutes = require("./routes/cms");
 const aiRoutes = require("./routes/ai");
+const trackingRoutes = require("./routes/tracking");
+const orderRoutes = require("./routes/orders");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const rootDir = path.join(__dirname, "..");
 
 const app = express();
 
+const configuredCorsOrigins = String(process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((value) => value.trim().toLowerCase())
+  .filter(Boolean);
+
+function isAllowedCorsOrigin(origin) {
+  if (!origin) return true;
+
+  const normalized = String(origin).trim().toLowerCase();
+  if (!normalized) return true;
+  if (normalized === "null") return true;
+  if (configuredCorsOrigins.includes(normalized)) return true;
+
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(normalized);
+}
+
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors());
+app.use(cors({
+  origin(origin, callback) {
+    if (isAllowedCorsOrigin(origin)) return callback(null, true);
+    return callback(new Error("Origin not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false }));
@@ -33,6 +58,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cms", cmsRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/tracking", trackingRoutes);
+app.use("/api/orders", orderRoutes);
 
 // SPA-ish fallback: serve index for unknown routes (except /api)
 app.get(/^\/(?!api\/).*/, (_req, res) => {

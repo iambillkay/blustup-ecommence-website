@@ -7,8 +7,138 @@
       "passwordHash": "$2b$12$szIDZ0c4TMd.3uQ0tPAQeu4FiCP7eM0GxBJu981xsPWKqzRrUeNEa",
       "role": "admin",
       "phone": null,
+      "loyaltyPoints": 0,
+      "billingProfile": {
+        "firstName": null,
+        "lastName": null,
+        "street": null,
+        "city": null,
+        "state": null,
+        "zip": null,
+        "country": null
+      },
       "createdAt": "2026-03-30T02:25:35.388Z",
       "updatedAt": "2026-03-30T02:25:35.388Z"
+    },
+    {
+      "_id": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "name": "Epaphras Asiedu",
+      "email": "epaphraskasiedu@gmail.com",
+      "passwordHash": "$2b$12$GXW1GbzOmbVB6lEYYzt7MesjZpuHcySzAQeXVpc9N.xPNBNro1Rp.",
+      "role": "user",
+      "phone": "0505724795",
+      "loyaltyPoints": 322,
+      "billingProfile": {
+        "firstName": "Epaphras",
+        "lastName": "Asiedu",
+        "street": "Adenta - Owusu Ansah",
+        "city": "Accra",
+        "state": "NY",
+        "zip": "122",
+        "country": "United States"
+      },
+      "createdAt": "2026-03-30T11:22:25.594Z",
+      "updatedAt": "2026-04-01T19:29:50.098Z"
+    },
+    {
+      "_id": "13dd75f2-2fc1-42cc-a949-ca76235ad1f1",
+      "name": "Billkay",
+      "email": "nii@gmail.com",
+      "passwordHash": "$2b$12$sj/fo9oAGisBstd5BVQSZe2ZSw70RlWNwDesvjyXMDJGveR7Tjzxa",
+      "role": "user",
+      "phone": "+233207280318",
+      "loyaltyPoints": 0,
+      "billingProfile": {
+        "firstName": null,
+        "lastName": null,
+        "street": null,
+        "city": null,
+        "state": null,
+        "zip": null,
+        "country": null
+      },
+      "createdAt": "2026-03-31T08:26:22.200Z",
+      "updatedAt": "2026-03-31T08:26:22.200Z"
+    },
+    {
+      "_id": "e577ecce-6c79-438f-9e4d-98806ac594d6",
+      "name": "Billing User",
+      "email": "billing-user@example.com",
+      "passwordHash": "$2b$12$14qipzT1jZ6A66E1WPUukOiZVkiFV/NePruyd5z2jhYrirCvNOJSS",
+      "role": "user",
+      "phone": "12345678",
+      "loyaltyPoints": 0,
+      "billingProfile": {
+        "firstName": null,
+        "lastName": null,
+        "street": null,
+        "city": null,
+        "state": null,
+        "zip": null,
+        "country": null
+      },
+      "createdAt": "2026-03-31T12:44:42.833Z",
+      "updatedAt": "2026-03-31T12:44:42.833Z"
+    },
+    {
+      "_id": "b03301e7-1f03-402f-98cd-eb83b8349919",
+      "name": "Billing User",
+      "email": "billing-user-2@example.com",
+      "passwordHash": "$2b$12$pMDhcBoRtK5Yd98gMqWk9O7f66zpikWP9H4lWMY5BlYxY5cYcSZAa",
+      "role": "user",
+      "phone": "99999999",
+      "loyaltyPoints": 0,
+      "billingProfile": {
+        "firstName": "Billing",
+        "lastName": "User",
+        "street": "123 Main",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "createdAt": "2026-03-31T12:47:25.515Z",
+      "updatedAt": "2026-03-31T12:47:25.698Z"
+    },
+    {
+      "_id": "93d6d4d7-9c3c-4051-aa9d-aa7e4185d411",
+      "name": "Billing Persist",
+      "email": "billing-persist@example.com",
+      "passwordHash": "$2b$12$1dv3COWlcymsy8.elUG73uH8Jc9mRi4f5.dFf1P7bzVyF6npdPgJu",
+      "role": "user",
+      "phone": "88888888",
+      "loyaltyPoints": 0,
+      "billingProfile": {
+        "firstName": "Billing",
+        "lastName": "Persist",
+        "street": "1 Test Way",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "createdAt": "2026-03-31T12:47:46.954Z",
+      "updatedAt": "2026-03-31T12:47:47.019Z"
+    },
+    {
+      "_id": "fb50a1f9-0d9e-41df-a506-cc0e99d349e2",
+      "name": "Points Check",
+      "email": "points-check-1775004181430@example.com",
+      "passwordHash": "$2b$12$stypfiOZ.AnqFOUJ1nPWA.vTFuI3mC60Twowny6rfsIff/GSNEuLO",
+      "role": "user",
+      "phone": "+233555123456",
+      "loyaltyPoints": 280,
+      "billingProfile": {
+        "firstName": "Points",
+        "lastName": "Check",
+        "street": "123 Market St",
+        "city": "Accra",
+        "state": "Greater Accra",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "createdAt": "2026-04-01T00:43:02.156Z",
+      "updatedAt": "2026-04-01T00:43:02.219Z"
     }
   ],
   "products": [
@@ -16,21 +146,24 @@
       "_id": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
       "name": "Oraimo Maxi Watch",
       "price": 2631.9,
-      "description": "Oraimo Maxi Watch is a essentials option designed for dependable everyday use and easy comparison while shopping online. It stands out with -47% appeal and a clear value story for everyday online shoppers in Ghana who want reliable value and clear guidance. Available stock is ready for new orders.",
+      "description": "Oraimo Maxi Watch is a oriamo option designed for dependable everyday use and easy comparison while shopping online.",
       "category": "oriamo",
       "categories": [
         "oriamo"
       ],
-      "stockQty": 25,
+      "stockQty": 20,
       "imageUrl": "product-imgs/1.jpg",
       "oldPrice": 4900,
       "badge": "-47%",
       "badgeType": null,
       "icon": null,
       "color": "linear-gradient(135deg,#e8f0ff,#d0dcff)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-30T02:48:11.520Z"
+      "updatedAt": "2026-03-31T12:48:07.792Z"
     },
     {
       "_id": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
@@ -48,6 +181,9 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#e8f0ff,#d0dcff)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
       "updatedAt": "2026-03-30T02:38:12.666Z"
@@ -68,6 +204,9 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#fff0f5,#ffd6e8)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
       "updatedAt": "2026-03-30T02:38:35.337Z"
@@ -82,22 +221,25 @@
         "lounge",
         "insurance"
       ],
-      "stockQty": 60,
+      "stockQty": 52,
       "imageUrl": "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp",
       "oldPrice": 400,
       "badge": "-42%",
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#fff8e8,#ffecc0)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "updatedAt": "2026-04-01T19:29:50.071Z"
     },
     {
       "_id": "a7e01eae-3b98-41de-83e3-092f1d870d84",
       "name": "Oraimo NutriFry Max Air",
-      "price": 1078.92,
-      "description": "Efficient air-fryer technology for quick meals.",
+      "price": 778.92,
+      "description": "Oraimo NutriFry Max Air is a upgrades option designed for dependable everyday use and easy comparison while shopping online. It stands out with",
       "category": "upgrades",
       "categories": [
         "upgrades",
@@ -110,9 +252,12 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#f0e8ff,#dcc0ff)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "updatedAt": "2026-03-30T03:14:33.790Z"
     },
     {
       "_id": "a8b88dda-45b4-4705-94a5-8959b0f4ed4d",
@@ -131,6 +276,9 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#e8fff5,#c0f5e0)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
       "updatedAt": "2026-03-29T23:44:41.174Z"
@@ -140,10 +288,10 @@
       "name": "Oraimo Wireless Charger",
       "price": 183.89,
       "description": "Fast wireless charging for multiple devices.",
-      "category": "essentials",
+      "category": "electronics",
       "categories": [
-        "essentials",
-        "flights"
+        "electronics",
+        "oriamo"
       ],
       "stockQty": 100,
       "imageUrl": "product-imgs/AI-appliances_v21.avif",
@@ -152,19 +300,21 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#e8f5ff,#c0e0ff)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "updatedAt": "2026-03-30T09:33:21.683Z"
     },
     {
       "_id": "d91615ef-3107-4c1b-8c11-ee5fa3faadb9",
-      "name": "Pepsodent Tooth Paste",
+      "name": "Vaseline cocoa",
       "price": 2631.9,
-      "description": "Daily oral care essential for the whole family.",
-      "category": "insurance",
+      "description": "Vaseline cocoa is a insurance option designed for dependable everyday use and easy comparison while shopping online. It stands out with -47% appeal and a clear value story for everyday online shoppers in Ghana who want reliable value and clear guidance. Available stock is ready for new orders.",
+      "category": "personal care",
       "categories": [
-        "insurance",
-        "essentials"
+        "personal care"
       ],
       "stockQty": 80,
       "imageUrl": "product-imgs/personal-care/36024a.jpg",
@@ -173,19 +323,21 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#e8ffee,#c0f0ce)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "updatedAt": "2026-03-30T09:36:27.941Z"
     },
     {
       "_id": "abbacd8c-2971-4de8-87be-fa1e2377b66a",
-      "name": "Close Up Tooth Paste",
+      "name": "Pepsodent Tooth Paste",
       "price": 136.9,
       "description": "Fresh breath toothpaste with active formula.",
-      "category": "insurance",
+      "category": "personal care",
       "categories": [
-        "insurance",
-        "essentials"
+        "personal care"
       ],
       "stockQty": 70,
       "imageUrl": "product-imgs/personal-care/67728a.jpg",
@@ -194,9 +346,12 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#ffe8e8,#ffc0c0)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "updatedAt": "2026-03-30T09:33:52.701Z"
     },
     {
       "_id": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
@@ -215,30 +370,1998 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#f6e8ff,#e6c7ff)",
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
       "updatedAt": "2026-03-29T23:44:41.174Z"
     },
     {
-      "_id": "da86e3d7-1da9-4d01-8e3c-1f138048a3d4",
-      "name": "Oral B Tooth Brush",
-      "price": 217,
-      "description": "Durable toothbrush designed for comfort.",
-      "category": "insurance",
+      "_id": "89232053-9388-46e9-b6de-ece111fbcc82",
+      "name": "Mango",
+      "price": 34.88,
+      "description": "Mango is a fruits & vegetables option designed for dependable everyday use and easy comparison while shopping online.",
+      "category": "Fruits & Vegetables",
       "categories": [
-        "insurance",
-        "essentials"
+        "Fruits & Vegetables"
       ],
-      "stockQty": 70,
-      "imageUrl": "product-imgs/personal-care/94947a.jpg",
-      "oldPrice": 400,
-      "badge": "-42%",
-      "badgeType": "sale",
+      "stockQty": 100,
+      "imageUrl": "/uploads/pngwing-com-12--mncyt6cv.png",
+      "oldPrice": 48,
+      "badge": "Fresh",
+      "badgeType": null,
       "icon": null,
-      "color": "linear-gradient(135deg,#e8f7ff,#c7e9ff)",
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
       "isActive": true,
-      "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "createdAt": "2026-03-30T09:07:46.164Z",
+      "updatedAt": "2026-03-30T09:07:46.164Z"
+    },
+    {
+      "_id": "809dbefc-b67f-4b4d-a1f6-fafacbf8f842",
+      "name": "Watermelon",
+      "price": 29,
+      "description": "Watermelon is a fruits & vegetables option designed for dependable everyday use and easy comparison while shopping online. It stands out with fresh appeal and a clear value story for everyday online shoppers in Ghana who want reliable value and clear guidance. Available stock is ready for new orders.",
+      "category": "Fruits & Vegetables",
+      "categories": [
+        "Fruits & Vegetables"
+      ],
+      "stockQty": 50,
+      "imageUrl": "/uploads/pngwing-com-13--mncyvkl7.png",
+      "oldPrice": 31.9,
+      "badge": "Fresh",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:09:37.924Z",
+      "updatedAt": "2026-03-30T09:09:37.924Z"
+    },
+    {
+      "_id": "a3b5bb91-203b-4424-9b6b-8b5fc91bf088",
+      "name": "Bananan",
+      "price": 10,
+      "description": "Bananan is a essentials option designed for dependable everyday use and easy comparison while shopping online. Priced at ₵0.00, it offers a practical balance of presentation, usefulness, and value.",
+      "category": "Fruits & Vegetables",
+      "categories": [
+        "Fruits & Vegetables"
+      ],
+      "stockQty": 20,
+      "imageUrl": "/uploads/Banana-mncywmu9.png",
+      "oldPrice": 15,
+      "badge": "Fresh",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:10:27.495Z",
+      "updatedAt": "2026-03-30T09:10:27.495Z"
+    },
+    {
+      "_id": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+      "name": "Orange",
+      "price": 5,
+      "description": "Orange is a essentials option designed for dependable everyday use and easy comparison while shopping online. Priced at ₵0.00, it offers a practical balance of presentation, usefulness, and value.",
+      "category": "Fruits & Vegetables",
+      "categories": [
+        "Fruits & Vegetables"
+      ],
+      "stockQty": 29,
+      "imageUrl": "/uploads/Orange-mncyz7nx.png",
+      "oldPrice": 9,
+      "badge": "Fresh",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:12:27.796Z",
+      "updatedAt": "2026-04-01T00:53:24.701Z"
+    },
+    {
+      "_id": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+      "name": "Pinapple",
+      "price": 20,
+      "description": "Pinapple is a essentials option designed for dependable everyday use and easy comparison while shopping online. Priced at ₵0.00, it offers a practical balance of presentation, usefulness, and value.",
+      "category": "Fruits & Vegetables",
+      "categories": [
+        "Fruits & Vegetables"
+      ],
+      "stockQty": 30,
+      "imageUrl": "/uploads/Pineapple-mncz0pje.png",
+      "oldPrice": 29,
+      "badge": "Fresh",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:13:37.633Z",
+      "updatedAt": "2026-04-01T00:45:17.189Z"
+    },
+    {
+      "_id": "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+      "name": "Foot Ball",
+      "price": 50,
+      "description": "Foot Ball is a essentials option designed for dependable everyday use and easy comparison while shopping online. Priced at ₵0.00, it offers a practical balance of presentation, usefulness, and value.",
+      "category": "Toys & Games",
+      "categories": [
+        "Toys & Games"
+      ],
+      "stockQty": 100,
+      "imageUrl": "/uploads/pngwing-com-16--mncz7rqp.png",
+      "oldPrice": 79,
+      "badge": "-12%",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:19:07.060Z",
+      "updatedAt": "2026-03-30T09:19:07.060Z"
+    },
+    {
+      "_id": "86f8a671-25d6-4003-8105-cc32202c54d3",
+      "name": "Cricket Bat",
+      "price": 350,
+      "description": "Cricket Bat is a toys & games option designed for dependable everyday use and easy comparison while shopping online.",
+      "category": "Toys & Games",
+      "categories": [
+        "Toys & Games"
+      ],
+      "stockQty": 100,
+      "imageUrl": "/uploads/criket-mnczesjz.png",
+      "oldPrice": 400,
+      "badge": "-7%",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:24:34.709Z",
+      "updatedAt": "2026-03-30T09:24:34.709Z"
+    },
+    {
+      "_id": "982655d9-92c3-4351-850c-66baf9ae9043",
+      "name": "Toy Car",
+      "price": 1300,
+      "description": "Toy Car is a essentials option designed for dependable everyday use and easy comparison while shopping online.",
+      "category": "Toys & Games",
+      "categories": [
+        "Toys & Games"
+      ],
+      "stockQty": 93,
+      "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png",
+      "oldPrice": 1900,
+      "badge": "-12%",
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-03-30T09:28:51.987Z",
+      "updatedAt": "2026-04-01T00:43:02.206Z"
+    }
+  ],
+  "orders": [
+    {
+      "_id": "37fffad5-944b-4608-9d5a-b28a4611c84d",
+      "reference": "BLU-MNELZ6YB-8819",
+      "userId": null,
+      "sessionId": null,
+      "customerName": "Test Buyer",
+      "customerEmail": "buyer@example.com",
+      "customerPhone": "12345678",
+      "billingAddress": {
+        "firstName": "Test",
+        "lastName": "Buyer",
+        "street": "123 Main",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "name": "Oraimo Maxi Watch",
+          "price": 2631.9,
+          "qty": 1,
+          "imageUrl": "product-imgs/1.jpg"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 2631.9,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 210.55,
+      "total": 2842.45,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "buyer@example.com",
+          "createdAt": "2026-03-31T12:44:04.211Z"
+        }
+      ],
+      "createdAt": "2026-03-31T12:44:04.211Z",
+      "updatedAt": "2026-03-31T12:44:04.211Z"
+    },
+    {
+      "_id": "72a1adc9-dac0-4043-b6a0-51e8e159a6a1",
+      "reference": "BLU-MNEM00S7-7915",
+      "userId": null,
+      "sessionId": null,
+      "customerName": "Billing User",
+      "customerEmail": "billing-user@example.com",
+      "customerPhone": "99999999",
+      "billingAddress": {
+        "firstName": "Billing",
+        "lastName": "User",
+        "street": "123 Main",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "name": "Oraimo Maxi Watch",
+          "price": 2631.9,
+          "qty": 1,
+          "imageUrl": "product-imgs/1.jpg"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 2631.9,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 210.55,
+      "total": 2842.45,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "billing-user@example.com",
+          "createdAt": "2026-03-31T12:44:42.872Z"
+        }
+      ],
+      "createdAt": "2026-03-31T12:44:42.872Z",
+      "updatedAt": "2026-03-31T12:44:42.872Z"
+    },
+    {
+      "_id": "9d4f222f-a239-4a1d-ad1d-ab8d51d3c19c",
+      "reference": "BLU-MNEM3IET-8993",
+      "userId": "b03301e7-1f03-402f-98cd-eb83b8349919",
+      "sessionId": null,
+      "customerName": "Billing User",
+      "customerEmail": "billing-user-2@example.com",
+      "customerPhone": "99999999",
+      "billingAddress": {
+        "firstName": "Billing",
+        "lastName": "User",
+        "street": "123 Main",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "name": "Oraimo Maxi Watch",
+          "price": 2631.9,
+          "qty": 1,
+          "imageUrl": "product-imgs/1.jpg"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 2631.9,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 210.55,
+      "total": 2842.45,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": "b03301e7-1f03-402f-98cd-eb83b8349919",
+          "actorEmail": "billing-user-2@example.com",
+          "createdAt": "2026-03-31T12:47:25.685Z"
+        }
+      ],
+      "createdAt": "2026-03-31T12:47:25.685Z",
+      "updatedAt": "2026-03-31T12:47:25.685Z"
+    },
+    {
+      "_id": "fa4b9051-a291-4d71-8dcf-04d39f4afab5",
+      "reference": "BLU-MNEM3YVA-7426",
+      "userId": "93d6d4d7-9c3c-4051-aa9d-aa7e4185d411",
+      "sessionId": null,
+      "customerName": "Billing Persist",
+      "customerEmail": "billing-persist@example.com",
+      "customerPhone": "88888888",
+      "billingAddress": {
+        "firstName": "Billing",
+        "lastName": "Persist",
+        "street": "1 Test Way",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "name": "Oraimo Maxi Watch",
+          "price": 2631.9,
+          "qty": 1,
+          "imageUrl": "product-imgs/1.jpg"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 2631.9,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 210.55,
+      "total": 2842.45,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": "93d6d4d7-9c3c-4051-aa9d-aa7e4185d411",
+          "actorEmail": "billing-persist@example.com",
+          "createdAt": "2026-03-31T12:47:47.014Z"
+        }
+      ],
+      "createdAt": "2026-03-31T12:47:47.014Z",
+      "updatedAt": "2026-03-31T12:47:47.014Z"
+    },
+    {
+      "_id": "fa7bea74-0bfb-4c29-9bc7-2f79100757ee",
+      "reference": "BLU-MNEM4EWO-3721",
+      "userId": null,
+      "sessionId": null,
+      "customerName": "Guest Buyer",
+      "customerEmail": "guest-buyer@example.com",
+      "customerPhone": "12121212",
+      "billingAddress": {
+        "firstName": "Guest",
+        "lastName": "Buyer",
+        "street": "Guest St",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "name": "Oraimo Maxi Watch",
+          "price": 2631.9,
+          "qty": 1,
+          "imageUrl": "product-imgs/1.jpg"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 2631.9,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 210.55,
+      "total": 2842.45,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "guest-buyer@example.com",
+          "createdAt": "2026-03-31T12:48:07.800Z"
+        }
+      ],
+      "createdAt": "2026-03-31T12:48:07.800Z",
+      "updatedAt": "2026-03-31T12:48:07.800Z"
+    },
+    {
+      "_id": "cd3fe869-5799-417b-8a0b-0e6102df256f",
+      "reference": "BLU-MNEN3ZHT-1374",
+      "userId": null,
+      "sessionId": "smoke-purchase",
+      "customerName": "Test Buyer",
+      "customerEmail": "smoke-purchase@example.com",
+      "customerPhone": "0240000000",
+      "billingAddress": {
+        "firstName": "Test",
+        "lastName": "Buyer",
+        "street": "1 Test St",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "smoke-purchase@example.com",
+          "createdAt": "2026-03-31T13:15:47.441Z"
+        }
+      ],
+      "createdAt": "2026-03-31T13:15:47.441Z",
+      "updatedAt": "2026-03-31T13:15:47.441Z"
+    },
+    {
+      "_id": "fbafb258-d1c9-48c4-9bf2-f77a89bf77a9",
+      "reference": "BLU-MNEN7X2Z-8883",
+      "userId": null,
+      "sessionId": null,
+      "customerName": "Guest Buyer",
+      "customerEmail": "guest-1774963130881@example.com",
+      "customerPhone": "12345678",
+      "billingAddress": {
+        "firstName": "Guest",
+        "lastName": "Buyer",
+        "street": "123 Main St",
+        "city": "Accra",
+        "state": "GA",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "processing",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "guest-1774963130881@example.com",
+          "createdAt": "2026-03-31T13:18:50.940Z"
+        },
+        {
+          "status": "processing",
+          "note": "Checked from smoke test",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-03-31T13:18:50.993Z"
+        }
+      ],
+      "createdAt": "2026-03-31T13:18:50.940Z",
+      "updatedAt": "2026-03-31T13:18:50.993Z"
+    },
+    {
+      "_id": "e522dabd-6c89-4c2e-b8da-1c2867f3eea5",
+      "reference": "BLU-MNFAKXMR-9975",
+      "userId": null,
+      "sessionId": "probe",
+      "customerName": "Test Buyer",
+      "customerEmail": "probe@example.com",
+      "customerPhone": "+233555123456",
+      "billingAddress": {
+        "firstName": "Test",
+        "lastName": "Buyer",
+        "street": "123 Market St",
+        "city": "Accra",
+        "state": "Greater Accra",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "probe@example.com",
+          "createdAt": "2026-04-01T00:12:49.348Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:12:49.348Z",
+      "updatedAt": "2026-04-01T00:12:49.348Z"
+    },
+    {
+      "_id": "6415febd-5711-4fbe-a370-9d3698d5549b",
+      "reference": "BLU-MNFALA9E-6125",
+      "userId": null,
+      "sessionId": "probe2",
+      "customerName": "Test Buyer",
+      "customerEmail": "probe2@example.com",
+      "customerPhone": "+233555123456",
+      "billingAddress": {
+        "firstName": "Test",
+        "lastName": "Buyer",
+        "street": "123 Market St",
+        "city": "Accra",
+        "state": "Greater Accra",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "probe2@example.com",
+          "createdAt": "2026-04-01T00:13:05.714Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:13:05.714Z",
+      "updatedAt": "2026-04-01T00:13:05.714Z"
+    },
+    {
+      "_id": "6d1eef3b-72ad-4a44-9292-a64850abdf60",
+      "reference": "BLU-MNFAN3H6-9670",
+      "userId": null,
+      "sessionId": "probe3005",
+      "customerName": "Port Test",
+      "customerEmail": "probe3005@example.com",
+      "customerPhone": "+233555123456",
+      "billingAddress": {
+        "firstName": "Port",
+        "lastName": "Test",
+        "street": "123 Market St",
+        "city": "Accra",
+        "state": "Greater Accra",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "cancelled",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "probe3005@example.com",
+          "createdAt": "2026-04-01T00:14:30.234Z"
+        },
+        {
+          "status": "cancelled",
+          "note": "",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-01T00:31:15.270Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:14:30.234Z",
+      "updatedAt": "2026-04-01T00:31:15.270Z"
+    },
+    {
+      "_id": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "reference": "BLU-MNFAPA2W-3540",
+      "userId": null,
+      "sessionId": "verified-3000",
+      "customerName": "Live Buyer",
+      "customerEmail": "livebuyer@example.com",
+      "customerPhone": "+233555123456",
+      "billingAddress": {
+        "firstName": "Live",
+        "lastName": "Buyer",
+        "street": "123 Market St",
+        "city": "Accra",
+        "state": "Greater Accra",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "shipped",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": null,
+          "actorEmail": "livebuyer@example.com",
+          "createdAt": "2026-04-01T00:16:12.105Z"
+        },
+        {
+          "status": "shipped",
+          "note": "",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-01T00:31:04.593Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:16:12.105Z",
+      "updatedAt": "2026-04-01T00:31:04.593Z"
+    },
+    {
+      "_id": "eb499191-8a71-42d9-b929-52f395ed41e6",
+      "reference": "BLU-MNFB7LC6-9854",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "customerName": "Epaphras Asiedu",
+      "customerEmail": "epaphraskasiedu@gmail.com",
+      "customerPhone": "0505724795",
+      "billingAddress": {
+        "firstName": "Epaphras",
+        "lastName": "Asiedu",
+        "street": "Adenta - Owusu Ansah",
+        "city": "Accra",
+        "state": "NY",
+        "zip": "122",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+          "name": "Oraimo CleanSip Faucet",
+          "price": 217,
+          "qty": 6,
+          "imageUrl": "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": "AIRLUME20",
+      "promoLabel": "20% off (AIRLUME20)",
+      "subtotal": 1302,
+      "discount": 260.4,
+      "shipping": 0,
+      "tax": 83.33,
+      "total": 1124.93,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 0,
+      "loyaltyTierAfter": null,
+      "status": "shipped",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order placed",
+          "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+          "actorEmail": "epaphraskasiedu@gmail.com",
+          "createdAt": "2026-04-01T00:30:26.502Z"
+        },
+        {
+          "status": "shipped",
+          "note": "",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-01T00:31:08.771Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:30:26.502Z",
+      "updatedAt": "2026-04-01T00:31:08.771Z"
+    },
+    {
+      "_id": "6d4a98ce-0800-4b24-9f37-0a42c1dc5c2e",
+      "reference": "BLU-MNFBNSG4-9206",
+      "userId": "fb50a1f9-0d9e-41df-a506-cc0e99d349e2",
+      "sessionId": "points-smoke",
+      "customerName": "Points Check",
+      "customerEmail": "points-check-1775004181430@example.com",
+      "customerPhone": "+233555123456",
+      "billingAddress": {
+        "firstName": "Points",
+        "lastName": "Check",
+        "street": "123 Market St",
+        "city": "Accra",
+        "state": "Greater Accra",
+        "zip": "00233",
+        "country": "Ghana"
+      },
+      "items": [
+        {
+          "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+          "name": "Toy Car",
+          "price": 1300,
+          "qty": 1,
+          "imageUrl": "/uploads/pngwing-com-15--mnczkb24.png"
+        }
+      ],
+      "paymentMethod": "card",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 1300,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 104,
+      "total": 1404,
+      "loyaltyEarned": 280,
+      "loyaltyBalanceAfter": 280,
+      "loyaltyTierAfter": "Silver",
+      "status": "processing",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order received and queued for confirmation.",
+          "actorId": "fb50a1f9-0d9e-41df-a506-cc0e99d349e2",
+          "actorEmail": "points-check-1775004181430@example.com",
+          "createdAt": "2026-04-01T00:43:02.212Z"
+        },
+        {
+          "status": "processing",
+          "note": "Your items are being prepared for dispatch.",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-01T00:43:24.020Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:43:02.212Z",
+      "updatedAt": "2026-04-01T00:43:24.020Z"
+    },
+    {
+      "_id": "8306ffcc-3b02-432b-a4de-f2778ea527b2",
+      "reference": "BLU-MNFBQOLR-3359",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "customerName": "Epaphras Asiedu",
+      "customerEmail": "epaphraskasiedu@gmail.com",
+      "customerPhone": "0505724795",
+      "billingAddress": {
+        "firstName": "Epaphras",
+        "lastName": "Asiedu",
+        "street": "Adenta - Owusu Ansah",
+        "city": "Accra",
+        "state": "NY",
+        "zip": "122",
+        "country": "United States"
+      },
+      "items": [
+        {
+          "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+          "name": "Oraimo CleanSip Faucet",
+          "price": 217,
+          "qty": 1,
+          "imageUrl": "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp"
+        },
+        {
+          "productId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+          "name": "Pinapple",
+          "price": 20,
+          "qty": 1,
+          "imageUrl": "/uploads/Pineapple-mncz0pje.png"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 237,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 18.96,
+      "total": 255.96,
+      "loyaltyEarned": 0,
+      "loyaltyBalanceAfter": 275,
+      "loyaltyTierAfter": "Silver",
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order received and queued for confirmation.",
+          "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+          "actorEmail": "epaphraskasiedu@gmail.com",
+          "createdAt": "2026-04-01T00:45:17.200Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:45:17.200Z",
+      "updatedAt": "2026-04-01T00:45:17.200Z"
+    },
+    {
+      "_id": "dbb4c3ab-d684-4d63-9260-4c5de8bd6760",
+      "reference": "BLU-MNFC14RP-6619",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "customerName": "Epaphras Asiedu",
+      "customerEmail": "epaphraskasiedu@gmail.com",
+      "customerPhone": "0505724795",
+      "billingAddress": {
+        "firstName": "Epaphras",
+        "lastName": "Asiedu",
+        "street": "Adenta - Owusu Ansah",
+        "city": "Accra",
+        "state": "NY",
+        "zip": "122",
+        "country": "United States"
+      },
+      "items": [
+        {
+          "productId": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+          "name": "Orange",
+          "price": 5,
+          "qty": 1,
+          "imageUrl": "/uploads/Orange-mncyz7nx.png"
+        }
+      ],
+      "paymentMethod": "paypal",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 5,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 0.4,
+      "total": 5.4,
+      "loyaltyEarned": 1,
+      "loyaltyBalanceAfter": 276,
+      "loyaltyTierAfter": "Silver",
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order received and queued for confirmation.",
+          "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+          "actorEmail": "epaphraskasiedu@gmail.com",
+          "createdAt": "2026-04-01T00:53:24.709Z"
+        }
+      ],
+      "createdAt": "2026-04-01T00:53:24.709Z",
+      "updatedAt": "2026-04-01T00:53:24.709Z"
+    },
+    {
+      "_id": "958a35e5-8dba-4305-b0f0-05b772691154",
+      "reference": "BLU-MNGFWV0K-1019",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "customerName": "Epaphras Asiedu",
+      "customerEmail": "epaphraskasiedu@gmail.com",
+      "customerPhone": "0505724795",
+      "billingAddress": {
+        "firstName": "Epaphras",
+        "lastName": "Asiedu",
+        "street": "Adenta - Owusu Ansah",
+        "city": "Accra",
+        "state": "NY",
+        "zip": "122",
+        "country": "United States"
+      },
+      "items": [
+        {
+          "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+          "name": "Oraimo CleanSip Faucet",
+          "price": 217,
+          "qty": 1,
+          "imageUrl": "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 217,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 17.36,
+      "total": 234.36,
+      "loyaltyEarned": 46,
+      "loyaltyBalanceAfter": 322,
+      "loyaltyTierAfter": "Silver",
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order received and queued for confirmation.",
+          "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+          "actorEmail": "epaphraskasiedu@gmail.com",
+          "createdAt": "2026-04-01T19:29:50.085Z"
+        }
+      ],
+      "createdAt": "2026-04-01T19:29:50.085Z",
+      "updatedAt": "2026-04-01T19:29:50.085Z"
+    }
+  ],
+  "tracking": [
+    {
+      "_id": "81c4f6e3-982a-42a5-bfe8-3e60e3843a66",
+      "userId": null,
+      "sessionId": "test-session",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "127.0.0.1",
+      "userAgent": "node",
+      "createdAt": "2026-03-31T12:47:24.923Z"
+    },
+    {
+      "_id": "4cf97f3d-c4f5-403e-b88d-2bc691e770bb",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:30:06.320Z"
+    },
+    {
+      "_id": "128d2569-a657-44a2-a03b-7acd16cb86f7",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:30:08.385Z"
+    },
+    {
+      "_id": "c964c13c-d91e-4ee4-8449-0c6312e57dd0",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "purchase",
+      "eventData": {
+        "ref": "BLU-MNFB7LC6-9854",
+        "total": 1124.93,
+        "email": "epaphraskasiedu@gmail.com",
+        "method": "cod",
+        "items": [
+          {
+            "id": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+            "quantity": 6
+          }
+        ]
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:30:26.523Z"
+    },
+    {
+      "_id": "a7d12a05-b7e4-432a-913b-3c76c93fc7da",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "success"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:30:26.528Z"
+    },
+    {
+      "_id": "b9633a28-37aa-4ff2-b5be-96d1e577436e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:30:34.622Z"
+    },
+    {
+      "_id": "83218ade-89f6-4a84-a54a-38f83f22de36",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:32:15.981Z"
+    },
+    {
+      "_id": "a549f7b8-9bf1-460e-90b9-fc4e10e92550",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:34:29.449Z"
+    },
+    {
+      "_id": "792c24d7-e36d-4d47-93c5-72c84116447a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:40:52.041Z"
+    },
+    {
+      "_id": "15cb956b-940b-4aa6-beb3-5116e174edfd",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:40:58.417Z"
+    },
+    {
+      "_id": "3dbbb345-3a1a-4b77-b4db-b539be5e9923",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:41:00.676Z"
+    },
+    {
+      "_id": "6f66bc62-f957-4bee-815c-413ff60ad7b5",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:41:26.149Z"
+    },
+    {
+      "_id": "4286f1de-fd22-4943-8635-2254ff7e3503",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:42:36.013Z"
+    },
+    {
+      "_id": "802b6b11-b198-4249-9e3a-d93a5cc2d2e5",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+        "productName": "Oraimo CleanSip Faucet"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:42:45.491Z"
+    },
+    {
+      "_id": "8e43796b-a01f-4fb2-9cb6-a580c96a2909",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:43:06.747Z"
+    },
+    {
+      "_id": "fed75315-ccde-4c54-993d-43956927f872",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:43:26.992Z"
+    },
+    {
+      "_id": "7892da0d-4616-4b39-84ff-ab5262d3ec4e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:44:44.168Z"
+    },
+    {
+      "_id": "7eeedf9a-10e4-481c-9d44-a499b41b24ab",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:44:51.150Z"
+    },
+    {
+      "_id": "b6e55dac-693e-4184-8def-85598fc49463",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+        "productName": "Pinapple"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:44:55.866Z"
+    },
+    {
+      "_id": "c87bb294-2ce0-46fb-af56-a7d21680d69e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:44:59.253Z"
+    },
+    {
+      "_id": "cf5e520c-8e41-43f3-83e8-69b24e916106",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:45:03.817Z"
+    },
+    {
+      "_id": "3f150648-7330-4bc1-9364-803ae8cc30cf",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "purchase",
+      "eventData": {
+        "ref": "BLU-MNFBQOLR-3359",
+        "total": 255.96,
+        "email": "epaphraskasiedu@gmail.com",
+        "method": "cod",
+        "items": [
+          {
+            "id": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+            "quantity": 1
+          },
+          {
+            "id": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+            "quantity": 1
+          }
+        ]
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:45:17.251Z"
+    },
+    {
+      "_id": "12f793c6-53b9-46b2-b9bb-b0de2ef36827",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "success"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:45:17.269Z"
+    },
+    {
+      "_id": "715d3730-9ac5-42a4-876f-74f7dda8e50e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:45:21.980Z"
+    },
+    {
+      "_id": "aae03340-5ae7-43fc-9d9a-188923ed382b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:45:57.372Z"
+    },
+    {
+      "_id": "3ff02c1c-c49f-442e-98af-d51dc436c9d8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:48:03.171Z"
+    },
+    {
+      "_id": "43966ba2-f960-4348-9193-5e59fb9b7783",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:50:08.077Z"
+    },
+    {
+      "_id": "24d80111-9ad4-48fc-b4c4-a9384bc8e951",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:50:29.281Z"
+    },
+    {
+      "_id": "80a86d40-dadb-480c-9021-4575e888b9a8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:50:36.936Z"
+    },
+    {
+      "_id": "aaa215db-5b84-4be0-b945-edf2cb621203",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:50:37.151Z"
+    },
+    {
+      "_id": "148c5619-d0fe-4e77-9c57-63aee9d64f37",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:50:43.619Z"
+    },
+    {
+      "_id": "13d9fe4f-a1f7-4ce4-95c9-16938303576b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:51:27.783Z"
+    },
+    {
+      "_id": "ddf01b11-8d29-4c59-ba5e-9d771f457c56",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:51:28.715Z"
+    },
+    {
+      "_id": "40cb30b2-574b-4c7b-ba6e-169c0e5235f4",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:52:18.093Z"
+    },
+    {
+      "_id": "e04ac5e2-f8e2-46f0-b064-083ca56d9b62",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:52:50.630Z"
+    },
+    {
+      "_id": "99fc7272-6995-4803-bbbf-23b98b73b26d",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+        "productName": "Orange"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:05.434Z"
+    },
+    {
+      "_id": "36f5b6df-f929-4bab-aa5d-4b1f89ae56ef",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:07.054Z"
+    },
+    {
+      "_id": "d1bf19dc-bee2-49c0-944d-615375503ce8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:16.281Z"
+    },
+    {
+      "_id": "fa33857d-9dea-42e7-a34c-e6bcdbb2047f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "purchase",
+      "eventData": {
+        "ref": "BLU-MNFC14RP-6619",
+        "total": 5.4,
+        "email": "epaphraskasiedu@gmail.com",
+        "method": "paypal",
+        "items": [
+          {
+            "id": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+            "quantity": 1
+          }
+        ]
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:24.743Z"
+    },
+    {
+      "_id": "1bd4c215-63e4-4dbf-86b6-05743b310e12",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "success"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:24.750Z"
+    },
+    {
+      "_id": "6ac5b01a-7e79-4006-9cce-aa4dd81bb55b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:26.195Z"
+    },
+    {
+      "_id": "e81fcb1c-1446-4548-8b2f-7acd42caf391",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:30.831Z"
+    },
+    {
+      "_id": "b65d702d-4abb-4d1c-96f2-f92400b159f9",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:49.319Z"
+    },
+    {
+      "_id": "18b3943c-c1d0-42db-b1ae-fb3ec895fbd8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:53:50.580Z"
+    },
+    {
+      "_id": "6042fc8e-ee17-44e5-9415-e5ffe97f2635",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:00.759Z"
+    },
+    {
+      "_id": "4db3b719-b90e-4ef3-91f2-35731a7dd283",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:03.429Z"
+    },
+    {
+      "_id": "8e416efc-d6b9-4566-9491-5f242a45df98",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:11.009Z"
+    },
+    {
+      "_id": "7fa8bfdc-ba54-4c6e-8fec-d32720a3e40a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:12.386Z"
+    },
+    {
+      "_id": "eb5e9bfa-bb3c-4e21-8004-afad64ac0f7c",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:35.950Z"
+    },
+    {
+      "_id": "6e1a564a-1488-49db-8a0d-c5ea7e7714df",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:37.252Z"
+    },
+    {
+      "_id": "355ebd36-bd51-4d40-9cf5-3d02f4b14c15",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T00:58:38.972Z"
+    },
+    {
+      "_id": "00c0be49-2ce7-48cc-9ddb-a4bc67b1f12a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T18:43:15.608Z"
+    },
+    {
+      "_id": "fc3df8bf-3ad8-4f55-93f4-58c8fb56e8e9",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:14:08.905Z"
+    },
+    {
+      "_id": "a3d364e6-2505-4a3e-ba68-41d70cd67441",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "loyalty"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:11.446Z"
+    },
+    {
+      "_id": "7131c626-de8a-4160-8313-5574751f3259",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:21.941Z"
+    },
+    {
+      "_id": "5d85cf81-65ab-4e84-82bc-e481316be0b1",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:25.701Z"
+    },
+    {
+      "_id": "65bb000c-fefa-48c6-a920-19f12e87b65e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:30.006Z"
+    },
+    {
+      "_id": "125bae18-98ee-4860-b899-bb13bd959421",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:36.087Z"
+    },
+    {
+      "_id": "257381de-1b86-4d6b-aa60-6f09c47838b5",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:47.007Z"
+    },
+    {
+      "_id": "404ccb66-808c-4c88-839e-f6a5cfe98140",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "loyalty"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:49.754Z"
+    },
+    {
+      "_id": "3ef6093c-97e2-4b7e-9fcf-796a339ceef1",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:20:57.677Z"
+    },
+    {
+      "_id": "8622f1a6-ab33-4f63-a5bd-5ceb32bf6a87",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:21:02.951Z"
+    },
+    {
+      "_id": "e69a9406-e9d5-47bd-af9a-34571d911593",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "loyalty"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:28:37.167Z"
+    },
+    {
+      "_id": "5e267097-b114-4fbf-8735-5bfb9a453d0b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:11.851Z"
+    },
+    {
+      "_id": "603207c4-c963-4186-b561-43d2588aad96",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:36.207Z"
+    },
+    {
+      "_id": "c7516677-ed37-4359-946a-a870765acd9a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+        "productName": "Oraimo CleanSip Faucet"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:38.642Z"
+    },
+    {
+      "_id": "b7a09250-e252-43d4-accb-dbcb3bd209c4",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:40.762Z"
+    },
+    {
+      "_id": "2346cf90-870e-42d8-a3bd-76dd1a611b94",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:42.305Z"
+    },
+    {
+      "_id": "1ba25424-899e-4949-8f16-2bd05de3a82f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "purchase",
+      "eventData": {
+        "ref": "BLU-MNGFWV0K-1019",
+        "total": 234.36,
+        "email": "epaphraskasiedu@gmail.com",
+        "method": "cod",
+        "items": [
+          {
+            "id": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+            "quantity": 1
+          }
+        ]
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:50.157Z"
+    },
+    {
+      "_id": "17c493d2-d1af-4c7b-b3e7-0531929ec125",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "success"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:50.176Z"
+    },
+    {
+      "_id": "bedf8938-d448-4065-9939-63a6794555c5",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:29:52.809Z"
+    },
+    {
+      "_id": "d0502173-59bd-4b6e-93f0-e62137850f49",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-01T19:30:02.246Z"
+    },
+    {
+      "_id": "878adb3c-07b7-4d29-be35-3d94931cc4cb",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T19:17:40.252Z"
+    },
+    {
+      "_id": "e9583f22-438f-4f0f-aee2-4829addffa18",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T19:17:41.806Z"
+    },
+    {
+      "_id": "815f4dee-0629-40cd-9e58-4dd301d1d7f6",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T19:17:43.893Z"
+    },
+    {
+      "_id": "1c8f116b-a266-49d4-bd31-fdef9a0592bb",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T19:17:45.992Z"
     }
   ],
   "audit": [
@@ -281,6 +2404,336 @@
       "summary": "Updated product: Oraimo Maxi Watch",
       "actorEmail": "admin@blustup.local",
       "createdAt": "2026-03-30T02:48:11.524Z"
+    },
+    {
+      "_id": "b01d7f6e-4278-4fb0-a5f1-ca6902cda1eb",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+      "summary": "Updated product: Oraimo Maxi Watch",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T03:14:10.454Z"
+    },
+    {
+      "_id": "f88cd023-297c-41a1-965c-7efbadc17936",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "a7e01eae-3b98-41de-83e3-092f1d870d84",
+      "summary": "Updated product: Oraimo NutriFry Max Air",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T03:14:33.794Z"
+    },
+    {
+      "_id": "ac6df202-d21f-4602-be82-aed58ab2cbff",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "delete",
+      "entityType": "product",
+      "entityId": "da86e3d7-1da9-4d01-8e3c-1f138048a3d4",
+      "summary": "Deleted product: Oral B Tooth Brush",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:04:18.769Z"
+    },
+    {
+      "_id": "25bf68fb-2ace-4117-bed7-11731d8febe3",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "89232053-9388-46e9-b6de-ece111fbcc82",
+      "summary": "Created product: Mango",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:07:46.169Z"
+    },
+    {
+      "_id": "7e8474c8-a54a-4dd2-aed8-a7ae2472f367",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "809dbefc-b67f-4b4d-a1f6-fafacbf8f842",
+      "summary": "Created product: Watermelon",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:09:37.927Z"
+    },
+    {
+      "_id": "42403347-407c-49ce-b232-3a61f48a488c",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "a3b5bb91-203b-4424-9b6b-8b5fc91bf088",
+      "summary": "Created product: Bananan",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:10:27.498Z"
+    },
+    {
+      "_id": "9b215f15-9b0c-4803-829b-41984308fdc7",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+      "summary": "Created product: Orange",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:12:27.798Z"
+    },
+    {
+      "_id": "2b5d17b1-fa2d-47ba-81b5-7a77fcfa4bd2",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+      "summary": "Created product: Pinapple",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:13:37.637Z"
+    },
+    {
+      "_id": "2c050e38-2a77-4646-b573-900c77c8e765",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+      "summary": "Created product: Foot Ball",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:19:07.067Z"
+    },
+    {
+      "_id": "c8d386a9-e408-4b93-9a60-c044b34da404",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "86f8a671-25d6-4003-8105-cc32202c54d3",
+      "summary": "Created product: Cricket Bat",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:24:34.715Z"
+    },
+    {
+      "_id": "0923118a-bf06-40aa-9199-a44d190467c9",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:26:09.720Z"
+    },
+    {
+      "_id": "e8de0943-82d5-4704-8575-19c1abba2d2a",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "982655d9-92c3-4351-850c-66baf9ae9043",
+      "summary": "Created product: Toy Car",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:28:51.989Z"
+    },
+    {
+      "_id": "ddd2d132-dd98-4bfb-8ad6-d2473455e08b",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:31:55.851Z"
+    },
+    {
+      "_id": "cd5e4497-2352-467b-9ac1-db5b52d12a74",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "28472a3c-40a2-4058-aa78-e89e233c1d85",
+      "summary": "Updated product: Oraimo Wireless Charger",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:33:21.695Z"
+    },
+    {
+      "_id": "2ed4fe73-8428-4472-a0b8-d727f2d32f59",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "abbacd8c-2971-4de8-87be-fa1e2377b66a",
+      "summary": "Updated product: Pepsodent Tooth Paste",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:33:52.709Z"
+    },
+    {
+      "_id": "32ee54a1-316b-4a52-b43d-f62df33e0e1f",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "d91615ef-3107-4c1b-8c11-ee5fa3faadb9",
+      "summary": "Updated product: Vaseline cocoa",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-30T09:36:27.947Z"
+    },
+    {
+      "_id": "8c1524b8-a1fb-4dc1-8421-d421851a7404",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "37fffad5-944b-4608-9d5a-b28a4611c84d",
+      "summary": "Created order BLU-MNELZ6YB-8819 for buyer@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-03-31T12:44:04.216Z"
+    },
+    {
+      "_id": "18491996-ce68-487b-8634-164657860350",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "72a1adc9-dac0-4043-b6a0-51e8e159a6a1",
+      "summary": "Created order BLU-MNEM00S7-7915 for billing-user@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-03-31T12:44:42.876Z"
+    },
+    {
+      "_id": "b13ea293-7571-4b6a-9486-d2908313c36f",
+      "actorId": "b03301e7-1f03-402f-98cd-eb83b8349919",
+      "action": "add",
+      "entityType": "order",
+      "entityId": "9d4f222f-a239-4a1d-ad1d-ab8d51d3c19c",
+      "summary": "Created order BLU-MNEM3IET-8993 for billing-user-2@example.com",
+      "actorEmail": "billing-user-2@example.com",
+      "createdAt": "2026-03-31T12:47:25.703Z"
+    },
+    {
+      "_id": "092231c7-ea35-4a44-8bec-3e9741802947",
+      "actorId": "93d6d4d7-9c3c-4051-aa9d-aa7e4185d411",
+      "action": "add",
+      "entityType": "order",
+      "entityId": "fa4b9051-a291-4d71-8dcf-04d39f4afab5",
+      "summary": "Created order BLU-MNEM3YVA-7426 for billing-persist@example.com",
+      "actorEmail": "billing-persist@example.com",
+      "createdAt": "2026-03-31T12:47:47.023Z"
+    },
+    {
+      "_id": "714aab9d-df59-46bc-a8f2-1d1ddb90f54e",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "fa7bea74-0bfb-4c29-9bc7-2f79100757ee",
+      "summary": "Created order BLU-MNEM4EWO-3721 for guest-buyer@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-03-31T12:48:07.805Z"
+    },
+    {
+      "_id": "d589ce42-a6f3-4b0a-81dc-6c97e5f65470",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "cd3fe869-5799-417b-8a0b-0e6102df256f",
+      "summary": "Created order BLU-MNEN3ZHT-1374 for smoke-purchase@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-03-31T13:15:47.448Z"
+    },
+    {
+      "_id": "661dae9b-db39-4345-ac35-0bd9da9df798",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "fbafb258-d1c9-48c4-9bf2-f77a89bf77a9",
+      "summary": "Created order BLU-MNEN7X2Z-8883 for guest-1774963130881@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-03-31T13:18:50.947Z"
+    },
+    {
+      "_id": "c8ea2fa3-8cbd-4c57-a58a-8ad819883784",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "fbafb258-d1c9-48c4-9bf2-f77a89bf77a9",
+      "summary": "Updated order BLU-MNEN7X2Z-8883 to processing",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-03-31T13:18:51.001Z"
+    },
+    {
+      "_id": "da70e181-a01c-4a56-9240-96aec4c6bfd4",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "e522dabd-6c89-4c2e-b8da-1c2867f3eea5",
+      "summary": "Created order BLU-MNFAKXMR-9975 for probe@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-04-01T00:12:49.352Z"
+    },
+    {
+      "_id": "d8c02e09-d55c-470e-aeb6-c247297d0d55",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "6415febd-5711-4fbe-a370-9d3698d5549b",
+      "summary": "Created order BLU-MNFALA9E-6125 for probe2@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-04-01T00:13:05.717Z"
+    },
+    {
+      "_id": "95219728-c6e0-4b70-9d5c-d4bf51992ee7",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "6d1eef3b-72ad-4a44-9292-a64850abdf60",
+      "summary": "Created order BLU-MNFAN3H6-9670 for probe3005@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-04-01T00:14:30.243Z"
+    },
+    {
+      "_id": "3c4c4e71-a6b8-4777-9679-987d17a15dac",
+      "actorId": null,
+      "action": "add",
+      "entityType": "order",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Created order BLU-MNFAPA2W-3540 for livebuyer@example.com",
+      "actorEmail": null,
+      "createdAt": "2026-04-01T00:16:12.114Z"
+    },
+    {
+      "_id": "21215a9c-182c-4370-a76f-bfbde80037f0",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Updated order BLU-MNFAPA2W-3540 to shipped",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-01T00:31:04.596Z"
+    },
+    {
+      "_id": "d0df18f2-b2b1-4cdf-8f32-72abe8cc511e",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "eb499191-8a71-42d9-b929-52f395ed41e6",
+      "summary": "Updated order BLU-MNFB7LC6-9854 to shipped",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-01T00:31:08.781Z"
+    },
+    {
+      "_id": "7eba526e-2524-4a13-b565-e21b64ddf8ce",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "6d1eef3b-72ad-4a44-9292-a64850abdf60",
+      "summary": "Updated order BLU-MNFAN3H6-9670 to cancelled",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-01T00:31:15.276Z"
+    },
+    {
+      "_id": "e2c03eb3-f461-429b-ba6c-9a690f1c3127",
+      "actorId": "fb50a1f9-0d9e-41df-a506-cc0e99d349e2",
+      "action": "add",
+      "entityType": "order",
+      "entityId": "6d4a98ce-0800-4b24-9f37-0a42c1dc5c2e",
+      "summary": "Created order BLU-MNFBNSG4-9206 for points-check-1775004181430@example.com",
+      "actorEmail": "points-check-1775004181430@example.com",
+      "createdAt": "2026-04-01T00:43:02.225Z"
+    },
+    {
+      "_id": "b808391f-8cbc-4aa7-b16d-930e1309666f",
+      "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "action": "add",
+      "entityType": "order",
+      "entityId": "958a35e5-8dba-4305-b0f0-05b772691154",
+      "summary": "Created order BLU-MNGFWV0K-1019 for epaphraskasiedu@gmail.com",
+      "actorEmail": "epaphraskasiedu@gmail.com",
+      "createdAt": "2026-04-01T19:29:50.125Z"
     }
   ],
   "cms": {
@@ -289,7 +2742,8 @@
         "product-imgs/ad/ad1.png",
         "product-imgs/ad/ad2.png",
         "product-imgs/ad/ad3.png",
-        "/uploads/our-ad-mnclnykm.jpg"
+        "/uploads/our-ad-mnclnykm.jpg",
+        "/uploads/ad3-mncz9ikx.png"
       ]
     },
     "shop": {
@@ -307,28 +2761,48 @@
           "showInShop": true
         },
         {
-          "label": "Clothes",
+          "label": "Fashion & Apparel",
           "value": "lounge",
           "showInShop": true
         },
         {
-          "label": "Consumables",
+          "label": "Health & Beauty",
           "value": "upgrades",
           "showInShop": true
         },
         {
-          "label": "Travel Essentials",
+          "label": "Home & Kitchen",
           "value": "essentials",
           "showInShop": true
         },
         {
-          "label": "Maintenance Kits",
-          "value": "insurance",
+          "label": "Sports & Outdoors",
+          "value": "flights",
           "showInShop": true
         },
         {
-          "label": "Flights",
-          "value": "flights",
+          "label": "Fruits & Vegetables",
+          "value": "Fruits & Vegetables",
+          "showInShop": true
+        },
+        {
+          "label": "Toys & Games",
+          "value": "Toys & Games",
+          "showInShop": true
+        },
+        {
+          "label": "Electronics",
+          "value": "electronics",
+          "showInShop": true
+        },
+        {
+          "label": "Personal Care",
+          "value": "personal care",
+          "showInShop": true
+        },
+        {
+          "label": "Insurance",
+          "value": "insurance",
           "showInShop": true
         }
       ]
@@ -345,20 +2819,29 @@
         ],
         "maxItems": 8,
         "isActive": true,
-        "productIds": []
+        "productIds": [
+          "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
+          "63d2296c-6d8c-499b-98fe-b674aca89cb6",
+          "ec35c0b4-04b8-4178-8a65-f249847829c0",
+          "a7e01eae-3b98-41de-83e3-092f1d870d84",
+          "a8b88dda-45b4-4705-94a5-8959b0f4ed4d"
+        ]
       },
       {
         "id": "deal-2",
         "name": "Personal Care Day",
         "timerSeconds": 21600,
-        "seeMoreFilter": "lounge",
+        "seeMoreFilter": "Toys & Games",
         "sourceCategory": "lounge",
         "sourceCategories": [
           "lounge"
         ],
         "maxItems": 8,
         "isActive": true,
-        "productIds": []
+        "productIds": [
+          "77d830c6-648f-4f70-b716-aa3eca9ef2fb"
+        ]
       }
     ],
     "faq": {
@@ -413,7 +2896,7 @@
       ]
     },
     "ai": {
-      "chatEnabled": false,
+      "chatEnabled": true,
       "searchEnabled": true,
       "botName": "Blustup AI",
       "userPersona": "everyday online shoppers in Ghana who want reliable value and clear guidance",

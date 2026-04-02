@@ -7,7 +7,11 @@ function requiredEnv(name) {
 }
 
 function getJwtSecret() {
-  return requiredEnv("JWT_SECRET");
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+  if (String(process.env.NODE_ENV || "").trim().toLowerCase() === "production") {
+    return requiredEnv("JWT_SECRET");
+  }
+  return "blustup-local-dev-secret-change-me";
 }
 
 function getJwtExpiresIn() {
@@ -24,4 +28,3 @@ function verifyJwt(token) {
 }
 
 module.exports = { signJwt, verifyJwt };
-

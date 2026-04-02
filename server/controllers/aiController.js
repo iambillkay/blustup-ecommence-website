@@ -96,11 +96,24 @@ async function callOpenAIChat(messages, systemPrompt, options = {}) {
 
 function scoreProduct(product, query) {
   const q = String(query || "").toLowerCase();
-  const hay = `${product.name} ${product.desc} ${getProductCategories(product).join(" ")}`.toLowerCase();
+  const name = String(product?.name || "").toLowerCase();
+  const description = String(product?.desc || "").toLowerCase();
+  const categories = getProductCategories(product).map((value) => value.toLowerCase());
+  const hay = `${name} ${description} ${categories.join(" ")}`.toLowerCase();
   if (!q) return 0;
+
+  if (name === q) return 30;
+  if (name.startsWith(q)) return 24;
+  if (categories.includes(q)) return 20;
   if (hay.includes(q)) return 12;
+
   const parts = q.split(/\s+/).filter(Boolean);
-  return parts.reduce((score, part) => score + (hay.includes(part) ? 3 : 0), 0);
+  return parts.reduce((score, part) => {
+    if (name.includes(part)) return score + 5;
+    if (categories.some((category) => category.includes(part))) return score + 4;
+    if (description.includes(part)) return score + 2;
+    return score;
+  }, 0);
 }
 
 function formatAiMoney(value) {
@@ -283,7 +296,9 @@ async function search(req, res) {
   if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
 
   const aiSettings = await getAiSettings();
-  const categoryToken = normalizeCategoryToken(parsed.data.category);
+  const categoryToken = normalizeCategoryToken(parsed.data.category) === "all"
+    ? ""
+    : normalizeCategoryToken(parsed.data.category);
   const products = await listCatalogProducts(200);
   const scopedProducts = categoryToken
     ? products.filter((product) => getProductCategories(product).some((value) => normalizeCategoryToken(value) === categoryToken))
@@ -295,7 +310,7 @@ async function search(req, res) {
   }
 
   const ranked = findMatchingProducts(parsed.data.query, scopedProducts, {
-    category: parsed.data.category,
+    category: categoryToken,
     limit: 40,
   });
 

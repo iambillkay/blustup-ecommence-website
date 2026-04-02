@@ -28,6 +28,21 @@ const productSchema = new mongoose.Schema(
     badgeType: { type: String, default: null, maxlength: 80 },
     icon: { type: String, default: null, maxlength: 10 },
     color: { type: String, default: null, maxlength: 200 },
+    ratingAverage: { type: Number, default: null, min: 1, max: 5 },
+    reviewCount: { type: Number, default: 0, min: 0 },
+    reviews: {
+      type: [
+        {
+          author: { type: String, trim: true, maxlength: 80, default: "" },
+          rating: { type: Number, min: 1, max: 5, default: 5 },
+          title: { type: String, trim: true, maxlength: 120, default: "" },
+          comment: { type: String, trim: true, maxlength: 600, default: "" },
+          verifiedPurchase: { type: Boolean, default: true },
+          createdAt: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    },
     isActive: { type: Boolean, required: true, default: true },
   },
   { timestamps: true }

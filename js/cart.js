@@ -131,6 +131,11 @@ function addToCart(id, e) {
 
   syncDependentViews();
   showToast("OK", `${product.name} added to cart`);
+
+  // Track add to cart
+  if (window.tracker) {
+    window.tracker.track('add_to_cart', { productId: id, productName: product.name });
+  }
 }
 
 function changeQty(id, delta) {
@@ -218,8 +223,12 @@ function getSubtotalAfterDiscount() {
 
 function getShipping() {
   const subtotalAfterDiscount = getSubtotalAfterDiscount();
+  const loyalty = typeof getCurrentLoyaltyState === "function"
+    ? getCurrentLoyaltyState(typeof getStoredUser === "function" ? getStoredUser() : null)
+    : null;
   if (!cart.length) return 0;
   if (appliedPromo.freeShip) return 0;
+  if (loyalty?.freeShippingEligible) return 0;
   if (subtotalAfterDiscount >= 50) return 0;
   return 5.99;
 }
@@ -343,6 +352,14 @@ function renderCart() {
 
   const shipping = getShipping();
   const discount = getDiscount();
+  const loyalty = typeof getCurrentLoyaltyState === "function"
+    ? getCurrentLoyaltyState(typeof getStoredUser === "function" ? getStoredUser() : null)
+    : null;
+  const shippingLabel = loyalty?.freeShippingEligible
+    ? `(included with ${escapeCartHtml(loyalty.tierName || "loyalty")})`
+    : getSubtotalAfterDiscount() < 50 && !appliedPromo.freeShip
+      ? `(free over ${formatCartMoney(50)})`
+      : "";
   const discountLine =
     appliedPromo.code && discount > 0
       ? `<div class="summary-row discount"><span>Discount (${escapeCartHtml(appliedPromo.code)})</span><span>-${formatCartMoney(discount)}</span></div>`
@@ -355,7 +372,7 @@ function renderCart() {
     </div>
     ${discountLine}
     <div class="summary-row">
-      <span>Shipping ${getSubtotalAfterDiscount() < 50 && !appliedPromo.freeShip ? `(free over ${formatCartMoney(50)})` : ""}</span>
+      <span>Shipping ${shippingLabel}</span>
       <span>${shipping === 0 ? "FREE" : formatCartMoney(shipping)}</span>
     </div>
     <div class="summary-row">
@@ -368,7 +385,9 @@ function renderCart() {
   if (promoHint) {
     promoHint.textContent = appliedPromo.code
       ? appliedPromo.label || `Promo ${appliedPromo.code} applied`
-      : "Try AIRLUME20, BLUSTUP10, or FREESHIP";
+      : loyalty?.freeShippingEligible
+        ? `${loyalty.tierName} loyalty perk active - Free shipping applied`
+        : "Try AIRLUME20, BLUSTUP10, or FREESHIP";
   }
 }
 

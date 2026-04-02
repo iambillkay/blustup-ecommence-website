@@ -28,7 +28,7 @@ function setAuth(token, user, options = {}) {
   clearAuth();
   const storage = remember ? localStorage : sessionStorage;
   storage.setItem(AUTH_TOKEN_KEY, token);
-  storage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+  if (user) storage.setItem(AUTH_USER_KEY, JSON.stringify(user));
   updateLoginUI(user?.name, user);
 }
 
@@ -37,6 +37,17 @@ function clearAuth() {
     storage.removeItem(AUTH_TOKEN_KEY);
     storage.removeItem(AUTH_USER_KEY);
   });
+}
+
+function persistStoredUser(user) {
+  const storage = getActiveAuthStorage();
+  if (!user) {
+    storage.removeItem(AUTH_USER_KEY);
+    updateLoginUI(null);
+    return;
+  }
+  storage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+  updateLoginUI(user?.name, user);
 }
 
 async function api(path, options = {}) {
@@ -335,10 +346,10 @@ function updateLoginUI(name, user) {
     });
   } else {
     const shortName = String(name).trim().split(/\s+/)[0]?.slice(0, 18) || "Account";
-    setButtonState(desktopButton, shortName, logout);
-    setButtonState(mobileButton, "Account", () => {
+    setButtonState(desktopButton, shortName, () => showPage("orders"));
+    setButtonState(mobileButton, "My Orders", () => {
       if (typeof closeMenu === "function") closeMenu();
-      logout();
+      showPage("orders");
     });
   }
 
@@ -362,6 +373,12 @@ function updateLoginUI(name, user) {
   } else if (existing) {
     existing.closest("li")?.remove();
   }
+
+  if (typeof refreshLoyaltyExperience === "function") {
+    refreshLoyaltyExperience(user || null);
+  }
+  if (typeof renderCart === "function") renderCart();
+  if (typeof renderCheckout === "function") renderCheckout();
 }
 
 /* LOGOUT */
@@ -370,6 +387,11 @@ function logout() {
   updateLoginUI(null);
   location.reload();
 }
+
+window.getToken = getToken;
+window.getStoredUser = getStoredUser;
+window.persistStoredUser = persistStoredUser;
+window.logout = logout;
 
 /* AUTO LOGIN */
 document.addEventListener("DOMContentLoaded", async () => {
@@ -384,8 +406,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const { user } = await api("/api/auth/me");
-    getActiveAuthStorage().setItem(AUTH_USER_KEY, JSON.stringify(user));
-    updateLoginUI(user.name, user);
+    persistStoredUser(user);
   } catch {
     clearAuth();
     updateLoginUI(null);

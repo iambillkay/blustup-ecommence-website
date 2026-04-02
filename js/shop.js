@@ -142,7 +142,14 @@ function renderProducts(filterValue) {
 
   grid.innerHTML = filtered
     .map((product) => `
-      <div class="product-card">
+      <div
+        class="product-card product-card-selectable"
+        role="button"
+        tabindex="0"
+        onclick="openProductSelection('${String(product.id).replace(/'/g, "\\'")}')"
+        onkeydown="handleProductCardKeydown(event, '${String(product.id).replace(/'/g, "\\'")}')"
+        aria-label="View details for ${escapeShopHtml(product.name)}"
+      >
         <div class="product-img" style="background:${product.color || "#f5f7ff"}">
           ${product.badge ? `<div class="product-badge-tag ${product.badgeType || ""}">${escapeShopHtml(product.badge)}</div>` : ""}
           ${
@@ -160,6 +167,7 @@ function renderProducts(filterValue) {
           </div>
           <div class="product-name">${escapeShopHtml(product.name)}</div>
           <div class="product-desc">${escapeShopHtml(product.desc)}</div>
+          ${typeof renderProductReviewMarkup === "function" ? renderProductReviewMarkup(product) : ""}
           <div class="product-footer">
             <div class="product-price">
               ${product.oldPrice ? `<span class="old-price">${formatShopMoney(product.oldPrice)}</span>` : ""}

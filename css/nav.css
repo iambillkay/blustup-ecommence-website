@@ -120,6 +120,7 @@ nav {
   z-index: 201; flex-shrink: 0;
 }
 
+
 /* ── Login Button ── */
 .btn-login {
   background: transparent;
@@ -244,13 +245,17 @@ nav {
   width: 100%; padding: 12px; font-size: .9rem;
   border-radius: 8px; text-align: center;
 }
+.drawer-actions .nav-ai-btn {
+  width: 100%;
+  justify-content: center;
+}
 .drawer-actions .cart-btn {
   width: 100%; justify-content: center;
   padding: 12px; font-size: .9rem; border-radius: 8px;
 }
 
 /* ─────────────────────────────────────
-   RESPONSIVE BREAKPOINTS
+  RESPONSIVE BREAKPOINTS
 ───────────────────────────────────── */
 
 /* Large desktop */
@@ -300,6 +305,7 @@ nav {
   .btn-login   { display: none; }
   .btn-primary { display: none; }
   .search-category { display: none; }
+  .nav-ai-btn { padding: 7px 12px; font-size: .77rem; }
 
   .nav-right .cart-btn {
     padding: 7px 11px;

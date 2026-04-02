@@ -24,6 +24,9 @@ function safeError(e) {
 }
 
 function toAuthUser(user) {
+  if (typeof storage.getAuthUserResponse === "function") {
+    return storage.getAuthUserResponse(user);
+  }
   return { id: user._id.toString(), name: user.name, email: user.email, role: user.role };
 }
 
@@ -69,7 +72,7 @@ async function login(req, res) {
 async function me(req, res) {
   const user = await storage.user.findById(req.user.sub);
   if (!user) return res.status(404).json({ error: "Not found" });
-  return res.json({ user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role } });
+  return res.json({ user: toAuthUser(user) });
 }
 
 async function adminLogin(req, res) {
@@ -88,4 +91,3 @@ async function adminLogin(req, res) {
 }
 
 module.exports = { signup, login, me, adminLogin };
-

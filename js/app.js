@@ -30,12 +30,22 @@ async function refreshLivePageData(pageName, options = {}) {
       return;
     }
 
+    if (activePage === "loyalty" && typeof refreshLoyaltyExperience === "function") {
+      refreshLoyaltyExperience();
+      return;
+    }
+
     if (activePage === "cart" && typeof renderCart === "function") {
       renderCart();
     }
 
     if (activePage === "checkout" && typeof renderCheckout === "function") {
       renderCheckout();
+      return;
+    }
+
+    if (activePage === "orders" && typeof refreshOrdersPage === "function") {
+      await refreshOrdersPage();
     }
   } catch (error) {
     console.warn(`Failed to refresh live data for ${activePage || "page"}`, error);
@@ -46,6 +56,8 @@ function showPage(name) {
   const target = document.getElementById(`page-${name}`);
   if (!target) return;
 
+  if (typeof closeProductSelection === "function") closeProductSelection();
+
   document.querySelectorAll(".page").forEach((page) => page.classList.remove("active"));
   target.classList.add("active");
 
@@ -54,8 +66,14 @@ function showPage(name) {
   if (typeof window.closeMenu === "function") window.closeMenu();
   window.scrollTo(0, 0);
 
+  // Track page view
+  if (window.tracker) {
+    window.tracker.track('pageview', { page: name });
+  }
+
   if (name === "cart" && typeof renderCart === "function") renderCart();
   if (name === "checkout" && typeof renderCheckout === "function") renderCheckout();
+  if (name === "orders" && typeof refreshOrdersPage === "function") refreshOrdersPage();
   refreshLivePageData(name, { force: true });
 }
 

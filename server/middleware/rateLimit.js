@@ -1,11 +1,16 @@
 const rateLimit = require("express-rate-limit");
 
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+function createLimiter(windowMs, max) {
+  return rateLimit({
+    windowMs,
+    max,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+}
 
-module.exports = { loginLimiter };
+const loginLimiter = createLimiter(15 * 60 * 1000, 10);
+const checkoutLimiter = createLimiter(15 * 60 * 1000, 30);
+const trackingLimiter = createLimiter(15 * 60 * 1000, 120);
 
+module.exports = { loginLimiter, checkoutLimiter, trackingLimiter };

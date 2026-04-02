@@ -11,6 +11,15 @@ function formatHomeMoney(value) {
   return `${HOME_CURRENCY_SYMBOL}${homeMoneyFormatter.format(Number.isFinite(amount) ? amount : 0)}`;
 }
 
+function escapeHomeHtml(value) {
+  if (typeof escapeStorefrontHtml === "function") return escapeStorefrontHtml(value);
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function getHomeProductCategories(product) {
   const source = Array.isArray(product?.categories) ? product.categories : [product?.cat];
   const seen = new Set();
@@ -43,19 +52,28 @@ function getHomeDealSourceCategories(deal) {
 
 function homeProductCard(p) {
   return `
-    <div class="product-card" style="min-width:220px;">
+    <div
+      class="product-card product-card-selectable"
+      style="min-width:220px;"
+      role="button"
+      tabindex="0"
+      onclick="openProductSelection('${String(p.id).replace(/'/g, "\\'")}')"
+      onkeydown="handleProductCardKeydown(event, '${String(p.id).replace(/'/g, "\\'")}')"
+      aria-label="View details for ${escapeHomeHtml(p.name)}"
+    >
       <div class="product-img" style="background:${p.color || "#f5f7ff"}">
-        ${p.badge ? `<div class="product-badge-tag ${p.badgeType || ""}">${p.badge}</div>` : ""}
+        ${p.badge ? `<div class="product-badge-tag ${escapeHomeHtml(p.badgeType || "")}">${escapeHomeHtml(p.badge)}</div>` : ""}
         ${
           p.imageUrl
-            ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+            ? `<img src="${escapeHomeHtml(p.imageUrl)}" alt="${escapeHomeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
             : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5f6b95;font-weight:600;">No image</div>`
         }
       </div>
       <div class="product-info">
-        <div class="product-category">${getHomeProductCategories(p)[0] || p.cat}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc}</div>
+        <div class="product-category">${escapeHomeHtml(getHomeProductCategories(p)[0] || p.cat)}</div>
+        <div class="product-name">${escapeHomeHtml(p.name)}</div>
+        <div class="product-desc">${escapeHomeHtml(p.desc)}</div>
+        ${typeof renderProductReviewMarkup === "function" ? renderProductReviewMarkup(p) : ""}
         <div class="product-footer">
           <div class="product-price">
             ${p.oldPrice ? `<span class="old-price">${formatHomeMoney(p.oldPrice)}</span>` : ""}
