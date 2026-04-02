@@ -883,21 +883,44 @@
     }
 
     // Products
-    function uniqueAdminValues(values) {
-      return [...new Set((values || []).map((value) => String(value || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    function dedupeAdminValues(values, options = {}) {
+      const normalize = typeof options.normalizer === "function"
+        ? options.normalizer
+        : (value) => String(value || "").trim().toLowerCase();
+      const seen = new Set();
+      return (values || [])
+        .map((value) => String(value || "").trim())
+        .filter((value) => {
+          const token = normalize(value);
+          if (!value || seen.has(token)) return false;
+          seen.add(token);
+          return true;
+        });
     }
-    function parseAdminCategoryInput(value) {
+    function uniqueAdminValues(values) {
+      return dedupeAdminValues(values).sort((a, b) => a.localeCompare(b));
+    }
+    function normalizeAdminCategoryToken(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+    function parseAdminCategoryInput(value, options = {}) {
       const source = Array.isArray(value) ? value : String(value || "").split(",");
       const seen = new Set();
       const categories = source
         .map((entry) => String(entry || "").trim())
         .filter((entry) => {
-          const token = entry.toLowerCase();
+          const token = normalizeAdminCategoryToken(entry);
           if (!entry || seen.has(token)) return false;
           seen.add(token);
           return true;
         });
-      return categories.length ? categories : ["general"];
+      if (categories.length) return categories;
+      if (options.allowEmpty) return [];
+      const fallback = String(options.fallback || "general").trim();
+      return fallback ? [fallback] : ["general"];
+    }
+    function createAdminDraftKey(prefix = "draft") {
+      return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     }
     function formatAdminProductCategories(product) {
       return parseAdminCategoryInput(Array.isArray(product?.categories) ? product.categories : [product?.cat || product?.category]);
@@ -915,7 +938,6 @@
       const filterList = Array.isArray(shopSettings.filters) ? shopSettings.filters : [];
       const categories = uniqueAdminValues([
         ...productList.flatMap((product) => formatAdminProductCategories(product)),
-        ...filterList.map((filter) => filter?.value).filter((value) => String(value || "").trim().toLowerCase() !== "all"),
       ]);
       const activeCategories = uniqueAdminValues(
         productList.filter((product) => product && product.isActive !== false).flatMap((product) => formatAdminProductCategories(product))
@@ -927,7 +949,16 @@
           label: matchingFilter?.label || (value === "all" ? "All Products" : humanizeAdminValue(value)),
         };
       });
-      return { products: productList, shop: shopSettings, categories, activeCategories, seeMoreFilters };
+      return {
+        products: productList,
+        productMap: new Map(productList.map((product) => [String(product?.id || ""), product])),
+        shop: shopSettings,
+        categories,
+        activeCategories,
+        activeCategoryMap: new Map(activeCategories.map((category) => [normalizeAdminCategoryToken(category), category])),
+        seeMoreFilters,
+        seeMoreFilterMap: new Map(seeMoreFilters.map((filter) => [normalizeAdminCategoryToken(filter.value), filter])),
+      };
     }
     function productCategoryOptions(values, currentValue) {
       return uniqueAdminValues([...(values || []), ...parseAdminCategoryInput(currentValue || "")]).map((value) => `<option value="${esc(value)}"></option>`).join("");
@@ -1236,8 +1267,9 @@
       const next = [{ label: "All Products", value: "all", showInShop: true }];
       (filters || []).forEach((filter) => {
         const value = String(filter?.value || "").trim();
-        if (!value || value.toLowerCase() === "all" || seen.has(value)) return;
-        seen.add(value);
+        const token = value.toLowerCase();
+        if (!value || token === "all" || seen.has(token)) return;
+        seen.add(token);
         next.push({
           label: String(filter?.label || humanizeAdminValue(value)).trim() || humanizeAdminValue(value),
           value,
@@ -1245,8 +1277,9 @@
         });
       });
       uniqueAdminValues(categories || []).forEach((category) => {
-        if (seen.has(category)) return;
-        seen.add(category);
+        const token = String(category || "").trim().toLowerCase();
+        if (!token || seen.has(token)) return;
+        seen.add(token);
         next.push({
           label: humanizeAdminValue(category),
           value: category,
@@ -1348,26 +1381,139 @@
     }
 
     // Deals - category-aware fallback + product picker
+    function getAdminDealPinnedProductIds(deal) {
+      return dedupeAdminValues(Array.isArray(deal?.productIds) ? deal.productIds : [], {
+        normalizer: (value) => String(value || "").trim(),
+      });
+    }
+    function getAdminDealDerivedCategories(productIds, context) {
+      return dedupeAdminValues(
+        (productIds || [])
+          .map((id) => context.productMap?.get(String(id)))
+          .filter((product) => product && product.isActive !== false)
+          .flatMap((product) => formatAdminProductCategories(product))
+          .map((category) => context.activeCategoryMap?.get(normalizeAdminCategoryToken(category)) || "")
+          .filter(Boolean)
+      );
+    }
+    function getAdminDealSourceCategories(deal, context, options = {}) {
+      const requestedCategories = parseAdminCategoryInput(
+        Array.isArray(deal?.sourceCategories) ? deal.sourceCategories : deal?.sourceCategory || "",
+        { allowEmpty: true }
+      );
+      const validRequestedCategories = dedupeAdminValues(
+        requestedCategories
+          .map((category) => context.activeCategoryMap?.get(normalizeAdminCategoryToken(category)) || "")
+          .filter(Boolean)
+      );
+      if (validRequestedCategories.length) return validRequestedCategories;
+      const derivedCategories = getAdminDealDerivedCategories(getAdminDealPinnedProductIds(deal), context);
+      if (derivedCategories.length) return derivedCategories;
+      if (options.fallbackToFirstActive && context.activeCategories?.length) return [context.activeCategories[0]];
+      return [];
+    }
+    function resolveAdminDealSeeMoreFilterValue(currentValue, sourceCategories, context) {
+      const requestedToken = normalizeAdminCategoryToken(currentValue);
+      if (requestedToken === "all") return "all";
+      if (requestedToken && context.seeMoreFilterMap?.has(requestedToken)) {
+        return context.seeMoreFilterMap.get(requestedToken).value;
+      }
+      const fallbackCategory = (sourceCategories || []).find((category) =>
+        context.seeMoreFilterMap?.has(normalizeAdminCategoryToken(category))
+      );
+      if (fallbackCategory) {
+        return context.seeMoreFilterMap.get(normalizeAdminCategoryToken(fallbackCategory)).value;
+      }
+      return "all";
+    }
     function dealSourceCategoryValue(deal, context) {
-      const source = parseAdminCategoryInput(Array.isArray(deal?.sourceCategories) ? deal.sourceCategories : [deal?.sourceCategory || context.activeCategories?.[0] || ""]);
-      return source.join(", ");
+      return getAdminDealSourceCategories(deal, context).join(", ");
     }
     function dealSeeMoreOptions(filters, currentValue) {
       return (filters || []).map((filter) => `<option value="${esc(filter.value)}" ${filter.value === currentValue ? "selected" : ""}>${esc(filter.label)} (${esc(filter.value)})</option>`).join("");
     }
-    function dealProductPicker(idx, deal, products) {
+    function buildAdminDealDraftFromRow(row, context) {
+      if (!row) return null;
+      const raw = {};
+      row.querySelectorAll("[data-deal]").forEach((el) => {
+        const key = el.getAttribute("data-k");
+        if (key) raw[key] = el.value;
+      });
+      const selectedProductIds = dedupeAdminValues(
+        Array.from(row.querySelectorAll("input[data-deal-product]:checked")).map((el) => el.value),
+        { normalizer: (value) => String(value || "").trim() }
+      );
+      const maxItems = Math.max(1, Number(raw.maxItems || 8));
+      const sourceCategories = getAdminDealSourceCategories(
+        {
+          sourceCategories: parseAdminCategoryInput(raw.sourceCategories || raw.sourceCategory || "", { allowEmpty: true }),
+          sourceCategory: "",
+          productIds: selectedProductIds,
+        },
+        context
+      );
+      return {
+        rowKey: row.getAttribute("data-deal-row") || "",
+        id: raw.id || createAdminDraftKey("deal"),
+        name: String(raw.name || "").trim(),
+        timerSeconds: Number(raw.timerSeconds || 0),
+        sourceCategory: sourceCategories[0] || "",
+        sourceCategories,
+        seeMoreFilter: resolveAdminDealSeeMoreFilterValue(raw.seeMoreFilter, sourceCategories, context),
+        maxItems,
+        isActive: raw.isActive === "1",
+        productIds: selectedProductIds,
+      };
+    }
+    function dealSummaryMarkup(deal, context) {
+      const sourceCategories = getAdminDealSourceCategories(deal, context);
+      const selectedCount = getAdminDealPinnedProductIds(deal).length;
+      const maxItems = Math.max(1, Number(deal?.maxItems || 1));
+      const showingCount = Math.min(selectedCount, maxItems);
+      const seeMoreValue = resolveAdminDealSeeMoreFilterValue(deal?.seeMoreFilter, sourceCategories, context);
+      const seeMoreLabel = context.seeMoreFilterMap?.get(normalizeAdminCategoryToken(seeMoreValue))?.label || humanizeAdminValue(seeMoreValue);
+      const statusLabel = !sourceCategories.length && !selectedCount
+        ? "Needs setup"
+        : deal?.isActive === false
+          ? "Saved as inactive"
+          : "Ready for homepage";
+      const fallbackLabel = sourceCategories.length
+        ? sourceCategories.map(humanizeAdminValue).join(", ")
+        : "Choose a category or pin products";
+      return `
+        <div style="font-size:12px;line-height:1.6;color:#5d6885;">
+          <strong style="display:block;font-size:13px;color:#172033;">${esc(statusLabel)}</strong>
+          <div>Fallback categories: ${esc(fallbackLabel)}</div>
+          <div>See more link: ${esc(seeMoreLabel)} (${esc(seeMoreValue)})</div>
+          <div>Pinned products: ${esc(`${showingCount}/${maxItems}`)}${selectedCount > maxItems ? ` <span style="color:#c2410c;">Only the first ${esc(maxItems)} selected items will show.</span>` : ""}</div>
+        </div>`;
+    }
+    function syncDealRowSummary(row, context) {
+      const summary = row?.querySelector("[data-deal-summary]");
+      if (!summary) return;
+      const draft = buildAdminDealDraftFromRow(row, context);
+      if (!draft) return;
+      summary.innerHTML = dealSummaryMarkup(draft, context);
+    }
+    function dealProductPicker(rowKey, deal, products) {
       const activeProducts = (products || []).filter((product) => product && product.isActive !== false);
       if (!activeProducts.length) {
         return `<div class="muted" style="font-size:12px;">Add or activate products before pinning featured items into a deal.</div>`;
       }
-      const selectedIds = new Set((deal.productIds || []).map(String));
+      const selectedIds = new Set(getAdminDealPinnedProductIds(deal).map(String));
+      const sortedProducts = [...activeProducts].sort((left, right) => {
+        const leftSelected = selectedIds.has(String(left.id)) ? 1 : 0;
+        const rightSelected = selectedIds.has(String(right.id)) ? 1 : 0;
+        if (leftSelected !== rightSelected) return rightSelected - leftSelected;
+        return String(left.name || "").localeCompare(String(right.name || ""));
+      });
       return `
         <div style="display:grid;gap:8px;max-height:220px;overflow:auto;padding:10px;border:1px solid #e7eaff;border-radius:14px;background:#fbfcff;">
-          ${activeProducts.map((product) => {
+          ${sortedProducts.map((product) => {
             const productId = String(product.id);
             return `
               <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid ${selectedIds.has(productId) ? "#cdddff" : "#edf1fb"};background:${selectedIds.has(productId) ? "#f5f8ff" : "#ffffff"};">
-                <input type="checkbox" data-deal-product="${idx}" value="${esc(productId)}" ${selectedIds.has(productId) ? "checked" : ""} style="margin-top:3px;">
+                <input type="checkbox" data-deal-product="${esc(rowKey)}" value="${esc(productId)}" ${selectedIds.has(productId) ? "checked" : ""} style="margin-top:3px;">
                 <span style="display:grid;gap:4px;">
                   <strong style="font-size:14px;">${esc(product.name)}</strong>
                   <span class="muted" style="font-size:12px;">${esc(formatAdminProductCategories(product).map(humanizeAdminValue).join(", "))} - ${esc(formatCurrency(product.price))} - ${esc(`${Number(product.stockQty || 0)} in stock`)}</span>
@@ -1376,100 +1522,113 @@
           }).join("")}
         </div>`;
     }
-    function dealRowTemplate(d, idx, context) {
+    function dealRowTemplate(d, rowKey, context) {
       const sourceCategoryValue = dealSourceCategoryValue(d, context);
-      const seeMoreFilter = d.seeMoreFilter || context.seeMoreFilters?.[0]?.value || "all";
+      const seeMoreFilter = resolveAdminDealSeeMoreFilterValue(d.seeMoreFilter, getAdminDealSourceCategories(d, context), context);
       return `
-        <div class="deal-admin-row" style="border:1px solid #e7eaff;padding:12px;border-radius:14px;margin-bottom:10px;background:#fff;">
+        <div class="deal-admin-row" data-deal-row="${esc(rowKey)}" style="border:1px solid #e7eaff;padding:12px;border-radius:14px;margin-bottom:10px;background:#fff;">
           <div class="grid2">
-            <div class="field"><label>Deal name</label><input data-deal="${idx}" data-k="name" value="${esc(d.name)}"></div>
-            <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${idx}" data-k="timerSeconds" value="${esc(d.timerSeconds || 3600)}"></div>
+            <div class="field"><label>Deal name</label><input data-deal="${esc(rowKey)}" data-k="name" value="${esc(d.name)}"></div>
+            <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${esc(rowKey)}" data-k="timerSeconds" value="${esc(d.timerSeconds || 3600)}"></div>
           </div>
           <div class="grid2" style="margin-top:8px;">
             <div class="field">
               <label>Fallback source categories</label>
-              <input data-deal="${idx}" data-k="sourceCategories" list="dealSourceCategories_${idx}" value="${esc(sourceCategoryValue)}" placeholder="electronics, essentials, travel" />
-              <datalist id="dealSourceCategories_${idx}">${productCategoryOptions(context.activeCategories || [], sourceCategoryValue)}</datalist>
-              <div class="muted" style="font-size:12px;">Separate categories with commas. If no featured products are pinned, the deal will pull from any matching category.</div>
+              <input data-deal="${esc(rowKey)}" data-k="sourceCategories" list="dealSourceCategories_${esc(rowKey)}" value="${esc(sourceCategoryValue)}" placeholder="electronics, personal care, oriamo" />
+              <datalist id="dealSourceCategories_${esc(rowKey)}">${productCategoryOptions(context.activeCategories || [], sourceCategoryValue)}</datalist>
+              <div class="muted" style="font-size:12px;">Separate categories with commas. Leave this empty only when pinned products should define the deal automatically.</div>
             </div>
-            <div class="field"><label>See more shop filter</label><select data-deal="${idx}" data-k="seeMoreFilter">${dealSeeMoreOptions(context.seeMoreFilters, seeMoreFilter)}</select></div>
+            <div class="field"><label>See more shop filter</label><select data-deal="${esc(rowKey)}" data-k="seeMoreFilter">${dealSeeMoreOptions(context.seeMoreFilters, seeMoreFilter)}</select></div>
           </div>
           <div class="field" style="margin-top:8px;">
             <label>Featured products (optional)</label>
-            <div class="muted" style="font-size:12px;margin-bottom:6px;">Selected products are pinned into the deal. If none are selected, the deal falls back to the source category.</div>
-            ${dealProductPicker(idx, d, context.products)}
+            <div class="muted" style="font-size:12px;margin-bottom:6px;">Pinned products always show first. If none are selected, the homepage row falls back to the source categories.</div>
+            ${dealProductPicker(rowKey, d, context.products)}
           </div>
+          <div data-deal-summary="${esc(rowKey)}" style="margin-top:8px;padding:10px 12px;border:1px solid #edf1fb;border-radius:12px;background:#fbfcff;">${dealSummaryMarkup(d, context)}</div>
           <div class="grid2" style="margin-top:8px;">
-            <div class="field"><label>Max items</label><input type="number" data-deal="${idx}" data-k="maxItems" value="${esc(d.maxItems || 8)}"></div>
-            <div class="field"><label>Active</label><select data-deal="${idx}" data-k="isActive"><option value="1" ${d.isActive ? "selected" : ""}>Yes</option><option value="0" ${!d.isActive ? "selected" : ""}>No</option></select></div>
+            <div class="field"><label>Max items</label><input type="number" data-deal="${esc(rowKey)}" data-k="maxItems" value="${esc(d.maxItems || 8)}"></div>
+            <div class="field"><label>Active</label><select data-deal="${esc(rowKey)}" data-k="isActive"><option value="1" ${d.isActive ? "selected" : ""}>Yes</option><option value="0" ${!d.isActive ? "selected" : ""}>No</option></select></div>
           </div>
-          <input type="hidden" data-deal="${idx}" data-k="id" value="${esc(d.id)}">
+          <input type="hidden" data-deal="${esc(rowKey)}" data-k="id" value="${esc(d.id)}">
           <div style="margin-top:8px;"><button type="button" class="btn-admin danger" data-action="remove-deal-row">Remove deal</button></div>
         </div>`;
+    }
+    function collectDealsFromEditor(context) {
+      return Array.from(document.querySelectorAll(".deal-admin-row")).map((row, index) => {
+        const draft = buildAdminDealDraftFromRow(row, context);
+        const fallbackName = `Deal ${index + 1}`;
+        const maxItems = Math.max(1, Number(draft?.maxItems || 8));
+        if (!draft?.name) throw new Error(`${fallbackName} needs a name.`);
+        if (!Number.isFinite(draft.timerSeconds) || draft.timerSeconds < 1) {
+          throw new Error(`Deal "${draft.name}" needs a timer greater than 0 seconds.`);
+        }
+        if (!Number.isFinite(maxItems) || maxItems < 1) {
+          throw new Error(`Deal "${draft.name}" needs at least 1 max item.`);
+        }
+        if (!draft.sourceCategories.length) {
+          throw new Error(`Deal "${draft.name}" needs at least one active source category or pinned product.`);
+        }
+        return {
+          id: draft.id || createAdminDraftKey("deal"),
+          name: draft.name,
+          timerSeconds: Math.floor(draft.timerSeconds),
+          sourceCategory: draft.sourceCategories[0] || "",
+          sourceCategories: draft.sourceCategories,
+          seeMoreFilter: draft.seeMoreFilter,
+          maxItems,
+          isActive: draft.isActive,
+          productIds: draft.productIds.slice(0, maxItems),
+        };
+      });
     }
     async function openDealsCms() {
       const [{ settings: deals }, context] = await Promise.all([api("/api/cms/deals"), loadAdminCatalogContext()]);
       const rows = Array.isArray(deals) ? deals : [];
       openModal("Deals", `
-        <div class="muted">Each deal now uses a real product category for fallback, a real shop filter for the "See more" link, and optional featured products from the live catalog.</div>
+        <div class="muted">Pinned products stay in the order you select them, fallback categories only use live catalog values, and the "See more" link falls back to the closest valid shop filter automatically.</div>
         ${context.activeCategories.length ? "" : `<div class="muted" style="margin-top:10px;">No active product categories are available yet. Add or activate products before creating a fallback deal.</div>`}
-        <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, i, context)).join("")}</div>
+        <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, d.id || createAdminDraftKey(`deal-${i}`), context)).join("")}</div>
         <div style="display:flex;gap:8px;margin-top:10px;">
           <button class="btn-admin" id="btnAddDeal" type="button">+ Add deal</button>
           <button class="btn-admin primary" id="saveDeals" type="button">Save Deals</button>
         </div>`);
 
+      document.querySelectorAll(".deal-admin-row").forEach((row) => syncDealRowSummary(row, context));
+
+      document.getElementById("dealsWrap").addEventListener("input", (event) => {
+        const row = event.target.closest(".deal-admin-row");
+        if (row) syncDealRowSummary(row, context);
+      });
+      document.getElementById("dealsWrap").addEventListener("change", (event) => {
+        const row = event.target.closest(".deal-admin-row");
+        if (row) syncDealRowSummary(row, context);
+      });
+
       document.getElementById("btnAddDeal").addEventListener("click", () => {
         if (!context.activeCategories.length) return alert("Add at least one active product before creating a deal.");
         const wrap = document.getElementById("dealsWrap");
-        const idx = wrap.querySelectorAll(".deal-admin-row").length;
+        const rowKey = createAdminDraftKey("deal-row");
+        const defaultCategory = context.activeCategories[0];
         const d = {
-          id: `deal-${Date.now()}`,
+          id: createAdminDraftKey("deal"),
           name: "New Deal",
           timerSeconds: 3600,
-          sourceCategory: context.activeCategories[0],
-          sourceCategories: [context.activeCategories[0]],
-          seeMoreFilter: context.seeMoreFilters[0]?.value || "all",
+          sourceCategory: defaultCategory,
+          sourceCategories: [defaultCategory],
+          seeMoreFilter: resolveAdminDealSeeMoreFilterValue(defaultCategory, [defaultCategory], context),
           maxItems: 8,
           isActive: true,
           productIds: [],
         };
         const div = document.createElement("div");
-        div.innerHTML = dealRowTemplate(d, idx, context);
+        div.innerHTML = dealRowTemplate(d, rowKey, context);
         wrap.appendChild(div.firstElementChild);
       });
 
       document.getElementById("saveDeals").addEventListener("click", async () => {
         try {
-          const nodes = Array.from(document.querySelectorAll(".deal-admin-row [data-deal]"));
-          const map = {};
-          nodes.forEach((el) => {
-            const i = el.getAttribute("data-deal");
-            const k = el.getAttribute("data-k");
-            if (!map[i]) map[i] = {};
-            map[i][k] = el.value;
-          });
-          document.querySelectorAll(".deal-admin-row input[data-deal-product]:checked").forEach((el) => {
-            const i = el.getAttribute("data-deal-product");
-            if (!map[i]) map[i] = {};
-            if (!Array.isArray(map[i].productIds)) map[i].productIds = [];
-            map[i].productIds.push(el.value);
-          });
-          const next = Object.values(map).map((d) => {
-            const maxItems = Math.max(1, Number(d.maxItems || 8));
-            const sourceCategories = parseAdminCategoryInput(d.sourceCategories || d.sourceCategory || "");
-            return {
-              id: d.id || `deal-${Date.now()}`,
-              name: String(d.name || "").trim(),
-              timerSeconds: Number(d.timerSeconds || 0),
-              sourceCategory: sourceCategories[0] || "",
-              sourceCategories,
-              seeMoreFilter: String(d.seeMoreFilter || "").trim(),
-              maxItems,
-              isActive: d.isActive === "1",
-              productIds: [...new Set(Array.isArray(d.productIds) ? d.productIds : [])].slice(0, maxItems),
-            };
-          }).filter((d) => d.name && d.timerSeconds > 0 && d.seeMoreFilter && d.sourceCategories.length);
+          const next = collectDealsFromEditor(context);
           await api("/api/cms/deals", { method: "PUT", body: JSON.stringify(next) });
           await refreshDashboard();
           closeModal();

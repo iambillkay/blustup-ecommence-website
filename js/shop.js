@@ -166,8 +166,7 @@ function renderProducts(filterValue) {
               .join("")}
           </div>
           <div class="product-name">${escapeShopHtml(product.name)}</div>
-          <div class="product-desc">${escapeShopHtml(product.desc)}</div>
-          ${typeof renderProductReviewMarkup === "function" ? renderProductReviewMarkup(product) : ""}
+          ${typeof renderProductRatingMarkup === "function" ? renderProductRatingMarkup(product) : ""}
           <div class="product-footer">
             <div class="product-price">
               ${product.oldPrice ? `<span class="old-price">${formatShopMoney(product.oldPrice)}</span>` : ""}

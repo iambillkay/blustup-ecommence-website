@@ -105,6 +105,15 @@ function normalizeCategoryToken(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+function normalizeLabelToken(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function normalizeCategoryList(value, fallbackValue, options = {}) {
   const source = Array.isArray(value)
     ? value
@@ -139,12 +148,19 @@ function humanizeCategoryValue(value) {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-async function getShopValidationContext() {
-  const productData = await storage.product.listAdmin();
-  const products = Array.isArray(productData?.products) ? productData.products : [];
+function labelMatchesCategory(label, categoryValue) {
+  const labelToken = normalizeLabelToken(label);
+  if (!labelToken) return false;
+
+  const categoryToken = normalizeLabelToken(categoryValue);
+  const humanizedToken = normalizeLabelToken(humanizeCategoryValue(categoryValue));
+  return labelToken === categoryToken || labelToken === humanizedToken;
+}
+
+function collectActiveCategories(products = []) {
   const categoryMap = new Map();
 
-  products
+  (products || [])
     .filter((product) => product && product.isActive !== false)
     .forEach((product) => {
       getProductCategories(product).forEach((category) => {
@@ -154,25 +170,39 @@ async function getShopValidationContext() {
       });
     });
 
-  const activeCategories = [...categoryMap.values()].sort((a, b) => a.localeCompare(b));
-  return { activeCategories };
+  return [...categoryMap.values()].sort((a, b) => a.localeCompare(b));
+}
+
+async function getShopValidationContext() {
+  const productData = await storage.product.listAdmin();
+  const products = Array.isArray(productData?.products) ? productData.products : [];
+  return { activeCategories: collectActiveCategories(products) };
 }
 
 function normalizeShopForSave(value, context = {}) {
   const base = normalizeShop(value);
   const filters = [];
   const seen = new Set(["all"]);
+  const activeCategoryMap = new Map(
+    (context.activeCategories || [])
+      .map((category) => String(category || "").trim())
+      .filter(Boolean)
+      .map((category) => [normalizeCategoryToken(category), category])
+  );
 
   filters.push({ label: "All Products", value: "all", showInShop: true });
 
   (base.filters || []).forEach((filter) => {
     const filterValue = String(filter?.value || "").trim();
     const token = normalizeCategoryToken(filterValue);
-    if (!filterValue || token === "all" || seen.has(token)) return;
+    const canonicalValue = activeCategoryMap.get(token);
+    if (!filterValue || token === "all" || seen.has(token) || !canonicalValue) return;
     seen.add(token);
     filters.push({
-      label: String(filter?.label || humanizeCategoryValue(filterValue)).trim() || humanizeCategoryValue(filterValue),
-      value: filterValue,
+      label: labelMatchesCategory(filter?.label, canonicalValue)
+        ? String(filter?.label || "").trim()
+        : humanizeCategoryValue(canonicalValue),
+      value: canonicalValue,
       showInShop: filter?.showInShop !== false,
     });
   });
@@ -205,6 +235,89 @@ function normalizeDeals(list) {
   }));
 }
 
+function dedupeValues(values = [], normalizer = normalizeCategoryToken) {
+  const seen = new Set();
+  return (values || [])
+    .map((value) => String(value || "").trim())
+    .filter((value) => {
+      const token = normalizer(value);
+      if (!value || seen.has(token)) return false;
+      seen.add(token);
+      return true;
+    });
+}
+
+function mapDealCategoriesToCanonical(categories, context = {}) {
+  const cleaned = dedupeValues(categories);
+  if (!context.activeCategoryMap) return cleaned;
+  return dedupeValues(
+    cleaned
+      .map((category) => context.activeCategoryMap.get(normalizeCategoryToken(category)) || "")
+      .filter(Boolean)
+  );
+}
+
+function getCanonicalDealProductIds(productIds, context = {}, maxItems = 50) {
+  const ids = dedupeValues(productIds, (value) => String(value || "").trim());
+  const filteredIds = context.activeProductMap
+    ? ids.filter((id) => context.activeProductMap.has(String(id)))
+    : ids;
+  return filteredIds.slice(0, Math.max(1, Number(maxItems || 1)));
+}
+
+function getDerivedDealCategoriesFromProducts(productIds, context = {}) {
+  if (!context.activeProductMap) return [];
+  return mapDealCategoriesToCanonical(
+    (productIds || [])
+      .map((id) => context.activeProductMap.get(String(id)))
+      .filter(Boolean)
+      .flatMap((product) => getProductCategories(product)),
+    context
+  );
+}
+
+function resolveCanonicalDealSourceCategories(deal, context = {}) {
+  const directSourceCategories = normalizeCategoryList(deal.sourceCategories, deal.sourceCategory, { allowEmpty: true });
+  const validDirectCategories = mapDealCategoriesToCanonical(directSourceCategories, context);
+  if (validDirectCategories.length) return validDirectCategories;
+  return getDerivedDealCategoriesFromProducts(deal.productIds, context);
+}
+
+function resolveCanonicalDealFilterValue(requestedFilter, sourceCategories, context = {}) {
+  const requestedFilterValue = String(requestedFilter || "").trim();
+  const requestedFilterToken = normalizeCategoryToken(requestedFilterValue);
+  if (!context.filterMap) return requestedFilterValue || sourceCategories[0] || "all";
+  if (requestedFilterToken === "all") return "all";
+  if (requestedFilterToken && context.filterMap.has(requestedFilterToken)) {
+    return context.filterMap.get(requestedFilterToken);
+  }
+  const fallbackCategory = (sourceCategories || []).find((category) =>
+    context.filterMap.has(normalizeCategoryToken(category))
+  );
+  if (fallbackCategory) {
+    return context.filterMap.get(normalizeCategoryToken(fallbackCategory));
+  }
+  return "all";
+}
+
+function canonicalizeDeal(deal, context = {}) {
+  const maxItems = Math.max(1, Number(deal.maxItems || 1));
+  const productIds = getCanonicalDealProductIds(deal.productIds, context, maxItems);
+  const sourceCategories = resolveCanonicalDealSourceCategories({ ...deal, productIds }, context);
+  return {
+    ...deal,
+    maxItems,
+    sourceCategories,
+    sourceCategory: sourceCategories[0] || "",
+    seeMoreFilter: resolveCanonicalDealFilterValue(deal.seeMoreFilter, sourceCategories, context),
+    productIds,
+  };
+}
+
+function normalizeDealsForResponse(list, context = {}) {
+  return normalizeDeals(list).map((deal) => canonicalizeDeal(deal, context));
+}
+
 async function getDealsValidationContext() {
   const [productData, shopSettings] = await Promise.all([
     storage.product.listAdmin(),
@@ -213,39 +326,46 @@ async function getDealsValidationContext() {
 
   const products = Array.isArray(productData?.products) ? productData.products : [];
   const activeProducts = products.filter((product) => product && product.isActive !== false);
+  const activeCategoriesList = collectActiveCategories(activeProducts);
   const activeProductIds = new Set(activeProducts.map((product) => String(product.id)));
-  const activeCategories = new Set(
-    activeProducts.flatMap((product) => getProductCategories(product).map(normalizeCategoryToken)).filter(Boolean)
+  const activeCategoryMap = new Map(
+    activeCategoriesList.map((category) => [normalizeCategoryToken(category), category])
+  );
+  const activeCategories = new Set(activeCategoryMap.keys());
+  const normalizedShop = normalizeShopForSave(shopSettings || {}, { activeCategories: activeCategoriesList });
+  const filterMap = new Map(
+    (Array.isArray(normalizedShop?.filters) ? normalizedShop.filters : [])
+      .map((filter) => {
+        const value = String(filter?.value || "").trim();
+        return value ? [normalizeCategoryToken(value), value] : null;
+      })
+      .filter(Boolean)
   );
   const filterValues = new Set(
-    (Array.isArray(shopSettings?.filters) ? shopSettings.filters : [])
-      .map((filter) => normalizeCategoryToken(filter?.value))
-      .filter(Boolean)
+    [...filterMap.keys()].filter(Boolean)
   );
   filterValues.add("all");
 
-  return { activeProducts, activeProductIds, activeCategories, filterValues };
+  return {
+    activeProducts,
+    activeProductIds,
+    activeCategories,
+    activeCategoryMap,
+    activeProductMap: new Map(activeProducts.map((product) => [String(product.id), product])),
+    filterMap,
+    filterValues,
+  };
 }
 
-function normalizeDealsForSave(list) {
-  return normalizeDeals(list).map((deal) => {
-    const maxItems = Math.max(1, Number(deal.maxItems || 1));
-    const sourceCategories = normalizeCategoryList(deal.sourceCategories, deal.sourceCategory);
-    return {
-      ...deal,
-      sourceCategory: sourceCategories[0] || String(deal.sourceCategory || "").trim(),
-      sourceCategories,
-      seeMoreFilter: String(deal.seeMoreFilter || "").trim(),
-      productIds: [...new Set((deal.productIds || []).map((id) => String(id).trim()).filter(Boolean))].slice(0, maxItems),
-    };
-  });
+function normalizeDealsForSave(list, context = {}) {
+  return normalizeDeals(list).map((deal) => canonicalizeDeal(deal, context));
 }
 
 function validateDeals(list, context) {
   for (const deal of list) {
-    const sourceCategories = normalizeCategoryList(deal.sourceCategories, deal.sourceCategory);
+    const sourceCategories = normalizeCategoryList(deal.sourceCategories, deal.sourceCategory, { allowEmpty: true });
     if (!sourceCategories.length) {
-      return `Deal "${deal.name}" needs at least one source category.`;
+      return `Deal "${deal.name}" needs at least one active source category or pinned product.`;
     }
 
     const invalidCategory = sourceCategories.find(
@@ -330,13 +450,17 @@ async function setAi(req, res) {
 }
 
 async function getDeals(_req, res) {
-  return res.json({ settings: normalizeDeals(await storage.cms.getDeals()) });
+  const [settings, context] = await Promise.all([
+    storage.cms.getDeals(),
+    getDealsValidationContext(),
+  ]);
+  return res.json({ settings: normalizeDealsForResponse(settings, context) });
 }
 async function setDeals(req, res) {
   const parsed = dealsSchema.safeParse(req.body || []);
   if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
-  const nextDeals = normalizeDealsForSave(parsed.data);
   const context = await getDealsValidationContext();
+  const nextDeals = normalizeDealsForSave(parsed.data, context);
   const validationError = validateDeals(nextDeals, context);
   if (validationError) return res.status(400).json({ error: validationError });
 

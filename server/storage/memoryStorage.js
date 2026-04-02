@@ -89,9 +89,9 @@ function createDefaultCmsState() {
         id: "deal-1",
         name: "Oraimo Brand Day",
         timerSeconds: 80200,
-        seeMoreFilter: "flights",
-        sourceCategory: "flights",
-        sourceCategories: ["flights", "essentials"],
+        seeMoreFilter: "oriamo",
+        sourceCategory: "oriamo",
+        sourceCategories: ["oriamo"],
         maxItems: 8,
         isActive: true,
         productIds: [],
@@ -100,9 +100,9 @@ function createDefaultCmsState() {
         id: "deal-2",
         name: "Personal Care Day",
         timerSeconds: 21600,
-        seeMoreFilter: "lounge",
-        sourceCategory: "lounge",
-        sourceCategories: ["lounge", "insurance"],
+        seeMoreFilter: "personal care",
+        sourceCategory: "personal care",
+        sourceCategories: ["personal care"],
         maxItems: 8,
         isActive: true,
         productIds: [],
@@ -884,6 +884,31 @@ async function updateProduct(id, payload) {
   return mapProductOut(product);
 }
 
+async function addProductReview(id, payload = {}) {
+  const target = String(id);
+  const product = state.products.find((item) => String(item._id) === target);
+  if (!product) return null;
+
+  const review = normalizeStoredReview({
+    author: payload.author,
+    rating: payload.rating,
+    title: payload.title,
+    comment: payload.comment,
+    verifiedPurchase: payload.verifiedPurchase,
+    createdAt: payload.createdAt || new Date(),
+  });
+
+  product.reviews = [review, ...(Array.isArray(product.reviews) ? product.reviews : [])];
+
+  const reviewSummary = normalizeProductReviews(product);
+  product.ratingAverage = reviewSummary.averageRating;
+  product.reviewCount = reviewSummary.reviewCount;
+  product.updatedAt = new Date();
+
+  await persistState();
+  return mapProductOut(product);
+}
+
 async function deleteProduct(id) {
   const target = String(id);
   const index = state.products.findIndex((product) => String(product._id) === target);
@@ -1040,6 +1065,7 @@ module.exports = {
     listAdmin: listProductsAdmin,
     create: createProduct,
     update: updateProduct,
+    addReview: addProductReview,
     delete: deleteProduct,
   },
   audit: {

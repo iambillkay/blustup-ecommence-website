@@ -70,6 +70,20 @@ function getProductReviewSummary(product = {}) {
 
 function renderProductReviewMarkup(product = {}) {
   const reviewSummary = getProductReviewSummary(product);
+  const ratingMarkup = renderProductRatingMarkup(product);
+
+  return `
+    ${ratingMarkup}
+    ${
+      reviewSummary.featuredReview
+        ? `<div class="product-review-quote">"${escapeStorefrontHtml(truncateStorefrontText(reviewSummary.featuredReview.comment))}"</div>`
+        : ""
+    }
+  `;
+}
+
+function renderProductRatingMarkup(product = {}) {
+  const reviewSummary = getProductReviewSummary(product);
   const countLabel = reviewSummary.reviewCount === 1 ? "review" : "reviews";
 
   return `
@@ -78,11 +92,6 @@ function renderProductReviewMarkup(product = {}) {
       <span class="product-rating-value">${escapeStorefrontHtml(reviewSummary.averageRating.toFixed(1))}</span>
       <span class="product-rating-count">${escapeStorefrontHtml(reviewSummary.reviewCount)} ${countLabel}</span>
     </div>
-    ${
-      reviewSummary.featuredReview
-        ? `<div class="product-review-quote">"${escapeStorefrontHtml(truncateStorefrontText(reviewSummary.featuredReview.comment))}"</div>`
-        : ""
-    }
   `;
 }
 
@@ -132,6 +141,21 @@ function getStorefrontProductCategories(product) {
     });
 }
 
+function syncStorefrontProductRecord(nextProduct) {
+  if (!nextProduct || !nextProduct.id) return;
+  const targetId = String(nextProduct.id);
+
+  if (typeof allProducts !== "undefined" && Array.isArray(allProducts)) {
+    const allIndex = allProducts.findIndex((product) => String(product?.id) === targetId);
+    if (allIndex >= 0) allProducts[allIndex] = { ...allProducts[allIndex], ...nextProduct };
+  }
+
+  if (typeof products !== "undefined" && Array.isArray(products)) {
+    const currentIndex = products.findIndex((product) => String(product?.id) === targetId);
+    if (currentIndex >= 0) products[currentIndex] = { ...products[currentIndex], ...nextProduct };
+  }
+}
+
 function getProductDetailNodes() {
   return {
     backdrop: document.getElementById("productDetailBackdrop"),
@@ -139,12 +163,165 @@ function getProductDetailNodes() {
   };
 }
 
+function renderProductReviewForm(product = {}) {
+  const currentUser = typeof getStoredUser === "function" ? getStoredUser() : null;
+  const productId = String(product.id || "");
+  const suggestedName = String(currentUser?.name || "").trim();
+  const loginHint = suggestedName
+    ? `Posting as ${escapeStorefrontHtml(suggestedName)}.`
+    : "Posting as guest. Add your name so other shoppers can recognize your feedback.";
+
+  return `
+    <form class="product-review-form" id="productDetailReviewForm" data-product-id="${escapeStorefrontHtml(productId)}" novalidate>
+      <div class="product-review-note">${loginHint}</div>
+      <div class="product-review-field-grid">
+        <label class="product-review-field">
+          <span class="product-review-label">Name</span>
+          <input class="product-review-input" type="text" name="author" maxlength="80" placeholder="Your name" value="${escapeStorefrontHtml(suggestedName)}" required>
+        </label>
+        <div class="product-review-field">
+          <span class="product-review-label">Rating</span>
+          <div class="product-review-rating-picker" aria-label="Choose your rating">
+            <input id="productReviewRating5-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="5" checked>
+            <label for="productReviewRating5-${escapeStorefrontHtml(productId)}" aria-label="5 stars" title="5 stars">&#9733;</label>
+            <input id="productReviewRating4-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="4">
+            <label for="productReviewRating4-${escapeStorefrontHtml(productId)}" aria-label="4 stars" title="4 stars">&#9733;</label>
+            <input id="productReviewRating3-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="3">
+            <label for="productReviewRating3-${escapeStorefrontHtml(productId)}" aria-label="3 stars" title="3 stars">&#9733;</label>
+            <input id="productReviewRating2-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="2">
+            <label for="productReviewRating2-${escapeStorefrontHtml(productId)}" aria-label="2 stars" title="2 stars">&#9733;</label>
+            <input id="productReviewRating1-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="1">
+            <label for="productReviewRating1-${escapeStorefrontHtml(productId)}" aria-label="1 star" title="1 star">&#9733;</label>
+          </div>
+        </div>
+      </div>
+      <label class="product-review-field">
+        <span class="product-review-label">Headline</span>
+        <input class="product-review-input" type="text" name="title" maxlength="120" placeholder="Summarize your experience">
+      </label>
+      <label class="product-review-field">
+        <span class="product-review-label">Comment</span>
+        <textarea class="product-review-textarea" name="comment" rows="5" maxlength="600" placeholder="What stood out about this product?" required></textarea>
+      </label>
+      <div class="product-review-form-feedback" aria-live="polite"></div>
+      <div class="product-detail-actions">
+        <button class="product-review-submit" type="submit">Submit review</button>
+      </div>
+    </form>
+  `;
+}
+
+function setProductReviewFormFeedback(form, message = "", tone = "info") {
+  const node = form?.querySelector(".product-review-form-feedback");
+  if (!node) return;
+
+  if (!message) {
+    node.hidden = true;
+    node.textContent = "";
+    node.className = "product-review-form-feedback";
+    return;
+  }
+
+  node.hidden = false;
+  node.textContent = message;
+  node.className = `product-review-form-feedback is-${tone}`;
+}
+
+function setProductReviewSubmitting(form, submitting) {
+  const button = form?.querySelector(".product-review-submit");
+  if (!button) return;
+  button.disabled = submitting;
+  button.textContent = submitting ? "Submitting..." : "Submit review";
+  button.setAttribute("aria-busy", String(submitting));
+}
+
+async function submitStorefrontProductReview(productId, payload) {
+  if (typeof api === "function") {
+    return api(`/api/products/${encodeURIComponent(productId)}/reviews`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  }
+
+  const headers = { "Content-Type": "application/json" };
+  if (typeof getToken === "function") {
+    const token = getToken();
+    if (token) headers.Authorization = `Bearer ${token}`;
+  }
+  const res = await apiFetch(`/api/products/${encodeURIComponent(productId)}/reviews`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.error || "Failed to submit review");
+  return data;
+}
+
+async function handleProductReviewSubmit(form) {
+  const productId = String(form?.getAttribute("data-product-id") || "").trim();
+  if (!productId) return;
+
+  const formData = new FormData(form);
+  const payload = {
+    author: String(formData.get("author") || "").trim(),
+    rating: Number(formData.get("rating") || 0),
+    title: String(formData.get("title") || "").trim(),
+    comment: String(formData.get("comment") || "").trim(),
+  };
+
+  if (payload.author.length < 2) {
+    setProductReviewFormFeedback(form, "Enter your name before submitting.", "error");
+    form.querySelector("[name=\"author\"]")?.focus();
+    return;
+  }
+
+  if (!Number.isInteger(payload.rating) || payload.rating < 1 || payload.rating > 5) {
+    setProductReviewFormFeedback(form, "Choose a rating from 1 to 5 stars.", "error");
+    return;
+  }
+
+  if (payload.comment.length < 8) {
+    setProductReviewFormFeedback(form, "Write a little more detail before submitting your review.", "error");
+    form.querySelector("[name=\"comment\"]")?.focus();
+    return;
+  }
+
+  setProductReviewSubmitting(form, true);
+  setProductReviewFormFeedback(form, "");
+
+  try {
+    const { product } = await submitStorefrontProductReview(productId, payload);
+    if (!product) throw new Error("We couldn't save your review just yet.");
+
+    syncStorefrontProductRecord(product);
+
+    const { body } = getProductDetailNodes();
+    if (body) {
+      body.innerHTML = renderProductDetailMarkup(product);
+      body.querySelector(".product-detail-comments")?.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+
+    if (typeof refreshLivePageData === "function") {
+      Promise.resolve(refreshLivePageData(document.body?.dataset?.page || "shop")).catch(() => {});
+    }
+
+    if (typeof showToast === "function") {
+      showToast("OK", "Your review has been posted.");
+    }
+  } catch (error) {
+    setProductReviewFormFeedback(form, error?.message || "We couldn't submit your review.", "error");
+  } finally {
+    setProductReviewSubmitting(form, false);
+  }
+}
+
 function renderProductDetailReviews(product = {}) {
   const reviewSummary = getProductReviewSummary(product);
   const reviews = Array.isArray(reviewSummary.reviews) ? reviewSummary.reviews : [];
 
   if (!reviews.length) {
-    return `<div class="product-detail-empty">Reviews will appear here once shoppers start rating this product.</div>`;
+    return `<div class="product-detail-empty">No customer comments yet. Be the first to share your experience.</div>`;
   }
 
   return reviews
@@ -175,71 +352,85 @@ function renderProductDetailReviews(product = {}) {
 function renderProductDetailMarkup(product = {}) {
   const categories = getStorefrontProductCategories(product);
   const reviewSummary = getProductReviewSummary(product);
-  const featuredReview = reviewSummary.featuredReview;
 
   return `
-    <div class="product-detail-layout">
-      <div class="product-detail-media" style="background:${escapeStorefrontHtml(product.color || "#f5f7ff")}">
+    <div class="product-detail-shell">
+      <section class="product-detail-hero">
+        <div class="product-detail-gallery" style="background:${escapeStorefrontHtml(product.color || "#f5f7ff")}">
         ${product.badge ? `<div class="product-badge-tag ${escapeStorefrontHtml(product.badgeType || "")}">${escapeStorefrontHtml(product.badge)}</div>` : ""}
         ${
           product.imageUrl
             ? `<img src="${escapeStorefrontHtml(product.imageUrl)}" alt="${escapeStorefrontHtml(product.name || "Product image")}">`
             : `<div class="product-detail-image-fallback">No image</div>`
         }
-      </div>
-      <div class="product-detail-content">
-        <div class="product-detail-category-list">
-          ${categories.map((category) => `<span class="product-category-chip">${escapeStorefrontHtml(category)}</span>`).join("")}
         </div>
-        <h2 id="productDetailTitle" class="product-detail-title">${escapeStorefrontHtml(product.name || "Product")}</h2>
-        <div class="product-detail-pricing">
-          <strong>${escapeStorefrontHtml(formatStorefrontMoney(product.price))}</strong>
-          ${product.oldPrice ? `<span>${escapeStorefrontHtml(formatStorefrontMoney(product.oldPrice))}</span>` : ""}
-        </div>
-        <div class="product-detail-summary">
-          ${renderProductReviewMarkup(product)}
-        </div>
-        <div class="product-detail-section">
-          <h3>Description</h3>
-          <p class="product-detail-description">${escapeStorefrontHtml(product.desc || "No description available for this product yet.").replace(/\n/g, "<br>")}</p>
-        </div>
-        ${
-          featuredReview
-            ? `
-              <div class="product-detail-section">
-                <h3>What shoppers are saying</h3>
-                <div class="product-detail-featured-review">"${escapeStorefrontHtml(featuredReview.comment || "")}"</div>
+        <div class="product-detail-content">
+          <div class="product-detail-category-list">
+            ${categories.map((category) => `<span class="product-category-chip">${escapeStorefrontHtml(category)}</span>`).join("")}
+          </div>
+          <div class="product-detail-headline">
+            <div>
+              <h2 id="productDetailTitle" class="product-detail-title">${escapeStorefrontHtml(product.name || "Product")}</h2>
+              <div class="product-detail-pricing">
+                <strong>${escapeStorefrontHtml(formatStorefrontMoney(product.price))}</strong>
+                ${product.oldPrice ? `<span>${escapeStorefrontHtml(formatStorefrontMoney(product.oldPrice))}</span>` : ""}
               </div>
-            `
-            : ""
-        }
-        <div class="product-detail-meta-grid">
-          <div class="product-detail-meta-card">
-            <strong>${escapeStorefrontHtml(String(reviewSummary.reviewCount || 0))}</strong>
-            <span>Customer reviews</span>
+            </div>
+            <button class="add-to-cart-btn product-detail-add-btn" type="button" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">+ Add to cart</button>
           </div>
-          <div class="product-detail-meta-card">
-            <strong>${escapeStorefrontHtml(Number(reviewSummary.averageRating || 0).toFixed(1))}/5</strong>
-            <span>Average rating</span>
+          <div class="product-detail-summary">
+            ${renderProductReviewMarkup(product)}
           </div>
-          <div class="product-detail-meta-card">
-            <strong>${escapeStorefrontHtml(String(Number(product.stockQty || 0)))}</strong>
-            <span>Units in stock</span>
+        </div>
+      </section>
+
+      <div class="product-detail-columns">
+        <section class="product-detail-panel">
+          <div class="product-detail-section-top">
+            <h3>Description</h3>
+            <span>Product overview</span>
           </div>
+          <p class="product-detail-description">${escapeStorefrontHtml(product.desc || "No description available for this product yet.").replace(/\n/g, "<br>")}</p>
+          <div class="product-detail-meta-grid">
+            <div class="product-detail-meta-card">
+              <strong>${escapeStorefrontHtml(String(reviewSummary.reviewCount || 0))}</strong>
+              <span>Customer reviews</span>
+            </div>
+            <div class="product-detail-meta-card">
+              <strong>${escapeStorefrontHtml(Number(reviewSummary.averageRating || 0).toFixed(1))}/5</strong>
+              <span>Average rating</span>
+            </div>
+            <div class="product-detail-meta-card">
+              <strong>${escapeStorefrontHtml(String(Number(product.stockQty || 0)))}</strong>
+              <span>Units in stock</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="product-detail-panel product-detail-panel-form">
+          <div class="product-detail-section-top">
+            <h3>Write a review</h3>
+            <span>Real shopper feedback</span>
+          </div>
+          ${renderProductReviewForm(product)}
+        </aside>
+      </div>
+
+      <section class="product-detail-panel product-detail-comments">
+        <div class="product-detail-section-top">
+          <h3>Customer comments</h3>
+          <span>${escapeStorefrontHtml(String(reviewSummary.reviewCount || 0))} total</span>
         </div>
         <div class="product-detail-section">
           <div class="product-detail-section-top">
-            <h3>Customer reviews</h3>
-            <span>${escapeStorefrontHtml(String(reviewSummary.reviewCount || 0))} total</span>
+            <h3>Latest reviews</h3>
+            <span>Newest at the top</span>
           </div>
           <div class="product-detail-reviews-list">
             ${renderProductDetailReviews(product)}
           </div>
         </div>
-        <div class="product-detail-actions">
-          <button class="add-to-cart-btn product-detail-add-btn" type="button" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">+ Add to cart</button>
-        </div>
-      </div>
+      </section>
     </div>
   `;
 }
@@ -403,6 +594,7 @@ function refreshLoyaltyExperience(user) {
 
 window.escapeStorefrontHtml = escapeStorefrontHtml;
 window.getProductReviewSummary = getProductReviewSummary;
+window.renderProductRatingMarkup = renderProductRatingMarkup;
 window.renderProductReviewMarkup = renderProductReviewMarkup;
 window.openProductSelection = openProductSelection;
 window.closeProductSelection = closeProductSelection;
@@ -426,6 +618,13 @@ document.addEventListener("click", (event) => {
   if (event.target === backdrop) {
     closeProductSelection();
   }
+});
+
+document.addEventListener("submit", (event) => {
+  const form = event.target?.closest?.("#productDetailReviewForm");
+  if (!form) return;
+  event.preventDefault();
+  handleProductReviewSubmit(form);
 });
 
 document.addEventListener("keydown", (event) => {

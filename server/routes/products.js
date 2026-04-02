@@ -1,7 +1,7 @@
 const express = require("express");
 
 const productController = require("../controllers/productController");
-const { requireAuth, requireRole } = require("../middleware/auth");
+const { requireAuth, requireRole, attachAuthIfPresent } = require("../middleware/auth");
 const { upload } = require("../middleware/upload");
 
 const router = express.Router();
@@ -15,6 +15,7 @@ router.delete("/admin/:id", requireAuth, adminRequired, productController.delete
 
 // Prompt-required public endpoint
 router.get("/", productController.listPublic);
+router.post("/:id/reviews", attachAuthIfPresent, productController.addReview);
 
 // Prompt-required admin endpoints (role-protected)
 router.post("/", requireAuth, adminRequired, upload.single("image"), productController.createProduct);
@@ -24,4 +25,3 @@ router.patch("/:id", requireAuth, adminRequired, upload.single("image"), product
 router.delete("/:id", requireAuth, adminRequired, productController.deleteProduct);
 
 module.exports = router;
-

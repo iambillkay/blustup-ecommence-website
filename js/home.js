@@ -72,8 +72,7 @@ function homeProductCard(p) {
       <div class="product-info">
         <div class="product-category">${escapeHomeHtml(getHomeProductCategories(p)[0] || p.cat)}</div>
         <div class="product-name">${escapeHomeHtml(p.name)}</div>
-        <div class="product-desc">${escapeHomeHtml(p.desc)}</div>
-        ${typeof renderProductReviewMarkup === "function" ? renderProductReviewMarkup(p) : ""}
+        ${typeof renderProductRatingMarkup === "function" ? renderProductRatingMarkup(p) : ""}
         <div class="product-footer">
           <div class="product-price">
             ${p.oldPrice ? `<span class="old-price">${formatHomeMoney(p.oldPrice)}</span>` : ""}

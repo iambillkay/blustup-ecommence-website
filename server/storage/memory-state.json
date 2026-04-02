@@ -216,10 +216,9 @@
       "name": "Oraimo CleanSip Faucet",
       "price": 217,
       "description": "Smart faucet accessory for cleaner water flow.",
-      "category": "lounge",
+      "category": "oriamo",
       "categories": [
-        "lounge",
-        "insurance"
+        "oriamo"
       ],
       "stockQty": 52,
       "imageUrl": "product-imgs/wireless-earphones-spacebuds-neo-plus-otw-323p-black.webp",
@@ -233,17 +232,16 @@
       "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-04-01T19:29:50.071Z"
+      "updatedAt": "2026-04-02T22:56:58.027Z"
     },
     {
       "_id": "a7e01eae-3b98-41de-83e3-092f1d870d84",
-      "name": "Oraimo NutriFry Max Air",
+      "name": "EP watch 1",
       "price": 778.92,
-      "description": "Oraimo NutriFry Max Air is a upgrades option designed for dependable everyday use and easy comparison while shopping online. It stands out with",
-      "category": "upgrades",
+      "description": "EP watch 1 is a upgrades option designed for dependable everyday use and easy comparison while shopping online. It stands out with -39% appeal and a clear value story for everyday online shoppers in Ghana who want reliable value and clear guidance. Available stock is ready for new orders.",
+      "category": "electronics",
       "categories": [
-        "upgrades",
-        "essentials"
+        "electronics"
       ],
       "stockQty": 50,
       "imageUrl": "product-imgs/oraimo-watch-muse-OSW-831N-4.webp",
@@ -257,17 +255,16 @@
       "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-30T03:14:33.790Z"
+      "updatedAt": "2026-04-02T22:57:53.133Z"
     },
     {
       "_id": "a8b88dda-45b4-4705-94a5-8959b0f4ed4d",
-      "name": "Oraimo Smart Trimmer",
-      "price": 183.89,
-      "description": "Precision grooming with long-lasting blades.",
-      "category": "upgrades",
+      "name": "Samsung s25",
+      "price": 3083.89,
+      "description": "Samsung s25 is a upgrades option designed for dependable everyday use and easy comparison while shopping online. It stands out with -47% appeal and a clear value story for everyday online shoppers in Ghana who want reliable value and clear guidance. Available stock is ready for new orders.",
+      "category": "electronics",
       "categories": [
-        "upgrades",
-        "insurance"
+        "electronics"
       ],
       "stockQty": 20,
       "imageUrl": "product-imgs/africa-en-galaxy-s26-ultra-s948-sm-s948bzvoafb-thumb-551361084.webp",
@@ -281,17 +278,16 @@
       "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
+      "updatedAt": "2026-04-02T22:58:43.098Z"
     },
     {
       "_id": "28472a3c-40a2-4058-aa78-e89e233c1d85",
-      "name": "Oraimo Wireless Charger",
+      "name": "washing Machine",
       "price": 183.89,
       "description": "Fast wireless charging for multiple devices.",
       "category": "electronics",
       "categories": [
-        "electronics",
-        "oriamo"
+        "electronics"
       ],
       "stockQty": 100,
       "imageUrl": "product-imgs/AI-appliances_v21.avif",
@@ -305,7 +301,7 @@
       "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-30T09:33:21.683Z"
+      "updatedAt": "2026-04-02T23:19:32.344Z"
     },
     {
       "_id": "d91615ef-3107-4c1b-8c11-ee5fa3faadb9",
@@ -352,30 +348,6 @@
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
       "updatedAt": "2026-03-30T09:33:52.701Z"
-    },
-    {
-      "_id": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
-      "name": "Kel Mouth Wash",
-      "price": 126.98,
-      "description": "Deep-clean mouthwash for complete care.",
-      "category": "insurance",
-      "categories": [
-        "insurance",
-        "essentials"
-      ],
-      "stockQty": 70,
-      "imageUrl": "product-imgs/personal-care/70100a.jpg",
-      "oldPrice": 240,
-      "badge": "-47%",
-      "badgeType": "sale",
-      "icon": null,
-      "color": "linear-gradient(135deg,#f6e8ff,#e6c7ff)",
-      "ratingAverage": null,
-      "reviewCount": 0,
-      "reviews": [],
-      "isActive": true,
-      "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-29T23:44:41.174Z"
     },
     {
       "_id": "89232053-9388-46e9-b6de-ece111fbcc82",
@@ -2362,6 +2334,477 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
       "createdAt": "2026-04-02T19:17:45.992Z"
+    },
+    {
+      "_id": "144d4263-de41-4e35-b47f-951ac60d8afd",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:22:05.691Z"
+    },
+    {
+      "_id": "52ab5657-820d-4075-ab4c-034de14d7c90",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:22:11.172Z"
+    },
+    {
+      "_id": "ea5a6bf5-8a44-4937-ae13-209475ee0511",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:22:14.978Z"
+    },
+    {
+      "_id": "061d42f8-60f0-489a-992e-50652cbf2949",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:26:48.779Z"
+    },
+    {
+      "_id": "a7d1b16e-472f-4522-b2d4-64fe1ac1ec18",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:31:01.349Z"
+    },
+    {
+      "_id": "bccfd60b-0c8d-491a-a06e-470791f18715",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:31:42.043Z"
+    },
+    {
+      "_id": "84a0c7b5-5aed-420e-9643-86d9db02e30f",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:34:05.202Z"
+    },
+    {
+      "_id": "175130fd-adf4-4522-a63c-2a46d1157599",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:39:41.473Z"
+    },
+    {
+      "_id": "226456f6-25c2-46cd-9a55-0168a172525d",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
+        "productName": "Kel Mouth Wash"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:40:03.977Z"
+    },
+    {
+      "_id": "7f2a53e1-5160-497c-9c10-eb78c1d67417",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
+        "productName": "Kel Mouth Wash"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:40:07.630Z"
+    },
+    {
+      "_id": "0a108dea-6c86-47c1-a5e4-d7eb5394bdc0",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
+        "productName": "Kel Mouth Wash"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:40:19.062Z"
+    },
+    {
+      "_id": "fe79856b-94a6-443b-9235-8b6c29448154",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:46:57.318Z"
+    },
+    {
+      "_id": "2cbe4e52-6d43-4a96-b14a-a9d3443e9ab5",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:47:52.890Z"
+    },
+    {
+      "_id": "03fd7eb9-1d21-453e-b3cd-7a53a334f798",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:51:54.357Z"
+    },
+    {
+      "_id": "cbd03a12-7bc6-4e85-a32d-9586b9e5b630",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:46.133Z"
+    },
+    {
+      "_id": "22053007-c34b-4414-bc84-c58fcd983f44",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:47.069Z"
+    },
+    {
+      "_id": "3e51647f-5e0a-41be-9e5d-f871c9671318",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:47.216Z"
+    },
+    {
+      "_id": "db6b3c43-779b-478a-a1d2-9910c7871e12",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:47.376Z"
+    },
+    {
+      "_id": "5e86edfa-3b4b-4acb-9a8e-46b3862e5b36",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:47.536Z"
+    },
+    {
+      "_id": "89dc225a-ef2e-4536-b568-3d5803d38b70",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:47.691Z"
+    },
+    {
+      "_id": "18bff24d-0391-44d4-bf81-a29332e6a04a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:47.845Z"
+    },
+    {
+      "_id": "95a33a6b-25bb-47db-a784-530c76782bf8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:48.005Z"
+    },
+    {
+      "_id": "beb184a5-cc6a-4154-b629-25f254682921",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:48.257Z"
+    },
+    {
+      "_id": "27126457-4b72-4f89-89ac-d19407b6c862",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:48.447Z"
+    },
+    {
+      "_id": "ba54ed28-0d9d-4765-9850-78213f96450d",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:54:50.491Z"
+    },
+    {
+      "_id": "f9fa6e90-ab55-4bf8-ae68-a8b13a419b28",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T22:55:30.246Z"
+    },
+    {
+      "_id": "38b26fe5-436e-4c8d-ba2e-0b75339d96da",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:04:26.377Z"
+    },
+    {
+      "_id": "02bf6145-55b7-4c74-8da8-7e19aeff808f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:04:29.302Z"
+    },
+    {
+      "_id": "1a880126-0c5b-47ba-a4e1-e95ec35790fd",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:16:32.871Z"
+    },
+    {
+      "_id": "3add3ad9-8a94-47bc-8713-42cca7edbf40",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:18:16.954Z"
+    },
+    {
+      "_id": "916c1d33-ca76-497d-8655-5e1ba883b59f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:18:17.811Z"
+    },
+    {
+      "_id": "56433343-f1cc-4c72-88a9-4870897b81a8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:22:46.329Z"
+    },
+    {
+      "_id": "14cf1748-13a0-4552-b742-5a8bae097830",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:22:52.261Z"
+    },
+    {
+      "_id": "0a1653f0-75da-4aa4-8993-aa67eeae6836",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:22:59.337Z"
+    },
+    {
+      "_id": "6a83bc6d-e00f-444f-a167-0fa2ffcbc4ac",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:23:01.942Z"
+    },
+    {
+      "_id": "8c99306e-4c6c-4ec8-b449-fa7656a07a23",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:23:06.110Z"
+    },
+    {
+      "_id": "156785d6-f7f2-4258-af2b-49b7047ddd48",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:23:08.945Z"
+    },
+    {
+      "_id": "fae5c292-a081-40f5-9fbe-1cbef40d48bd",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:23:10.552Z"
+    },
+    {
+      "_id": "08e49117-9eea-4841-a8db-c2f79d2b6793",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:23:12.172Z"
     }
   ],
   "audit": [
@@ -2734,6 +3177,166 @@
       "summary": "Created order BLU-MNGFWV0K-1019 for epaphraskasiedu@gmail.com",
       "actorEmail": "epaphraskasiedu@gmail.com",
       "createdAt": "2026-04-01T19:29:50.125Z"
+    },
+    {
+      "_id": "801f9fd3-f01d-4fe9-a57b-6501210b8b04",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+      "summary": "Updated product: Oraimo CleanSip Faucet",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T22:56:30.611Z"
+    },
+    {
+      "_id": "e68ec9fb-7274-4c08-afbb-7a49013be5e1",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+      "summary": "Updated product: Oraimo CleanSip Faucet",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T22:56:58.034Z"
+    },
+    {
+      "_id": "3575c235-a9e8-462e-8cb5-77a8402154d7",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "a7e01eae-3b98-41de-83e3-092f1d870d84",
+      "summary": "Updated product: EP watch 1",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T22:57:53.143Z"
+    },
+    {
+      "_id": "9a59bc31-9157-4481-a141-79d5b2d3e73f",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "a8b88dda-45b4-4705-94a5-8959b0f4ed4d",
+      "summary": "Updated product: Samsung s25",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T22:58:43.108Z"
+    },
+    {
+      "_id": "a9308621-087a-483f-84fa-3473c26bce78",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "delete",
+      "entityType": "product",
+      "entityId": "77d830c6-648f-4f70-b716-aa3eca9ef2fb",
+      "summary": "Deleted product: Kel Mouth Wash",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T22:58:53.869Z"
+    },
+    {
+      "_id": "4e114a43-40f3-4880-88c2-b98dd16dbc50",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:15:27.179Z"
+    },
+    {
+      "_id": "28060009-decf-4fe6-9c9c-b17d2a33b693",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:16:05.418Z"
+    },
+    {
+      "_id": "2723190c-0b23-4a6c-a1c1-1ee731a04dbf",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:16:23.866Z"
+    },
+    {
+      "_id": "7fadf22a-6da0-4271-af95-5d215ed03dc5",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:17:13.801Z"
+    },
+    {
+      "_id": "56e3447a-dbbb-49c7-a249-f78927778cff",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:18:08.614Z"
+    },
+    {
+      "_id": "76b2f05f-22fc-48bb-a8e4-00f7b6c88e4a",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "product",
+      "entityId": "28472a3c-40a2-4058-aa78-e89e233c1d85",
+      "summary": "Updated product: washing Machine",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:19:32.354Z"
+    },
+    {
+      "_id": "5b8927af-41d2-43aa-8cac-8194055e4f44",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:19:52.632Z"
+    },
+    {
+      "_id": "b6c89a21-ccae-4b81-8879-ca45427d1acd",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:20:27.706Z"
+    },
+    {
+      "_id": "dd53be9e-8ad4-4998-bd81-2977ef36b742",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:21:27.669Z"
+    },
+    {
+      "_id": "b1a9e5ee-a0b3-415f-bcae-f009cc7dca26",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:21:56.684Z"
+    },
+    {
+      "_id": "a4e21e28-8074-4484-bfa2-50837a8f3f65",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "deals",
+      "entityId": null,
+      "summary": "Updated deals: 2 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:22:21.564Z"
     }
   ],
   "cms": {
@@ -2757,22 +3360,17 @@
         },
         {
           "label": "Electronics",
-          "value": "oriamo",
+          "value": "electronics",
           "showInShop": true
         },
         {
           "label": "Fashion & Apparel",
-          "value": "lounge",
-          "showInShop": true
-        },
-        {
-          "label": "Health & Beauty",
-          "value": "upgrades",
+          "value": "personal care",
           "showInShop": true
         },
         {
           "label": "Home & Kitchen",
-          "value": "essentials",
+          "value": "lounge",
           "showInShop": true
         },
         {
@@ -2791,18 +3389,23 @@
           "showInShop": true
         },
         {
-          "label": "Electronics",
-          "value": "electronics",
-          "showInShop": true
-        },
-        {
-          "label": "Personal Care",
-          "value": "personal care",
+          "label": "Essentials",
+          "value": "essentials",
           "showInShop": true
         },
         {
           "label": "Insurance",
           "value": "insurance",
+          "showInShop": true
+        },
+        {
+          "label": "Oriamo",
+          "value": "oriamo",
+          "showInShop": true
+        },
+        {
+          "label": "Upgrades",
+          "value": "upgrades",
           "showInShop": true
         }
       ]
@@ -2813,34 +3416,40 @@
         "name": "Oraimo Brand Day",
         "timerSeconds": 80200,
         "seeMoreFilter": "flights",
-        "sourceCategory": "flights",
+        "sourceCategory": "oriamo",
         "sourceCategories": [
-          "flights"
+          "oriamo"
         ],
         "maxItems": 8,
         "isActive": true,
         "productIds": [
+          "a7e01eae-3b98-41de-83e3-092f1d870d84",
+          "ec35c0b4-04b8-4178-8a65-f249847829c0",
+          "63d2296c-6d8c-499b-98fe-b674aca89cb6",
           "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
           "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
-          "63d2296c-6d8c-499b-98fe-b674aca89cb6",
-          "ec35c0b4-04b8-4178-8a65-f249847829c0",
-          "a7e01eae-3b98-41de-83e3-092f1d870d84",
-          "a8b88dda-45b4-4705-94a5-8959b0f4ed4d"
+          "28472a3c-40a2-4058-aa78-e89e233c1d85"
         ]
       },
       {
-        "id": "deal-2",
-        "name": "Personal Care Day",
-        "timerSeconds": 21600,
-        "seeMoreFilter": "Toys & Games",
-        "sourceCategory": "lounge",
+        "id": "deal-1775172010287-x72ig5",
+        "name": "Clearance sale",
+        "timerSeconds": 3600,
+        "seeMoreFilter": "electronics",
+        "sourceCategory": "electronics",
         "sourceCategories": [
-          "lounge"
+          "electronics"
         ],
         "maxItems": 8,
         "isActive": true,
         "productIds": [
-          "77d830c6-648f-4f70-b716-aa3eca9ef2fb"
+          "a3b5bb91-203b-4424-9b6b-8b5fc91bf088",
+          "86f8a671-25d6-4003-8105-cc32202c54d3",
+          "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+          "89232053-9388-46e9-b6de-ece111fbcc82",
+          "ca3db198-2ab2-4943-ac84-cf146081d48d",
+          "abbacd8c-2971-4de8-87be-fa1e2377b66a",
+          "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3"
         ]
       }
     ],

@@ -183,6 +183,13 @@ const createProductSchema = z.object({
 
 const updateProductSchema = createProductSchema.partial();
 
+const createReviewSchema = z.object({
+  author: z.string().trim().min(2).max(80),
+  rating: z.number().int().min(1).max(5),
+  title: z.string().trim().max(120).optional().default(""),
+  comment: z.string().trim().min(8).max(600),
+});
+
 async function listPublic(req, res) {
   const page = Number(req.query.page || 1);
   const limit = Math.min(Number(req.query.limit || 12), 50);
@@ -364,4 +371,33 @@ async function deleteProduct(req, res) {
   return res.json({ ok: true });
 }
 
-module.exports = { listPublic, listAdmin, createProduct, updateProduct, deleteProduct };
+async function addReview(req, res) {
+  const id = req.params.id;
+  if (!storage.isValidId(id)) return res.status(400).json({ error: "Invalid id" });
+
+  const parsed = createReviewSchema.safeParse({
+    author: String(req.body?.author || req.user?.name || "").trim(),
+    rating: Number(req.body?.rating),
+    title: req.body?.title == null ? "" : String(req.body.title),
+    comment: String(req.body?.comment || "").trim(),
+  });
+
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid review input" });
+  }
+
+  const updated = await storage.product.addReview(id, {
+    author: parsed.data.author,
+    rating: parsed.data.rating,
+    title: parsed.data.title || "",
+    comment: parsed.data.comment,
+    verifiedPurchase: false,
+    createdAt: new Date(),
+  });
+
+  if (!updated) return res.status(404).json({ error: "Product not found" });
+
+  return res.status(201).json({ product: updated });
+}
+
+module.exports = { listPublic, listAdmin, createProduct, updateProduct, deleteProduct, addReview };

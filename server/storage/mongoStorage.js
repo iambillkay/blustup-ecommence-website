@@ -205,6 +205,27 @@ async function updateProduct(id, payload) {
   return mapProductOut(updated);
 }
 
+async function addProductReview(id, payload = {}) {
+  const product = await Product.findById(id);
+  if (!product) return null;
+
+  product.reviews.unshift({
+    author: String(payload.author || "").trim(),
+    rating: Number(payload.rating || 0),
+    title: String(payload.title || "").trim(),
+    comment: String(payload.comment || "").trim(),
+    verifiedPurchase: payload.verifiedPurchase === true,
+    createdAt: payload.createdAt || new Date(),
+  });
+
+  const reviewSummary = normalizeProductReviews(product.toObject());
+  product.ratingAverage = reviewSummary.averageRating;
+  product.reviewCount = reviewSummary.reviewCount;
+  await product.save();
+
+  return mapProductOut(product);
+}
+
 async function deleteProduct(id) {
   const existing = await Product.findById(id);
   if (!existing) return null;
@@ -346,9 +367,9 @@ const DEFAULT_DEALS = [
     id: "deal-1",
     name: "Oraimo Brand Day",
     timerSeconds: 80200,
-    seeMoreFilter: "flights",
-    sourceCategory: "flights",
-    sourceCategories: ["flights", "essentials"],
+    seeMoreFilter: "oriamo",
+    sourceCategory: "oriamo",
+    sourceCategories: ["oriamo"],
     maxItems: 8,
     isActive: true,
     productIds: [],
@@ -357,9 +378,9 @@ const DEFAULT_DEALS = [
     id: "deal-2",
     name: "Personal Care Day",
     timerSeconds: 21600,
-    seeMoreFilter: "lounge",
-    sourceCategory: "lounge",
-    sourceCategories: ["lounge", "insurance"],
+    seeMoreFilter: "personal care",
+    sourceCategory: "personal care",
+    sourceCategories: ["personal care"],
     maxItems: 8,
     isActive: true,
     productIds: [],
@@ -471,7 +492,7 @@ module.exports = {
       return { users: users.map(mapUserOut) };
     },
   },
-  product: { listPublic, listAdmin, create: createProduct, update: updateProduct, delete: deleteProduct },
+  product: { listPublic, listAdmin, create: createProduct, update: updateProduct, addReview: addProductReview, delete: deleteProduct },
   order: {
     create: createOrder,
     listForUser: listOrdersForUser,
