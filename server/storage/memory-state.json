@@ -27,7 +27,7 @@
       "passwordHash": "$2b$12$GXW1GbzOmbVB6lEYYzt7MesjZpuHcySzAQeXVpc9N.xPNBNro1Rp.",
       "role": "user",
       "phone": "0505724795",
-      "loyaltyPoints": 322,
+      "loyaltyPoints": 890,
       "billingProfile": {
         "firstName": "Epaphras",
         "lastName": "Asiedu",
@@ -38,7 +38,7 @@
         "country": "United States"
       },
       "createdAt": "2026-03-30T11:22:25.594Z",
-      "updatedAt": "2026-04-01T19:29:50.098Z"
+      "updatedAt": "2026-04-03T00:14:04.305Z"
     },
     {
       "_id": "13dd75f2-2fc1-42cc-a949-ca76235ad1f1",
@@ -151,7 +151,7 @@
       "categories": [
         "oriamo"
       ],
-      "stockQty": 20,
+      "stockQty": 19,
       "imageUrl": "product-imgs/1.jpg",
       "oldPrice": 4900,
       "badge": "-47%",
@@ -163,7 +163,7 @@
       "reviews": [],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-31T12:48:07.792Z"
+      "updatedAt": "2026-04-03T00:14:04.294Z"
     },
     {
       "_id": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
@@ -872,7 +872,7 @@
       "loyaltyEarned": 0,
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
-      "status": "processing",
+      "status": "delivered",
       "statusHistory": [
         {
           "status": "placed",
@@ -887,10 +887,17 @@
           "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
           "actorEmail": "admin@blustup.local",
           "createdAt": "2026-03-31T13:18:50.993Z"
+        },
+        {
+          "status": "delivered",
+          "note": "Your order has been delivered successfully.",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-02T23:38:31.039Z"
         }
       ],
       "createdAt": "2026-03-31T13:18:50.940Z",
-      "updatedAt": "2026-03-31T13:18:50.993Z"
+      "updatedAt": "2026-04-02T23:38:31.039Z"
     },
     {
       "_id": "e522dabd-6c89-4c2e-b8da-1c2867f3eea5",
@@ -1143,7 +1150,7 @@
       "loyaltyEarned": 0,
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
-      "status": "shipped",
+      "status": "cancelled",
       "statusHistory": [
         {
           "status": "placed",
@@ -1158,10 +1165,17 @@
           "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
           "actorEmail": "admin@blustup.local",
           "createdAt": "2026-04-01T00:31:08.771Z"
+        },
+        {
+          "status": "cancelled",
+          "note": "This order has been cancelled.",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-02T23:38:53.444Z"
         }
       ],
       "createdAt": "2026-04-01T00:30:26.502Z",
-      "updatedAt": "2026-04-01T00:31:08.771Z"
+      "updatedAt": "2026-04-02T23:38:53.444Z"
     },
     {
       "_id": "6d4a98ce-0800-4b24-9f37-0a42c1dc5c2e",
@@ -1200,7 +1214,7 @@
       "loyaltyEarned": 280,
       "loyaltyBalanceAfter": 280,
       "loyaltyTierAfter": "Silver",
-      "status": "processing",
+      "status": "delivered",
       "statusHistory": [
         {
           "status": "placed",
@@ -1215,10 +1229,17 @@
           "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
           "actorEmail": "admin@blustup.local",
           "createdAt": "2026-04-01T00:43:24.020Z"
+        },
+        {
+          "status": "delivered",
+          "note": "Your order has been delivered successfully.",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-02T23:38:26.443Z"
         }
       ],
       "createdAt": "2026-04-01T00:43:02.212Z",
-      "updatedAt": "2026-04-01T00:43:24.020Z"
+      "updatedAt": "2026-04-02T23:38:26.443Z"
     },
     {
       "_id": "8306ffcc-3b02-432b-a4de-f2778ea527b2",
@@ -1376,6 +1397,63 @@
       ],
       "createdAt": "2026-04-01T19:29:50.085Z",
       "updatedAt": "2026-04-01T19:29:50.085Z"
+    },
+    {
+      "_id": "e5a00df2-96b2-4548-a440-d8efd7adbcab",
+      "reference": "BLU-MNI5I8SS-6713",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "customerName": "Epaphras Asiedu",
+      "customerEmail": "epaphraskasiedu@gmail.com",
+      "customerPhone": "0505724795",
+      "billingAddress": {
+        "firstName": "Epaphras",
+        "lastName": "Asiedu",
+        "street": "Adenta - Owusu Ansah",
+        "city": "Accra",
+        "state": "NY",
+        "zip": "122",
+        "country": "United States"
+      },
+      "items": [
+        {
+          "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+          "name": "Oraimo Maxi Watch",
+          "price": 2631.9,
+          "qty": 1,
+          "imageUrl": "product-imgs/1.jpg"
+        }
+      ],
+      "paymentMethod": "cod",
+      "promoCode": null,
+      "promoLabel": null,
+      "subtotal": 2631.9,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 210.55,
+      "total": 2842.45,
+      "loyaltyEarned": 568,
+      "loyaltyBalanceAfter": 890,
+      "loyaltyTierAfter": "Platinum",
+      "status": "delivered",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "note": "Order received and queued for confirmation.",
+          "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+          "actorEmail": "epaphraskasiedu@gmail.com",
+          "createdAt": "2026-04-03T00:14:04.300Z"
+        },
+        {
+          "status": "delivered",
+          "note": "Your order has been delivered successfully.",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-03T00:14:39.899Z"
+        }
+      ],
+      "createdAt": "2026-04-03T00:14:04.300Z",
+      "updatedAt": "2026-04-03T00:14:39.899Z"
     }
   ],
   "tracking": [
@@ -2805,6 +2883,440 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
       "createdAt": "2026-04-02T23:23:12.172Z"
+    },
+    {
+      "_id": "3c40d967-42af-4da5-a2ee-08989730a2a0",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:37:26.366Z"
+    },
+    {
+      "_id": "8d7e3e7a-c96f-418c-b5dd-81297959cf45",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:37:43.572Z"
+    },
+    {
+      "_id": "1889e5f4-feae-448c-af9f-a4f7a1e376ca",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:37:46.098Z"
+    },
+    {
+      "_id": "d45e50a1-a2fd-41f3-b67e-ac9bcb3f99dc",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "ad_click",
+      "eventData": {
+        "adId": "ad-1",
+        "title": "Discover better deals without the guesswork.",
+        "target": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:46:09.963Z"
+    },
+    {
+      "_id": "e39f59a1-057c-473c-ba4c-3fafe9fdc063",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-02T23:46:09.966Z"
+    },
+    {
+      "_id": "8741de6b-585b-4016-9f8e-deae9dc990f3",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "ad_click",
+      "eventData": {
+        "adId": "ad-1",
+        "title": "Discover better deals without the guesswork.",
+        "target": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:12:08.097Z"
+    },
+    {
+      "_id": "4652413f-beb8-48eb-b40a-0b6c68a548a7",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:12:08.101Z"
+    },
+    {
+      "_id": "48a2a3a8-c6ab-4a74-b818-16926522888c",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:12:10.321Z"
+    },
+    {
+      "_id": "48f515bb-aaf8-4ffd-a7a6-1f48c9d47a59",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "ad_click",
+      "eventData": {
+        "adId": "ad-1",
+        "title": "Discover better deals without the guesswork.",
+        "target": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:12:11.056Z"
+    },
+    {
+      "_id": "e47abc9a-b46b-4a90-819c-bf71e1cedc1a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:12:11.059Z"
+    },
+    {
+      "_id": "db9544c1-c236-485e-90a2-c5a83533aae3",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:12:12.515Z"
+    },
+    {
+      "_id": "bdf0c92f-2235-437d-bda6-41185a4458a1",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:14.836Z"
+    },
+    {
+      "_id": "9a52dd81-2278-4b39-ba9a-8f315c2ab111",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+        "productName": "Foot Ball",
+        "category": "Toys & Games",
+        "price": 50,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:17.105Z"
+    },
+    {
+      "_id": "67beff2c-0035-42ae-a419-872f9b20e148",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+        "productName": "Orange",
+        "category": "Fruits & Vegetables",
+        "price": 5,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:22.150Z"
+    },
+    {
+      "_id": "e8af8c3f-b36b-41e6-9073-f39d1f25f783",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:33.086Z"
+    },
+    {
+      "_id": "43e4b284-2a74-4305-aed7-397e16337a41",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:36.575Z"
+    },
+    {
+      "_id": "b61ed793-d6c2-4434-aedf-a3d5b87d22ab",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:38.732Z"
+    },
+    {
+      "_id": "1507f61e-d184-4665-a770-fb4996c92dd6",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:41.811Z"
+    },
+    {
+      "_id": "f0346819-99ac-463e-b80d-ca349267e692",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+        "productName": "Oraimo Maxi Watch",
+        "category": "oriamo",
+        "price": 2631.9,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:43.829Z"
+    },
+    {
+      "_id": "419de222-c676-42a1-bbd0-c14f9cdf274e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:45.079Z"
+    },
+    {
+      "_id": "f9b99983-fd88-4af4-8a88-5952bf6bfe18",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:13:49.673Z"
+    },
+    {
+      "_id": "2c618367-227d-48cd-acb6-166097de6c49",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "purchase",
+      "eventData": {
+        "reference": "BLU-MNI5I8SS-6713",
+        "total": 2842.45,
+        "paymentMethod": "cod",
+        "items": [
+          {
+            "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+            "qty": 1
+          }
+        ]
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:14:04.315Z"
+    },
+    {
+      "_id": "514a3910-6d5f-48c2-84a4-39bb2050aa02",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "success"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:14:04.326Z"
+    },
+    {
+      "_id": "cc8f151a-f4e8-4b04-b912-ce4e3992ce76",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T00:14:06.573Z"
+    },
+    {
+      "_id": "9581d985-b5d1-41c1-b5d9-e41ea7f40f22",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:56:55.271Z"
+    },
+    {
+      "_id": "5fc355a2-3fe6-464e-9480-c48f300df79f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+        "productName": "Foot Ball",
+        "category": "Toys & Games",
+        "price": 50,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:56:57.073Z"
+    },
+    {
+      "_id": "8c224d64-5dc2-4820-a123-09f903972b5e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:57:06.610Z"
+    },
+    {
+      "_id": "837b9809-7e4b-484f-9827-b80a17e76909",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+        "productName": "Orange",
+        "category": "Fruits & Vegetables",
+        "price": 5,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:57:20.558Z"
+    },
+    {
+      "_id": "7c9bf4a0-e910-4aae-bb55-d501828386c2",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "abbacd8c-2971-4de8-87be-fa1e2377b66a",
+        "productName": "Pepsodent Tooth Paste",
+        "category": "personal care",
+        "price": 136.9,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:57:24.869Z"
+    },
+    {
+      "_id": "c419f2a4-62c3-4cd0-b66c-2c3fca1efd38",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "89232053-9388-46e9-b6de-ece111fbcc82",
+        "productName": "Mango",
+        "category": "Fruits & Vegetables",
+        "price": 34.88,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:57:28.034Z"
+    },
+    {
+      "_id": "f9d8bddb-1897-4595-b879-3eb2543f348c",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+        "productName": "Pinapple",
+        "category": "Fruits & Vegetables",
+        "price": 20,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:57:30.309Z"
+    },
+    {
+      "_id": "61c760ca-bc39-417c-bac4-ec5ec779e560",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "abbacd8c-2971-4de8-87be-fa1e2377b66a",
+        "productName": "Pepsodent Tooth Paste",
+        "category": "personal care",
+        "price": 136.9,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-03T12:57:31.946Z"
     }
   ],
   "audit": [
@@ -3337,14 +3849,141 @@
       "summary": "Updated deals: 2 configured",
       "actorEmail": "admin@blustup.local",
       "createdAt": "2026-04-02T23:22:21.564Z"
+    },
+    {
+      "_id": "d6deae75-f81c-45da-9e47-6cbcab3a76b3",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "6d4a98ce-0800-4b24-9f37-0a42c1dc5c2e",
+      "summary": "Updated order BLU-MNFBNSG4-9206 to delivered",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:38:26.447Z"
+    },
+    {
+      "_id": "a7b16302-405f-4469-b265-3703d99a546b",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "fbafb258-d1c9-48c4-9bf2-f77a89bf77a9",
+      "summary": "Updated order BLU-MNEN7X2Z-8883 to delivered",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:38:31.044Z"
+    },
+    {
+      "_id": "8327bd5f-27c4-4481-a18e-d866fa299a87",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "eb499191-8a71-42d9-b929-52f395ed41e6",
+      "summary": "Updated order BLU-MNFB7LC6-9854 to cancelled",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-02T23:38:53.449Z"
+    },
+    {
+      "_id": "81077bf1-541e-433d-a356-e3a8abf68955",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "reports",
+      "entityId": "report-1775175056541-8kylg",
+      "summary": "Generated daily report",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-03T00:10:56.548Z"
+    },
+    {
+      "_id": "f86c4325-27cf-4651-b012-1e65d073d786",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "reports",
+      "entityId": null,
+      "summary": "Updated scheduled report settings",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-03T00:11:23.492Z"
+    },
+    {
+      "_id": "ea2ce13d-5931-472d-a5a8-74f4c7b69f4b",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "home",
+      "entityId": null,
+      "summary": "Updated homepage ads: 4 configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-03T00:11:56.724Z"
+    },
+    {
+      "_id": "9aa055b5-cc7e-4107-b6be-e320201acbf8",
+      "actorId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "action": "add",
+      "entityType": "order",
+      "entityId": "e5a00df2-96b2-4548-a440-d8efd7adbcab",
+      "summary": "Created order BLU-MNI5I8SS-6713 for epaphraskasiedu@gmail.com",
+      "actorEmail": "epaphraskasiedu@gmail.com",
+      "createdAt": "2026-04-03T00:14:04.309Z"
+    },
+    {
+      "_id": "d683e9a5-3e57-471d-93f3-4fdf95ee4ad6",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "e5a00df2-96b2-4548-a440-d8efd7adbcab",
+      "summary": "Updated order BLU-MNI5I8SS-6713 to delivered",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-03T00:14:39.904Z"
+    },
+    {
+      "_id": "fd6f9e08-a38e-441a-8de0-627984916577",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "reports",
+      "entityId": "report-1775220968955-dzcwo",
+      "summary": "Generated weekly report",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-03T12:56:09.088Z"
     }
   ],
   "cms": {
     "home": {
+      "ads": [
+        {
+          "id": "ad-1",
+          "imageUrl": "product-imgs/ad/ad1.png",
+          "title": "Discover better deals without the guesswork.",
+          "subtitle": "Shop curated products, compare ratings quickly, and move through checkout with confidence.",
+          "ctaLabel": "Shop now",
+          "ctaTarget": "shop",
+          "isActive": true
+        },
+        {
+          "id": "ad-2",
+          "imageUrl": "product-imgs/ad/ad2.png",
+          "title": "Weekly picks built for value-focused shoppers.",
+          "subtitle": "Fresh offers, dependable brands, and featured products that are easy to explore.",
+          "ctaLabel": "View deals",
+          "ctaTarget": "home",
+          "isActive": true
+        },
+        {
+          "id": "ad-4",
+          "imageUrl": "/uploads/our-ad-mnclnykm.jpg",
+          "title": "Featured Ad 4",
+          "subtitle": "",
+          "ctaLabel": "Shop now",
+          "ctaTarget": "shop",
+          "isActive": true
+        },
+        {
+          "id": "ad-5",
+          "imageUrl": "/uploads/ad3-mncz9ikx.png",
+          "title": "Featured Ad 5",
+          "subtitle": "",
+          "ctaLabel": "Shop now",
+          "ctaTarget": "shop",
+          "isActive": true
+        }
+      ],
       "adImages": [
         "product-imgs/ad/ad1.png",
         "product-imgs/ad/ad2.png",
-        "product-imgs/ad/ad3.png",
         "/uploads/our-ad-mnclnykm.jpg",
         "/uploads/ad3-mncz9ikx.png"
       ]
@@ -3503,6 +4142,153 @@
           "imageUrl": null
         }
       ]
+    },
+    "about": {
+      "badge": "About Blustup",
+      "title": "Blustup helps everyday shoppers buy with more clarity, more trust, and less friction.",
+      "intro": "We built Blustup around a simple promise: product discovery should feel transparent, checkout should feel secure, and support should be available the moment a shopper needs it. That is why the storefront combines curated catalog design, loyalty rewards, and AI-guided assistance in one place.",
+      "primaryCtaLabel": "Explore the shop",
+      "primaryCtaTarget": "shop",
+      "secondaryCtaLabel": "Ask Blustup AI",
+      "secondaryCtaTarget": "ai",
+      "stats": [
+        {
+          "title": "Transparent",
+          "text": "Clear pricing, visible ratings, and plain-language trust signals through checkout."
+        },
+        {
+          "title": "Helpful",
+          "text": "AI support, loyalty perks, and guidance that reduces checkout friction."
+        },
+        {
+          "title": "Reliable",
+          "text": "A brand built around secure payments, dependable fulfillment, and customer confidence."
+        }
+      ],
+      "cards": [
+        {
+          "title": "Our Identity",
+          "text": "Blustup is positioned as a modern e-business brand for practical shoppers who want strong value without sacrificing trust. The experience blends confident visuals, curated products, and support that feels available before, during, and after purchase."
+        },
+        {
+          "title": "Our Promise",
+          "text": "We focus on making every stage of online shopping easier to understand: what a product offers, how customers feel about it, and how payment and delivery choices affect the final order."
+        },
+        {
+          "title": "Our Voice",
+          "text": "Helpful, direct, and practical. From the product cards to the AI assistant, the brand is designed to feel supportive rather than overwhelming."
+        }
+      ],
+      "pillars": [
+        {
+          "title": "What shapes the business",
+          "items": [
+            "Product pages emphasize clear value, ratings, and short customer proof.",
+            "Loyalty points encourage repeat purchases and stronger customer retention.",
+            "Visible privacy and payment messaging reinforce trust at the moment it matters most."
+          ]
+        },
+        {
+          "title": "How we serve shoppers",
+          "items": [
+            "AI chat answers product, offer, and checkout questions in real time.",
+            "Secure checkout messaging keeps payment confidence front and center.",
+            "Account-linked order tracking helps repeat buyers move faster on future purchases."
+          ]
+        }
+      ]
+    },
+    "reports": {
+      "emailEnabled": false,
+      "emailTo": "nnii@gmail.com",
+      "emailSubjectPrefix": "Blustup Reports",
+      "timezone": "Africa/Accra",
+      "dailyCron": "0 8 * * *",
+      "weeklyCron": "0 9 * * 1",
+      "inventoryCron": "0 10 * * 1",
+      "history": [
+        {
+          "id": "report-1775220968955-dzcwo",
+          "type": "weekly",
+          "generatedAt": "2026-04-03T12:56:08.954Z",
+          "summary": "Weekly sales: GHS 0.00 from 0 orders in the last 7 days.",
+          "emailStatus": "disabled",
+          "emailTo": "nnii@gmail.com",
+          "source": "admin@blustup.local",
+          "snapshot": {
+            "period": "last_7_days",
+            "revenue": 0,
+            "orders": 0,
+            "revenueChangePercent": 0,
+            "topProducts": [
+              {
+                "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+                "unitsSold": 6,
+                "revenue": 15791.4,
+                "name": "Oraimo Maxi Watch"
+              },
+              {
+                "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+                "unitsSold": 6,
+                "revenue": 7800,
+                "name": "Toy Car"
+              },
+              {
+                "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+                "unitsSold": 2,
+                "revenue": 434,
+                "name": "Oraimo CleanSip Faucet"
+              },
+              {
+                "productId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+                "unitsSold": 1,
+                "revenue": 20,
+                "name": "Pinapple"
+              },
+              {
+                "productId": "ca3db198-2ab2-4943-ac84-cf146081d48d",
+                "unitsSold": 1,
+                "revenue": 5,
+                "name": "Orange"
+              }
+            ],
+            "funnel": {
+              "pageViews": 121,
+              "productViews": 2,
+              "addToCartEvents": 8,
+              "purchases": 0,
+              "pageSessions": 3,
+              "productSessions": 1,
+              "addToCartSessions": 2,
+              "purchaseSessions": 0,
+              "viewToCartPercent": 200,
+              "cartToPurchasePercent": 0,
+              "viewToPurchasePercent": 0
+            }
+          }
+        },
+        {
+          "id": "report-1775175056541-8kylg",
+          "type": "daily",
+          "generatedAt": "2026-04-03T00:10:56.541Z",
+          "summary": "Daily sales: GHS 0.00 from 0 orders today.",
+          "emailStatus": "disabled",
+          "emailTo": "admin@blustup.local",
+          "source": "admin@blustup.local",
+          "snapshot": {
+            "period": "today",
+            "revenue": 0,
+            "orders": 0,
+            "revenueChangePercent": 0,
+            "averageOrderValue": 1652.28
+          }
+        }
+      ],
+      "lastRunByType": {
+        "daily": "2026-04-03T00:10:56.541Z",
+        "weekly": "2026-04-03T12:56:08.954Z",
+        "inventory": null
+      }
     },
     "ai": {
       "chatEnabled": true,

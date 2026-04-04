@@ -21,7 +21,8 @@ router.put("/deals", ...adminOnly, cmsController.setDeals);
 
 router.get("/faq", cmsController.getFaq);
 router.put("/faq", ...adminOnly, cmsController.setFaq);
+router.get("/about", cmsController.getAbout);
+router.put("/about", ...adminOnly, cmsController.setAbout);
 router.post("/upload-image", ...adminOnly, upload.single("image"), cmsController.uploadCmsImage);
 
 module.exports = router;
-

@@ -134,7 +134,13 @@ function addToCart(id, e) {
 
   // Track add to cart
   if (window.tracker) {
-    window.tracker.track('add_to_cart', { productId: id, productName: product.name });
+    window.tracker.track("add_to_cart", {
+      productId: id,
+      productName: product.name,
+      category: getCartProductCategories(product)[0] || product.cat || "",
+      price: Number(product.price || 0),
+      page: document.body?.dataset?.page || "unknown",
+    });
   }
 }
 

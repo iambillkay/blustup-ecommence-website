@@ -7,6 +7,14 @@ const Tracking = require("../models/Tracking");
 const AuditLog = require("../models/AuditLog");
 const CmsConfig = require("../models/CmsConfig");
 const { normalizeProductReviews, buildLoyaltyProfile } = require("../utils/storefront");
+const {
+  DEFAULT_HOME_SETTINGS,
+  DEFAULT_ABOUT_SETTINGS,
+  DEFAULT_REPORT_SETTINGS,
+  normalizeHomeSettings,
+  normalizeAboutSettings,
+  normalizeReportSettings,
+} = require("../utils/cmsDefaults");
 
 function isValidId(id) {
   return mongoose.Types.ObjectId.isValid(id);
@@ -137,6 +145,17 @@ function mapOrderOut(order) {
       : [],
     createdAt: order.createdAt?.toISOString?.() || null,
     updatedAt: order.updatedAt?.toISOString?.() || null,
+  };
+}
+
+function mapTrackingOut(event) {
+  return {
+    id: event._id.toString(),
+    userId: event.userId ? event.userId.toString() : null,
+    sessionId: event.sessionId || null,
+    eventType: event.eventType,
+    eventData: event.eventData && typeof event.eventData === "object" ? event.eventData : {},
+    createdAt: event.createdAt?.toISOString?.() || null,
   };
 }
 
@@ -297,7 +316,7 @@ async function lookupOrderByReference({ reference, email }) {
 }
 
 async function listOrdersAdmin({ status, q, limit }) {
-  const pageSize = Math.min(Math.max(1, Number(limit || 50)), 100);
+  const pageSize = Math.min(Math.max(1, Number(limit || 50)), 5000);
   const query = {};
 
   if (status) query.status = String(status).trim().toLowerCase();
@@ -332,13 +351,7 @@ async function updateOrderStatus(id, { status, note, actorId, actorEmail }) {
   return mapOrderOut(order);
 }
 
-const DEFAULT_HOME = {
-  adImages: [
-    "product-imgs/ad/ad1.png",
-    "product-imgs/ad/ad2.png",
-    "product-imgs/ad/ad3.png",
-  ],
-};
+const DEFAULT_HOME = normalizeHomeSettings(DEFAULT_HOME_SETTINGS);
 
 const DEFAULT_SHOP = {
   title: "Welcome to the Shop",
@@ -361,6 +374,9 @@ const DEFAULT_AI = {
   systemPrompt:
     "You are Blustup's shopping assistant. Give brief, direct answers. Recommend products when relevant.",
 };
+
+const DEFAULT_ABOUT = normalizeAboutSettings(DEFAULT_ABOUT_SETTINGS);
+const DEFAULT_REPORTS = normalizeReportSettings(DEFAULT_REPORT_SETTINGS);
 
 const DEFAULT_DEALS = [
   {
@@ -502,6 +518,18 @@ module.exports = {
   },
   tracking: {
     add: (payload) => Tracking.create(payload),
+    list: async ({ limit, since, eventType } = {}) => {
+      const query = {};
+      if (since) {
+        const sinceDate = new Date(since);
+        if (!Number.isNaN(sinceDate.getTime())) query.createdAt = { $gte: sinceDate };
+      }
+      if (eventType) query.eventType = String(eventType).trim();
+
+      const pageSize = Math.min(Math.max(1, Number(limit || 1000)), 10000);
+      const events = await Tracking.find(query).sort({ createdAt: -1 }).limit(pageSize);
+      return { events: events.map(mapTrackingOut) };
+    },
   },
   audit: { add: addAuditLog, listRecent: listRecentAudit },
   cms: {
@@ -515,5 +543,9 @@ module.exports = {
     setDeals: (value) => upsertCmsByKey("deals", value),
     getFaq: () => getCmsByKey("faq", DEFAULT_FAQ),
     setFaq: (value) => upsertCmsByKey("faq", value),
+    getAbout: async () => normalizeAboutSettings(await getCmsByKey("about", DEFAULT_ABOUT)),
+    setAbout: (value) => upsertCmsByKey("about", value),
+    getReports: async () => normalizeReportSettings(await getCmsByKey("reports", DEFAULT_REPORTS)),
+    setReports: (value) => upsertCmsByKey("reports", value),
   },
 };

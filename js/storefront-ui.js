@@ -450,6 +450,16 @@ function openProductSelection(productId, event) {
   const { backdrop, body } = getProductDetailNodes();
   if (!product || !backdrop || !body) return;
 
+  if (window.tracker) {
+    window.tracker.track("product_view", {
+      productId: String(product.id),
+      productName: product.name,
+      category: Array.isArray(product.categories) ? product.categories[0] || "" : product.cat || "",
+      price: Number(product.price || 0),
+      page: document.body?.dataset?.page || "unknown",
+    });
+  }
+
   body.innerHTML = renderProductDetailMarkup(product);
   backdrop.hidden = false;
   backdrop.classList.add("open");

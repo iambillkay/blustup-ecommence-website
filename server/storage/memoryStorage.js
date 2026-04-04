@@ -8,6 +8,14 @@ const {
   normalizeStoredReview,
   buildLoyaltyProfile,
 } = require("../utils/storefront");
+const {
+  DEFAULT_HOME_SETTINGS,
+  DEFAULT_ABOUT_SETTINGS,
+  DEFAULT_REPORT_SETTINGS,
+  normalizeHomeSettings,
+  normalizeAboutSettings,
+  normalizeReportSettings,
+} = require("../utils/cmsDefaults");
 
 const STATE_FILE = path.join(__dirname, "memory-state.json");
 const DEFAULT_AI = {
@@ -65,13 +73,7 @@ function toISO(value) {
 
 function createDefaultCmsState() {
   return {
-    home: {
-      adImages: [
-        "product-imgs/ad/ad1.png",
-        "product-imgs/ad/ad2.png",
-        "product-imgs/ad/ad3.png",
-      ],
-    },
+    home: normalizeHomeSettings(DEFAULT_HOME_SETTINGS),
     shop: {
       title: "Welcome to the Shop",
       subtitle: "Discover products tailored to your needs",
@@ -165,6 +167,8 @@ function createDefaultCmsState() {
         },
       ],
     },
+    about: normalizeAboutSettings(DEFAULT_ABOUT_SETTINGS),
+    reports: normalizeReportSettings(DEFAULT_REPORT_SETTINGS),
     ai: { ...DEFAULT_AI },
   };
 }
@@ -328,9 +332,7 @@ function normalizeAuditRecord(record = {}) {
 function normalizeCmsState(cms = {}) {
   const defaults = createDefaultCmsState();
   return {
-    home: {
-      adImages: Array.isArray(cms?.home?.adImages) && cms.home.adImages.length ? cms.home.adImages : defaults.home.adImages,
-    },
+    home: normalizeHomeSettings(cms?.home || defaults.home),
     shop: {
       title: String(cms?.shop?.title || defaults.shop.title),
       subtitle: String(cms?.shop?.subtitle || defaults.shop.subtitle),
@@ -368,6 +370,8 @@ function normalizeCmsState(cms = {}) {
           board: Array.isArray(cms.faq.board) ? cms.faq.board : defaults.faq.board,
         }
       : defaults.faq,
+    about: normalizeAboutSettings(cms?.about || defaults.about),
+    reports: normalizeReportSettings(cms?.reports || defaults.reports),
     ai: {
       ...DEFAULT_AI,
       ...(cms?.ai && typeof cms.ai === "object" ? cms.ai : {}),
@@ -493,6 +497,17 @@ function mapOrderOut(order) {
     })),
     createdAt: toISO(order.createdAt),
     updatedAt: toISO(order.updatedAt),
+  };
+}
+
+function mapTrackingOut(entry) {
+  return {
+    id: String(entry._id),
+    userId: entry.userId || null,
+    sessionId: entry.sessionId || null,
+    eventType: entry.eventType,
+    eventData: entry.eventData && typeof entry.eventData === "object" ? { ...entry.eventData } : {},
+    createdAt: toISO(entry.createdAt),
   };
 }
 
@@ -972,7 +987,7 @@ async function lookupOrderByReference({ reference, email }) {
 }
 
 async function listOrdersAdmin({ status, q, limit }) {
-  const pageSize = Math.min(Math.max(1, Number(limit || 50)), 100);
+  const pageSize = Math.min(Math.max(1, Number(limit || 50)), 5000);
   let rows = [...state.orders];
   if (status) {
     const targetStatus = String(status).trim().toLowerCase();
@@ -1012,6 +1027,26 @@ async function addTrackingEvent(payload) {
   );
   await persistState();
   return { ok: true };
+}
+
+async function listTrackingEvents({ limit, since, eventType } = {}) {
+  let rows = [...state.tracking];
+
+  if (since) {
+    const sinceTime = new Date(since).getTime();
+    if (!Number.isNaN(sinceTime)) {
+      rows = rows.filter((entry) => new Date(entry.createdAt).getTime() >= sinceTime);
+    }
+  }
+
+  if (eventType) {
+    const target = String(eventType).trim().toLowerCase();
+    rows = rows.filter((entry) => String(entry.eventType || "").trim().toLowerCase() === target);
+  }
+
+  rows.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const pageSize = Math.min(Math.max(1, Number(limit || rows.length || 1)), 10000);
+  return { events: rows.slice(0, pageSize).map(mapTrackingOut) };
 }
 
 async function addAuditLog({ actorId, action, entityType, entityId, summary }) {
@@ -1081,6 +1116,7 @@ module.exports = {
   },
   tracking: {
     add: addTrackingEvent,
+    list: listTrackingEvents,
   },
   cms: {
     getHome: async () => state.cms.home,
@@ -1112,6 +1148,18 @@ module.exports = {
       state.cms.faq = value;
       await persistState();
       return state.cms.faq;
+    },
+    getAbout: async () => state.cms.about,
+    setAbout: async (value) => {
+      state.cms.about = value;
+      await persistState();
+      return state.cms.about;
+    },
+    getReports: async () => state.cms.reports,
+    setReports: async (value) => {
+      state.cms.reports = value;
+      await persistState();
+      return state.cms.reports;
     },
   },
   getAuthUserResponse,

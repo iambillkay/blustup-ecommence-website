@@ -290,21 +290,21 @@ Log In
   <div id="page-about" class="page site-page">
     <div class="site-page-shell">
       <section class="site-page-hero">
-        <div class="section-badge">About Blustup</div>
-        <h1>Blustup helps everyday shoppers buy with more clarity, more trust, and less friction.</h1>
-        <p>We built Blustup around a simple promise: product discovery should feel transparent, checkout should feel secure, and support should be available the moment a shopper needs it. That is why the storefront combines curated catalog design, loyalty rewards, and AI-guided assistance in one place.</p>
+        <div class="section-badge" id="about-badge">About Blustup</div>
+        <h1 id="about-title">Blustup helps everyday shoppers buy with more clarity, more trust, and less friction.</h1>
+        <p id="about-intro">We built Blustup around a simple promise: product discovery should feel transparent, checkout should feel secure, and support should be available the moment a shopper needs it. That is why the storefront combines curated catalog design, loyalty rewards, and AI-guided assistance in one place.</p>
         <div class="site-page-hero-actions">
-          <button class="checkout-btn" type="button" onclick="showPage('shop')">Explore the shop</button>
-          <button class="cart-secondary-btn" type="button" onclick="openAiChat()">Ask Blustup AI</button>
+          <button class="checkout-btn" type="button" id="about-primary-cta" onclick="showPage('shop')">Explore the shop</button>
+          <button class="cart-secondary-btn" type="button" id="about-secondary-cta" onclick="openAiChat()">Ask Blustup AI</button>
         </div>
-        <div class="about-stats">
+        <div class="about-stats" id="about-stats-root">
           <div class="about-stat"><strong>Transparent</strong><span>Clear pricing, visible ratings, and plain-language trust signals through checkout.</span></div>
           <div class="about-stat"><strong>Helpful</strong><span>AI support, loyalty perks, and guidance that reduces checkout friction.</span></div>
           <div class="about-stat"><strong>Reliable</strong><span>A brand built around secure payments, dependable fulfillment, and customer confidence.</span></div>
         </div>
       </section>
 
-      <div class="site-page-grid three-up">
+      <div class="site-page-grid three-up" id="about-cards-root">
         <article class="info-card">
           <h3>Our Identity</h3>
           <p>Blustup is positioned as a modern e-business brand for practical shoppers who want strong value without sacrificing trust. The experience blends confident visuals, curated products, and support that feels available before, during, and after purchase.</p>
@@ -319,7 +319,7 @@ Log In
         </article>
       </div>
 
-      <div class="site-page-grid two-up">
+      <div class="site-page-grid two-up" id="about-pillars-root">
         <article class="info-card">
           <h2>What shapes the business</h2>
           <ul>
@@ -970,6 +970,7 @@ Already have an account?
   <script src="js/ai-chat.js"></script>
   <script src="js/home.js"></script>
   <script src="js/FAQ.js"></script>
+  <script src="js/about.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/checkout.js"></script>

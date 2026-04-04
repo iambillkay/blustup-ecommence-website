@@ -278,6 +278,27 @@ async function createOrder(req, res) {
       console.warn("Order created but failed to write audit log:", auditError?.message || auditError);
     }
 
+    try {
+      await storage.tracking.add({
+        userId: req.user?.sub || null,
+        sessionId: parsed.data.sessionId || null,
+        eventType: "purchase",
+        eventData: {
+          reference: order.reference,
+          total: order.total,
+          paymentMethod: order.paymentMethod,
+          items: order.items.map((item) => ({
+            productId: item.productId,
+            qty: item.qty,
+          })),
+        },
+        ipAddress: req.ip || req.connection?.remoteAddress || null,
+        userAgent: req.get("User-Agent") || null,
+      });
+    } catch (trackingError) {
+      console.warn("Order created but failed to track purchase:", trackingError?.message || trackingError);
+    }
+
     return res.status(201).json({
       order,
       user: userResponse,

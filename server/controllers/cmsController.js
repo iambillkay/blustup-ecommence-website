@@ -1,8 +1,23 @@
 const { z } = require("zod");
 const storage = require("../storage");
+const {
+  normalizeHomeSettings,
+  normalizeAboutSettings,
+} = require("../utils/cmsDefaults");
 
 const homeSchema = z.object({
-  adImages: z.array(z.string().trim().min(1).max(500)).min(1).max(10),
+  adImages: z.array(z.string().trim().min(1).max(500)).max(10).optional(),
+  ads: z.array(
+    z.object({
+      id: z.string().trim().min(1).max(60),
+      imageUrl: z.string().trim().min(1).max(500),
+      title: z.string().trim().min(1).max(140),
+      subtitle: z.string().trim().max(220).optional(),
+      ctaLabel: z.string().trim().max(40).optional(),
+      ctaTarget: z.string().trim().max(200).optional(),
+      isActive: z.boolean().optional(),
+    })
+  ).max(10).optional(),
 });
 
 const shopSchema = z.object({
@@ -79,6 +94,34 @@ const faqSchema = z.object({
       })
     )
     .max(20),
+});
+
+const aboutSchema = z.object({
+  badge: z.string().trim().min(1).max(80),
+  title: z.string().trim().min(1).max(220),
+  intro: z.string().trim().min(1).max(800),
+  primaryCtaLabel: z.string().trim().min(1).max(40),
+  primaryCtaTarget: z.string().trim().min(1).max(200),
+  secondaryCtaLabel: z.string().trim().min(1).max(40),
+  secondaryCtaTarget: z.string().trim().min(1).max(200),
+  stats: z.array(
+    z.object({
+      title: z.string().trim().min(1).max(80),
+      text: z.string().trim().min(1).max(220),
+    })
+  ).min(1).max(6),
+  cards: z.array(
+    z.object({
+      title: z.string().trim().min(1).max(120),
+      text: z.string().trim().min(1).max(900),
+    })
+  ).min(1).max(6),
+  pillars: z.array(
+    z.object({
+      title: z.string().trim().min(1).max(120),
+      items: z.array(z.string().trim().min(1).max(220)).min(1).max(8),
+    })
+  ).min(1).max(4),
 });
 
 function normalizeShop(value) {
@@ -415,12 +458,19 @@ function normalizeAiSettings(value) {
 }
 
 async function getHome(_req, res) {
-  return res.json({ settings: await storage.cms.getHome() });
+  return res.json({ settings: normalizeHomeSettings(await storage.cms.getHome()) });
 }
 async function setHome(req, res) {
   const parsed = homeSchema.safeParse(req.body || {});
   if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
-  const settings = await storage.cms.setHome(parsed.data);
+  const settings = await storage.cms.setHome(normalizeHomeSettings(parsed.data));
+  await storage.audit.add({
+    actorId: req.user?.sub || null,
+    action: "change",
+    entityType: "home",
+    entityId: null,
+    summary: `Updated homepage ads: ${(Array.isArray(settings?.ads) ? settings.ads.length : 0)} configured`,
+  });
   return res.json({ settings });
 }
 
@@ -485,6 +535,23 @@ async function setFaq(req, res) {
   return res.json({ settings });
 }
 
+async function getAbout(_req, res) {
+  return res.json({ settings: normalizeAboutSettings(await storage.cms.getAbout()) });
+}
+async function setAbout(req, res) {
+  const parsed = aboutSchema.safeParse(req.body || {});
+  if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
+  const settings = await storage.cms.setAbout(normalizeAboutSettings(parsed.data));
+  await storage.audit.add({
+    actorId: req.user?.sub || null,
+    action: "change",
+    entityType: "about",
+    entityId: null,
+    summary: "Updated About page content",
+  });
+  return res.json({ settings });
+}
+
 async function uploadHomeImage(req, res) {
   if (!req.file) return res.status(400).json({ error: "Image file is required" });
   return res.status(201).json({ imageUrl: `/uploads/${req.file.filename}` });
@@ -506,6 +573,8 @@ module.exports = {
   setDeals,
   getFaq,
   setFaq,
+  getAbout,
+  setAbout,
   uploadHomeImage,
   uploadCmsImage,
 };

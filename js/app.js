@@ -30,6 +30,11 @@ async function refreshLivePageData(pageName, options = {}) {
       return;
     }
 
+    if (activePage === "about" && typeof loadAboutContent === "function") {
+      await loadAboutContent();
+      return;
+    }
+
     if (activePage === "loyalty" && typeof refreshLoyaltyExperience === "function") {
       refreshLoyaltyExperience();
       return;

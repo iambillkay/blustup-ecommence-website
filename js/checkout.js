@@ -564,16 +564,6 @@ async function placeOrder() {
       persistStoredUser(response.user);
     }
 
-    if (window.tracker) {
-      window.tracker.track("purchase", {
-        ref: order.reference,
-        total: order.total,
-        email: order.customerEmail,
-        method: order.paymentMethod,
-        items: order.items.map((item) => ({ id: item.productId, quantity: item.qty })),
-      });
-    }
-
     const orderRef = document.getElementById("order-ref");
     if (orderRef) orderRef.textContent = order.reference;
     const successLoyalty = document.getElementById("success-loyalty-note");

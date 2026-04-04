@@ -16,5 +16,10 @@ router.get("/actions/recent", requireAuth, requireRole("admin"), adminController
 router.get("/orders", requireAuth, requireRole("admin"), orderController.listAdminOrders);
 router.patch("/orders/:id/status", requireAuth, requireRole("admin"), orderController.updateOrderStatus);
 router.get("/users", requireAuth, requireRole("admin"), orderController.listAdminUsers);
+router.get("/analytics/overview", requireAuth, requireRole("admin"), adminController.analyticsOverview);
+router.get("/reports", requireAuth, requireRole("admin"), adminController.reportsDashboard);
+router.get("/reports/settings", requireAuth, requireRole("admin"), adminController.reportSettings);
+router.patch("/reports/settings", requireAuth, requireRole("admin"), adminController.updateReportSettings);
+router.post("/reports/run", requireAuth, requireRole("admin"), adminController.runReport);
 
 module.exports = router;

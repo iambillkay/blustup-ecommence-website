@@ -25,9 +25,11 @@
         <a href="#" class="sidebar-link" data-action="list-users"><span class="nav-icon"></span><span>Customers</span></a>
         <a href="#" class="sidebar-link" data-action="list-products"><span class="nav-icon"></span><span>Products</span></a>
         <a href="#" class="sidebar-link" data-action="edit-shop"><span class="nav-icon"></span><span>Shop setup</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Homepage media</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Ads & hero</span></a>
         <a href="#" class="sidebar-link" data-action="edit-deals"><span class="nav-icon"></span><span>Deals</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-about"><span class="nav-icon"></span><span>About page</span></a>
         <a href="#" class="sidebar-link" data-action="edit-faq"><span class="nav-icon"></span><span>FAQ and board</span></a>
+        <a href="#" class="sidebar-link" data-action="view-reports"><span class="nav-icon"></span><span>Reports</span></a>
         <a href="#" class="sidebar-link" data-action="edit-ai"><span class="nav-icon"></span><span>AI settings</span></a>
       </nav>
 
@@ -149,10 +151,22 @@
           <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-deals">Manage deals</a></div>
         </article>
 
-        <article class="command-card" data-search-text="home hero media images banners upload">
-          <div class="command-card-top"><div><p class="eyebrow">Homepage</p><h2>Media rotation</h2></div><span class="command-stat" id="homeStat">Hero media</span></div>
-          <p>Refresh the homepage ad imagery and keep your visual merchandising aligned with campaigns.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-home-images">Edit media</a></div>
+        <article class="command-card" data-search-text="home hero media images banners upload ads campaigns">
+          <div class="command-card-top"><div><p class="eyebrow">Homepage</p><h2>Ads and hero control</h2></div><span class="command-stat" id="homeStat">Hero ads</span></div>
+          <p>Manage hero slides, campaign headlines, CTA links, and the ad imagery customers see first.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-home-images">Manage ads</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="about brand story mission page copy content">
+          <div class="command-card-top"><div><p class="eyebrow">Brand</p><h2>About page content</h2></div><span class="command-stat" id="aboutStat">Brand story</span></div>
+          <p>Update the About page headline, stats, story cards, and the trust pillars shown on the storefront.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-about">Edit about page</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="reports analytics dashboard cron email revenue funnel inventory">
+          <div class="command-card-top"><div><p class="eyebrow">Reports</p><h2>Analytics and automation</h2></div><span class="command-stat" id="reportsStat">Reports ready</span></div>
+          <p>Review revenue, funnel activity, slow movers, and schedule daily or weekly report emails.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="view-reports">Open reports</a></div>
         </article>
 
         <article class="command-card" data-search-text="ai chatbot search automation bot prompt">
@@ -211,9 +225,9 @@
           <button class="mini-action" type="button" data-action="list-orders">Orders</button>
           <button class="mini-action" type="button" data-action="list-users">Customers</button>
           <button class="mini-action" type="button" data-action="add-product">Add product</button>
-          <button class="mini-action" type="button" data-action="edit-home-images">Home media</button>
+          <button class="mini-action" type="button" data-action="edit-home-images">Ads</button>
           <button class="mini-action" type="button" data-action="edit-deals">Deals</button>
-          <button class="mini-action" type="button" data-action="edit-faq">FAQ</button>
+          <button class="mini-action" type="button" data-action="view-reports">Reports</button>
         </div>
       </section>
 
@@ -327,8 +341,10 @@
     const shopStat = document.getElementById("shopStat");
     const dealsStat = document.getElementById("dealsStat");
     const homeStat = document.getElementById("homeStat");
+    const aboutStat = document.getElementById("aboutStat");
+    const reportsStat = document.getElementById("reportsStat");
     const aiStat = document.getElementById("aiStat");
-    const dashboardState = { user: null, actions: [], products: [], orders: [], users: [] };
+    const dashboardState = { user: null, actions: [], products: [], orders: [], users: [], analytics: null };
     const adminOrderFilters = { status: "", q: "" };
     const ADMIN_ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
 
@@ -522,6 +538,8 @@
         home: "Homepage",
         faq: "FAQ",
         board: "Board",
+        about: "About",
+        reports: "Reports",
         ai: "AI",
         deal: "Deals",
         deals: "Deals",
@@ -540,7 +558,7 @@
       });
     }
     function syncNavForAction(action) {
-      if (["list-orders", "list-users", "list-products", "edit-shop", "edit-home-images", "edit-deals", "edit-faq", "edit-ai", "dashboard"].includes(action)) {
+      if (["list-orders", "list-users", "list-products", "edit-shop", "edit-home-images", "edit-deals", "edit-about", "edit-faq", "view-reports", "edit-ai", "dashboard"].includes(action)) {
         syncActiveNav(action);
         return;
       }
@@ -610,7 +628,7 @@
           </div>
         </div>`).join("");
     }
-    function renderMetrics(products, actions, orders, users) {
+    function renderMetrics(products, actions, orders, users, analytics) {
       const activeProducts = (products || []).filter((item) => item.isActive !== false);
       const lowStock = activeProducts.filter((item) => Number(item.stockQty || 0) <= 5);
       const categoryCount = new Set(activeProducts.flatMap((item) => formatAdminProductCategories(item))).size;
@@ -618,11 +636,20 @@
       const orderList = Array.isArray(orders) ? orders : [];
       const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
       const openOrders = orderList.filter((order) => !["delivered", "cancelled"].includes(String(order.status || "").trim().toLowerCase()));
+      const analyticsSnapshot = analytics && typeof analytics === "object" ? analytics : null;
       const metrics = [
-        { label: "Active catalog", value: `${activeProducts.length} items`, progress: Math.min(activeProducts.length / 12, 1) || 0.08 },
-        { label: "Orders in motion", value: `${openOrders.length} active`, progress: Math.min(openOrders.length / 12, 1) || 0.08 },
-        { label: "Customer base", value: `${userList.length} shoppers`, progress: Math.min(userList.length / 20, 1) || 0.08 },
-        { label: "Low stock watch", value: `${lowStock.length} flagged`, progress: activeProducts.length ? Math.min(lowStock.length / activeProducts.length, 1) : 0.08 },
+        analyticsSnapshot
+          ? { label: "Today's revenue", value: formatCurrency(analyticsSnapshot.sales?.todayRevenue || 0), progress: Math.min(Number(analyticsSnapshot.sales?.todayOrders || 0) / 10, 1) || 0.08 }
+          : { label: "Active catalog", value: `${activeProducts.length} items`, progress: Math.min(activeProducts.length / 12, 1) || 0.08 },
+        analyticsSnapshot
+          ? { label: "7-day revenue", value: formatCurrency(analyticsSnapshot.sales?.weekRevenue || 0), progress: Math.min(Number(analyticsSnapshot.sales?.weekOrders || 0) / 20, 1) || 0.08 }
+          : { label: "Orders in motion", value: `${openOrders.length} active`, progress: Math.min(openOrders.length / 12, 1) || 0.08 },
+        analyticsSnapshot
+          ? { label: "View to cart", value: `${Number(analyticsSnapshot.funnel?.viewToCartPercent || 0).toFixed(1)}%`, progress: Math.max(0.08, Math.min(Number(analyticsSnapshot.funnel?.viewToCartPercent || 0) / 100, 1)) }
+          : { label: "Customer base", value: `${userList.length} shoppers`, progress: Math.min(userList.length / 20, 1) || 0.08 },
+        analyticsSnapshot
+          ? { label: "Slow movers", value: `${Number(analyticsSnapshot.inventory?.slowMoving?.length || 0)} flagged`, progress: activeProducts.length ? Math.min(Number(analyticsSnapshot.inventory?.slowMoving?.length || 0) / activeProducts.length, 1) : 0.08 }
+          : { label: "Low stock watch", value: `${lowStock.length} flagged`, progress: activeProducts.length ? Math.min(lowStock.length / activeProducts.length, 1) : 0.08 },
       ];
 
       adminMetrics.innerHTML = metrics.map((metric) => `
@@ -642,13 +669,17 @@
       if (customersStat) customersStat.textContent = `${userList.length} shoppers`;
       shopStat.textContent = `${categoryCount} categories`;
       dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
-      homeStat.textContent = activeProducts.length ? "Media synced" : "Hero media";
+      homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
+      if (aboutStat) aboutStat.textContent = activeProducts.length ? "Story synced" : "Brand story";
+      if (reportsStat) reportsStat.textContent = analyticsSnapshot?.sales?.weekOrders ? `${analyticsSnapshot.sales.weekOrders} orders this week` : "Reports ready";
       aiStat.textContent = "Assistant online";
 
       if (dashboardState.user) {
         const name = getDisplayName(dashboardState.user);
         adminGreeting.textContent = `Hi, ${name}`;
-        adminGreetingSub.textContent = `${openOrders.length} orders are active, ${userList.length} shoppers are on file, and ${activeProducts.length} products are live across ${categoryCount || 0} categories.`;
+        adminGreetingSub.textContent = analyticsSnapshot
+          ? `${formatCurrency(analyticsSnapshot.sales?.todayRevenue || 0)} came in today, ${analyticsSnapshot.sales?.weekOrders || 0} orders landed this week, and ${analyticsSnapshot.inventory?.slowMoving?.length || 0} slow movers are on your watch list.`
+          : `${openOrders.length} orders are active, ${userList.length} shoppers are on file, and ${activeProducts.length} products are live across ${categoryCount || 0} categories.`;
       }
     }
     function renderUser(user) {
@@ -680,11 +711,12 @@
     async function refreshDashboard() {
       setSyncLabel("Syncing...");
 
-      const [actionsResult, productsResult, ordersResult, usersResult] = await Promise.allSettled([
+      const [actionsResult, productsResult, ordersResult, usersResult, analyticsResult] = await Promise.allSettled([
         api("/api/admin/actions/recent"),
         api("/api/products/admin"),
         api("/api/admin/orders?limit=100"),
         api("/api/admin/users"),
+        api("/api/admin/analytics/overview"),
       ]);
 
       const hasActionData = actionsResult.status === "fulfilled";
@@ -722,7 +754,11 @@
         dashboardState.users = Array.isArray(usersResult.value.users) ? usersResult.value.users : [];
       }
 
-      renderMetrics(dashboardState.products, dashboardState.actions, dashboardState.orders, dashboardState.users);
+      if (analyticsResult.status === "fulfilled") {
+        dashboardState.analytics = analyticsResult.value;
+      }
+
+      renderMetrics(dashboardState.products, dashboardState.actions, dashboardState.orders, dashboardState.users, dashboardState.analytics);
       applyAdminSearch();
       const syncStamp = formatDateTime(new Date().toISOString());
       setSyncLabel(hasActionData && hasProductData && hasOrderData && hasUserData ? `Updated ${syncStamp}` : `Partial sync ${syncStamp}`);
@@ -1214,46 +1250,348 @@
       }
     }
 
-    // Home images only
+    function normalizeAdminAdsDraft(settings = {}) {
+      if (Array.isArray(settings.ads) && settings.ads.length) {
+        return settings.ads.map((ad, index) => ({
+          id: ad.id || createAdminDraftKey(`ad-${index + 1}`),
+          imageUrl: String(ad.imageUrl || "").trim(),
+          title: String(ad.title || "").trim(),
+          subtitle: String(ad.subtitle || "").trim(),
+          ctaLabel: String(ad.ctaLabel || "Shop now").trim() || "Shop now",
+          ctaTarget: String(ad.ctaTarget || "shop").trim() || "shop",
+          isActive: ad.isActive !== false,
+        }));
+      }
+      return (Array.isArray(settings.adImages) ? settings.adImages : []).map((imageUrl, index) => ({
+        id: createAdminDraftKey(`ad-${index + 1}`),
+        imageUrl: String(imageUrl || "").trim(),
+        title: index === 0 ? "Discover better deals without the guesswork." : `Featured ad ${index + 1}`,
+        subtitle: "Shop curated products, compare ratings quickly, and move through checkout with confidence.",
+        ctaLabel: "Shop now",
+        ctaTarget: "shop",
+        isActive: true,
+      }));
+    }
+    function homeAdRowTemplate(ad, rowKey) {
+      return `
+        <div class="home-ad-row" data-home-ad-row="${esc(rowKey)}" style="border:1px solid #e7eaff;padding:12px;border-radius:16px;margin-bottom:12px;background:#fff;">
+          <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start;">
+            <div style="display:grid;gap:10px;">
+              <div style="width:120px;height:84px;border-radius:14px;overflow:hidden;border:1px solid #dde6fb;background:#f5f7ff;display:grid;place-items:center;">
+                ${ad.imageUrl ? `<img src="${esc(ad.imageUrl)}" alt="${esc(ad.title || "Ad image")}" style="width:100%;height:100%;object-fit:cover;">` : `<span class="muted" style="font-size:12px;">No image</span>`}
+              </div>
+              <div class="field" style="margin:0;">
+                <label>Upload image</label>
+                <input type="file" accept="image/*" data-home-ad-upload="${esc(rowKey)}">
+              </div>
+            </div>
+            <div style="display:grid;gap:10px;">
+              <div class="grid2">
+                <div class="field"><label>Headline</label><input data-home-ad="${esc(rowKey)}" data-k="title" value="${esc(ad.title)}"></div>
+                <div class="field"><label>CTA text</label><input data-home-ad="${esc(rowKey)}" data-k="ctaLabel" value="${esc(ad.ctaLabel || "Shop now")}"></div>
+              </div>
+              <div class="field"><label>Image URL</label><input data-home-ad="${esc(rowKey)}" data-k="imageUrl" value="${esc(ad.imageUrl)}" placeholder="/uploads/ad.jpg or https://..."></div>
+              <div class="field"><label>Subtitle</label><textarea data-home-ad="${esc(rowKey)}" data-k="subtitle" rows="2">${esc(ad.subtitle || "")}</textarea></div>
+              <div class="grid2">
+                <div class="field"><label>CTA target</label><input data-home-ad="${esc(rowKey)}" data-k="ctaTarget" value="${esc(ad.ctaTarget || "shop")}" placeholder="shop, about, ai, https://..."></div>
+                <div class="field"><label>Active</label><select data-home-ad="${esc(rowKey)}" data-k="isActive"><option value="1" ${ad.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${ad.isActive === false ? "selected" : ""}>No</option></select></div>
+              </div>
+              <input type="hidden" data-home-ad="${esc(rowKey)}" data-k="id" value="${esc(ad.id)}">
+              <div><button type="button" class="btn-admin danger" data-action="remove-home-ad-row">Remove ad</button></div>
+            </div>
+          </div>
+        </div>`;
+    }
+    function collectHomeAdsFromEditor() {
+      const map = {};
+      document.querySelectorAll(".home-ad-row [data-home-ad]").forEach((el) => {
+        const row = el.getAttribute("data-home-ad");
+        const key = el.getAttribute("data-k");
+        if (!map[row]) map[row] = {};
+        map[row][key] = el.value;
+      });
+      return Object.values(map).map((ad, index) => ({
+        id: ad.id || createAdminDraftKey(`ad-${index + 1}`),
+        imageUrl: String(ad.imageUrl || "").trim(),
+        title: String(ad.title || "").trim(),
+        subtitle: String(ad.subtitle || "").trim(),
+        ctaLabel: String(ad.ctaLabel || "Shop now").trim() || "Shop now",
+        ctaTarget: String(ad.ctaTarget || "shop").trim() || "shop",
+        isActive: ad.isActive === "1",
+      })).filter((ad) => ad.imageUrl && ad.title);
+    }
+
+    // Home ads / hero
     async function openHomeImagesCms() {
       const { settings } = await api("/api/cms/home");
-      const images = Array.isArray(settings.adImages) ? settings.adImages : [];
-      openModal("Home Ad Images", `
-        <div class="muted">Home CMS controls only ad images.</div>
-        <div id="homeImgsList" style="display:grid;gap:10px;margin-top:10px;">
-          ${images.map((img, i) => `
-            <div style="display:flex;gap:10px;align-items:center;">
-              <img src="${esc(img)}" alt="Home ad image" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;">
-              <input data-img-index="${i}" value="${esc(img)}" style="flex:1;" />
-            </div>`).join("")}
+      const ads = normalizeAdminAdsDraft(settings || {});
+      openModal("Ads & Hero", `
+        <div class="muted">Manage each homepage ad as a full campaign slide with an image, headline, supporting copy, CTA button, and destination target.</div>
+        <div id="homeAdsList" style="display:grid;gap:10px;margin-top:12px;">
+          ${ads.map((ad) => homeAdRowTemplate(ad, ad.id || createAdminDraftKey("ad"))).join("")}
         </div>
-        <div class="field" style="margin-top:12px;"><label>Upload new ad image</label><input id="homeImageFile" type="file" accept="image/*" /></div>
         <div style="margin-top:14px;display:flex;gap:8px;">
-          <button class="btn-admin" id="btnUploadHomeImage" type="button">Upload</button>
+          <button class="btn-admin" id="btnAddHomeAd" type="button">+ Add ad</button>
           <button class="btn-admin primary" id="btnSaveHomeImages" type="button">Save</button>
         </div>`);
 
-      document.getElementById("btnUploadHomeImage").addEventListener("click", async () => {
-        const file = document.getElementById("homeImageFile").files?.[0];
-        if (!file) return alert("Choose an image first");
+      document.getElementById("btnAddHomeAd").addEventListener("click", () => {
+        const list = document.getElementById("homeAdsList");
+        const ad = {
+          id: createAdminDraftKey("ad"),
+          imageUrl: "",
+          title: "New homepage ad",
+          subtitle: "",
+          ctaLabel: "Shop now",
+          ctaTarget: "shop",
+          isActive: true,
+        };
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = homeAdRowTemplate(ad, ad.id);
+        list.appendChild(wrapper.firstElementChild);
+      });
+
+      document.getElementById("homeAdsList").addEventListener("change", async (event) => {
+        const input = event.target;
+        if (!input.matches("[data-home-ad-upload]")) return;
+        const file = input.files?.[0];
+        if (!file) return;
+        const rowKey = input.getAttribute("data-home-ad-upload");
         const imageUrl = await uploadImage(file);
-        const list = document.getElementById("homeImgsList");
-        const nextIndex = list.querySelectorAll("[data-img-index]").length;
-        const row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.gap = "10px";
-        row.style.alignItems = "center";
-        row.innerHTML = `<img src="${esc(imageUrl)}" alt="Home ad image" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e2e7ff;"><input data-img-index="${nextIndex}" value="${esc(imageUrl)}" style="flex:1;">`;
-        list.appendChild(row);
-        document.getElementById("homeImageFile").value = "";
+        const imageInput = document.querySelector(`.home-ad-row [data-home-ad="${rowKey}"][data-k="imageUrl"]`);
+        if (imageInput) imageInput.value = imageUrl;
+        const row = input.closest(".home-ad-row");
+        if (row) {
+          const preview = row.querySelector("img");
+          if (preview) preview.src = imageUrl;
+        }
+        input.value = "";
       });
 
       document.getElementById("btnSaveHomeImages").addEventListener("click", async () => {
-        const values = Array.from(document.querySelectorAll("[data-img-index]")).map((x) => x.value.trim()).filter(Boolean);
-        await api("/api/cms/home", { method: "PUT", body: JSON.stringify({ adImages: values }) });
+        const adsPayload = collectHomeAdsFromEditor();
+        if (!adsPayload.length) return alert("Add at least one active ad with an image and headline.");
+        if (!adsPayload.some((ad) => ad.isActive)) return alert("Keep at least one homepage ad active.");
+        await api("/api/cms/home", { method: "PUT", body: JSON.stringify({ ads: adsPayload }) });
         await refreshDashboard();
         closeModal();
       });
+    }
+
+    function serializeAdminTitleTextItems(items) {
+      return (Array.isArray(items) ? items : [])
+        .map((item) => `${String(item?.title || "").trim()} :: ${String(item?.text || "").trim()}`.trim())
+        .filter(Boolean)
+        .join("\n");
+    }
+    function parseAdminTitleTextItems(value) {
+      return String(value || "")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [title, ...rest] = line.split("::");
+          return {
+            title: String(title || "").trim(),
+            text: rest.join("::").trim(),
+          };
+        })
+        .filter((item) => item.title && item.text);
+    }
+    function serializeAdminPillars(items) {
+      return (Array.isArray(items) ? items : [])
+        .map((item) => `${String(item?.title || "").trim()} :: ${(Array.isArray(item?.items) ? item.items : []).map((entry) => String(entry || "").trim()).filter(Boolean).join(" | ")}`.trim())
+        .filter(Boolean)
+        .join("\n");
+    }
+    function parseAdminPillars(value) {
+      return String(value || "")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [title, ...rest] = line.split("::");
+          const items = rest.join("::").split("|").map((entry) => entry.trim()).filter(Boolean);
+          return {
+            title: String(title || "").trim(),
+            items,
+          };
+        })
+        .filter((pillar) => pillar.title && pillar.items.length);
+    }
+    async function openAboutCms() {
+      const { settings } = await api("/api/cms/about");
+      openModal("About Page", `
+        <div class="muted">Update the storefront's brand story, hero section, value stats, and trust pillars from one place.</div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field"><label>Badge</label><input id="about_badge" value="${esc(settings.badge || "")}"></div>
+          <div class="field"><label>Hero title</label><input id="about_title" value="${esc(settings.title || "")}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Intro</label><textarea id="about_intro" rows="4">${esc(settings.intro || "")}</textarea></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Primary CTA label</label><input id="about_primary_label" value="${esc(settings.primaryCtaLabel || "")}"></div>
+          <div class="field"><label>Primary CTA target</label><input id="about_primary_target" value="${esc(settings.primaryCtaTarget || "")}" placeholder="shop, about, ai, https://..."></div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Secondary CTA label</label><input id="about_secondary_label" value="${esc(settings.secondaryCtaLabel || "")}"></div>
+          <div class="field"><label>Secondary CTA target</label><input id="about_secondary_target" value="${esc(settings.secondaryCtaTarget || "")}" placeholder="ai, faq, https://..."></div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Stats</label>
+          <textarea id="about_stats" rows="5" placeholder="Transparent :: Clear pricing and trust signals">${esc(serializeAdminTitleTextItems(settings.stats || []))}</textarea>
+          <div class="muted" style="font-size:12px;">One line per stat using: title :: text</div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Story cards</label>
+          <textarea id="about_cards" rows="6" placeholder="Our Identity :: Explain who the brand is">${esc(serializeAdminTitleTextItems(settings.cards || []))}</textarea>
+          <div class="muted" style="font-size:12px;">One line per card using: title :: text</div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Trust pillars</label>
+          <textarea id="about_pillars" rows="6" placeholder="How we serve shoppers :: AI chat support | Secure checkout | Order tracking">${esc(serializeAdminPillars(settings.pillars || []))}</textarea>
+          <div class="muted" style="font-size:12px;">One line per section using: title :: item one | item two | item three</div>
+        </div>
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAbout" type="button">Save</button></div>`);
+
+      document.getElementById("saveAbout").addEventListener("click", async () => {
+        const payload = {
+          badge: document.getElementById("about_badge").value.trim(),
+          title: document.getElementById("about_title").value.trim(),
+          intro: document.getElementById("about_intro").value.trim(),
+          primaryCtaLabel: document.getElementById("about_primary_label").value.trim(),
+          primaryCtaTarget: document.getElementById("about_primary_target").value.trim(),
+          secondaryCtaLabel: document.getElementById("about_secondary_label").value.trim(),
+          secondaryCtaTarget: document.getElementById("about_secondary_target").value.trim(),
+          stats: parseAdminTitleTextItems(document.getElementById("about_stats").value),
+          cards: parseAdminTitleTextItems(document.getElementById("about_cards").value),
+          pillars: parseAdminPillars(document.getElementById("about_pillars").value),
+        };
+        await api("/api/cms/about", { method: "PUT", body: JSON.stringify(payload) });
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+    function renderReportHistory(history) {
+      const rows = Array.isArray(history) ? history : [];
+      if (!rows.length) return `<div class="muted">No reports have been generated yet.</div>`;
+      return rows.slice(0, 10).map((entry) => `
+        <div style="display:grid;gap:4px;padding:12px 14px;border:1px solid #e7ecfa;border-radius:14px;background:#fff;">
+          <strong style="font-size:14px;">${esc(humanizeAdminValue(entry.type || "report"))}</strong>
+          <div class="muted" style="font-size:12px;">${esc(formatDateTime(entry.generatedAt))} - email ${esc(entry.emailStatus || "unknown")}${entry.emailTo ? ` to ${esc(entry.emailTo)}` : ""}</div>
+          <div style="font-size:13px;color:#172033;">${esc(entry.summary || "")}</div>
+        </div>
+      `).join("");
+    }
+    async function openReportsDashboard() {
+      const { settings, history, overview, mailConfigured, scheduler } = await api("/api/admin/reports");
+      const schedulerRunning = scheduler?.started === true && Number(scheduler?.activeTaskCount || 0) > 0;
+      openModal("Reports & Analytics", `
+        <div class="muted">Track revenue, funnel performance, and inventory health, then schedule daily and weekly summaries with cron-driven email delivery.</div>
+        <div class="field" style="margin-top:12px;padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:${schedulerRunning ? "#eefbf3" : "#fff7e8"};">
+          <label>Automation status</label>
+          <div style="font-size:14px;line-height:1.7;color:#172033;">
+            Scheduler: <strong>${esc(schedulerRunning ? "Running" : "Not active")}</strong><br>
+            Active schedules: <strong>${esc(String(scheduler?.activeTaskCount || 0))}</strong><br>
+            Backend note: <strong>Cron only runs while the Node server is running.</strong>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>Today's revenue</label>
+            <div style="font-size:24px;font-weight:800;color:#172033;">${esc(formatCurrency(overview.sales?.todayRevenue || 0))}</div>
+            <div class="muted">${esc(`${overview.sales?.todayOrders || 0} orders today`)}</div>
+          </div>
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>7-day revenue</label>
+            <div style="font-size:24px;font-weight:800;color:#172033;">${esc(formatCurrency(overview.sales?.weekRevenue || 0))}</div>
+            <div class="muted">${esc(`${overview.sales?.weekOrders || 0} orders in the last 7 days`)}</div>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>Funnel</label>
+            <div style="font-size:14px;line-height:1.7;color:#172033;">Views to cart: <strong>${esc(`${Number(overview.funnel?.viewToCartPercent || 0).toFixed(1)}%`)}</strong><br>Cart to purchase: <strong>${esc(`${Number(overview.funnel?.cartToPurchasePercent || 0).toFixed(1)}%`)}</strong><br>Views to purchase: <strong>${esc(`${Number(overview.funnel?.viewToPurchasePercent || 0).toFixed(1)}%`)}</strong></div>
+          </div>
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>Inventory watch</label>
+            <div style="font-size:14px;line-height:1.7;color:#172033;">Low stock: <strong>${esc(String(overview.inventory?.lowStockCount || 0))}</strong><br>Slow movers: <strong>${esc(String((overview.inventory?.slowMoving || []).length))}</strong><br>Active products: <strong>${esc(String(overview.inventory?.activeProducts || 0))}</strong></div>
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Recent 7-day revenue</label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;">
+            ${(Array.isArray(overview.revenue?.chart) ? overview.revenue.chart : []).map((entry) => `
+              <div style="padding:10px 12px;border:1px solid #e7ecfa;border-radius:14px;background:#fbfcff;">
+                <div class="muted" style="font-size:11px;">${esc(entry.date)}</div>
+                <strong style="display:block;margin-top:6px;">${esc(formatCurrency(entry.revenue || 0))}</strong>
+                <div class="muted" style="font-size:11px;">${esc(`${entry.orders || 0} orders`)}</div>
+              </div>`).join("")}
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Report delivery</label>
+          <div class="muted" style="font-size:12px;margin-bottom:8px;">${mailConfigured ? "SMTP is configured. Scheduled reports can be emailed." : "SMTP is not configured yet. Reports will still be generated and saved in history, but email delivery will be skipped until SMTP env vars are set."}</div>
+          <div class="grid2">
+            <div class="field"><label>Email enabled</label><select id="report_email_enabled"><option value="1" ${settings.emailEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.emailEnabled ? "selected" : ""}>No</option></select></div>
+            <div class="field"><label>Recipient email</label><input id="report_email_to" type="email" value="${esc(settings.emailTo || "")}" placeholder="owner@example.com"></div>
+          </div>
+          <div class="grid2" style="margin-top:10px;">
+            <div class="field"><label>Subject prefix</label><input id="report_subject_prefix" value="${esc(settings.emailSubjectPrefix || "")}"></div>
+            <div class="field"><label>Timezone</label><input id="report_timezone" value="${esc(settings.timezone || "")}" placeholder="Africa/Accra"></div>
+          </div>
+          <div class="grid2" style="margin-top:10px;">
+            <div class="field"><label>Daily cron</label><input id="report_daily_cron" value="${esc(settings.dailyCron || "")}" placeholder="0 8 * * *"></div>
+            <div class="field"><label>Weekly sales cron</label><input id="report_weekly_cron" value="${esc(settings.weeklyCron || "")}" placeholder="0 9 * * 1"></div>
+          </div>
+          <div class="field" style="margin-top:10px;"><label>Inventory cron</label><input id="report_inventory_cron" value="${esc(settings.inventoryCron || "")}" placeholder="0 10 * * 1"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn-admin" type="button" id="runDailyReport">Run daily report</button>
+          <button class="btn-admin" type="button" id="runWeeklyReport">Run weekly report</button>
+          <button class="btn-admin" type="button" id="runInventoryReport">Run inventory report</button>
+          <button class="btn-admin primary" type="button" id="saveReportSettings">Save schedule</button>
+        </div>
+        <div class="panel-header" style="margin-top:18px;">Recent report history</div>
+        <div style="display:grid;gap:8px;">${renderReportHistory(history)}</div>`);
+
+      document.getElementById("saveReportSettings").addEventListener("click", async () => {
+        try {
+          await api("/api/admin/reports/settings", {
+            method: "PATCH",
+            body: JSON.stringify({
+              emailEnabled: document.getElementById("report_email_enabled").value === "1",
+              emailTo: document.getElementById("report_email_to").value.trim(),
+              emailSubjectPrefix: document.getElementById("report_subject_prefix").value.trim(),
+              timezone: document.getElementById("report_timezone").value.trim(),
+              dailyCron: document.getElementById("report_daily_cron").value.trim(),
+              weeklyCron: document.getElementById("report_weekly_cron").value.trim(),
+              inventoryCron: document.getElementById("report_inventory_cron").value.trim(),
+            }),
+          });
+          await refreshDashboard();
+          await openReportsDashboard();
+        } catch (error) {
+          alert(error.message || "Failed to save report settings");
+        }
+      });
+
+      const bindRunButton = (id, type) => {
+        document.getElementById(id).addEventListener("click", async () => {
+          try {
+            await api("/api/admin/reports/run", {
+              method: "POST",
+              body: JSON.stringify({ type }),
+            });
+            await refreshDashboard();
+            await openReportsDashboard();
+          } catch (error) {
+            alert(error.message || "Failed to run report");
+          }
+        });
+      };
+      bindRunButton("runDailyReport", "daily");
+      bindRunButton("runWeeklyReport", "weekly");
+      bindRunButton("runInventoryReport", "inventory");
     }
 
     // Shop filters - label, value (dropdown), visibility (dropdown)
@@ -1828,7 +2166,9 @@
       if (action === "edit-home-images") return openHomeImagesCms();
       if (action === "edit-shop") return openShopCms();
       if (action === "edit-deals") return openDealsCms();
+      if (action === "edit-about") return openAboutCms();
       if (action === "edit-faq") return openFaqCms();
+      if (action === "view-reports") return openReportsDashboard();
       if (action === "edit-ai") return openAiSettings();
       if (action === "remove-filter-row") {
         node.closest(".admin-filter-row")?.remove();
@@ -1839,6 +2179,7 @@
         renderShopFilterPreview(categoryValues);
         return;
       }
+      if (action === "remove-home-ad-row") return node.closest(".home-ad-row")?.remove();
       if (action === "remove-deal-row") return node.closest(".deal-admin-row")?.remove();
       if (action === "remove-faq-qa") return node.closest(".faq-edit-row")?.remove();
       if (action === "remove-board-row") return node.closest(".board-edit-row")?.remove();

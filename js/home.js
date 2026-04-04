@@ -50,6 +50,43 @@ function getHomeDealSourceCategories(deal) {
     });
 }
 
+function getHomeAds(homeSettings) {
+  if (Array.isArray(homeSettings?.ads) && homeSettings.ads.length) {
+    return homeSettings.ads.filter((ad) => ad && ad.isActive !== false && ad.imageUrl);
+  }
+
+  const images = Array.isArray(homeSettings?.adImages) ? homeSettings.adImages : [];
+  return images.map((imageUrl, index) => ({
+    id: `ad-${index + 1}`,
+    imageUrl,
+    title: index === 0
+      ? "Discover better deals without the guesswork."
+      : index === 1
+        ? "Weekly picks built for value-focused shoppers."
+        : "A storefront designed to feel clear and secure.",
+    subtitle: "Shop curated products, compare ratings quickly, and move through checkout with confidence.",
+    ctaLabel: "Shop now",
+    ctaTarget: "shop",
+    isActive: true,
+  }));
+}
+
+function handleHomeAdClick(ad) {
+  if (!ad) return;
+  if (window.tracker) {
+    window.tracker.track("ad_click", {
+      adId: ad.id,
+      title: ad.title,
+      target: ad.ctaTarget,
+    });
+  }
+  if (typeof window.navigateToCmsTarget === "function") {
+    window.navigateToCmsTarget(ad.ctaTarget || "shop");
+    return;
+  }
+  if (typeof showPage === "function") showPage("shop");
+}
+
 function homeProductCard(p) {
   return `
     <div
@@ -210,7 +247,7 @@ function renderDeals(deals, productList) {
   });
 }
 
-function setupHeroSlider(adImages) {
+function setupHeroSlider(homeSettings) {
   const track = document.querySelector(".hero-track");
   const nextBtn = document.querySelector(".hero-btn.next");
   const prevBtn = document.querySelector(".hero-btn.prev");
@@ -221,19 +258,42 @@ function setupHeroSlider(adImages) {
     heroSliderIntervalId = null;
   }
 
-  const images = Array.isArray(adImages) && adImages.length ? adImages : [
+  const ads = getHomeAds(homeSettings);
+  const slidesData = ads.length ? ads : getHomeAds({ adImages: [
     "product-imgs/ad/ad1.png",
     "product-imgs/ad/ad2.png",
     "product-imgs/ad/ad3.png",
-  ];
+  ] });
 
-  track.innerHTML = images
-    .map((src, i) => `<div class="hero-slide"><img src="${src}" alt="Promo ${i + 1}"></div>`)
+  track.innerHTML = slidesData
+    .map((ad, i) => `
+      <div
+        class="hero-slide hero-slide-clickable"
+        data-home-ad-index="${i}"
+        role="button"
+        tabindex="0"
+        aria-label="${escapeHomeHtml(ad.ctaLabel || ad.title || `Open ad ${i + 1}`)}"
+      >
+        <img src="${escapeHomeHtml(ad.imageUrl)}" alt="${escapeHomeHtml(ad.title || `Promo ${i + 1}`)}">
+      </div>`)
     .join("");
   dotsContainer.innerHTML = "";
 
   const slides = Array.from(track.querySelectorAll(".hero-slide"));
   let index = 0;
+
+  track.querySelectorAll("[data-home-ad-index]").forEach((slide) => {
+    const openAd = () => {
+      const ad = slidesData[Number(slide.getAttribute("data-home-ad-index"))];
+      handleHomeAdClick(ad);
+    };
+    slide.addEventListener("click", openAd);
+    slide.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      openAd();
+    });
+  });
 
   slides.forEach((_, i) => {
     const dot = document.createElement("span");
@@ -284,7 +344,7 @@ async function loadHomeContent(options = {}) {
     deals = dealsData?.settings || null;
   } catch (_e) {}
 
-  setupHeroSlider(homeSettings?.adImages || []);
+  setupHeroSlider(homeSettings || {});
   renderDeals(deals || [], products || []);
   startTimers();
 }

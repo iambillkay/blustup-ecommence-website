@@ -465,6 +465,11 @@ position:relative;
 .hero-slide {
     min-width: 100%; /* Each slide takes full width of banner */
     height: 100%;
+    position: relative;
+}
+
+.hero-slide-clickable {
+    cursor: pointer;
 }
 
 .hero-slide img {
@@ -519,4 +524,8 @@ position:relative;
 }
 @media (max-width: 540px) {
   .features-grid, .features-grid-2 { grid-template-columns: 1fr; }
+  .hero-banner {
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
 }
