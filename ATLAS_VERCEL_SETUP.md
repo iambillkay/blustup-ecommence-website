@@ -44,13 +44,36 @@ Example conversion:
 
 ```env
 # Atlas placeholder style
-mongodb+srv://blustup_db_user:22388812@cluster0.myfdqg2.mongodb.net/?appName=Cluster0
+mongodb+srv://blustup_db_user:<db_password>@cluster0.myfdqg2.mongodb.net/?appName=Cluster0
 
 # App-ready URI
-mongodb+srv://blustup_db_user:22388812@cluster0.myfdqg2.mongodb.net/blustup?retryWrites=true&w=majority&appName=Cluster0
+mongodb+srv://blustup_db_user:your-password@cluster0.myfdqg2.mongodb.net/blustup?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-### 3. Local `.env` example
+### 3. Deploy to Vercel
+
+This repo uses:
+
+- `vercel.json` for routing
+- `api/index.js` as the serverless Express entrypoint
+- `public/**` for the storefront assets Vercel serves directly
+
+Deploy steps:
+
+1. Push this repo to GitHub.
+2. Import the repo into Vercel.
+3. Keep the project root as the repo root.
+4. Add the environment variables from the section below.
+5. Trigger a production deployment.
+
+If Vercel shows `No Production Deployment` or `DEPLOYMENT_NOT_FOUND`, it means the domain is attached to a project that does not currently have a successful production deployment. In that case:
+
+1. Open the Vercel project.
+2. Check the latest deployment logs.
+3. Redeploy after the build passes.
+4. Confirm the domain is attached to the same Vercel project you deployed.
+
+### 4. Local `.env` example
 
 ```env
 PORT=3000
@@ -63,7 +86,7 @@ ADMIN_EMAIL=you@example.com
 ADMIN_PASSWORD=choose-a-strong-password
 ```
 
-### 4. Vercel environment variables
+### 5. Vercel environment variables
 
 Set these in your Vercel project:
 
@@ -89,7 +112,7 @@ Optional:
 - `SMTP_FROM`
 - `REPORT_EMAIL_FROM`
 
-### 5. Verify
+### 6. Verify
 
 After deployment:
 
