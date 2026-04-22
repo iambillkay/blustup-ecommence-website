@@ -2,6 +2,7 @@ const { z } = require("zod");
 
 const storage = require("../storage");
 const { buildLoyaltyProfile, calculateEarnedLoyaltyPoints } = require("../utils/storefront");
+const { dispatchOrderToRider } = require("../services/deliveryDispatchService");
 
 const ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
 const TAX_RATE = 0.08;
@@ -349,6 +350,9 @@ async function updateOrderStatus(req, res) {
     return res.status(400).json({ error: "Invalid id" });
   }
 
+  const existingOrder = await storage.order.getById(req.params.id);
+  if (!existingOrder) return res.status(404).json({ error: "Order not found" });
+
   const order = await storage.order.updateStatus(req.params.id, {
     status: parsed.data.status,
     note: buildOrderStatusNote(parsed.data.status, parsed.data.note),
@@ -357,6 +361,19 @@ async function updateOrderStatus(req, res) {
   });
 
   if (!order) return res.status(404).json({ error: "Order not found" });
+
+  let dispatch = null;
+  const previousStatus = String(existingOrder.status || "").trim().toLowerCase();
+  const nextStatus = String(order.status || "").trim().toLowerCase();
+  if (nextStatus === "shipped" && previousStatus !== "shipped") {
+    try {
+      dispatch = await dispatchOrderToRider(order, {
+        source: "order_status_update",
+      });
+    } catch (dispatchError) {
+      console.warn("Order marked shipped but rider dispatch failed:", dispatchError?.message || dispatchError);
+    }
+  }
 
   try {
     await storage.audit.add({
@@ -370,7 +387,59 @@ async function updateOrderStatus(req, res) {
     console.warn("Order status updated but failed to write audit log:", auditError?.message || auditError);
   }
 
-  return res.json({ order });
+  if (dispatch?.assignment) {
+    try {
+      await storage.audit.add({
+        actorId: req.user?.sub || null,
+        action: "change",
+        entityType: "delivery",
+        entityId: order.id,
+        summary: `Dispatch status for ${order.reference}: ${dispatch.assignment.status}`,
+      });
+    } catch (auditError) {
+      console.warn("Delivery dispatch audit log failed:", auditError?.message || auditError);
+    }
+  }
+
+  const latestOrder = dispatch?.assignment ? await storage.order.getById(req.params.id) : order;
+  return res.json({ order: latestOrder, dispatch: dispatch?.assignment || null });
+}
+
+async function dispatchOrderManually(req, res) {
+  if (!storage.isValidId(req.params.id)) {
+    return res.status(400).json({ error: "Invalid id" });
+  }
+
+  const order = await storage.order.getById(req.params.id);
+  if (!order) return res.status(404).json({ error: "Order not found" });
+
+  const status = String(order.status || "").trim().toLowerCase();
+  if (status !== "shipped") {
+    return res.status(400).json({ error: "Mark the order as shipped before dispatching a rider." });
+  }
+
+  const dispatch = await dispatchOrderToRider(order, {
+    source: req.user?.email || "admin_manual",
+    force: true,
+  });
+
+  try {
+    await storage.audit.add({
+      actorId: req.user?.sub || null,
+      action: "change",
+      entityType: "delivery",
+      entityId: order.id,
+      summary: `Manually dispatched rider for ${order.reference}: ${dispatch.assignment.status}`,
+    });
+  } catch (auditError) {
+    console.warn("Manual delivery dispatch audit log failed:", auditError?.message || auditError);
+  }
+
+  return res.status(201).json({
+    order: await storage.order.getById(req.params.id),
+    dispatch: dispatch.assignment,
+    mailConfigured: dispatch.mailConfigured,
+  });
 }
 
 async function listAdminUsers(req, res) {
@@ -462,5 +531,6 @@ module.exports = {
   lookupOrder,
   listAdminOrders,
   updateOrderStatus,
+  dispatchOrderManually,
   listAdminUsers,
 };

@@ -23,6 +23,8 @@ router.get("/faq", cmsController.getFaq);
 router.put("/faq", ...adminOnly, cmsController.setFaq);
 router.get("/about", cmsController.getAbout);
 router.put("/about", ...adminOnly, cmsController.setAbout);
+router.get("/admin-page", cmsController.getAdminPage);
+router.put("/admin-page", ...adminOnly, cmsController.setAdminPage);
 router.post("/upload-image", ...adminOnly, upload.single("image"), cmsController.uploadCmsImage);
 
 module.exports = router;

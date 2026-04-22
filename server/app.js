@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
@@ -13,6 +14,12 @@ const orderRoutes = require("./routes/orders");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const rootDir = path.join(__dirname, "..");
+const publicDir = path.join(rootDir, "public");
+const publicIndexFile = path.join(publicDir, "index.html");
+const isVercelDeployment = Boolean(process.env.VERCEL);
+const frontendIndexFile = isVercelDeployment && fs.existsSync(publicIndexFile)
+  ? publicIndexFile
+  : path.join(rootDir, "index.html");
 
 const app = express();
 
@@ -45,11 +52,16 @@ app.use(cors({
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false }));
 
-// Static frontend + assets
+// Vercel serves static files from public/**, but local development should continue
+// preferring the existing root-level files while the repo transitions.
+if (isVercelDeployment) app.use(express.static(publicDir));
 app.use(express.static(rootDir));
+if (!isVercelDeployment) app.use(express.static(publicDir));
 
 // Uploads (image URL support)
+if (isVercelDeployment) app.use("/uploads", express.static(path.join(publicDir, "uploads")));
 app.use("/uploads", express.static(path.join(rootDir, "uploads")));
+if (!isVercelDeployment) app.use("/uploads", express.static(path.join(publicDir, "uploads")));
 
 // API
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
@@ -63,7 +75,7 @@ app.use("/api/orders", orderRoutes);
 
 // SPA-ish fallback: serve index for unknown routes (except /api)
 app.get(/^\/(?!api\/).*/, (_req, res) => {
-  res.sendFile(path.join(rootDir, "index.html"));
+  res.sendFile(frontendIndexFile);
 });
 
 app.use(notFound);

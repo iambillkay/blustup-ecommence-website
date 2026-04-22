@@ -3,6 +3,7 @@ const storage = require("../storage");
 const {
   normalizeHomeSettings,
   normalizeAboutSettings,
+  normalizeAdminPageSettings,
 } = require("../utils/cmsDefaults");
 
 const homeSchema = z.object({
@@ -122,6 +123,28 @@ const aboutSchema = z.object({
       items: z.array(z.string().trim().min(1).max(220)).min(1).max(8),
     })
   ).min(1).max(4),
+});
+
+const colorHexSchema = z.string().trim().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Use a valid hex color.");
+
+const adminPageSchema = z.object({
+  pageTitle: z.string().trim().min(1).max(80),
+  logoImageUrl: z.union([z.string().trim().max(500), z.literal("")]),
+  brandSubtitle: z.string().trim().min(1).max(80),
+  sidebarStatus: z.string().trim().min(1).max(80),
+  heroEyebrow: z.string().trim().min(1).max(80),
+  heroTitleTemplate: z.string().trim().min(1).max(180),
+  heroSubtitle: z.string().trim().min(1).max(300),
+  supportEyebrow: z.string().trim().min(1).max(80),
+  supportTitle: z.string().trim().min(1).max(120),
+  supportText: z.string().trim().min(1).max(400),
+  primaryButtonLabel: z.string().trim().min(1).max(40),
+  secondaryButtonLabel: z.string().trim().min(1).max(40),
+  accentColor: colorHexSchema,
+  linkColor: colorHexSchema,
+  backgroundStartColor: colorHexSchema,
+  backgroundEndColor: colorHexSchema,
+  glowColor: colorHexSchema,
 });
 
 function normalizeShop(value) {
@@ -552,6 +575,24 @@ async function setAbout(req, res) {
   return res.json({ settings });
 }
 
+async function getAdminPage(_req, res) {
+  return res.json({ settings: normalizeAdminPageSettings(await storage.cms.getAdminPage()) });
+}
+
+async function setAdminPage(req, res) {
+  const parsed = adminPageSchema.safeParse(req.body || {});
+  if (!parsed.success) return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid input" });
+  const settings = await storage.cms.setAdminPage(normalizeAdminPageSettings(parsed.data));
+  await storage.audit.add({
+    actorId: req.user?.sub || null,
+    action: "change",
+    entityType: "admin_page",
+    entityId: null,
+    summary: "Updated admin page appearance",
+  });
+  return res.json({ settings });
+}
+
 async function uploadHomeImage(req, res) {
   if (!req.file) return res.status(400).json({ error: "Image file is required" });
   return res.status(201).json({ imageUrl: `/uploads/${req.file.filename}` });
@@ -575,6 +616,8 @@ module.exports = {
   setFaq,
   getAbout,
   setAbout,
+  getAdminPage,
+  setAdminPage,
   uploadHomeImage,
   uploadCmsImage,
 };

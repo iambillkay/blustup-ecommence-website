@@ -4,9 +4,9 @@ let transporterPromise = null;
 
 function getMailConfig() {
   return {
-    host: String(process.env.SMTP_HOST || "").trim(),
+    host: String(process.env.SMTP_HOST || "smtp-relay.brevo.com").trim(),
     port: Number(process.env.SMTP_PORT || 587),
-    secure: String(process.env.SMTP_SECURE || "").trim().toLowerCase() === "true",
+    secure: String(process.env.SMTP_SECURE || "false").trim().toLowerCase() === "true",
     user: String(process.env.SMTP_USER || "").trim(),
     pass: String(process.env.SMTP_PASS || "").trim(),
     from: String(process.env.REPORT_EMAIL_FROM || process.env.SMTP_FROM || "").trim(),

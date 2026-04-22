@@ -9,6 +9,11 @@ const {
   generateAndStoreReport,
 } = require("../services/reportingService");
 const {
+  getDeliveryDashboardPayload,
+  getDeliverySettings,
+  saveDeliverySettings,
+} = require("../services/deliveryDispatchService");
+const {
   refreshReportScheduler,
   getReportSchedulerStatus,
 } = require("../services/reportScheduler");
@@ -25,6 +30,22 @@ const reportSettingsSchema = z.object({
 
 const runReportSchema = z.object({
   type: z.enum(["daily", "weekly", "inventory"]),
+});
+
+const deliverySettingsSchema = z.object({
+  automationEnabled: z.boolean(),
+  emailSubjectPrefix: z.string().trim().max(120),
+  dispatchIntro: z.string().trim().max(1200),
+  riders: z.array(
+    z.object({
+      id: z.string().trim().max(60).optional(),
+      name: z.string().trim().min(1).max(120),
+      email: z.union([z.string().trim().email().max(200), z.literal("")]),
+      phone: z.union([z.string().trim().max(30), z.literal("")]).optional(),
+      coverage: z.union([z.string().trim().max(120), z.literal("")]).optional(),
+      isActive: z.boolean().optional(),
+    })
+  ).max(50),
 });
 
 async function recentActions(req, res) {
@@ -45,6 +66,33 @@ async function reportsDashboard(_req, res) {
 
 async function reportSettings(_req, res) {
   return res.json({ settings: await getReportSettings() });
+}
+
+async function deliveryDashboard(_req, res) {
+  return res.json(await getDeliveryDashboardPayload());
+}
+
+async function updateDeliverySettings(req, res) {
+  const parsed = deliverySettingsSchema.safeParse(req.body || {});
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0]?.message || "Invalid delivery settings" });
+  }
+
+  const current = await getDeliverySettings();
+  const settings = await saveDeliverySettings({
+    ...current,
+    ...parsed.data,
+  });
+
+  await storage.audit.add({
+    actorId: req.user?.sub || null,
+    action: "change",
+    entityType: "delivery",
+    entityId: null,
+    summary: "Updated delivery automation settings",
+  });
+
+  return res.json({ settings });
 }
 
 async function updateReportSettings(req, res) {
@@ -104,6 +152,8 @@ module.exports = {
   analyticsOverview,
   reportsDashboard,
   reportSettings,
+  deliveryDashboard,
   updateReportSettings,
+  updateDeliverySettings,
   runReport,
 };

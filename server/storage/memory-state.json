@@ -181,12 +181,21 @@
       "badgeType": "sale",
       "icon": null,
       "color": "linear-gradient(135deg,#e8f0ff,#d0dcff)",
-      "ratingAverage": null,
-      "reviewCount": 0,
-      "reviews": [],
+      "ratingAverage": 5,
+      "reviewCount": 1,
+      "reviews": [
+        {
+          "author": "Epaphras Asiedu",
+          "rating": 5,
+          "title": "m",
+          "comment": "wwwwwweeeeeeeeeeeeeee",
+          "verifiedPurchase": false,
+          "createdAt": "2026-04-04T10:51:53.655Z"
+        }
+      ],
       "isActive": true,
       "createdAt": "2026-03-29T23:44:41.174Z",
-      "updatedAt": "2026-03-30T02:38:12.666Z"
+      "updatedAt": "2026-04-04T10:51:53.655Z"
     },
     {
       "_id": "63d2296c-6d8c-499b-98fe-b674aca89cb6",
@@ -573,6 +582,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -623,6 +633,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -673,6 +684,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -723,6 +735,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -773,6 +786,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -823,6 +837,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -873,6 +888,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "delivered",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -937,6 +953,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -987,6 +1004,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1037,6 +1055,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "cancelled",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1094,6 +1113,19 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "shipped",
+      "deliveryAssignment": {
+        "id": "dispatch-1775265403376-p19vz",
+        "riderId": "rider-1775263953540-j0xfzy",
+        "riderName": "Ama Sosu",
+        "riderEmail": "tettehbabyboy13@gmail.com",
+        "riderPhone": "+233207280318",
+        "coverage": "Accra",
+        "status": "rider_notified",
+        "note": "Delivery brief emailed to Ama Sosu.",
+        "source": "admin@blustup.local",
+        "assignedAt": "2026-04-04T01:16:40.409Z",
+        "notifiedAt": "2026-04-04T01:16:40.409Z"
+      },
       "statusHistory": [
         {
           "status": "placed",
@@ -1108,10 +1140,17 @@
           "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
           "actorEmail": "admin@blustup.local",
           "createdAt": "2026-04-01T00:31:04.593Z"
+        },
+        {
+          "status": "shipped",
+          "note": "Your order is on the way.",
+          "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+          "actorEmail": "admin@blustup.local",
+          "createdAt": "2026-04-04T01:16:41.446Z"
         }
       ],
       "createdAt": "2026-04-01T00:16:12.105Z",
-      "updatedAt": "2026-04-01T00:31:04.593Z"
+      "updatedAt": "2026-04-04T01:16:43.383Z"
     },
     {
       "_id": "eb499191-8a71-42d9-b929-52f395ed41e6",
@@ -1151,6 +1190,7 @@
       "loyaltyBalanceAfter": 0,
       "loyaltyTierAfter": null,
       "status": "cancelled",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1215,6 +1255,7 @@
       "loyaltyBalanceAfter": 280,
       "loyaltyTierAfter": "Silver",
       "status": "delivered",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1286,6 +1327,7 @@
       "loyaltyBalanceAfter": 275,
       "loyaltyTierAfter": "Silver",
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1336,6 +1378,7 @@
       "loyaltyBalanceAfter": 276,
       "loyaltyTierAfter": "Silver",
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1386,6 +1429,7 @@
       "loyaltyBalanceAfter": 322,
       "loyaltyTierAfter": "Silver",
       "status": "placed",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -1436,6 +1480,7 @@
       "loyaltyBalanceAfter": 890,
       "loyaltyTierAfter": "Platinum",
       "status": "delivered",
+      "deliveryAssignment": null,
       "statusHistory": [
         {
           "status": "placed",
@@ -3317,6 +3362,1882 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
       "createdAt": "2026-04-03T12:57:31.946Z"
+    },
+    {
+      "_id": "ea4f9fb4-90a6-4ad0-939f-5d16f052e9bb",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T00:48:11.339Z"
+    },
+    {
+      "_id": "4b5e0b88-e38d-4e42-95f2-784b1c8b5eac",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T00:48:21.404Z"
+    },
+    {
+      "_id": "62c7f907-2ee6-4f82-ba01-fbe75f49cd61",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:30:36.734Z"
+    },
+    {
+      "_id": "df9693c6-3ca9-41e5-b4cf-a364d0afa290",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:30:46.981Z"
+    },
+    {
+      "_id": "1bbfeea0-6dcd-40e8-ad81-56246814a6f9",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:30:55.062Z"
+    },
+    {
+      "_id": "07363242-3e92-48de-90e0-3bee77c20eec",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "privacy"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:30:59.079Z"
+    },
+    {
+      "_id": "6526cb43-25e1-4cf7-83a7-cda947a85e4b",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:32:49.308Z"
+    },
+    {
+      "_id": "d42abcb1-a1a5-4c6c-bad7-0d2cac6c1b9f",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:33:13.502Z"
+    },
+    {
+      "_id": "cbf15da4-8967-4ef3-b62c-c0b004a6118e",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:33:14.419Z"
+    },
+    {
+      "_id": "eb042196-235c-4e3f-b5b6-3759a368820d",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:33:17.911Z"
+    },
+    {
+      "_id": "8c640278-c410-4efe-966d-61d91a26d98d",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:33:38.683Z"
+    },
+    {
+      "_id": "110fe35d-3521-4750-8878-a895c635d08b",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:34:07.048Z"
+    },
+    {
+      "_id": "d6462e8f-3bff-4ab3-bf8a-861a5ac4305b",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:34:24.438Z"
+    },
+    {
+      "_id": "bbc8add7-3695-4910-90e6-f6a57567ede5",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:34:42.736Z"
+    },
+    {
+      "_id": "f462dcaa-a884-4526-9f26-eb51a3bd3f4f",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:35:27.325Z"
+    },
+    {
+      "_id": "788e416e-6e5e-43b9-bafe-3908e610221e",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:35:43.769Z"
+    },
+    {
+      "_id": "ae87050f-bee8-4aba-aaa8-04bf6efb126b",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:35:53.384Z"
+    },
+    {
+      "_id": "86b3b28a-9776-4bcf-95a6-bba867a6d121",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:37:08.738Z"
+    },
+    {
+      "_id": "2ad405ad-0262-4d48-ab59-4fffc3c4c4d1",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:37:23.553Z"
+    },
+    {
+      "_id": "c93bf6f3-e983-4314-a3dd-341375fe2b18",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:37:25.264Z"
+    },
+    {
+      "_id": "ae3e100e-cb2e-4411-a5e8-52ca703c9629",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:37:27.166Z"
+    },
+    {
+      "_id": "304fb36d-b259-46cc-a0da-2cd1cd0074cd",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:37:36.484Z"
+    },
+    {
+      "_id": "a935dd24-b023-4bcd-915f-48ecde90ec61",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:37:56.085Z"
+    },
+    {
+      "_id": "6760981f-a57a-4074-ba3e-a6dd99c2b7b8",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:39:52.633Z"
+    },
+    {
+      "_id": "06edf010-555f-4d74-ae58-dde3b3956dce",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:40:05.010Z"
+    },
+    {
+      "_id": "8199b39e-dcd7-4629-9830-f2bc81aec36f",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:40:13.856Z"
+    },
+    {
+      "_id": "9054aac3-0b31-4019-8039-a27e18a051f2",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:41:05.816Z"
+    },
+    {
+      "_id": "9546ed97-00e7-44ea-b22c-7167ba98923e",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:51:16.446Z"
+    },
+    {
+      "_id": "e0efbdab-432f-445a-b5fa-5e218903707c",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
+        "productName": "Oraimo Power Bank Lite",
+        "category": "oriamo",
+        "price": 136.9,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:51:31.591Z"
+    },
+    {
+      "_id": "d4f2f50b-256c-44b2-be0a-26aa5beb4460",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:52:37.466Z"
+    },
+    {
+      "_id": "37789c78-de57-494a-87b2-e61656968307",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:53:59.281Z"
+    },
+    {
+      "_id": "487e9e90-bc18-4843-874a-99b50c75b6ab",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:54:09.917Z"
+    },
+    {
+      "_id": "b5f6a97a-0239-4b56-ab23-2732218f95d9",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:54:12.142Z"
+    },
+    {
+      "_id": "7c278c51-c684-49e9-bc14-8d7b29aa8da8",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:54:22.610Z"
+    },
+    {
+      "_id": "17a798a5-78b0-4d2b-a53d-a29bcb35b74a",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:54:32.320Z"
+    },
+    {
+      "_id": "bf09bc14-315a-4b78-8dfe-bc0a71071c33",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:54:35.532Z"
+    },
+    {
+      "_id": "f6ea6ba7-eb9e-405b-aa3c-f4b903bdcb56",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T10:54:38.922Z"
+    },
+    {
+      "_id": "40253be9-b39a-460b-ac91-75f095691d7b",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:55:54.094Z"
+    },
+    {
+      "_id": "92f0ed3b-8d50-4dbc-a81b-d7fe814888d9",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:56:18.173Z"
+    },
+    {
+      "_id": "68dd3f89-5180-4610-80d3-dba1c3c3a6a5",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:56:35.172Z"
+    },
+    {
+      "_id": "483ed648-09ba-477f-9021-526db9f2a076",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:57:08.906Z"
+    },
+    {
+      "_id": "5d0dddae-cc49-45aa-a091-df8d28fdc223",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:57:36.126Z"
+    },
+    {
+      "_id": "cbc460bf-ae62-4395-a87d-161a0eeec98f",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:57:50.580Z"
+    },
+    {
+      "_id": "11987483-cded-4193-b1bc-64ae32d17a30",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:58:07.174Z"
+    },
+    {
+      "_id": "096b407f-620f-4f0c-9451-8ec45d97ac66",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:58:21.248Z"
+    },
+    {
+      "_id": "01298f39-48e1-492e-88e9-e86a8353439b",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:59:02.345Z"
+    },
+    {
+      "_id": "e68e9aab-2cca-43ce-b41a-06d393097bc4",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T10:59:59.723Z"
+    },
+    {
+      "_id": "f547d041-d4e9-498d-a6b0-b7a957223502",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T11:00:10.148Z"
+    },
+    {
+      "_id": "a14167b9-97db-494e-bca2-11bde76f3cf8",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T11:00:14.255Z"
+    },
+    {
+      "_id": "14de9794-bee0-4576-9a90-532244f03b22",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T11:00:16.279Z"
+    },
+    {
+      "_id": "172433b0-8dc8-478e-819a-a4a771fa7a69",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T11:01:21.460Z"
+    },
+    {
+      "_id": "1260dfcd-c15b-4bac-a63a-aa50c83d768c",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T11:01:41.745Z"
+    },
+    {
+      "_id": "497d4e8e-d2df-4f70-aeee-8dfc208a97d1",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36",
+      "createdAt": "2026-04-04T11:02:07.243Z"
+    },
+    {
+      "_id": "39e68061-adf4-444b-a043-0ae2a626e0b5",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:04:15.050Z"
+    },
+    {
+      "_id": "e806be81-0be5-4657-bcb4-bdd51c0ced1f",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:04:18.255Z"
+    },
+    {
+      "_id": "d58d145a-6fc4-46b9-8b3c-89b5e207cb46",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:06:12.772Z"
+    },
+    {
+      "_id": "ccbb34ec-a707-4c8d-9840-4a63d849edb7",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:06:54.646Z"
+    },
+    {
+      "_id": "45b3770a-dae0-4a63-a8f1-f16b45fe1d2d",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:07:21.316Z"
+    },
+    {
+      "_id": "416b6cc5-29a1-4f76-a5d4-1f18335fecd7",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:07:52.993Z"
+    },
+    {
+      "_id": "a42b16e6-4498-48ef-9bd1-097f8555daa9",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:13:51.335Z"
+    },
+    {
+      "_id": "a4cf7637-e7f4-4fe8-84d0-6f63b10449f9",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:13:55.293Z"
+    },
+    {
+      "_id": "de7c3fb5-c373-49b5-8a37-19470da94bca",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:15:44.551Z"
+    },
+    {
+      "_id": "c8459937-c976-4fd0-b3a5-4920d197e9b9",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:16:04.898Z"
+    },
+    {
+      "_id": "6efaa802-0b36-4bfd-a182-c91b19aef072",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:17:48.128Z"
+    },
+    {
+      "_id": "02c0d7de-2c88-407e-957c-a02601c4ba6a",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:17:52.808Z"
+    },
+    {
+      "_id": "ca3dc721-0e2a-4d85-976b-f582ddb639bb",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T11:18:52.246Z"
+    },
+    {
+      "_id": "3e590085-e0e3-424a-9183-32d0a64e86e4",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:27:36.148Z"
+    },
+    {
+      "_id": "369a00dc-2264-488c-936b-fdb14f023378",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:27:47.377Z"
+    },
+    {
+      "_id": "0357b880-aafa-4176-bbb8-8659cb8c7895",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:27:52.292Z"
+    },
+    {
+      "_id": "9d64c20a-917e-4499-9dbe-17d2d745f480",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:28:58.064Z"
+    },
+    {
+      "_id": "116b4132-5e28-4893-ae87-30d8584b5e5f",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:29:19.335Z"
+    },
+    {
+      "_id": "e695ee7d-1c40-4e97-b0c0-8c6607906f9b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:39:17.337Z"
+    },
+    {
+      "_id": "805503ad-f42a-496f-a0cb-3a09c515aea8",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:39:18.026Z"
+    },
+    {
+      "_id": "d97af0f1-afee-49d2-9eae-974805649b95",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:40:00.463Z"
+    },
+    {
+      "_id": "3f140b46-5716-49ea-a996-134b201dffb1",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+        "productName": "Pinapple",
+        "category": "Fruits & Vegetables",
+        "price": 20,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:40:03.642Z"
+    },
+    {
+      "_id": "3cdae124-3e6b-4ee6-b04e-b7f161f98476",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:40:44.405Z"
+    },
+    {
+      "_id": "260987ce-dc6b-4e5e-bfaa-dc4a67725b28",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:40:54.629Z"
+    },
+    {
+      "_id": "3765f29b-395b-4c7c-af7c-eb126e0fed68",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:41:00.629Z"
+    },
+    {
+      "_id": "6f0df13b-1322-4153-b4fb-e1e2a10ba6dd",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:41:10.882Z"
+    },
+    {
+      "_id": "20e7378f-68cf-44f4-b350-588d59a9bc3f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:42:27.411Z"
+    },
+    {
+      "_id": "20e25d0c-1f58-421f-a606-159b86d10497",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:42:34.519Z"
+    },
+    {
+      "_id": "382044bf-9fb1-4d4b-8f26-9f0c5ac01eb3",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:42:38.660Z"
+    },
+    {
+      "_id": "472792a4-9594-4b04-993d-43f6353805df",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+        "productName": "Foot Ball",
+        "category": "Toys & Games",
+        "price": 50,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:42:43.075Z"
+    },
+    {
+      "_id": "78a11340-30e2-4986-9f51-355715795dd7",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+        "productName": "Oraimo CleanSip Faucet",
+        "category": "oriamo",
+        "price": 217,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:43:08.309Z"
+    },
+    {
+      "_id": "3ccfc3bd-e8c0-456c-9622-c17e640ec7e1",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+        "productName": "Oraimo CleanSip Faucet",
+        "category": "oriamo",
+        "price": 217,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:43:16.730Z"
+    },
+    {
+      "_id": "a5f80de6-69a5-4479-a182-4a24ddbdc06b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:45:04.123Z"
+    },
+    {
+      "_id": "56ab8df6-5c52-4516-b01b-83f0b7451f38",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:45:04.675Z"
+    },
+    {
+      "_id": "c26bccb2-8140-428d-b422-28df936c39aa",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:45:04.918Z"
+    },
+    {
+      "_id": "031a28e3-773c-48d4-b00c-ab10bec1c629",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:45:05.145Z"
+    },
+    {
+      "_id": "af5da34d-8505-402c-9a2b-d76e47393d4a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:47:21.037Z"
+    },
+    {
+      "_id": "b76bea46-887b-4037-b93c-3b20e855fe8e",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:47:25.475Z"
+    },
+    {
+      "_id": "3888cdc3-63c2-4f70-a5ef-04b7086d0f1c",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:47:32.416Z"
+    },
+    {
+      "_id": "5d1a8892-4e5b-480b-a9ce-55a09a151434",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "privacy"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:47:42.232Z"
+    },
+    {
+      "_id": "c4c8debe-d294-4b17-83ab-88f4943654a5",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:47:47.828Z"
+    },
+    {
+      "_id": "e58d29b5-5c70-44fb-93f3-206bddad1363",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:47:53.878Z"
+    },
+    {
+      "_id": "4d110744-c273-487e-acb5-36926651307a",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:49:30.014Z"
+    },
+    {
+      "_id": "c7262c41-9f3a-4812-995e-95c45fef0709",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:49:32.439Z"
+    },
+    {
+      "_id": "d23fce54-3c30-4b04-adfb-50f8a2b98856",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:50:08.170Z"
+    },
+    {
+      "_id": "c9145df4-0618-41f0-b967-bfbf743cc31a",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:50:11.460Z"
+    },
+    {
+      "_id": "341f9696-9cb2-4c35-b574-17e6a6581ec6",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:50:44.840Z"
+    },
+    {
+      "_id": "d06d36c7-37af-4e77-a36b-6960df6801f0",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:50:49.026Z"
+    },
+    {
+      "_id": "85d5978b-f069-4bda-ae90-bfcf79ff7af7",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:04.272Z"
+    },
+    {
+      "_id": "22ee65dc-caf8-427e-9dae-ca809d17cff2",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:06.094Z"
+    },
+    {
+      "_id": "d70b3242-e70c-4650-bff6-b67e3c65ad8b",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:16.920Z"
+    },
+    {
+      "_id": "34e7e68f-4ec2-49fb-b61e-4f9c11b1fb91",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:23.348Z"
+    },
+    {
+      "_id": "16dc43c0-58fc-41b4-8b80-9f74a31a88dc",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "a8b88dda-45b4-4705-94a5-8959b0f4ed4d",
+        "productName": "Samsung s25",
+        "category": "electronics",
+        "price": 3083.89,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:36.415Z"
+    },
+    {
+      "_id": "ec2fd047-15e0-4072-9799-8b24c148b646",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:46.374Z"
+    },
+    {
+      "_id": "565a1e1e-cee8-4c9d-abab-31b39d9cac85",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:46.945Z"
+    },
+    {
+      "_id": "5e85d10c-7121-4f16-a3f3-fc81273f08b6",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "8bee9f2e-9dd9-4c72-9571-5634ac15f6c3",
+        "productName": "Pinapple",
+        "category": "Fruits & Vegetables",
+        "price": 20,
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:51:51.921Z"
+    },
+    {
+      "_id": "b8ceff51-2684-4633-8e71-5a33c97ab79f",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+        "productName": "Oraimo Maxi Watch",
+        "category": "oriamo",
+        "price": 2631.9,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:58:00.580Z"
+    },
+    {
+      "_id": "d42c4f4c-863e-4e53-a435-425cf9627ce3",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+        "productName": "Oraimo CleanSip Faucet",
+        "category": "oriamo",
+        "price": 217,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:58:08.786Z"
+    },
+    {
+      "_id": "3c4fb12c-163f-46bd-8c14-c9df01af6c46",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:58:14.564Z"
+    },
+    {
+      "_id": "a9d6ba8a-62fb-4317-807f-5163a1a9b58c",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "5ea87a31-4194-4438-8d19-737aab2b5bf4",
+        "productName": "Foot Ball",
+        "category": "Toys & Games",
+        "price": 50,
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:58:17.018Z"
+    },
+    {
+      "_id": "e85e81b9-34cf-47ef-b0bd-9960c80e7ffc",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "63d2296c-6d8c-499b-98fe-b674aca89cb6",
+        "productName": "Oraimo Lite Earphones",
+        "category": "oriamo",
+        "price": 126.98,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T12:58:44.666Z"
+    },
+    {
+      "_id": "4077fbe1-5f27-4d65-8fb2-b656743ebc27",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "ec35c0b4-04b8-4178-8a65-f249847829c0",
+        "productName": "Oraimo CleanSip Faucet",
+        "category": "oriamo",
+        "price": 217,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T13:15:14.571Z"
+    },
+    {
+      "_id": "329dffaa-d1d6-4a13-b415-3ad72e967fb9",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
+        "productName": "Oraimo Power Bank Lite",
+        "category": "oriamo",
+        "price": 136.9,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T13:38:43.332Z"
+    },
+    {
+      "_id": "74a26d40-14ec-4f49-a5d4-130536742fc8",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "dd6f6d62-bf7d-4ea4-b589-b05096a4a34c",
+        "productName": "Oraimo Power Bank Lite",
+        "category": "oriamo",
+        "price": 136.9,
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T13:38:48.125Z"
+    },
+    {
+      "_id": "9c64ae2c-6195-4797-a2e5-924d3e1bda18",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+        "productName": "Toy Car",
+        "category": "Toys & Games",
+        "price": 1300,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-04T22:17:51.923Z"
+    },
+    {
+      "_id": "d7a2960b-5e24-409c-8ac0-75bdd2b6d92c",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-06T12:39:45.658Z"
+    },
+    {
+      "_id": "b46a344d-dff6-45d6-9767-295f882c9b37",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:18:47.838Z"
+    },
+    {
+      "_id": "168e76bf-4b75-49aa-b16b-dd16d7678f07",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:18:55.535Z"
+    },
+    {
+      "_id": "566a0188-283a-45b2-9f0c-d8387b1e132c",
+      "userId": null,
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:19:08.137Z"
+    },
+    {
+      "_id": "948ad42b-a3f4-4ea6-b434-46ee9d4c2a81",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:19:15.332Z"
+    },
+    {
+      "_id": "3984d521-5b93-4c66-a85f-c7f30072d0f0",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:19:19.682Z"
+    },
+    {
+      "_id": "6719ed27-fb6a-400c-b0fd-d3d0ac3173e2",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:19:45.552Z"
+    },
+    {
+      "_id": "eca29fed-4a8c-4703-aea9-3d8232ee7352",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:19:51.045Z"
+    },
+    {
+      "_id": "4e1ab918-53c7-4141-8d95-4d1c91a1a615",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:20:04.513Z"
+    },
+    {
+      "_id": "5a10169f-4b2a-410e-b062-fc1b12e76d22",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:20:15.621Z"
+    },
+    {
+      "_id": "35dccf63-0287-414f-8615-4373f9f1edd6",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:20:24.163Z"
+    },
+    {
+      "_id": "61584ead-a072-461d-95ef-b7daaa5b7769",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:20:54.105Z"
+    },
+    {
+      "_id": "6d7659a0-9a4c-4441-a30e-20a7a1d89cfa",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:23:33.750Z"
+    },
+    {
+      "_id": "4568af55-a9d4-4655-a92b-0006286dbd74",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:24:25.731Z"
+    },
+    {
+      "_id": "80ed4e9b-5308-4271-999e-ff39f237559b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:24:27.612Z"
+    },
+    {
+      "_id": "28947c78-920a-45bc-a7cb-275b97fc738a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:24:28.973Z"
+    },
+    {
+      "_id": "dee70a16-7fc4-4480-bdd6-0a0faed5d9c5",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:24:43.399Z"
+    },
+    {
+      "_id": "5d4bf5c3-b16f-49f1-8611-765cda74b61a",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:27:58.650Z"
+    },
+    {
+      "_id": "7f9dac0d-e40e-4310-8241-352aae44750c",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:27:59.672Z"
+    },
+    {
+      "_id": "622c116e-b58b-48e4-ac3f-6d9edc1c83f3",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:30:42.259Z"
+    },
+    {
+      "_id": "68c24244-bbd9-4fcb-9561-1e9e18a69b5b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:30:43.230Z"
+    },
+    {
+      "_id": "6adf19d5-696f-4eaa-9d8e-67e8cc318256",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:30:50.312Z"
+    },
+    {
+      "_id": "acc4f9d5-a83d-4210-9abd-9969adc83b2f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:32:10.215Z"
+    },
+    {
+      "_id": "2068a4dc-5e6c-4849-a823-b8821810894f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:34:24.187Z"
+    },
+    {
+      "_id": "531f010a-d191-4f04-b189-52db363cd475",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:34:28.597Z"
+    },
+    {
+      "_id": "48665df7-ca65-4a49-a86c-789d672eaefd",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:34:32.006Z"
+    },
+    {
+      "_id": "9cf740c3-bcf5-4adb-a6ca-ad860fe171fd",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "6b4520ef-a6a0-479c-a5b7-e9dde2cadca6",
+        "productName": "Oraimo Maxi Watch",
+        "category": "oriamo",
+        "price": 2631.9,
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:34:34.291Z"
+    },
+    {
+      "_id": "98b50844-a082-49d7-9b82-a249063131a2",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:34:36.304Z"
+    },
+    {
+      "_id": "2a38a50a-fe04-47f7-925b-078a8c19514b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-17T20:34:39.423Z"
+    },
+    {
+      "_id": "21b2d8c0-9e5a-4246-a240-a9551b007108",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T22:26:00.119Z"
+    },
+    {
+      "_id": "c47809f5-6c45-4376-95ba-adef3ec0045e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T22:26:02.215Z"
+    },
+    {
+      "_id": "5b8408db-ccac-4a93-98e4-c2e415b8eade",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T22:26:03.066Z"
+    },
+    {
+      "_id": "c2bf0997-9d0c-4210-8780-a46f0d98250f",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917674683-53o7l62oy",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T22:26:36.152Z"
     }
   ],
   "audit": [
@@ -3939,6 +5860,156 @@
       "summary": "Generated weekly report",
       "actorEmail": "admin@blustup.local",
       "createdAt": "2026-04-03T12:56:09.088Z"
+    },
+    {
+      "_id": "2966e896-2dda-4201-8240-2f73703d86e8",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": null,
+      "summary": "Updated delivery automation settings",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T00:53:26.112Z"
+    },
+    {
+      "_id": "78efbdff-0d3f-41b5-880a-60b4a887d3e0",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": null,
+      "summary": "Updated delivery automation settings",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T00:53:51.804Z"
+    },
+    {
+      "_id": "fe95f22c-7e4f-47ec-b9ff-f288f4161290",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Manually dispatched rider for BLU-MNFAPA2W-3540: mail_not_configured",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T00:54:34.023Z"
+    },
+    {
+      "_id": "7d031cc3-14b4-4a77-ad98-357d0e3dc3f1",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": null,
+      "summary": "Updated delivery automation settings",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:16:06.429Z"
+    },
+    {
+      "_id": "f98b1917-e654-4d13-aeb4-475a5c337d8f",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "order",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Updated order BLU-MNFAPA2W-3540 to shipped",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:16:41.451Z"
+    },
+    {
+      "_id": "008ad799-da67-4223-a1d0-5bb17ded78ed",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Manually dispatched rider for BLU-MNFAPA2W-3540: rider_notified",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:16:42.139Z"
+    },
+    {
+      "_id": "923147bd-824a-4a9b-b777-4b72825a41ba",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Manually dispatched rider for BLU-MNFAPA2W-3540: rider_notified",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:16:42.431Z"
+    },
+    {
+      "_id": "1b75c76d-cd96-4121-a6ab-8550a5a04529",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Manually dispatched rider for BLU-MNFAPA2W-3540: rider_notified",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:16:42.807Z"
+    },
+    {
+      "_id": "9d6922a0-64a1-4005-99c8-4070b386278c",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "delivery",
+      "entityId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+      "summary": "Manually dispatched rider for BLU-MNFAPA2W-3540: rider_notified",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:16:43.389Z"
+    },
+    {
+      "_id": "1c767e58-d382-4473-9ff6-31253207e841",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "admin_page",
+      "entityId": null,
+      "summary": "Updated admin page appearance",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:29:51.057Z"
+    },
+    {
+      "_id": "0d60022d-1b3a-4232-af77-efd6cfcca52d",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "admin_page",
+      "entityId": null,
+      "summary": "Updated admin page appearance",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:30:20.287Z"
+    },
+    {
+      "_id": "daf680f0-7264-4692-b6d4-47dc947ba754",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "admin_page",
+      "entityId": null,
+      "summary": "Updated admin page appearance",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:30:45.649Z"
+    },
+    {
+      "_id": "3dc681c9-aea7-4de1-82ec-d93d5d5b2e6b",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "admin_page",
+      "entityId": null,
+      "summary": "Updated admin page appearance",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:31:02.920Z"
+    },
+    {
+      "_id": "133590c3-70d9-4806-8746-b76ec468e19f",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "admin_page",
+      "entityId": null,
+      "summary": "Updated admin page appearance",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:31:19.694Z"
+    },
+    {
+      "_id": "22f23083-7ad9-467d-a89d-dc06e20479f4",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "change",
+      "entityType": "admin_page",
+      "entityId": null,
+      "summary": "Updated admin page appearance",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-04T01:31:34.486Z"
     }
   ],
   "cms": {
@@ -4127,19 +6198,25 @@
           "name": "Amina Osei",
           "role": "Chair & CEO",
           "bio": "Leads strategy and partnerships across retail and logistics for Blustup.",
-          "imageUrl": null
+          "imageUrl": "/uploads/Screenshot_20250723_170058_WhatsApp-mo3d0jf5.jpg"
         },
         {
           "name": "Jordan Mensah",
           "role": "Chief Operating Officer",
           "bio": "Oversees day-to-day operations, vendor relationships, and customer experience.",
-          "imageUrl": null
+          "imageUrl": "/uploads/IMG-20250630-WA0109-mo3d0rrz.jpg"
         },
         {
           "name": "Priya Nair",
           "role": "Chief Technology Officer",
           "bio": "Drives platform security, payments infrastructure, and product engineering.",
-          "imageUrl": null
+          "imageUrl": "/uploads/Screenshot_20250901_192429_Instagram-mo3d14q2.jpg"
+        },
+        {
+          "name": "Kwame Ai",
+          "role": "Ai Assistance",
+          "bio": "Just ask a question",
+          "imageUrl": "/uploads/IMG-20250723-WA0061-mo3d3l2g.jpg"
         }
       ]
     },
@@ -4289,6 +6366,71 @@
         "weekly": "2026-04-03T12:56:08.954Z",
         "inventory": null
       }
+    },
+    "delivery": {
+      "automationEnabled": true,
+      "emailSubjectPrefix": "Blustup Delivery",
+      "dispatchIntro": "A customer order has been marked as shipped. Please contact the customer, confirm the delivery plan, and complete the drop-off as soon as possible.",
+      "riders": [
+        {
+          "id": "rider-1775263953540-j0xfzy",
+          "name": "Ama Sosu",
+          "email": "tettehbabyboy13@gmail.com",
+          "phone": "+233207280318",
+          "coverage": "Accra",
+          "isActive": true
+        }
+      ],
+      "history": [
+        {
+          "id": "dispatch-1775265403376-p19vz",
+          "orderId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+          "orderReference": "BLU-MNFAPA2W-3540",
+          "riderId": "rider-1775263953540-j0xfzy",
+          "riderName": "Ama Sosu",
+          "riderEmail": "tettehbabyboy13@gmail.com",
+          "riderPhone": "+233207280318",
+          "coverage": "Accra",
+          "status": "rider_notified",
+          "source": "admin@blustup.local",
+          "note": "Delivery brief emailed to Ama Sosu.",
+          "createdAt": "2026-04-04T01:16:40.409Z"
+        },
+        {
+          "id": "dispatch-1775264074011-38kd3",
+          "orderId": "e1a8cd9b-a0d6-40ba-beb5-3c1c924e70c6",
+          "orderReference": "BLU-MNFAPA2W-3540",
+          "riderId": "rider-1775263953540-j0xfzy",
+          "riderName": "Ama Sosu",
+          "riderEmail": "tettehbabyboy13@gmail.com",
+          "riderPhone": "+233207280318",
+          "coverage": "Accra",
+          "status": "mail_not_configured",
+          "source": "admin@blustup.local",
+          "note": "Ama Sosu was assigned, but SMTP is not configured yet.",
+          "createdAt": "2026-04-04T00:54:34.011Z"
+        }
+      ],
+      "roundRobinIndex": 2
+    },
+    "adminPage": {
+      "pageTitle": "Admin Dashboard",
+      "logoImageUrl": "logos/Layer 2.png",
+      "brandSubtitle": "Commerce Admin",
+      "sidebarStatus": "Live console",
+      "heroEyebrow": "Admin cockpit",
+      "heroTitleTemplate": "Hi, {{name}}",
+      "heroSubtitle": "Manage products, storefront content, and automation from one calm workspace.",
+      "supportEyebrow": "Customer support",
+      "supportTitle": "Need a quick hand?",
+      "supportText": "Jump to the live storefront or tune your help content without leaving the console.",
+      "primaryButtonLabel": "View site",
+      "secondaryButtonLabel": "Help content",
+      "accentColor": "#000000",
+      "linkColor": "#1148d4",
+      "backgroundStartColor": "#f4f6fb",
+      "backgroundEndColor": "#e8eef8",
+      "glowColor": "#000000"
     },
     "ai": {
       "chatEnabled": true,

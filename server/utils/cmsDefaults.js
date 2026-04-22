@@ -104,9 +104,44 @@ const DEFAULT_REPORT_SETTINGS = {
   },
 };
 
+const DEFAULT_DELIVERY_SETTINGS = {
+  automationEnabled: false,
+  emailSubjectPrefix: "Blustup Delivery",
+  dispatchIntro:
+    "A customer order has been marked as shipped. Please contact the customer, confirm the delivery plan, and complete the drop-off as soon as possible.",
+  riders: [],
+  history: [],
+  roundRobinIndex: 0,
+};
+
+const DEFAULT_ADMIN_PAGE_SETTINGS = {
+  pageTitle: "Admin Dashboard",
+  logoImageUrl: "logos/Layer 2.png",
+  brandSubtitle: "Commerce Admin",
+  sidebarStatus: "Live console",
+  heroEyebrow: "Admin cockpit",
+  heroTitleTemplate: "Hi, {{name}}",
+  heroSubtitle: "Manage products, storefront content, and automation from one calm workspace.",
+  supportEyebrow: "Customer support",
+  supportTitle: "Need a quick hand?",
+  supportText: "Jump to the live storefront or tune your help content without leaving the console.",
+  primaryButtonLabel: "View site",
+  secondaryButtonLabel: "Help content",
+  accentColor: "#000000",
+  linkColor: "#2f6bff",
+  backgroundStartColor: "#f4f6fb",
+  backgroundEndColor: "#e8eef8",
+  glowColor: "#000000",
+};
+
 function normalizeString(value, fallback = "") {
   const normalized = String(value || "").trim();
   return normalized || fallback;
+}
+
+function normalizeHexColor(value, fallback) {
+  const normalized = String(value || "").trim();
+  return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(normalized) ? normalized : fallback;
 }
 
 function uniqueStrings(values, { allowEmpty = false } = {}) {
@@ -244,11 +279,86 @@ function normalizeReportSettings(value = {}) {
   };
 }
 
+function normalizeDeliveryRider(item = {}, index = 0) {
+  return {
+    id: normalizeString(item?.id, `rider-${index + 1}`),
+    name: normalizeString(item?.name, ""),
+    email: normalizeString(item?.email, "").toLowerCase(),
+    phone: normalizeString(item?.phone, ""),
+    coverage: normalizeString(item?.coverage, ""),
+    isActive: item?.isActive !== false,
+  };
+}
+
+function normalizeDeliveryHistoryItem(item = {}, index = 0) {
+  return {
+    id: normalizeString(item?.id, `delivery-${index + 1}`),
+    orderId: normalizeString(item?.orderId, ""),
+    orderReference: normalizeString(item?.orderReference, ""),
+    riderId: normalizeString(item?.riderId, ""),
+    riderName: normalizeString(item?.riderName, ""),
+    riderEmail: normalizeString(item?.riderEmail, "").toLowerCase(),
+    riderPhone: normalizeString(item?.riderPhone, ""),
+    coverage: normalizeString(item?.coverage, ""),
+    status: normalizeString(item?.status, "pending"),
+    source: normalizeString(item?.source, "system"),
+    note: normalizeString(item?.note, ""),
+    createdAt: normalizeString(item?.createdAt, new Date().toISOString()),
+  };
+}
+
+function normalizeDeliverySettings(value = {}) {
+  const riders = (Array.isArray(value?.riders) ? value.riders : [])
+    .map((item, index) => normalizeDeliveryRider(item, index))
+    .filter((rider) => rider.name || rider.email || rider.phone)
+    .slice(0, 50);
+
+  const history = (Array.isArray(value?.history) ? value.history : [])
+    .map((item, index) => normalizeDeliveryHistoryItem(item, index))
+    .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime())
+    .slice(0, 50);
+
+  return {
+    automationEnabled: value?.automationEnabled === true,
+    emailSubjectPrefix: normalizeString(value?.emailSubjectPrefix, DEFAULT_DELIVERY_SETTINGS.emailSubjectPrefix),
+    dispatchIntro: normalizeString(value?.dispatchIntro, DEFAULT_DELIVERY_SETTINGS.dispatchIntro),
+    riders,
+    history,
+    roundRobinIndex: Math.max(0, Math.floor(Number(value?.roundRobinIndex || 0))),
+  };
+}
+
+function normalizeAdminPageSettings(value = {}) {
+  return {
+    pageTitle: normalizeString(value?.pageTitle, DEFAULT_ADMIN_PAGE_SETTINGS.pageTitle),
+    logoImageUrl: normalizeString(value?.logoImageUrl, DEFAULT_ADMIN_PAGE_SETTINGS.logoImageUrl),
+    brandSubtitle: normalizeString(value?.brandSubtitle, DEFAULT_ADMIN_PAGE_SETTINGS.brandSubtitle),
+    sidebarStatus: normalizeString(value?.sidebarStatus, DEFAULT_ADMIN_PAGE_SETTINGS.sidebarStatus),
+    heroEyebrow: normalizeString(value?.heroEyebrow, DEFAULT_ADMIN_PAGE_SETTINGS.heroEyebrow),
+    heroTitleTemplate: normalizeString(value?.heroTitleTemplate, DEFAULT_ADMIN_PAGE_SETTINGS.heroTitleTemplate),
+    heroSubtitle: normalizeString(value?.heroSubtitle, DEFAULT_ADMIN_PAGE_SETTINGS.heroSubtitle),
+    supportEyebrow: normalizeString(value?.supportEyebrow, DEFAULT_ADMIN_PAGE_SETTINGS.supportEyebrow),
+    supportTitle: normalizeString(value?.supportTitle, DEFAULT_ADMIN_PAGE_SETTINGS.supportTitle),
+    supportText: normalizeString(value?.supportText, DEFAULT_ADMIN_PAGE_SETTINGS.supportText),
+    primaryButtonLabel: normalizeString(value?.primaryButtonLabel, DEFAULT_ADMIN_PAGE_SETTINGS.primaryButtonLabel),
+    secondaryButtonLabel: normalizeString(value?.secondaryButtonLabel, DEFAULT_ADMIN_PAGE_SETTINGS.secondaryButtonLabel),
+    accentColor: normalizeHexColor(value?.accentColor, DEFAULT_ADMIN_PAGE_SETTINGS.accentColor),
+    linkColor: normalizeHexColor(value?.linkColor, DEFAULT_ADMIN_PAGE_SETTINGS.linkColor),
+    backgroundStartColor: normalizeHexColor(value?.backgroundStartColor, DEFAULT_ADMIN_PAGE_SETTINGS.backgroundStartColor),
+    backgroundEndColor: normalizeHexColor(value?.backgroundEndColor, DEFAULT_ADMIN_PAGE_SETTINGS.backgroundEndColor),
+    glowColor: normalizeHexColor(value?.glowColor, DEFAULT_ADMIN_PAGE_SETTINGS.glowColor),
+  };
+}
+
 module.exports = {
   DEFAULT_HOME_SETTINGS,
   DEFAULT_ABOUT_SETTINGS,
   DEFAULT_REPORT_SETTINGS,
+  DEFAULT_DELIVERY_SETTINGS,
+  DEFAULT_ADMIN_PAGE_SETTINGS,
   normalizeHomeSettings,
   normalizeAboutSettings,
   normalizeReportSettings,
+  normalizeDeliverySettings,
+  normalizeAdminPageSettings,
 };

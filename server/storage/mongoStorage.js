@@ -11,9 +11,13 @@ const {
   DEFAULT_HOME_SETTINGS,
   DEFAULT_ABOUT_SETTINGS,
   DEFAULT_REPORT_SETTINGS,
+  DEFAULT_DELIVERY_SETTINGS,
+  DEFAULT_ADMIN_PAGE_SETTINGS,
   normalizeHomeSettings,
   normalizeAboutSettings,
   normalizeReportSettings,
+  normalizeDeliverySettings,
+  normalizeAdminPageSettings,
 } = require("../utils/cmsDefaults");
 
 function isValidId(id) {
@@ -104,6 +108,22 @@ function mapUserOut(user) {
 }
 
 function mapOrderOut(order) {
+  const deliveryAssignment = order.deliveryAssignment && typeof order.deliveryAssignment === "object"
+    ? {
+        id: order.deliveryAssignment.id || null,
+        riderId: order.deliveryAssignment.riderId ? String(order.deliveryAssignment.riderId) : null,
+        riderName: order.deliveryAssignment.riderName || null,
+        riderEmail: order.deliveryAssignment.riderEmail || null,
+        riderPhone: order.deliveryAssignment.riderPhone || null,
+        coverage: order.deliveryAssignment.coverage || null,
+        status: order.deliveryAssignment.status || null,
+        note: order.deliveryAssignment.note || "",
+        source: order.deliveryAssignment.source || null,
+        assignedAt: order.deliveryAssignment.assignedAt?.toISOString?.() || null,
+        notifiedAt: order.deliveryAssignment.notifiedAt?.toISOString?.() || null,
+      }
+    : null;
+
   return {
     id: order._id.toString(),
     reference: order.reference,
@@ -134,6 +154,7 @@ function mapOrderOut(order) {
     loyaltyBalanceAfter: Number(order.loyaltyBalanceAfter || 0),
     loyaltyTierAfter: order.loyaltyTierAfter || null,
     status: order.status,
+    deliveryAssignment,
     statusHistory: Array.isArray(order.statusHistory)
       ? order.statusHistory.map((entry) => ({
           status: entry.status,
@@ -315,6 +336,11 @@ async function lookupOrderByReference({ reference, email }) {
   return order ? mapOrderOut(order) : null;
 }
 
+async function getOrderById(id) {
+  const order = await Order.findById(id);
+  return order ? mapOrderOut(order) : null;
+}
+
 async function listOrdersAdmin({ status, q, limit }) {
   const pageSize = Math.min(Math.max(1, Number(limit || 50)), 5000);
   const query = {};
@@ -351,6 +377,29 @@ async function updateOrderStatus(id, { status, note, actorId, actorEmail }) {
   return mapOrderOut(order);
 }
 
+async function updateOrderDeliveryAssignment(id, deliveryAssignment) {
+  const order = await Order.findById(id);
+  if (!order) return null;
+
+  order.deliveryAssignment = deliveryAssignment && typeof deliveryAssignment === "object"
+    ? {
+        id: deliveryAssignment.id || null,
+        riderId: deliveryAssignment.riderId || null,
+        riderName: deliveryAssignment.riderName || null,
+        riderEmail: deliveryAssignment.riderEmail || null,
+        riderPhone: deliveryAssignment.riderPhone || null,
+        coverage: deliveryAssignment.coverage || null,
+        status: deliveryAssignment.status || "pending",
+        note: deliveryAssignment.note || "",
+        source: deliveryAssignment.source || null,
+        assignedAt: deliveryAssignment.assignedAt ? new Date(deliveryAssignment.assignedAt) : null,
+        notifiedAt: deliveryAssignment.notifiedAt ? new Date(deliveryAssignment.notifiedAt) : null,
+      }
+    : null;
+  await order.save();
+  return mapOrderOut(order);
+}
+
 const DEFAULT_HOME = normalizeHomeSettings(DEFAULT_HOME_SETTINGS);
 
 const DEFAULT_SHOP = {
@@ -377,6 +426,8 @@ const DEFAULT_AI = {
 
 const DEFAULT_ABOUT = normalizeAboutSettings(DEFAULT_ABOUT_SETTINGS);
 const DEFAULT_REPORTS = normalizeReportSettings(DEFAULT_REPORT_SETTINGS);
+const DEFAULT_DELIVERY = normalizeDeliverySettings(DEFAULT_DELIVERY_SETTINGS);
+const DEFAULT_ADMIN_PAGE = normalizeAdminPageSettings(DEFAULT_ADMIN_PAGE_SETTINGS);
 
 const DEFAULT_DEALS = [
   {
@@ -511,10 +562,12 @@ module.exports = {
   product: { listPublic, listAdmin, create: createProduct, update: updateProduct, addReview: addProductReview, delete: deleteProduct },
   order: {
     create: createOrder,
+    getById: getOrderById,
     listForUser: listOrdersForUser,
     lookupByReference: lookupOrderByReference,
     listAdmin: listOrdersAdmin,
     updateStatus: updateOrderStatus,
+    updateDeliveryAssignment: updateOrderDeliveryAssignment,
   },
   tracking: {
     add: (payload) => Tracking.create(payload),
@@ -547,5 +600,9 @@ module.exports = {
     setAbout: (value) => upsertCmsByKey("about", value),
     getReports: async () => normalizeReportSettings(await getCmsByKey("reports", DEFAULT_REPORTS)),
     setReports: (value) => upsertCmsByKey("reports", value),
+    getDelivery: async () => normalizeDeliverySettings(await getCmsByKey("delivery", DEFAULT_DELIVERY)),
+    setDelivery: (value) => upsertCmsByKey("delivery", value),
+    getAdminPage: async () => normalizeAdminPageSettings(await getCmsByKey("adminPage", DEFAULT_ADMIN_PAGE)),
+    setAdminPage: (value) => upsertCmsByKey("adminPage", value),
   },
 };

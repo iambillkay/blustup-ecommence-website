@@ -12,9 +12,13 @@ const {
   DEFAULT_HOME_SETTINGS,
   DEFAULT_ABOUT_SETTINGS,
   DEFAULT_REPORT_SETTINGS,
+  DEFAULT_DELIVERY_SETTINGS,
+  DEFAULT_ADMIN_PAGE_SETTINGS,
   normalizeHomeSettings,
   normalizeAboutSettings,
   normalizeReportSettings,
+  normalizeDeliverySettings,
+  normalizeAdminPageSettings,
 } = require("../utils/cmsDefaults");
 
 const STATE_FILE = path.join(__dirname, "memory-state.json");
@@ -169,6 +173,8 @@ function createDefaultCmsState() {
     },
     about: normalizeAboutSettings(DEFAULT_ABOUT_SETTINGS),
     reports: normalizeReportSettings(DEFAULT_REPORT_SETTINGS),
+    delivery: normalizeDeliverySettings(DEFAULT_DELIVERY_SETTINGS),
+    adminPage: normalizeAdminPageSettings(DEFAULT_ADMIN_PAGE_SETTINGS),
     ai: { ...DEFAULT_AI },
   };
 }
@@ -270,6 +276,37 @@ function normalizeStatusHistoryEntry(entry = {}) {
   };
 }
 
+function normalizeDeliveryAssignment(entry = {}) {
+  if (!entry || typeof entry !== "object") return null;
+
+  const id = entry.id ? String(entry.id).trim() : "";
+  const status = entry.status ? String(entry.status).trim() : "";
+  const riderName = entry.riderName ? String(entry.riderName).trim() : "";
+  const riderEmail = entry.riderEmail ? normalizeEmail(entry.riderEmail) : null;
+  const riderPhone = entry.riderPhone ? String(entry.riderPhone).trim() : null;
+  const coverage = entry.coverage ? String(entry.coverage).trim() : null;
+  const note = entry.note ? String(entry.note).trim() : "";
+  const source = entry.source ? String(entry.source).trim() : null;
+  const assignedAt = entry.assignedAt ? toDate(entry.assignedAt) : null;
+  const notifiedAt = entry.notifiedAt ? toDate(entry.notifiedAt) : null;
+
+  if (!id && !status && !riderName && !riderEmail && !riderPhone && !note) return null;
+
+  return {
+    id: id || makeId(),
+    riderId: entry.riderId ? String(entry.riderId).trim() : null,
+    riderName: riderName || null,
+    riderEmail,
+    riderPhone,
+    coverage,
+    status: status || "pending",
+    note,
+    source,
+    assignedAt,
+    notifiedAt,
+  };
+}
+
 function normalizeOrderRecord(order = {}) {
   const createdAt = toDate(order.createdAt);
   const updatedAt = toDate(order.updatedAt || order.createdAt);
@@ -295,6 +332,7 @@ function normalizeOrderRecord(order = {}) {
     loyaltyBalanceAfter: Math.max(0, Number(order.loyaltyBalanceAfter || 0)),
     loyaltyTierAfter: order.loyaltyTierAfter ? String(order.loyaltyTierAfter).trim() : null,
     status: String(order.status || "placed").trim() || "placed",
+    deliveryAssignment: normalizeDeliveryAssignment(order.deliveryAssignment),
     statusHistory: Array.isArray(order.statusHistory)
       ? order.statusHistory.map(normalizeStatusHistoryEntry)
       : [],
@@ -372,6 +410,8 @@ function normalizeCmsState(cms = {}) {
       : defaults.faq,
     about: normalizeAboutSettings(cms?.about || defaults.about),
     reports: normalizeReportSettings(cms?.reports || defaults.reports),
+    delivery: normalizeDeliverySettings(cms?.delivery || defaults.delivery),
+    adminPage: normalizeAdminPageSettings(cms?.adminPage || defaults.adminPage),
     ai: {
       ...DEFAULT_AI,
       ...(cms?.ai && typeof cms.ai === "object" ? cms.ai : {}),
@@ -411,6 +451,13 @@ function serializeState(currentState) {
     })),
     orders: currentState.orders.map((order) => ({
       ...order,
+      deliveryAssignment: order.deliveryAssignment
+        ? {
+            ...order.deliveryAssignment,
+            assignedAt: order.deliveryAssignment.assignedAt ? toISO(order.deliveryAssignment.assignedAt) : null,
+            notifiedAt: order.deliveryAssignment.notifiedAt ? toISO(order.deliveryAssignment.notifiedAt) : null,
+          }
+        : null,
       statusHistory: order.statusHistory.map((entry) => ({
         ...entry,
         createdAt: toISO(entry.createdAt),
@@ -491,6 +538,13 @@ function mapOrderOut(order) {
     loyaltyBalanceAfter: order.loyaltyBalanceAfter,
     loyaltyTierAfter: order.loyaltyTierAfter ?? null,
     status: order.status,
+    deliveryAssignment: order.deliveryAssignment
+      ? {
+          ...order.deliveryAssignment,
+          assignedAt: order.deliveryAssignment.assignedAt ? toISO(order.deliveryAssignment.assignedAt) : null,
+          notifiedAt: order.deliveryAssignment.notifiedAt ? toISO(order.deliveryAssignment.notifiedAt) : null,
+        }
+      : null,
     statusHistory: order.statusHistory.map((entry) => ({
       ...entry,
       createdAt: toISO(entry.createdAt),
@@ -986,6 +1040,11 @@ async function lookupOrderByReference({ reference, email }) {
   return order ? mapOrderOut(order) : null;
 }
 
+async function getOrderById(id) {
+  const order = state.orders.find((entry) => String(entry._id) === String(id));
+  return order ? mapOrderOut(order) : null;
+}
+
 async function listOrdersAdmin({ status, q, limit }) {
   const pageSize = Math.min(Math.max(1, Number(limit || 50)), 5000);
   let rows = [...state.orders];
@@ -1012,6 +1071,16 @@ async function updateOrderStatus(id, { status, note, actorId, actorEmail }) {
       createdAt: new Date(),
     })
   );
+  order.updatedAt = new Date();
+  await persistState();
+  return mapOrderOut(order);
+}
+
+async function updateOrderDeliveryAssignment(id, deliveryAssignment) {
+  const order = state.orders.find((entry) => String(entry._id) === String(id));
+  if (!order) return null;
+
+  order.deliveryAssignment = normalizeDeliveryAssignment(deliveryAssignment);
   order.updatedAt = new Date();
   await persistState();
   return mapOrderOut(order);
@@ -1109,10 +1178,12 @@ module.exports = {
   },
   order: {
     create: createOrder,
+    getById: getOrderById,
     listForUser: listOrdersForUser,
     lookupByReference: lookupOrderByReference,
     listAdmin: listOrdersAdmin,
     updateStatus: updateOrderStatus,
+    updateDeliveryAssignment: updateOrderDeliveryAssignment,
   },
   tracking: {
     add: addTrackingEvent,
@@ -1160,6 +1231,18 @@ module.exports = {
       state.cms.reports = value;
       await persistState();
       return state.cms.reports;
+    },
+    getDelivery: async () => state.cms.delivery,
+    setDelivery: async (value) => {
+      state.cms.delivery = value;
+      await persistState();
+      return state.cms.delivery;
+    },
+    getAdminPage: async () => state.cms.adminPage,
+    setAdminPage: async (value) => {
+      state.cms.adminPage = value;
+      await persistState();
+      return state.cms.adminPage;
     },
   },
   getAuthUserResponse,

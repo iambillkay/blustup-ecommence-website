@@ -39,6 +39,23 @@ const statusHistorySchema = new mongoose.Schema(
   { _id: false }
 );
 
+const deliveryAssignmentSchema = new mongoose.Schema(
+  {
+    id: { type: String, trim: true, default: null },
+    riderId: { type: String, trim: true, default: null },
+    riderName: { type: String, trim: true, maxlength: 120, default: null },
+    riderEmail: { type: String, trim: true, lowercase: true, maxlength: 200, default: null },
+    riderPhone: { type: String, trim: true, maxlength: 30, default: null },
+    coverage: { type: String, trim: true, maxlength: 120, default: null },
+    status: { type: String, trim: true, maxlength: 60, default: null },
+    note: { type: String, trim: true, maxlength: 500, default: "" },
+    source: { type: String, trim: true, maxlength: 60, default: null },
+    assignedAt: { type: Date, default: null },
+    notifiedAt: { type: Date, default: null },
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
     reference: { type: String, required: true, unique: true, index: true },
@@ -67,6 +84,7 @@ const orderSchema = new mongoose.Schema(
       default: "placed",
       index: true,
     },
+    deliveryAssignment: { type: deliveryAssignmentSchema, default: null },
     statusHistory: { type: [statusHistorySchema], default: [] },
   },
   { timestamps: true }
