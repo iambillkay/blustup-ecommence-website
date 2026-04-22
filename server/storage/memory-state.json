@@ -541,6 +541,29 @@
       "isActive": true,
       "createdAt": "2026-03-30T09:28:51.987Z",
       "updatedAt": "2026-04-01T00:43:02.206Z"
+    },
+    {
+      "_id": "570fbc75-ec78-4022-8a4d-ae5dbc7cb0d8",
+      "name": "Oraimo Maxi Watch1",
+      "price": 0,
+      "description": "Oraimo Maxi Watch1 is a electronics option designed for dependable everyday use and easy comparison while shopping online. Priced at ₵0.00, it offers a practical balance of presentation, usefulness, and value.",
+      "category": "electronics",
+      "categories": [
+        "electronics"
+      ],
+      "stockQty": 0,
+      "imageUrl": "/uploads/preview-moaoc4ww.webp",
+      "oldPrice": null,
+      "badge": null,
+      "badgeType": null,
+      "icon": null,
+      "color": null,
+      "ratingAverage": null,
+      "reviewCount": 0,
+      "reviews": [],
+      "isActive": true,
+      "createdAt": "2026-04-22T23:18:44.984Z",
+      "updatedAt": "2026-04-22T23:18:44.984Z"
     }
   ],
   "orders": [
@@ -5238,6 +5261,150 @@
       "ipAddress": "::ffff:127.0.0.1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
       "createdAt": "2026-04-22T22:26:36.152Z"
+    },
+    {
+      "_id": "df5b3ba4-f5aa-4ad4-8ab5-eafdf4782ce6",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:16.593Z"
+    },
+    {
+      "_id": "40bc786d-94bf-4f9d-b64b-25d22bb2791d",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:19.424Z"
+    },
+    {
+      "_id": "a3929916-3938-4097-b9ca-5ad6ea192c17",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:30.702Z"
+    },
+    {
+      "_id": "fe09700e-48f9-4220-a1d2-d9b4f3ae620d",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:32.897Z"
+    },
+    {
+      "_id": "3064ec64-7c01-4a03-bfdd-e69b9b70226c",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:41.186Z"
+    },
+    {
+      "_id": "89ae93f8-d0fb-4268-aa5b-d07f404c5ccf",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:42.955Z"
+    },
+    {
+      "_id": "d77ff993-44c5-44a3-89bd-a8e2bc50803e",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:47.436Z"
+    },
+    {
+      "_id": "93541142-ce06-4e71-8915-c34d5ec185d1",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:47.887Z"
+    },
+    {
+      "_id": "95502aff-d085-48e0-9892-43e4564129cf",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:48.121Z"
+    },
+    {
+      "_id": "2aeaf24c-9a9c-4e5b-b3e8-f6b5a2698eb4",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:48.421Z"
+    },
+    {
+      "_id": "239a0de6-4a6e-4109-8695-75528f751036",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:17:48.607Z"
+    },
+    {
+      "_id": "11284a0e-91d4-46ce-87e3-83a4aad6b33c",
+      "userId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-22T23:22:34.321Z"
     }
   ],
   "audit": [
@@ -6010,6 +6177,16 @@
       "summary": "Updated admin page appearance",
       "actorEmail": "admin@blustup.local",
       "createdAt": "2026-04-04T01:31:34.486Z"
+    },
+    {
+      "_id": "33fbc222-e44c-4795-aabf-53ad3f319708",
+      "actorId": "c42a450c-9faa-44ce-9185-14b92b7cbd4f",
+      "action": "add",
+      "entityType": "product",
+      "entityId": "570fbc75-ec78-4022-8a4d-ae5dbc7cb0d8",
+      "summary": "Created product: Oraimo Maxi Watch1",
+      "actorEmail": "admin@blustup.local",
+      "createdAt": "2026-04-22T23:18:44.991Z"
     }
   ],
   "cms": {
