@@ -28,25 +28,81 @@ const configuredCorsOrigins = String(process.env.CORS_ORIGINS || "")
   .map((value) => value.trim().toLowerCase())
   .filter(Boolean);
 
-function isAllowedCorsOrigin(origin) {
+function parseOrigin(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (!normalized || normalized === "null") return null;
+
+  try {
+    return new URL(normalized);
+  } catch (_error) {
+    return null;
+  }
+}
+
+function normalizeConfiguredOrigin(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (!normalized) return null;
+
+  const parsed = parseOrigin(normalized);
+  if (parsed) {
+    return { type: "origin", value: parsed.origin.toLowerCase() };
+  }
+
+  const bareHost = normalized.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+  return bareHost ? { type: "host", value: bareHost } : null;
+}
+
+const normalizedCorsOrigins = configuredCorsOrigins
+  .map(normalizeConfiguredOrigin)
+  .filter(Boolean);
+
+function buildRequestOrigin(req) {
+  const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").trim().toLowerCase();
+  if (!host) return null;
+
+  const protoHeader = String(req.headers["x-forwarded-proto"] || req.protocol || "http")
+    .split(",")[0]
+    .trim()
+    .toLowerCase();
+  const proto = protoHeader || "http";
+  return `${proto}://${host}`;
+}
+
+function matchesConfiguredOrigin(originUrl) {
+  return normalizedCorsOrigins.some((entry) => {
+    if (entry.type === "origin") return entry.value === originUrl.origin.toLowerCase();
+    return entry.type === "host" && entry.value === originUrl.host.toLowerCase();
+  });
+}
+
+function isAllowedCorsOrigin(origin, req) {
   if (!origin) return true;
 
-  const normalized = String(origin).trim().toLowerCase();
-  if (!normalized) return true;
-  if (normalized === "null") return true;
-  if (configuredCorsOrigins.includes(normalized)) return true;
+  const parsedOrigin = parseOrigin(origin);
+  if (!parsedOrigin) return true;
 
-  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(normalized);
+  const requestOrigin = buildRequestOrigin(req);
+  if (requestOrigin && parsedOrigin.origin.toLowerCase() === requestOrigin) return true;
+  if (matchesConfiguredOrigin(parsedOrigin)) return true;
+
+  return /^(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?$/i.test(parsedOrigin.host);
 }
 
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({
-  origin(origin, callback) {
-    if (isAllowedCorsOrigin(origin)) return callback(null, true);
-    return callback(new Error("Origin not allowed by CORS"));
-  },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+app.use(cors((req, callback) => {
+  const allowed = isAllowedCorsOrigin(req.headers.origin, req);
+  if (allowed) {
+    return callback(null, {
+      origin: true,
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    });
+  }
+
+  const error = new Error("Origin not allowed by CORS");
+  error.status = 403;
+  error.publicMessage = "Origin not allowed by CORS";
+  return callback(error);
 }));
 
 app.use(express.json({ limit: "2mb" }));
