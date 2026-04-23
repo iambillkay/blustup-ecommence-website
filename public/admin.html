@@ -270,7 +270,9 @@
 
   <script src="js/api.js"></script>
   <script>
-    if (typeof redirectToHostedLocalApp === "function") redirectToHostedLocalApp("/admin.html");
+    if (typeof redirectToHostedLocalApp === "function") {
+      redirectToHostedLocalApp("/admin.html").catch(() => {});
+    }
   </script>
   <script>
     function getToken() { return localStorage.getItem("blustup_token") || sessionStorage.getItem("blustup_token"); }

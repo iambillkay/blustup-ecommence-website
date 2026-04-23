@@ -514,7 +514,24 @@ const DEFAULT_FAQ = {
 
 async function getCmsByKey(key, fallback) {
   const doc = await CmsConfig.findOne({ key }).select("value");
-  return doc?.value || fallback;
+  const rawValue = doc?.value;
+  const value =
+    rawValue
+    && typeof rawValue === "object"
+    && !Array.isArray(rawValue)
+    && Object.prototype.hasOwnProperty.call(rawValue, "settings")
+      ? rawValue.settings
+      : rawValue;
+
+  if (Array.isArray(fallback)) {
+    return Array.isArray(value) ? value : fallback;
+  }
+
+  if (fallback && typeof fallback === "object") {
+    return value && typeof value === "object" && !Array.isArray(value) ? value : fallback;
+  }
+
+  return value == null ? fallback : value;
 }
 
 async function upsertCmsByKey(key, value) {

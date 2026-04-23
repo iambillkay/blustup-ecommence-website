@@ -101,8 +101,26 @@
     return true;
   }
 
-  function redirectToHostedLocalApp(fallbackPath = "/") {
+  async function canReachLocalBackend() {
+    const controller = typeof AbortController === "function" ? new AbortController() : null;
+    const timeoutId = controller ? window.setTimeout(() => controller.abort(), 1200) : null;
+
+    try {
+      const response = await fetch(`${getLocalBackendOrigin()}/api/health`, {
+        cache: "no-store",
+        signal: controller?.signal,
+      });
+      return response.ok;
+    } catch (_error) {
+      return false;
+    } finally {
+      if (timeoutId) window.clearTimeout(timeoutId);
+    }
+  }
+
+  async function redirectToHostedLocalApp(fallbackPath = "/") {
     if (!shouldRedirectToHostedLocalApp()) return false;
+    if (!(await canReachLocalBackend())) return false;
 
     const targetBase = getLocalBackendOrigin();
     const targetPath = getHostedAppPath(fallbackPath);
@@ -117,7 +135,17 @@
   }
 
   function apiFetch(path, options) {
-    return fetch(buildApiUrl(path), options);
+    const targetUrl = buildApiUrl(path);
+    return fetch(targetUrl, options).catch((error) => {
+      const healthUrl = buildApiUrl("/api/health");
+      const wrapped = new Error(
+        `Could not reach the API at ${healthUrl}. Start the backend or set BLUSTUP_API_BASE to the correct server URL.`
+      );
+      wrapped.cause = error;
+      wrapped.code = error?.code || "API_UNREACHABLE";
+      wrapped.targetUrl = targetUrl;
+      throw wrapped;
+    });
   }
 
   window.getApiBase = getApiBase;
@@ -125,5 +153,6 @@
   window.apiFetch = apiFetch;
   window.getSiteBaseUrl = getSiteBaseUrl;
   window.buildSiteUrl = buildSiteUrl;
+  window.canReachLocalBackend = canReachLocalBackend;
   window.redirectToHostedLocalApp = redirectToHostedLocalApp;
 })();

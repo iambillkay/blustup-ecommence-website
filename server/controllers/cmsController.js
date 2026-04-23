@@ -148,10 +148,11 @@ const adminPageSchema = z.object({
 });
 
 function normalizeShop(value) {
+  const source = value && typeof value === "object" && !Array.isArray(value) ? value : {};
   const seen = new Set();
   return {
-    ...value,
-    filters: (value.filters || [])
+    ...source,
+    filters: (Array.isArray(source.filters) ? source.filters : [])
       .filter((f) => {
         const filterValue = String(f?.value || "").trim();
         const token = normalizeCategoryToken(filterValue);
@@ -293,7 +294,8 @@ function normalizeShopForSave(value, context = {}) {
 }
 
 function normalizeDeals(list) {
-  return (list || []).map((d) => ({
+  const source = Array.isArray(list) ? list : [];
+  return source.map((d) => ({
     ...d,
     sourceCategories: normalizeCategoryList(d.sourceCategories, d.sourceCategory),
     sourceCategory: normalizeCategoryList(d.sourceCategories, d.sourceCategory)[0] || "",
