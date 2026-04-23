@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
+    "migrate:memory-to-mongo": "node scripts/migrate-memory-to-mongo.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
