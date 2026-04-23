@@ -1,4 +1,5 @@
 node_modules/
+.vercel/
 
 # local secrets
 .env
@@ -10,4 +11,3 @@ Database/*.sqlite3
 
 # uploaded images
 uploads/
-

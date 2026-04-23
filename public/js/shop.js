@@ -12,7 +12,10 @@ function renderShopFiltersSkeleton() {
   const wrap = document.querySelector(".shop-filters");
   if (!wrap) return;
 
-  wrap.innerHTML = Array.from({ length: 5 }, () => '<span class="shop-skeleton-pill" aria-hidden="true"></span>').join("");
+  const widths = ["112px", "88px", "128px", "72px", "104px"];
+  wrap.innerHTML = widths
+    .map((width) => `<span class="shop-skeleton-pill" style="width:${width};" aria-hidden="true"></span>`)
+    .join("");
 }
 
 function renderProductsSkeleton(count = 8) {
@@ -56,8 +59,19 @@ function setShopHeroLoadingState(isLoading) {
   }
 
   if (subtitle) {
-    if (isLoading) subtitle.innerHTML = '<span class="shop-skeleton shop-skeleton-hero-copy" aria-hidden="true"></span>';
-    else if (!subtitle.textContent.trim()) subtitle.textContent = "Discover products tailored to your needs";
+    if (isLoading) {
+      subtitle.innerHTML = '<span class="shop-skeleton shop-skeleton-hero-copy" aria-hidden="true"></span>';
+      if (!hero.querySelector(".shop-skeleton-hero-action")) {
+        const actionPlaceholder = document.createElement("div");
+        actionPlaceholder.className = "shop-skeleton shop-skeleton-hero-action";
+        actionPlaceholder.setAttribute("aria-hidden", "true");
+        subtitle.insertAdjacentElement("afterend", actionPlaceholder);
+      }
+    } else {
+      if (!subtitle.textContent.trim()) subtitle.textContent = "Discover products tailored to your needs";
+      const actionPlaceholder = hero.querySelector(".shop-skeleton-hero-action");
+      if (actionPlaceholder) actionPlaceholder.remove();
+    }
   }
 }
 

@@ -78,6 +78,13 @@
   height: 1rem;
   border-radius: 999px;
 }
+.shop-skeleton-hero-action {
+  display: block;
+  width: min(260px, 50vw);
+  height: 18px;
+  margin: 18px auto 0;
+  border-radius: 999px;
+}
 .filter-btn {
   background: #fff; border: 1.5px solid #e0e3f5; color: var(--text-dark);
   border-radius: 30px; padding: 9px 20px; font-size: .85rem; font-weight: 600;
