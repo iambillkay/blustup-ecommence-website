@@ -525,12 +525,10 @@ position:relative;
 @media (max-width: 540px) {
   .features-grid, .features-grid-2 { grid-template-columns: 1fr; }
   .hero-banner {
-    width: calc(100% - 40px);
-    margin: 100px auto 20px auto;
+    width: calc(100% - 16px);
+    margin: 96px auto 12px auto;
     aspect-ratio: 1612 / 300;
     border-radius: 16px;
-    transform: scale(0.94);
-    transform-origin: top center;
   }
   .hero-btn {
     width: 32px;
@@ -572,7 +570,8 @@ position:relative;
 
 @media (max-width: 380px) {
   .hero-banner {
-    transform: scale(0.9);
+    width: calc(100% - 12px);
+    margin-top: 92px;
   }
   .hero-btn {
     width: 28px;

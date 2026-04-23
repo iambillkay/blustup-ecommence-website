@@ -86,6 +86,11 @@ Log In
 
 <!-- Mobile drawer -->
 <div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-welcome">
+    <p class="drawer-kicker">Quick menu</p>
+    <strong>Shop faster on mobile</strong>
+  </div>
+
   <!-- Search in drawer -->
   <div class="mobile-search">
     <input type="text" placeholder="Search products…" aria-label="Search" id="mobileSearchInput" />
@@ -96,14 +101,26 @@ Log In
     </button>
   </div>
 
-  <ul class="nav-links">
+  <p class="drawer-section-title">Browse</p>
+  <ul class="nav-links drawer-nav-main">
     <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link">Home</a></li>
     <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()">Shop</a></li>
-    <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()">About</a></li>
     <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()">Loyalty</a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()">Privacy</a></li>
-    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()">FAQ</a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()">Orders</a></li>
   </ul>
+
+  <p class="drawer-section-title">Help & policy</p>
+  <ul class="nav-links drawer-nav-secondary">
+    <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()">About</a></li>
+    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()">FAQ</a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()">Privacy</a></li>
+  </ul>
+
+  <div class="drawer-quick-links" aria-label="Quick links">
+    <button type="button" onclick="showPage('shop'); closeMenu()">Top deals</button>
+    <button type="button" onclick="showPage('shop'); closeMenu()">Baby care</button>
+    <button type="button" onclick="showPage('shop'); closeMenu()">Electronics</button>
+  </div>
 
   <div class="drawer-actions">
     <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()">Ask AI</button>
