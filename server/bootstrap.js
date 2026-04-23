@@ -3,6 +3,7 @@ require("dotenv").config();
 const app = require("./app");
 const { connectDB } = require("./config/db");
 const { seedAdminIfConfigured } = require("./config/seedAdmin");
+const { seedCatalogIfEmpty } = require("./config/seedCatalog");
 const storage = require("./storage");
 const { startReportScheduler } = require("./services/reportScheduler");
 
@@ -15,6 +16,7 @@ async function prepareApp() {
     if (storage.mode === "mongo") {
       await connectDB();
       await seedAdminIfConfigured();
+      await seedCatalogIfEmpty();
     } else if (typeof storage.ensureAdminSeed === "function") {
       await storage.ensureAdminSeed();
     }

@@ -19,6 +19,7 @@ const {
   normalizeDeliverySettings,
   normalizeAdminPageSettings,
 } = require("../utils/cmsDefaults");
+const { DEFAULT_DEALS_SETTINGS } = require("../utils/defaultCatalog");
 
 function isValidId(id) {
   return mongoose.Types.ObjectId.isValid(id);
@@ -429,30 +430,11 @@ const DEFAULT_REPORTS = normalizeReportSettings(DEFAULT_REPORT_SETTINGS);
 const DEFAULT_DELIVERY = normalizeDeliverySettings(DEFAULT_DELIVERY_SETTINGS);
 const DEFAULT_ADMIN_PAGE = normalizeAdminPageSettings(DEFAULT_ADMIN_PAGE_SETTINGS);
 
-const DEFAULT_DEALS = [
-  {
-    id: "deal-1",
-    name: "Oraimo Brand Day",
-    timerSeconds: 80200,
-    seeMoreFilter: "oriamo",
-    sourceCategory: "oriamo",
-    sourceCategories: ["oriamo"],
-    maxItems: 8,
-    isActive: true,
-    productIds: [],
-  },
-  {
-    id: "deal-2",
-    name: "Personal Care Day",
-    timerSeconds: 21600,
-    seeMoreFilter: "personal care",
-    sourceCategory: "personal care",
-    sourceCategories: ["personal care"],
-    maxItems: 8,
-    isActive: true,
-    productIds: [],
-  },
-];
+const DEFAULT_DEALS = DEFAULT_DEALS_SETTINGS.map((deal) => ({
+  ...deal,
+  sourceCategories: [...deal.sourceCategories],
+  productIds: [...deal.productIds],
+}));
 
 const DEFAULT_FAQ = {
   pageTitle: "Frequently asked\nquestions",

@@ -62,7 +62,7 @@ productSchema.pre("validate", function syncPrimaryCategory(next) {
     this.categories = [fallback];
   }
 
-  next();
+  if (typeof next === "function") next();
 });
 
 module.exports = mongoose.model("Product", productSchema);
