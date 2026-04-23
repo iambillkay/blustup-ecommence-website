@@ -23,7 +23,7 @@ nav {
   display: flex; align-items: center; gap: 8px; cursor: pointer;
   z-index: 201; flex-shrink: 0;
 }
-.logo-icon img { width: 150px; height: auto; }
+.logo-icon img { width: 120px; height: auto; }
 
 /* ══════════════════════════════════════
    JUMIA-STYLE SEARCH BAR
@@ -261,14 +261,14 @@ nav {
 /* Large desktop */
 @media (min-width: 1200px) {
   nav { padding: 0 60px 0 0; }
-  .logo-icon img { width: 160px; }
+  .logo-icon img { width: 137px; }
   .nav-search { max-width: 640px; }
 }
 
 /* Tablet — hide nav links & shop now, keep search */
 @media (max-width: 960px) {
   nav { padding: 0 20px 0 0; gap: 14px; }
-  .logo-icon img { width: 120px; }
+  .logo-icon img { width: 103px; }
   .nav-links  { display: none; }
   .btn-primary { display: none; }
   .hamburger { display: flex; }
@@ -298,7 +298,7 @@ nav {
     margin-bottom: 4px;
   }
 
-  .logo-icon img { width: 110px; }
+  .logo-icon img { width: 94px; }
 
   /* Hide desktop-only elements */
   nav > .nav-links { display: none; }
@@ -317,5 +317,5 @@ nav {
 /* Very small */
 @media (max-width: 380px) {
   nav { padding: 10px 12px; }
-  .logo-icon img { width: 95px; }
+  .logo-icon img { width: 82px; }
 }
