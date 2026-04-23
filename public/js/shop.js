@@ -6,6 +6,76 @@ const shopMoneyFormatter = new Intl.NumberFormat("en-GH", {
 
 let currentFilter = "all";
 let shopSettings = null;
+let shopSkeletonVisible = false;
+
+function renderShopFiltersSkeleton() {
+  const wrap = document.querySelector(".shop-filters");
+  if (!wrap) return;
+
+  wrap.innerHTML = Array.from({ length: 5 }, () => '<span class="shop-skeleton-pill" aria-hidden="true"></span>').join("");
+}
+
+function renderProductsSkeleton(count = 8) {
+  const grid = document.getElementById("products-grid");
+  if (!grid) return;
+
+  grid.innerHTML = Array.from({ length: count }, () => `
+    <article class="product-card product-card-skeleton" aria-hidden="true">
+      <div class="product-img product-img-skeleton">
+        <span class="shop-skeleton shop-skeleton-badge"></span>
+      </div>
+      <div class="product-info">
+        <div class="product-category-list">
+          <span class="shop-skeleton shop-skeleton-chip"></span>
+          <span class="shop-skeleton shop-skeleton-chip short"></span>
+        </div>
+        <div class="shop-skeleton shop-skeleton-title"></div>
+        <div class="shop-skeleton shop-skeleton-title short"></div>
+        <div class="product-footer">
+          <div class="shop-skeleton shop-skeleton-price"></div>
+          <div class="shop-skeleton shop-skeleton-button"></div>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function setShopHeroLoadingState(isLoading) {
+  const hero = document.querySelector(".shop-hero");
+  if (!hero) return;
+
+  hero.classList.toggle("is-loading", isLoading);
+  hero.setAttribute("aria-busy", isLoading ? "true" : "false");
+
+  const title = hero.querySelector("h1");
+  const subtitle = hero.querySelector("p");
+
+  if (title) {
+    if (isLoading) title.innerHTML = '<span class="shop-skeleton shop-skeleton-hero-title" aria-hidden="true"></span>';
+    else if (!title.textContent.trim()) title.textContent = "Shop";
+  }
+
+  if (subtitle) {
+    if (isLoading) subtitle.innerHTML = '<span class="shop-skeleton shop-skeleton-hero-copy" aria-hidden="true"></span>';
+    else if (!subtitle.textContent.trim()) subtitle.textContent = "Discover products tailored to your needs";
+  }
+}
+
+function setShopLoadingState(isLoading, options = {}) {
+  const shouldSkeletonizeProducts = options?.products !== false;
+  const shouldSkeletonizeFilters = options?.filters !== false;
+
+  shopSkeletonVisible = isLoading;
+
+  if (isLoading) {
+    setShopHeroLoadingState(true);
+    if (shouldSkeletonizeFilters) renderShopFiltersSkeleton();
+    if (shouldSkeletonizeProducts) renderProductsSkeleton();
+    return;
+  }
+
+  setShopHeroLoadingState(false);
+}
 
 function normalizeShopCategoryToken(value) {
   return String(value || "").trim().toLowerCase();
@@ -120,6 +190,7 @@ function getActiveFilterLabel(filterValue) {
 function renderProducts(filterValue) {
   const grid = document.getElementById("products-grid");
   if (!grid) return;
+  if (shopSkeletonVisible) return;
 
   const activeToken = normalizeShopCategoryToken(filterValue || "all");
   const filtered = activeToken === "all"
@@ -237,12 +308,15 @@ function renderShopFilters(filters) {
 }
 
 async function loadShopSettings() {
+  setShopLoadingState(true, { products: !getCatalogProducts().length });
+
   try {
     const response = await apiFetch("/api/cms/shop", { cache: "no-store" });
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok || !data?.settings) {
       shopSettings = { title: "", subtitle: "", filters: [{ label: "All Products", value: "all", showInShop: true }] };
+      setShopLoadingState(false);
       renderShopFilters(shopSettings.filters);
       return;
     }
@@ -257,9 +331,11 @@ async function loadShopSettings() {
       if (subtitle) subtitle.textContent = shopSettings.subtitle || "Discover products tailored to your needs";
     }
 
+    setShopLoadingState(false);
     renderShopFilters(shopSettings.filters || []);
   } catch (_e) {
     shopSettings = { title: "", subtitle: "", filters: [{ label: "All Products", value: "all", showInShop: true }] };
+    setShopLoadingState(false);
     renderShopFilters(shopSettings.filters);
   }
 }
@@ -275,6 +351,7 @@ window.loadShopSettings = loadShopSettings;
 window.refreshShopContent = refreshShopContent;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  setShopLoadingState(true);
   if ((!Array.isArray(getRenderedProducts()) || !getRenderedProducts().length) && typeof loadProducts === "function") {
     await loadProducts();
   }
