@@ -39,6 +39,11 @@ function syncMobileCartCount() {
   cartCountMobile.textContent = cartCount.textContent;
 }
 
+function updateViewportHeightVar() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--app-vh", `${vh}px`);
+}
+
 window.openMenu = openMenu;
 window.closeMenu = closeMenu;
 window.handleMobileSearch = handleMobileSearch;
@@ -64,10 +69,19 @@ mobileSearchInput?.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("resize", () => {
+  updateViewportHeightVar();
   if (window.innerWidth > 960 && hamburger?.classList.contains("open")) {
     closeMenu();
   }
 });
+
+window.addEventListener("orientationchange", () => {
+  updateViewportHeightVar();
+  closeMenu();
+});
+
+window.addEventListener("pageshow", updateViewportHeightVar);
+updateViewportHeightVar();
 
 if (cartCount && cartCountMobile) {
   const observer = new MutationObserver(syncMobileCartCount);

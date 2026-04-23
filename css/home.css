@@ -525,7 +525,63 @@ position:relative;
 @media (max-width: 540px) {
   .features-grid, .features-grid-2 { grid-template-columns: 1fr; }
   .hero-banner {
-    aspect-ratio: auto;
-    min-height: 320px;
+    width: 100%;
+    margin: 94px 0 12px 0;
+    aspect-ratio: 16 / 6.8;
+    min-height: 0;
+    max-height: 180px;
+    border-radius: 0;
+  }
+  .hero-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 0.95rem;
+    background: rgba(0, 0, 0, 0.14);
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .hero-dots {
+    bottom: 7px;
+  }
+  .brand-day {
+    margin: 12px 8px;
+    border-inline-start-width: 5px;
+  }
+  .brand-header {
+    padding: 10px 12px;
+    font-size: 0.86rem;
+    gap: 8px;
+  }
+  .brand-header a {
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  .product-row {
+    padding: 12px;
+    gap: 12px;
+  }
+  .product-row .product-card {
+    flex: 0 0 190px;
+    min-width: 190px;
+    max-width: 190px;
+  }
+  .product-row .product-img {
+    height: 124px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-banner {
+    margin-top: 90px;
+    aspect-ratio: 16 / 7.2;
+    max-height: 150px;
+  }
+  .hero-btn {
+    width: 28px;
+    height: 28px;
+  }
+  .brand-header {
+    font-size: 0.8rem;
+    padding: 8px 10px;
   }
 }

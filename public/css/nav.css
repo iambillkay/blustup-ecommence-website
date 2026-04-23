@@ -191,7 +191,8 @@ nav {
 .mobile-drawer {
   display: none; position: fixed;
   top: 0; right: 0;
-  width: min(85vw, 320px); height: 100dvh;
+  width: min(88vw, 340px);
+  height: calc(var(--app-vh, 1vh) * 100);
   background: #fff; z-index: 199;
   padding: 20px;
   box-shadow: -4px 0 20px rgba(0,0,0,0.15);
@@ -335,7 +336,6 @@ nav {
 .drawer-actions .btn-primary:hover {
   background: #333;
 }
-}
 .drawer-actions .cart-btn {
   width: 100%; justify-content: center;
   padding: 12px; font-size: .9rem; border-radius: 8px;
@@ -362,6 +362,34 @@ nav {
   .mobile-overlay { display: block; }
   .mobile-drawer  { display: block; }
   .search-category { display: none; } /* simplify on tablet */
+}
+
+/* Landscape phones/tablets: keep controls compact and sidebar usable */
+@media (max-width: 960px) and (orientation: landscape) {
+  nav {
+    min-height: 62px;
+    height: auto;
+    padding: 6px 14px 6px 0;
+  }
+  .nav-search {
+    height: 38px;
+    max-width: 420px;
+  }
+  .mobile-drawer {
+    width: min(70vw, 420px);
+    padding: 14px 16px;
+  }
+  .mobile-drawer .nav-links a {
+    padding: 12px 16px;
+  }
+  .drawer-actions {
+    padding-top: 14px;
+    gap: 8px;
+  }
+  .drawer-actions button {
+    padding: 10px 12px;
+    font-size: .9rem;
+  }
 }
 
 /* Mobile — move search below nav, show hamburger */
