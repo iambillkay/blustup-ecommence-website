@@ -1,2 +1,9 @@
-// Entry point kept at repo root for backwards compatibility.
-require("./server/index");
+require("express");
+
+const app = require("./server/app");
+
+module.exports = app;
+
+if (require.main === module) {
+  require("./server/index");
+}

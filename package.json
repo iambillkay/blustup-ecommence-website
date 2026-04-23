@@ -2,7 +2,7 @@
   "name": "blustup-ecommence-website",
   "version": "1.0.0",
   "description": "",
-  "main": "server/app.js",
+  "main": "app.js",
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
