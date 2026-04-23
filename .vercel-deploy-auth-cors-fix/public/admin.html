@@ -1,0 +1,2610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin">
+  <div class="admin-app-shell">
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-lockup">
+          <div>
+            <img class="brand-mark" id="adminBrandMark" src="logos/Layer 2.png" alt="Blustup"  />
+            <div class="brand-subtitle" id="adminBrandSubtitle">Commerce Admin</div>
+          </div>
+        </div>
+        <span class="sidebar-status" id="adminSidebarStatus">Live console</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Admin sections">
+        <a href="#" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon"></span><span>Dashboard</span></a>
+        <a href="#" class="sidebar-link" data-action="customize-admin"><span class="nav-icon"></span><span>Customize admin</span></a>
+        <a href="#" class="sidebar-link" data-action="list-orders"><span class="nav-icon"></span><span>Orders</span></a>
+        <a href="#" class="sidebar-link" data-action="manage-delivery"><span class="nav-icon"></span><span>Delivery automation</span></a>
+        <a href="#" class="sidebar-link" data-action="list-users"><span class="nav-icon"></span><span>Customers</span></a>
+        <a href="#" class="sidebar-link" data-action="list-products"><span class="nav-icon"></span><span>Products</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-shop"><span class="nav-icon"></span><span>Shop setup</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Ads & hero</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-deals"><span class="nav-icon"></span><span>Deals</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-about"><span class="nav-icon"></span><span>About page</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-faq"><span class="nav-icon"></span><span>FAQ and board</span></a>
+        <a href="#" class="sidebar-link" data-action="view-reports"><span class="nav-icon"></span><span>Reports</span></a>
+        <a href="#" class="sidebar-link" data-action="edit-ai"><span class="nav-icon"></span><span>AI settings</span></a>
+      </nav>
+
+      <div class="sidebar-support">
+        <p class="eyebrow" id="adminSupportEyebrow">Customer support</p>
+        <h3 id="adminSupportTitle">Need a quick hand?</h3>
+        <p id="adminSupportText">Jump to the live storefront or tune your help content without leaving the console.</p>
+        <div class="sidebar-support-actions">
+          <button class="btn-admin primary" id="btnHome" type="button">View site</button>
+          <button class="btn-admin ghost" id="btnHelpContent" type="button" data-action="edit-faq">Help content</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-workspace">
+      <header class="workspace-topbar">
+        <label class="admin-search" for="adminSearch">
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M10.5 4a6.5 6.5 0 1 1 0 13a6.5 6.5 0 0 1 0-13Zm0 1.8a4.7 4.7 0 1 0 0 9.4a4.7 4.7 0 0 0 0-9.4Zm8.37 11.8l2.63 2.63l-1.27 1.27l-2.63-2.63z" />
+            </svg>
+          </span>
+          <input id="adminSearch" type="search" placeholder="Search products, tools or recent changes" />
+        </label>
+
+        <div class="workspace-actions">
+          <button class="icon-btn" id="btnRefresh" type="button" aria-label="Refresh dashboard">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M17.65 6.35A7.95 7.95 0 0 0 12 4V1L7 6l5 5V7a5 5 0 1 1-4.9 6.01H5.02A7 7 0 1 0 17.65 6.35Z" />
+            </svg>
+          </button>
+
+          <div class="workspace-profile">
+            <div class="workspace-avatar" id="adminAvatar">B</div>
+            <div class="workspace-profile-copy">
+              <div class="workspace-profile-name" id="adminDisplayName">Admin team</div>
+              <div class="workspace-profile-sub" id="whoami">Loading...</div>
+            </div>
+          </div>
+
+          <button class="btn-admin danger" id="btnLogout" type="button">Log out</button>
+        </div>
+      </header>
+
+      <section class="workspace-hero">
+        <div class="hero-copy">
+          <p class="eyebrow" id="adminHeroEyebrow">Admin cockpit</p>
+          <h1 id="adminGreeting">Hi, Blustup team</h1>
+          <p id="adminGreetingSub">Manage products, storefront content, and automation from one calm workspace.</p>
+          <p id="adminGreetingLive" class="hero-live-copy"></p>
+        </div>
+        <div class="hero-controls">
+          <button class="hero-arrow" type="button" data-action="edit-home-images" aria-label="Edit home images">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M14 7l-5 5l5 5v-3h7v-4h-7z" /></svg>
+          </button>
+          <button class="hero-arrow" type="button" data-action="edit-deals" aria-label="Edit deals">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M10 7l5 5l-5 5v-3H3v-4h7z" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="product-strip" id="dashboardPreview">
+        <article class="product-card placeholder-card">
+          <div class="product-card-media"></div>
+          <div class="product-card-body">
+            <div class="product-card-title">Loading catalog</div>
+            <div class="product-card-meta">Pulling your latest products into the dashboard.</div>
+          </div>
+        </article>
+        <article class="product-card placeholder-card">
+          <div class="product-card-media"></div>
+          <div class="product-card-body">
+            <div class="product-card-title">Syncing updates</div>
+            <div class="product-card-meta">Recent admin activity will appear here in a moment.</div>
+          </div>
+        </article>
+        <article class="product-card placeholder-card">
+          <div class="product-card-media"></div>
+          <div class="product-card-body">
+            <div class="product-card-title">Preparing insights</div>
+            <div class="product-card-meta">Quick metrics will refresh as soon as the console loads.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="command-board">
+        <article class="command-card" data-search-text="orders shipping delivery fulfillment status tracking">
+          <div class="command-card-top"><div><p class="eyebrow">Orders</p><h2>Fulfillment board</h2></div><span class="command-stat" id="ordersStat">0 active orders</span></div>
+          <p>Track new purchases, update order status, and keep delivery progress visible for your team.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-orders">Open orders</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="delivery riders dispatch shipping automation courier">
+          <div class="command-card-top"><div><p class="eyebrow">Delivery</p><h2>Rider dispatch automation</h2></div><span class="command-stat" id="deliveryStat">Dispatch ready</span></div>
+          <p>Assign riders automatically when orders are shipped and keep a simple roster with recent dispatch history.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="manage-delivery">Manage delivery</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="customers consumers users accounts billing profile">
+          <div class="command-card-top"><div><p class="eyebrow">Customers</p><h2>Customer desk</h2></div><span class="command-stat" id="customersStat">0 shoppers</span></div>
+          <p>Review customer accounts, saved billing details, and who has been ordering most recently.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-users">Open customers</a></div>
+        </article>
+
+        <article class="command-card command-card-primary" data-search-text="products catalog inventory add edit">
+          <div class="command-card-top"><div><p class="eyebrow">Store</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
+          <p>Review product listings, add new inventory, and keep the storefront catalog clean.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-products">Open catalog</a><a href="#" class="btn-admin ghost" data-action="add-product">Add product</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="shop filters categories title subtitle">
+          <div class="command-card-top"><div><p class="eyebrow">Shop</p><h2>Filter and category setup</h2></div><span class="command-stat" id="shopStat">0 categories</span></div>
+          <p>Adjust the shop title, subtitle, and category filter system that drives discovery.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-shop">Edit shop</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="faq board directors help content">
+          <div class="command-card-top"><div><p class="eyebrow">Content</p><h2>FAQ and leadership section</h2></div><span class="command-stat">Support content</span></div>
+          <p>Maintain the FAQ experience, board profiles, and support messaging shown to customers.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-faq">Open content</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="deals promotions timers campaigns offers">
+          <div class="command-card-top"><div><p class="eyebrow">Deals</p><h2>Campaign scheduling</h2></div><span class="command-stat" id="dealsStat">Promotions ready</span></div>
+          <p>Control featured deals, timers, and the product rows highlighted on the homepage.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-deals">Manage deals</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="home hero media images banners upload ads campaigns">
+          <div class="command-card-top"><div><p class="eyebrow">Homepage</p><h2>Ads and hero control</h2></div><span class="command-stat" id="homeStat">Hero ads</span></div>
+          <p>Manage hero slides, campaign headlines, CTA links, and the ad imagery customers see first.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-home-images">Manage ads</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="about brand story mission page copy content">
+          <div class="command-card-top"><div><p class="eyebrow">Brand</p><h2>About page content</h2></div><span class="command-stat" id="aboutStat">Brand story</span></div>
+          <p>Update the About page headline, stats, story cards, and the trust pillars shown on the storefront.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-about">Edit about page</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="admin appearance dashboard branding theme colors logo customize">
+          <div class="command-card-top"><div><p class="eyebrow">Appearance</p><h2>Admin page customization</h2></div><span class="command-stat">Theme ready</span></div>
+          <p>Change the admin logo, dashboard copy, button labels, and colors so the console matches your brand.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="customize-admin">Customize admin</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="reports analytics dashboard cron email revenue funnel inventory">
+          <div class="command-card-top"><div><p class="eyebrow">Reports</p><h2>Analytics and automation</h2></div><span class="command-stat" id="reportsStat">Reports ready</span></div>
+          <p>Review revenue, funnel activity, slow movers, and schedule daily or weekly report emails.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="view-reports">Open reports</a></div>
+        </article>
+
+        <article class="command-card" data-search-text="ai chatbot search automation bot prompt">
+          <div class="command-card-top"><div><p class="eyebrow">Automation</p><h2>AI assistant controls</h2></div><span class="command-stat" id="aiStat">Assistant online</span></div>
+          <p>Update chatbot availability, search behavior, and the prompt that guides the AI experience.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-ai">Tune AI</a></div>
+        </article>
+      </section>
+
+      <div class="search-empty" id="searchEmptyState" hidden>No modules or product previews match that search yet.</div>
+
+      <section class="history-panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">Operations history</p><h2>Recent admin activity</h2></div>
+          <button class="text-link" id="btnActivityRefresh" type="button">Refresh feed</button>
+        </div>
+        <div class="history-table-wrap">
+          <table class="admin-table admin-history-table">
+            <thead><tr><th>Workspace</th><th>Activity</th><th>Owner</th><th>Time</th></tr></thead>
+            <tbody id="activityTable"><tr><td colspan="4" class="muted">Loading recent admin activity...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <aside class="admin-rail">
+      <section class="rail-card profile-card">
+        <div class="profile-card-top">
+          <!-- <div class="workspace-avatar large" id="adminAvatarLarge">B</div> -->
+          <div>
+            <div class="profile-card-name" id="adminDisplayNameLarge">Admin team</div>
+            <div class="profile-card-sub" id="adminRoleLabel">Operations lead</div>
+          </div>
+        </div>
+        <div class="profile-card-meta">
+          <span class="meta-pill">Secure session</span>
+          <span class="meta-pill muted" id="adminLastSync">Syncing...</span>
+        </div>
+      </section>
+
+      <section class="rail-card finance-card">
+        <div class="finance-card-top"><span>Store pulse</span><span class="finance-chip"></span></div>
+        <div class="finance-card-value" id="catalogValue">₵0.00</div>
+        <div class="finance-card-label">Estimated live catalog value</div>
+        <div class="finance-card-footer"><span id="activeProductCount">0 products</span><span id="lowStockCount">0 low stock</span></div>
+      </section>
+
+      <section class="rail-card metrics-card">
+        <div class="section-heading compact"><div><p class="eyebrow">Console health</p><h2>Quick stats</h2></div></div>
+        <div class="metric-list" id="adminMetrics"><div class="muted">Loading dashboard metrics...</div></div>
+      </section>
+
+      <section class="rail-card quick-actions-card">
+        <div class="section-heading compact"><div><p class="eyebrow">Shortcuts</p><h2>Quick actions</h2></div></div>
+        <div class="quick-actions-grid">
+          <button class="mini-action" type="button" data-action="customize-admin">Customize</button>
+          <button class="mini-action" type="button" data-action="list-orders">Orders</button>
+          <button class="mini-action" type="button" data-action="manage-delivery">Delivery</button>
+          <button class="mini-action" type="button" data-action="list-users">Customers</button>
+          <button class="mini-action" type="button" data-action="add-product">Add product</button>
+          <button class="mini-action" type="button" data-action="edit-home-images">Ads</button>
+          <button class="mini-action" type="button" data-action="edit-deals">Deals</button>
+          <button class="mini-action" type="button" data-action="view-reports">Reports</button>
+        </div>
+      </section>
+
+      <section class="rail-card recent-card">
+        <div class="section-heading compact">
+          <div><p class="eyebrow">Activity stream</p><h2>Recent actions</h2></div>
+          <button class="text-link" id="btnRecentRefresh" type="button">Refresh</button>
+        </div>
+        <div id="recentActions" class="recent-feed muted">Loading...</div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Admin modal">
+      <div class="modal-top">
+        <div class="title" id="modalTitle">Admin</div>
+        <button class="btn-admin" id="modalClose" type="button">Close</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    if (typeof redirectToHostedLocalApp === "function") {
+      redirectToHostedLocalApp("/admin.html").catch(() => {});
+    }
+  </script>
+  <script>
+    function getToken() { return localStorage.getItem("blustup_token") || sessionStorage.getItem("blustup_token"); }
+    function clearAuth() {
+      localStorage.removeItem("blustup_token");
+      localStorage.removeItem("blustup_user");
+      sessionStorage.removeItem("blustup_token");
+      sessionStorage.removeItem("blustup_user");
+    }
+    async function api(path, options = {}) {
+      const method = String(options.method || "GET").toUpperCase();
+      const isFormData = options.body instanceof FormData;
+      const headers = { ...(options.headers || {}) };
+      if (!isFormData && options.body != null && method !== "GET" && method !== "HEAD" && !headers["Content-Type"]) {
+        headers["Content-Type"] = "application/json";
+      }
+      const token = getToken();
+      if (token) headers.Authorization = `Bearer ${token}`;
+      const res = await apiFetch(path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      return data;
+    }
+    async function backendLooksReachable() {
+      try {
+        const res = await apiFetch("/api/health", { cache: "no-store" });
+        return res.ok;
+      } catch (_e) {
+        return false;
+      }
+    }
+
+    async function uploadImage(file) {
+      const token = getToken();
+      const form = new FormData();
+      form.append("image", file);
+      const res = await fetch(buildApiUrl("/api/cms/home/upload-image"), {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      return data.imageUrl;
+    }
+
+    async function uploadCmsImage(file) {
+      const token = getToken();
+      const form = new FormData();
+      form.append("image", file);
+      const res = await fetch(buildApiUrl("/api/cms/upload-image"), {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      return data.imageUrl;
+    }
+
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const whoami = document.getElementById("whoami");
+    const adminBrandMark = document.getElementById("adminBrandMark");
+    const adminBrandSubtitleNode = document.getElementById("adminBrandSubtitle");
+    const adminSidebarStatusNode = document.getElementById("adminSidebarStatus");
+    const adminHeroEyebrowNode = document.getElementById("adminHeroEyebrow");
+    const dashboardPreview = document.getElementById("dashboardPreview");
+    const activityTable = document.getElementById("activityTable");
+    const recentActionsEl = document.getElementById("recentActions");
+    const adminMetrics = document.getElementById("adminMetrics");
+    const adminSearch = document.getElementById("adminSearch");
+    const searchEmptyState = document.getElementById("searchEmptyState");
+    const adminGreeting = document.getElementById("adminGreeting");
+    const adminGreetingSub = document.getElementById("adminGreetingSub");
+    const adminGreetingLive = document.getElementById("adminGreetingLive");
+    const adminDisplayName = document.getElementById("adminDisplayName");
+    const adminDisplayNameLarge = document.getElementById("adminDisplayNameLarge");
+    const adminAvatar = document.getElementById("adminAvatar");
+    const adminAvatarLarge = document.getElementById("adminAvatarLarge");
+    const adminRoleLabel = document.getElementById("adminRoleLabel");
+    const adminLastSync = document.getElementById("adminLastSync");
+    const catalogValue = document.getElementById("catalogValue");
+    const activeProductCount = document.getElementById("activeProductCount");
+    const lowStockCount = document.getElementById("lowStockCount");
+    const catalogStat = document.getElementById("catalogStat");
+    const ordersStat = document.getElementById("ordersStat");
+    const customersStat = document.getElementById("customersStat");
+    const shopStat = document.getElementById("shopStat");
+    const dealsStat = document.getElementById("dealsStat");
+    const homeStat = document.getElementById("homeStat");
+    const aboutStat = document.getElementById("aboutStat");
+    const deliveryStat = document.getElementById("deliveryStat");
+    const reportsStat = document.getElementById("reportsStat");
+    const aiStat = document.getElementById("aiStat");
+    const adminSupportEyebrowNode = document.getElementById("adminSupportEyebrow");
+    const adminSupportTitleNode = document.getElementById("adminSupportTitle");
+    const adminSupportTextNode = document.getElementById("adminSupportText");
+    const btnHome = document.getElementById("btnHome");
+    const btnHelpContent = document.getElementById("btnHelpContent");
+    const DEFAULT_ADMIN_APPEARANCE = {
+      pageTitle: "Admin Dashboard",
+      logoImageUrl: "logos/Layer 2.png",
+      brandSubtitle: "Commerce Admin",
+      sidebarStatus: "Live console",
+      heroEyebrow: "Admin cockpit",
+      heroTitleTemplate: "Hi, {{name}}",
+      heroSubtitle: "Manage products, storefront content, and automation from one calm workspace.",
+      supportEyebrow: "Customer support",
+      supportTitle: "Need a quick hand?",
+      supportText: "Jump to the live storefront or tune your help content without leaving the console.",
+      primaryButtonLabel: "View site",
+      secondaryButtonLabel: "Help content",
+      accentColor: "#000000",
+      linkColor: "#2f6bff",
+      backgroundStartColor: "#f4f6fb",
+      backgroundEndColor: "#e8eef8",
+      glowColor: "#000000",
+    };
+    const dashboardState = { user: null, actions: [], products: [], orders: [], users: [], analytics: null, adminAppearance: { ...DEFAULT_ADMIN_APPEARANCE } };
+    const adminOrderFilters = { status: "", q: "" };
+    const ADMIN_ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
+
+    function normalizeAdminHex(value, fallback) {
+      const raw = String(value || "").trim();
+      return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(raw) ? raw : fallback;
+    }
+    function hexToRgbParts(hex) {
+      const value = normalizeAdminHex(hex, "#000000").slice(1);
+      const expanded = value.length === 3 ? value.split("").map((char) => char + char).join("") : value;
+      return {
+        r: parseInt(expanded.slice(0, 2), 16),
+        g: parseInt(expanded.slice(2, 4), 16),
+        b: parseInt(expanded.slice(4, 6), 16),
+      };
+    }
+    function hexToRgba(hex, alpha) {
+      const rgb = hexToRgbParts(hex);
+      return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+    }
+    function getReadableTextColor(hex) {
+      const rgb = hexToRgbParts(hex);
+      const brightness = ((rgb.r * 299) + (rgb.g * 587) + (rgb.b * 114)) / 1000;
+      return brightness >= 150 ? "#172033" : "#ffffff";
+    }
+    function darkenHex(hex, factor = 0.18) {
+      const rgb = hexToRgbParts(hex);
+      const clamp = (value) => Math.max(0, Math.min(255, Math.round(value)));
+      const next = {
+        r: clamp(rgb.r * (1 - factor)),
+        g: clamp(rgb.g * (1 - factor)),
+        b: clamp(rgb.b * (1 - factor)),
+      };
+      return `#${[next.r, next.g, next.b].map((value) => value.toString(16).padStart(2, "0")).join("")}`;
+    }
+    function fillAdminTemplate(template, values = {}) {
+      return String(template || "")
+        .replace(/\{\{\s*name\s*\}\}/gi, String(values.name || "Blustup team"))
+        .trim();
+    }
+    function getAdminAppearance() {
+      return dashboardState.adminAppearance && typeof dashboardState.adminAppearance === "object"
+        ? dashboardState.adminAppearance
+        : DEFAULT_ADMIN_APPEARANCE;
+    }
+    function getAdminGreetingText(name = "Blustup team") {
+      const appearance = getAdminAppearance();
+      return fillAdminTemplate(appearance.heroTitleTemplate || DEFAULT_ADMIN_APPEARANCE.heroTitleTemplate, { name });
+    }
+    function applyAdminAppearance(settings = {}) {
+      const next = {
+        ...DEFAULT_ADMIN_APPEARANCE,
+        ...(settings && typeof settings === "object" ? settings : {}),
+      };
+      next.accentColor = normalizeAdminHex(next.accentColor, DEFAULT_ADMIN_APPEARANCE.accentColor);
+      next.linkColor = normalizeAdminHex(next.linkColor, DEFAULT_ADMIN_APPEARANCE.linkColor);
+      next.backgroundStartColor = normalizeAdminHex(next.backgroundStartColor, DEFAULT_ADMIN_APPEARANCE.backgroundStartColor);
+      next.backgroundEndColor = normalizeAdminHex(next.backgroundEndColor, DEFAULT_ADMIN_APPEARANCE.backgroundEndColor);
+      next.glowColor = normalizeAdminHex(next.glowColor, DEFAULT_ADMIN_APPEARANCE.glowColor);
+      dashboardState.adminAppearance = next;
+
+      document.title = next.pageTitle || DEFAULT_ADMIN_APPEARANCE.pageTitle;
+      document.documentElement.style.setProperty("--admin-accent", next.accentColor);
+      document.documentElement.style.setProperty("--admin-accent-dark", darkenHex(next.accentColor, 0.22));
+      document.documentElement.style.setProperty("--admin-accent-contrast", getReadableTextColor(next.accentColor));
+      document.documentElement.style.setProperty("--admin-accent-soft", hexToRgba(next.accentColor, 0.14));
+      document.documentElement.style.setProperty("--admin-link", next.linkColor);
+      document.documentElement.style.setProperty("--admin-bg-start", next.backgroundStartColor);
+      document.documentElement.style.setProperty("--admin-bg-end", next.backgroundEndColor);
+      document.documentElement.style.setProperty("--admin-glow-color", hexToRgba(next.glowColor, 0.22));
+      document.documentElement.style.setProperty("--admin-secondary-glow", hexToRgba(next.linkColor, 0.14));
+
+      if (adminBrandMark) adminBrandMark.src = next.logoImageUrl || DEFAULT_ADMIN_APPEARANCE.logoImageUrl;
+      if (adminBrandSubtitleNode) adminBrandSubtitleNode.textContent = next.brandSubtitle || DEFAULT_ADMIN_APPEARANCE.brandSubtitle;
+      if (adminSidebarStatusNode) adminSidebarStatusNode.textContent = next.sidebarStatus || DEFAULT_ADMIN_APPEARANCE.sidebarStatus;
+      if (adminHeroEyebrowNode) adminHeroEyebrowNode.textContent = next.heroEyebrow || DEFAULT_ADMIN_APPEARANCE.heroEyebrow;
+      if (adminGreeting) adminGreeting.textContent = getAdminGreetingText(dashboardState.user ? getDisplayName(dashboardState.user) : "Blustup team");
+      if (adminGreetingSub) adminGreetingSub.textContent = next.heroSubtitle || DEFAULT_ADMIN_APPEARANCE.heroSubtitle;
+      if (adminSupportEyebrowNode) adminSupportEyebrowNode.textContent = next.supportEyebrow || DEFAULT_ADMIN_APPEARANCE.supportEyebrow;
+      if (adminSupportTitleNode) adminSupportTitleNode.textContent = next.supportTitle || DEFAULT_ADMIN_APPEARANCE.supportTitle;
+      if (adminSupportTextNode) adminSupportTextNode.textContent = next.supportText || DEFAULT_ADMIN_APPEARANCE.supportText;
+      if (btnHome) btnHome.textContent = next.primaryButtonLabel || DEFAULT_ADMIN_APPEARANCE.primaryButtonLabel;
+      if (btnHelpContent) btnHelpContent.textContent = next.secondaryButtonLabel || DEFAULT_ADMIN_APPEARANCE.secondaryButtonLabel;
+    }
+    async function loadAdminAppearance() {
+      try {
+        const response = await apiFetch("/api/cms/admin-page", { cache: "no-store" });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data?.settings) return;
+        applyAdminAppearance(data.settings);
+      } catch (_error) {
+        applyAdminAppearance(DEFAULT_ADMIN_APPEARANCE);
+      }
+    }
+
+    function openModal(title, html) {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = html;
+      modalBackdrop.classList.add("open");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+    function closeModal() {
+      modalBackdrop.classList.remove("open");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      modalBody.innerHTML = "";
+      releaseProductPreviewObjectUrl();
+    }
+    function esc(v) {
+      return String(v == null ? "" : v).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+    }
+    const ADMIN_CURRENCY_SYMBOL = "\u20B5";
+    const adminMoneyFormatter = new Intl.NumberFormat("en-GH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function formatCurrency(value) {
+      const num = Number(value || 0);
+      return `${ADMIN_CURRENCY_SYMBOL}${adminMoneyFormatter.format(Number.isFinite(num) ? num : 0)}`;
+    }
+    function formatDateTime(value) {
+      if (!value) return "Just now";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(date);
+    }
+    function humanizeOrderStatus(status) {
+      const value = String(status || "").trim().toLowerCase();
+      if (!value) return "Placed";
+      return value.replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    function orderStatusOptions(selectedValue) {
+      return ADMIN_ORDER_STATUSES.map((status) => `
+        <option value="${esc(status)}" ${String(selectedValue || "").trim().toLowerCase() === status ? "selected" : ""}>
+          ${esc(humanizeOrderStatus(status))}
+        </option>`).join("");
+    }
+    function humanizePaymentMethod(method) {
+      const labels = {
+        card: "Card",
+        cod: "Pay on delivery",
+        paypal: "PayPal",
+        apple: "Apple Pay",
+        google: "Google Pay",
+      };
+      const value = String(method || "").trim().toLowerCase();
+      return labels[value] || humanizeOrderStatus(value || "card");
+    }
+    function getLatestOrderHistoryEntry(order) {
+      const history = Array.isArray(order?.statusHistory) ? order.statusHistory : [];
+      return history.length ? history[history.length - 1] : null;
+    }
+    function getOrderStatusTone(status) {
+      const value = String(status || "").trim().toLowerCase();
+      if (value === "delivered") return { background: "#eafaf1", color: "#15803d" };
+      if (value === "shipped") return { background: "#e8f8ff", color: "#0369a1" };
+      if (value === "processing") return { background: "#fff7e8", color: "#a16207" };
+      if (value === "cancelled") return { background: "#fff0f0", color: "#b91c1c" };
+      return { background: "#eef2ff", color: "#3955d6" };
+    }
+    function renderOrderStatusPill(status) {
+      const tone = getOrderStatusTone(status);
+      return `<span style="display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:${tone.background};color:${tone.color};font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">${esc(humanizeOrderStatus(status))}</span>`;
+    }
+    function getAdminOrderCounts(orders) {
+      return (Array.isArray(orders) ? orders : []).reduce((acc, order) => {
+        const key = String(order?.status || "").trim().toLowerCase();
+        if (key) acc[key] = (acc[key] || 0) + 1;
+        acc.all += 1;
+        return acc;
+      }, { all: 0, placed: 0, processing: 0, shipped: 0, delivered: 0, cancelled: 0 });
+    }
+    function buildAdminOrdersQuery() {
+      const query = new URLSearchParams();
+      query.set("limit", "100");
+      if (adminOrderFilters.status) query.set("status", adminOrderFilters.status);
+      if (adminOrderFilters.q) query.set("q", adminOrderFilters.q);
+      const value = query.toString();
+      return value ? `?${value}` : "";
+    }
+    function setNodeText(node, value) {
+      if (node) node.textContent = value;
+    }
+    function rememberAdminAuth(token, user, remember) {
+      clearAuth();
+      const storage = remember ? localStorage : sessionStorage;
+      storage.setItem("blustup_token", token);
+      storage.setItem("blustup_user", JSON.stringify(user));
+    }
+    function isAdminAuthError(message) {
+      const text = String(message || "").trim();
+      return text === "Missing token" || text === "Invalid or expired token" || text === "Admin access required";
+    }
+    function renderAdminUnavailableState(title, message) {
+      whoami.textContent = title;
+      adminGreeting.textContent = title;
+      adminGreetingSub.textContent = message;
+      if (adminGreetingLive) adminGreetingLive.textContent = "";
+      dashboardPreview.innerHTML = `
+        <article class="product-card product-card-empty">
+          <div class="product-card-body">
+            <div class="product-card-title">${esc(title)}</div>
+            <div class="product-card-meta">${esc(message)}</div>
+          </div>
+        </article>`;
+      recentActionsEl.innerHTML = `<div class="muted">${esc(message)}</div>`;
+      activityTable.innerHTML = `<tr><td colspan="4" class="muted">${esc(message)}</td></tr>`;
+      adminMetrics.innerHTML = `<div class="muted">${esc(message)}</div>`;
+      setSyncLabel("Offline");
+    }
+    function showAdminLoginModal(message) {
+      openModal("Admin Sign In", `
+        <form id="adminLoginForm" style="display:grid;gap:12px;">
+          <div class="muted">${esc(message || "Sign in with your admin account to connect the dashboard.")}</div>
+          <div class="field">
+            <label for="adminLoginEmail">Admin email</label>
+            <input id="adminLoginEmail" type="email" value="admin@blustup.local" autocomplete="username">
+          </div>
+          <div class="field">
+            <label for="adminLoginPassword">Password</label>
+            <input id="adminLoginPassword" type="password" value="change-me" autocomplete="current-password">
+          </div>
+          <label style="display:flex;gap:8px;align-items:center;font-size:14px;color:#54627b;">
+            <input id="adminLoginRemember" type="checkbox" checked>
+            <span>Keep me signed in on this device</span>
+          </label>
+          <div id="adminLoginError" class="muted" style="color:#b42318;"></div>
+          <button class="btn-admin primary" id="adminLoginSubmit" type="submit">Sign In</button>
+        </form>`);
+
+      document.getElementById("adminLoginForm")?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const submit = document.getElementById("adminLoginSubmit");
+        const error = document.getElementById("adminLoginError");
+        const email = document.getElementById("adminLoginEmail")?.value.trim() || "";
+        const password = document.getElementById("adminLoginPassword")?.value || "";
+        const remember = document.getElementById("adminLoginRemember")?.checked !== false;
+
+        if (!email || !password) {
+          if (error) error.textContent = "Enter your admin email and password.";
+          return;
+        }
+
+        if (submit) submit.disabled = true;
+        if (error) error.textContent = "";
+
+        try {
+          const { token, user } = await api("/api/admin/login", {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+          });
+          rememberAdminAuth(token, user, remember);
+          await bootstrapAdminSession(user);
+          closeModal();
+        } catch (loginError) {
+          if (error) error.textContent = loginError.message || "Admin sign-in failed.";
+        } finally {
+          if (submit) submit.disabled = false;
+        }
+      });
+    }
+    function getDisplayName(user) {
+      const raw = user?.name || user?.fullName || user?.email || "Admin team";
+      return raw
+        .split("@")[0]
+        .replace(/[._-]+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    function getInitials(value) {
+      return String(value || "BT")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase() || "")
+        .join("") || "BT";
+    }
+    function getActionWorkspace(action) {
+      const raw = String(action?.entity_type || action?.action || "general").toLowerCase();
+      const map = {
+        product: "Catalog",
+        products: "Catalog",
+        shop: "Shop",
+        home: "Homepage",
+        faq: "FAQ",
+        board: "Board",
+        about: "About",
+        admin_page: "Admin",
+        appearance: "Admin",
+        delivery: "Delivery",
+        reports: "Reports",
+        ai: "AI",
+        deal: "Deals",
+        deals: "Deals",
+      };
+      return map[raw] || raw.replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    function setSyncLabel(message) {
+      adminLastSync.textContent = message;
+    }
+    function syncActiveNav(action) {
+      const links = document.querySelectorAll(".sidebar-link[data-action], .sidebar-link[data-nav]");
+      links.forEach((link) => {
+        const isDashboard = action === "dashboard" && link.getAttribute("data-nav") === "dashboard";
+        const isMatch = link.getAttribute("data-action") === action;
+        link.classList.toggle("active", Boolean(isDashboard || isMatch));
+      });
+    }
+    function syncNavForAction(action) {
+      if (["customize-admin", "list-orders", "manage-delivery", "list-users", "list-products", "edit-shop", "edit-home-images", "edit-deals", "edit-about", "edit-faq", "view-reports", "edit-ai", "dashboard"].includes(action)) {
+        syncActiveNav(action);
+        return;
+      }
+      if (["add-product", "edit-product", "delete-product"].includes(action)) {
+        syncActiveNav("list-products");
+        return;
+      }
+      if (["save-order-status", "dispatch-order-rider"].includes(action)) {
+        syncActiveNav("list-orders");
+      }
+    }
+    function renderProductShowcase(products) {
+      const items = (products || []).filter((item) => item.isActive !== false).slice(0, 3);
+      if (!items.length) {
+        dashboardPreview.innerHTML = `
+          <article class="product-card product-card-empty" data-search-text="products catalog empty add">
+            <div class="product-card-body">
+              <div class="product-card-title">No active products yet</div>
+              <div class="product-card-meta">Add your first product to start filling this dashboard preview.</div>
+              <div class="product-card-footer"><a href="#" class="btn-admin primary" data-action="add-product">Add product</a></div>
+            </div>
+          </article>`;
+        return;
+      }
+
+      dashboardPreview.innerHTML = items.map((item) => `
+        <article class="product-card" data-search-text="${esc(`${item.name || ""} ${formatAdminProductCategories(item).join(" ")} product catalog inventory`)}">
+          <div class="product-card-media">
+            ${item.imageUrl ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name || "Product image")}" />` : `<span class="image-fallback">${esc((item.name || "P").slice(0, 1).toUpperCase())}</span>`}
+          </div>
+          <div class="product-card-body">
+            <div class="product-card-title">${esc(item.name || "Untitled product")}</div>
+            <div class="product-card-meta">${esc(formatAdminProductCategories(item).map(humanizeAdminValue).join(" • ") || "General merchandise")}</div>
+            <div class="product-card-footer">
+              <strong>${esc(formatCurrency(item.price))}</strong>
+              <span>${esc(`${Number(item.stockQty || 0)} in stock`)}</span>
+            </div>
+          </div>
+        </article>`).join("");
+    }
+    function renderActivityTable(actions) {
+      if (!actions.length) {
+        activityTable.innerHTML = `<tr><td colspan="4" class="muted">No recent admin activity yet.</td></tr>`;
+        return;
+      }
+
+      activityTable.innerHTML = actions.slice(0, 6).map((action) => `
+        <tr>
+          <td><span class="table-chip">${esc(getActionWorkspace(action))}</span></td>
+          <td>${esc(action.summary || action.action || "Updated content")}</td>
+          <td>${esc(action.actor_email || "Unknown user")}</td>
+          <td>${esc(formatDateTime(action.created_at))}</td>
+        </tr>`).join("");
+    }
+    function renderRecentActions(actions) {
+      if (!actions.length) {
+        recentActionsEl.innerHTML = `<div class="muted">No recent actions yet.</div>`;
+        return;
+      }
+
+      recentActionsEl.innerHTML = actions.slice(0, 5).map((action) => `
+        <div class="recent-item">
+          <div class="recent-icon">${esc(getActionWorkspace(action).slice(0, 1))}</div>
+          <div class="recent-copy">
+            <div class="recent-title">${esc(action.summary || action.action || "Updated content")}</div>
+            <div class="recent-meta">${esc(action.actor_email || "Unknown user")} - ${esc(formatDateTime(action.created_at))}</div>
+          </div>
+        </div>`).join("");
+    }
+    function renderMetrics(products, actions, orders, users, analytics) {
+      const activeProducts = (products || []).filter((item) => item.isActive !== false);
+      const lowStock = activeProducts.filter((item) => Number(item.stockQty || 0) <= 5);
+      const categoryCount = new Set(activeProducts.flatMap((item) => formatAdminProductCategories(item))).size;
+      const catalogTotal = activeProducts.reduce((sum, item) => sum + Number(item.price || 0), 0);
+      const orderList = Array.isArray(orders) ? orders : [];
+      const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
+      const openOrders = orderList.filter((order) => !["delivered", "cancelled"].includes(String(order.status || "").trim().toLowerCase()));
+      const analyticsSnapshot = analytics && typeof analytics === "object" ? analytics : null;
+      const metrics = [
+        analyticsSnapshot
+          ? { label: "Today's revenue", value: formatCurrency(analyticsSnapshot.sales?.todayRevenue || 0), progress: Math.min(Number(analyticsSnapshot.sales?.todayOrders || 0) / 10, 1) || 0.08 }
+          : { label: "Active catalog", value: `${activeProducts.length} items`, progress: Math.min(activeProducts.length / 12, 1) || 0.08 },
+        analyticsSnapshot
+          ? { label: "7-day revenue", value: formatCurrency(analyticsSnapshot.sales?.weekRevenue || 0), progress: Math.min(Number(analyticsSnapshot.sales?.weekOrders || 0) / 20, 1) || 0.08 }
+          : { label: "Orders in motion", value: `${openOrders.length} active`, progress: Math.min(openOrders.length / 12, 1) || 0.08 },
+        analyticsSnapshot
+          ? { label: "View to cart", value: `${Number(analyticsSnapshot.funnel?.viewToCartPercent || 0).toFixed(1)}%`, progress: Math.max(0.08, Math.min(Number(analyticsSnapshot.funnel?.viewToCartPercent || 0) / 100, 1)) }
+          : { label: "Customer base", value: `${userList.length} shoppers`, progress: Math.min(userList.length / 20, 1) || 0.08 },
+        analyticsSnapshot
+          ? { label: "Slow movers", value: `${Number(analyticsSnapshot.inventory?.slowMoving?.length || 0)} flagged`, progress: activeProducts.length ? Math.min(Number(analyticsSnapshot.inventory?.slowMoving?.length || 0) / activeProducts.length, 1) : 0.08 }
+          : { label: "Low stock watch", value: `${lowStock.length} flagged`, progress: activeProducts.length ? Math.min(lowStock.length / activeProducts.length, 1) : 0.08 },
+      ];
+
+      adminMetrics.innerHTML = metrics.map((metric) => `
+        <div class="metric-row">
+          <div class="metric-row-top">
+            <span>${esc(metric.label)}</span>
+            <strong>${esc(metric.value)}</strong>
+          </div>
+          <div class="metric-bar"><span style="width:${Math.max(8, Math.round(metric.progress * 100))}%"></span></div>
+        </div>`).join("");
+
+      catalogValue.textContent = formatCurrency(catalogTotal);
+      activeProductCount.textContent = `${activeProducts.length} products`;
+      lowStockCount.textContent = `${lowStock.length} low stock`;
+      catalogStat.textContent = `${activeProducts.length} active products`;
+      if (ordersStat) ordersStat.textContent = `${openOrders.length} active orders`;
+      if (customersStat) customersStat.textContent = `${userList.length} shoppers`;
+      shopStat.textContent = `${categoryCount} categories`;
+      dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
+      homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
+      if (aboutStat) aboutStat.textContent = activeProducts.length ? "Story synced" : "Brand story";
+      if (deliveryStat) {
+        const dispatchedOrders = orderList.filter((order) => order?.deliveryAssignment?.status);
+        deliveryStat.textContent = dispatchedOrders.length
+          ? `${dispatchedOrders.length} dispatch updates`
+          : "Dispatch ready";
+      }
+      if (reportsStat) reportsStat.textContent = analyticsSnapshot?.sales?.weekOrders ? `${analyticsSnapshot.sales.weekOrders} orders this week` : "Reports ready";
+      aiStat.textContent = "Assistant online";
+
+      if (dashboardState.user) {
+        const name = getDisplayName(dashboardState.user);
+        adminGreeting.textContent = getAdminGreetingText(name);
+        if (adminGreetingLive) adminGreetingLive.textContent = analyticsSnapshot
+          ? `${formatCurrency(analyticsSnapshot.sales?.todayRevenue || 0)} came in today, ${analyticsSnapshot.sales?.weekOrders || 0} orders landed this week, and ${analyticsSnapshot.inventory?.slowMoving?.length || 0} slow movers are on your watch list.`
+          : `${openOrders.length} orders are active, ${userList.length} shoppers are on file, and ${activeProducts.length} products are live across ${categoryCount || 0} categories.`;
+        else {
+          adminGreetingSub.textContent = analyticsSnapshot
+            ? `${formatCurrency(analyticsSnapshot.sales?.todayRevenue || 0)} came in today, ${analyticsSnapshot.sales?.weekOrders || 0} orders landed this week, and ${analyticsSnapshot.inventory?.slowMoving?.length || 0} slow movers are on your watch list.`
+            : `${openOrders.length} orders are active, ${userList.length} shoppers are on file, and ${activeProducts.length} products are live across ${categoryCount || 0} categories.`;
+        }
+      }
+    }
+    function renderUser(user) {
+      const name = getDisplayName(user);
+      const initials = getInitials(name);
+      setNodeText(adminDisplayName, name);
+      setNodeText(adminDisplayNameLarge, name);
+      setNodeText(adminAvatar, initials);
+      setNodeText(adminAvatarLarge, initials);
+      setNodeText(whoami, user?.email ? `Signed in as ${user.email}` : "Admin session active");
+      setNodeText(
+        adminRoleLabel,
+        user?.role ? `${String(user.role).charAt(0).toUpperCase()}${String(user.role).slice(1)} access` : "Operations lead"
+      );
+      setNodeText(adminGreeting, getAdminGreetingText(name));
+    }
+    function applyAdminSearch() {
+      const term = adminSearch.value.trim().toLowerCase();
+      const searchable = Array.from(document.querySelectorAll("[data-search-text]"));
+      let visibleCount = 0;
+      searchable.forEach((node) => {
+        const haystack = String(node.getAttribute("data-search-text") || "").toLowerCase();
+        const match = !term || haystack.includes(term);
+        node.classList.toggle("is-filtered-out", !match);
+        if (match) visibleCount += 1;
+      });
+      searchEmptyState.hidden = visibleCount > 0;
+    }
+    async function refreshDashboard() {
+      setSyncLabel("Syncing...");
+
+      const [actionsResult, productsResult, ordersResult, usersResult, analyticsResult] = await Promise.allSettled([
+        api("/api/admin/actions/recent"),
+        api("/api/products/admin"),
+        api("/api/admin/orders?limit=100"),
+        api("/api/admin/users"),
+        api("/api/admin/analytics/overview"),
+      ]);
+
+      const hasActionData = actionsResult.status === "fulfilled";
+      const hasProductData = productsResult.status === "fulfilled";
+      const hasOrderData = ordersResult.status === "fulfilled";
+      const hasUserData = usersResult.status === "fulfilled";
+
+      if (hasActionData) {
+        dashboardState.actions = Array.isArray(actionsResult.value.actions) ? actionsResult.value.actions : [];
+        renderRecentActions(dashboardState.actions);
+        renderActivityTable(dashboardState.actions);
+      } else if (!dashboardState.actions.length) {
+        recentActionsEl.innerHTML = `<div class="muted">${esc(actionsResult.reason?.message || "Failed to load recent actions.")}</div>`;
+        activityTable.innerHTML = `<tr><td colspan="4" class="muted">${esc(actionsResult.reason?.message || "Failed to load recent actions.")}</td></tr>`;
+      }
+
+      if (hasProductData) {
+        dashboardState.products = Array.isArray(productsResult.value.products) ? productsResult.value.products : [];
+        renderProductShowcase(dashboardState.products);
+      } else if (!dashboardState.products.length) {
+        dashboardPreview.innerHTML = `
+          <article class="product-card product-card-empty">
+            <div class="product-card-body">
+              <div class="product-card-title">Catalog preview unavailable</div>
+            <div class="product-card-meta">${esc(productsResult.reason?.message || "Failed to load products.")}</div>
+          </div>
+        </article>`;
+      }
+
+      if (hasOrderData) {
+        dashboardState.orders = Array.isArray(ordersResult.value.orders) ? ordersResult.value.orders : [];
+      }
+
+      if (hasUserData) {
+        dashboardState.users = Array.isArray(usersResult.value.users) ? usersResult.value.users : [];
+      }
+
+      if (analyticsResult.status === "fulfilled") {
+        dashboardState.analytics = analyticsResult.value;
+      }
+
+      renderMetrics(dashboardState.products, dashboardState.actions, dashboardState.orders, dashboardState.users, dashboardState.analytics);
+      applyAdminSearch();
+      const syncStamp = formatDateTime(new Date().toISOString());
+      setSyncLabel(hasActionData && hasProductData && hasOrderData && hasUserData ? `Updated ${syncStamp}` : `Partial sync ${syncStamp}`);
+
+      if (!hasActionData && !hasProductData && !hasOrderData && !hasUserData) {
+        throw new Error(
+          actionsResult.reason?.message
+          || productsResult.reason?.message
+          || ordersResult.reason?.message
+          || usersResult.reason?.message
+          || "Failed to load dashboard"
+        );
+      }
+    }
+    async function loadRecentActions() {
+      return refreshDashboard();
+    }
+
+    async function openAdminAppearance() {
+      const appearance = getAdminAppearance();
+      openModal("Customize Admin Page", `
+        <div class="muted">Update the admin console branding, hero copy, sidebar support card, and dashboard colors from one place.</div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field"><label>Browser title</label><input id="admin_page_title" value="${esc(appearance.pageTitle || "")}"></div>
+          <div class="field"><label>Logo image URL</label><input id="admin_logo_url" value="${esc(appearance.logoImageUrl || "")}" placeholder="/uploads/your-logo.png"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Upload logo</label><input id="admin_logo_upload" type="file" accept="image/*"></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Brand subtitle</label><input id="admin_brand_subtitle" value="${esc(appearance.brandSubtitle || "")}"></div>
+          <div class="field"><label>Status pill</label><input id="admin_sidebar_status" value="${esc(appearance.sidebarStatus || "")}"></div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Hero eyebrow</label><input id="admin_hero_eyebrow" value="${esc(appearance.heroEyebrow || "")}"></div>
+          <div class="field"><label>Hero title template</label><input id="admin_hero_title_template" value="${esc(appearance.heroTitleTemplate || "")}" placeholder="Hi, {{name}}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Hero subtitle</label><textarea id="admin_hero_subtitle" rows="3">${esc(appearance.heroSubtitle || "")}</textarea></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Support eyebrow</label><input id="admin_support_eyebrow" value="${esc(appearance.supportEyebrow || "")}"></div>
+          <div class="field"><label>Support title</label><input id="admin_support_title" value="${esc(appearance.supportTitle || "")}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Support text</label><textarea id="admin_support_text" rows="3">${esc(appearance.supportText || "")}</textarea></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Primary button label</label><input id="admin_primary_button_label" value="${esc(appearance.primaryButtonLabel || "")}"></div>
+          <div class="field"><label>Secondary button label</label><input id="admin_secondary_button_label" value="${esc(appearance.secondaryButtonLabel || "")}"></div>
+        </div>
+        <div class="panel-header" style="margin-top:16px;">Theme colors</div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Accent</label><input id="admin_accent_color" type="color" value="${esc(appearance.accentColor || DEFAULT_ADMIN_APPEARANCE.accentColor)}"></div>
+          <div class="field"><label>Link</label><input id="admin_link_color" type="color" value="${esc(appearance.linkColor || DEFAULT_ADMIN_APPEARANCE.linkColor)}"></div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Background start</label><input id="admin_bg_start_color" type="color" value="${esc(appearance.backgroundStartColor || DEFAULT_ADMIN_APPEARANCE.backgroundStartColor)}"></div>
+          <div class="field"><label>Background end</label><input id="admin_bg_end_color" type="color" value="${esc(appearance.backgroundEndColor || DEFAULT_ADMIN_APPEARANCE.backgroundEndColor)}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Glow color</label><input id="admin_glow_color" type="color" value="${esc(appearance.glowColor || DEFAULT_ADMIN_APPEARANCE.glowColor)}"></div>
+        <div class="muted" style="font-size:12px;margin-top:8px;">Use <code>{{name}}</code> in the hero title template to keep the signed-in admin's name in the greeting.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn-admin" type="button" id="adminAppearanceReset">Reset defaults</button>
+          <button class="btn-admin primary" type="button" id="adminAppearanceSave">Save appearance</button>
+        </div>`);
+
+      document.getElementById("admin_logo_upload")?.addEventListener("change", async (event) => {
+        const file = event.target?.files?.[0];
+        if (!file) return;
+        const url = await uploadCmsImage(file);
+        const input = document.getElementById("admin_logo_url");
+        if (input) input.value = url;
+        event.target.value = "";
+      });
+
+      document.getElementById("adminAppearanceReset")?.addEventListener("click", () => {
+        applyAdminAppearance(DEFAULT_ADMIN_APPEARANCE);
+        closeModal();
+      });
+
+      document.getElementById("adminAppearanceSave")?.addEventListener("click", async () => {
+        const payload = {
+          pageTitle: document.getElementById("admin_page_title").value.trim(),
+          logoImageUrl: document.getElementById("admin_logo_url").value.trim(),
+          brandSubtitle: document.getElementById("admin_brand_subtitle").value.trim(),
+          sidebarStatus: document.getElementById("admin_sidebar_status").value.trim(),
+          heroEyebrow: document.getElementById("admin_hero_eyebrow").value.trim(),
+          heroTitleTemplate: document.getElementById("admin_hero_title_template").value.trim(),
+          heroSubtitle: document.getElementById("admin_hero_subtitle").value.trim(),
+          supportEyebrow: document.getElementById("admin_support_eyebrow").value.trim(),
+          supportTitle: document.getElementById("admin_support_title").value.trim(),
+          supportText: document.getElementById("admin_support_text").value.trim(),
+          primaryButtonLabel: document.getElementById("admin_primary_button_label").value.trim(),
+          secondaryButtonLabel: document.getElementById("admin_secondary_button_label").value.trim(),
+          accentColor: document.getElementById("admin_accent_color").value,
+          linkColor: document.getElementById("admin_link_color").value,
+          backgroundStartColor: document.getElementById("admin_bg_start_color").value,
+          backgroundEndColor: document.getElementById("admin_bg_end_color").value,
+          glowColor: document.getElementById("admin_glow_color").value,
+        };
+        const { settings } = await api("/api/cms/admin-page", {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        });
+        applyAdminAppearance(settings);
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+
+    async function openOrdersTable(nextFilters = {}) {
+      if (nextFilters.status !== undefined) adminOrderFilters.status = String(nextFilters.status || "").trim().toLowerCase();
+      if (nextFilters.q !== undefined) adminOrderFilters.q = String(nextFilters.q || "").trim();
+
+      const { orders } = await api(`/api/admin/orders${buildAdminOrdersQuery()}`);
+      const orderList = Array.isArray(orders) ? orders : [];
+      const counts = getAdminOrderCounts(Array.isArray(dashboardState.orders) && dashboardState.orders.length ? dashboardState.orders : orderList);
+      const statusButtons = [
+        { key: "", label: "All" },
+        ...ADMIN_ORDER_STATUSES.map((status) => ({ key: status, label: humanizeOrderStatus(status) })),
+      ];
+
+      openModal("Orders", `
+        <div class="muted" style="margin-bottom:12px;">Update order progress here so customers and admins see the latest delivery status immediately.</div>
+        <div style="display:grid;gap:14px;">
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="btn-admin" type="button" data-action="manage-delivery">Delivery automation</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;">
+            ${statusButtons.map((button) => {
+              const tone = button.key ? getOrderStatusTone(button.key) : { background: "#f3f6fc", color: "#172033" };
+              const count = button.key ? counts[button.key] || 0 : counts.all || 0;
+              const isActive = adminOrderFilters.status === button.key;
+              return `
+                <button
+                  type="button"
+                  data-order-quick-filter="${esc(button.key)}"
+                  style="text-align:left;padding:12px 14px;border-radius:16px;border:1px solid ${isActive ? tone.color : "#dfe5f2"};background:${isActive ? tone.background : "#fff"};cursor:pointer;"
+                >
+                  <div style="font-size:12px;color:${tone.color};font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">${esc(button.label)}</div>
+                  <div style="margin-top:6px;font-size:22px;font-weight:800;color:#172033;">${esc(String(count))}</div>
+                </button>
+              `;
+            }).join("")}
+          </div>
+          <form id="adminOrdersFilterForm" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+            <input id="adminOrderSearchInput" value="${esc(adminOrderFilters.q)}" placeholder="Search reference, customer, or email" style="flex:1;min-width:220px;">
+            <select id="adminOrderStatusFilter" style="min-width:180px;">
+              <option value="">All statuses</option>
+              ${orderStatusOptions(adminOrderFilters.status)}
+            </select>
+            <button class="btn-admin primary" type="submit">Apply</button>
+            <button class="btn-admin" id="adminOrderResetBtn" type="button">Reset</button>
+          </form>
+          <div class="muted">${esc(orderList.length ? `Showing ${orderList.length} order(s).` : "No orders match the current filter.")}</div>
+        </div>
+        <table class="admin-table" style="margin-top:14px;">
+          <thead><tr><th>Reference</th><th>Customer</th><th>Tracking</th><th>Commercial</th><th>Actions</th></tr></thead>
+          <tbody>${orderList.length ? orderList.map((order) => {
+            const latestEntry = getLatestOrderHistoryEntry(order);
+            const totalItems = (order.items || []).reduce((sum, item) => sum + Number(item.qty || 0), 0);
+            const dispatch = order.deliveryAssignment || null;
+            return `
+            <tr>
+              <td>
+                <strong>${esc(order.reference)}</strong>
+                <div class="muted">${esc(`${totalItems} item(s)`)}${order.promoCode ? ` · ${esc(order.promoCode)}` : ""}</div>
+              </td>
+              <td>
+                ${esc(order.customerName || "Guest order")}
+                <div class="muted">${esc(order.customerEmail || "")}</div>
+                <div class="muted">${esc(order.customerPhone || "No phone")}</div>
+              </td>
+              <td>
+                ${renderOrderStatusPill(order.status)}
+                <div class="muted" style="margin-top:8px;">${esc(latestEntry?.note || "No status note yet.")}</div>
+                <div class="muted">${dispatch ? esc(`Dispatch: ${humanizeAdminValue(dispatch.status || "pending")}`) : "Dispatch: not started"}</div>
+                <div class="muted">${dispatch ? esc(dispatch.riderName || dispatch.riderEmail || dispatch.riderPhone || "Rider pending") : "Rider pending"}</div>
+                <div class="muted">${esc(formatDateTime(order.updatedAt || order.createdAt))}</div>
+              </td>
+              <td>
+                <strong>${esc(formatCurrency(order.total || 0))}</strong>
+                <div class="muted">${esc(humanizePaymentMethod(order.paymentMethod))}</div>
+                <div class="muted">${Number(order.loyaltyEarned || 0) > 0 ? esc(`+${Math.floor(Number(order.loyaltyEarned || 0))} pts earned`) : "Guest / no points earned"}</div>
+              </td>
+              <td>
+                <div style="display:grid;gap:8px;min-width:240px;">
+                  <select data-order-status="${esc(order.id)}">${orderStatusOptions(order.status)}</select>
+                  <input data-order-note="${esc(order.id)}" placeholder="${esc(latestEntry?.note || "Optional status note")}" />
+                  <button class="btn-admin primary" type="button" data-action="save-order-status" data-id="${esc(order.id)}">Save status</button>
+                  ${String(order.status || "").trim().toLowerCase() === "shipped" ? `<button class="btn-admin" type="button" data-action="dispatch-order-rider" data-id="${esc(order.id)}">Dispatch rider</button>` : ""}
+                </div>
+              </td>
+            </tr>`;
+          }).join("") : `<tr><td colspan="5" class="muted">No orders have been placed yet.</td></tr>`}</tbody>
+        </table>`);
+
+      document.getElementById("adminOrdersFilterForm")?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        openOrdersTable({
+          status: document.getElementById("adminOrderStatusFilter")?.value || "",
+          q: document.getElementById("adminOrderSearchInput")?.value || "",
+        }).catch((error) => alert(error.message || "Failed to filter orders"));
+      });
+      document.getElementById("adminOrderStatusFilter")?.addEventListener("change", (event) => {
+        openOrdersTable({
+          status: event.target?.value || "",
+          q: document.getElementById("adminOrderSearchInput")?.value || "",
+        }).catch((error) => alert(error.message || "Failed to filter orders"));
+      });
+      document.getElementById("adminOrderResetBtn")?.addEventListener("click", () => {
+        openOrdersTable({ status: "", q: "" }).catch((error) => alert(error.message || "Failed to reset filters"));
+      });
+      document.querySelectorAll("[data-order-quick-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          openOrdersTable({
+            status: button.getAttribute("data-order-quick-filter") || "",
+            q: document.getElementById("adminOrderSearchInput")?.value || "",
+          }).catch((error) => alert(error.message || "Failed to filter orders"));
+        });
+      });
+    }
+
+    async function saveOrderStatus(id) {
+      const status = document.querySelector(`[data-order-status="${String(id)}"]`)?.value;
+      const note = document.querySelector(`[data-order-note="${String(id)}"]`)?.value || "";
+      if (!status) return alert("Choose a status first.");
+      const result = await api(`/api/admin/orders/${id}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({ status, note }),
+      });
+      await refreshDashboard();
+      await openOrdersTable();
+      if (result?.dispatch?.note) {
+        alert(result.dispatch.note);
+      }
+    }
+
+    async function dispatchOrderRider(id) {
+      const result = await api(`/api/admin/orders/${id}/dispatch`, {
+        method: "POST",
+      });
+      await refreshDashboard();
+      await openOrdersTable();
+      if (result?.dispatch?.note) {
+        alert(result.dispatch.note);
+      }
+    }
+
+    function deliveryRiderRowTemplate(rider, rowKey) {
+      return `
+        <div class="delivery-rider-row" style="display:grid;gap:10px;padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+          <input type="hidden" data-delivery-rider="${esc(rowKey)}" data-k="id" value="${esc(rider.id || rowKey)}">
+          <div class="grid2">
+            <div class="field"><label>Rider name</label><input data-delivery-rider="${esc(rowKey)}" data-k="name" value="${esc(rider.name || "")}" placeholder="Ama Mensah"></div>
+            <div class="field"><label>Email</label><input data-delivery-rider="${esc(rowKey)}" data-k="email" type="email" value="${esc(rider.email || "")}" placeholder="rider@example.com"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Phone</label><input data-delivery-rider="${esc(rowKey)}" data-k="phone" value="${esc(rider.phone || "")}" placeholder="+233..."></div>
+            <div class="field"><label>Coverage</label><input data-delivery-rider="${esc(rowKey)}" data-k="coverage" value="${esc(rider.coverage || "")}" placeholder="Accra"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+            <label style="display:flex;gap:8px;align-items:center;font-size:14px;color:#54627b;">
+              <input data-delivery-rider="${esc(rowKey)}" data-k="isActive" type="checkbox" value="1" ${rider.isActive !== false ? "checked" : ""}>
+              <span>Active for auto assignment</span>
+            </label>
+            <button class="btn-admin danger" type="button" data-action="remove-delivery-rider-row">Remove rider</button>
+          </div>
+        </div>`;
+    }
+
+    function collectDeliveryRidersFromEditor() {
+      const grouped = {};
+      document.querySelectorAll("[data-delivery-rider]").forEach((el) => {
+        const row = el.getAttribute("data-delivery-rider");
+        const key = el.getAttribute("data-k");
+        if (!grouped[row]) grouped[row] = {};
+        grouped[row][key] = el.type === "checkbox" ? el.checked : el.value;
+      });
+      return Object.values(grouped)
+        .map((rider, index) => ({
+          id: String(rider.id || createAdminDraftKey(`rider-${index + 1}`)).trim(),
+          name: String(rider.name || "").trim(),
+          email: String(rider.email || "").trim(),
+          phone: String(rider.phone || "").trim(),
+          coverage: String(rider.coverage || "").trim(),
+          isActive: rider.isActive !== false,
+        }))
+        .filter((rider) => rider.name);
+    }
+
+    function renderDeliveryDispatchHistory(history) {
+      const rows = Array.isArray(history) ? history : [];
+      if (!rows.length) return `<div class="muted">No rider dispatches have been recorded yet.</div>`;
+      return rows.slice(0, 10).map((entry) => `
+        <div style="display:grid;gap:4px;padding:12px 14px;border:1px solid #e7ecfa;border-radius:14px;background:#fff;">
+          <strong style="font-size:14px;">${esc(entry.orderReference || "Order")}</strong>
+          <div class="muted" style="font-size:12px;">${esc(formatDateTime(entry.createdAt))} - ${esc(entry.riderName || entry.riderEmail || entry.riderPhone || "No rider")}</div>
+          <div class="muted" style="font-size:12px;">${esc(humanizeAdminValue(entry.status || "pending"))}${entry.coverage ? ` - ${esc(entry.coverage)}` : ""}</div>
+          <div style="font-size:13px;color:#172033;">${esc(entry.note || "")}</div>
+        </div>
+      `).join("");
+    }
+
+    async function openDeliveryAutomation() {
+      const { settings, history, activeRiders, mailConfigured } = await api("/api/admin/delivery");
+      const riders = Array.isArray(settings.riders) ? settings.riders : [];
+      openModal("Delivery Automation", `
+        <div class="muted">When an order is moved into <strong>shipped</strong>, the system can assign the next active rider and email a delivery brief automatically.</div>
+        <div class="field" style="margin-top:12px;padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:${settings.automationEnabled ? "#eefbf3" : "#fff7e8"};">
+          <label>Automation overview</label>
+          <div style="font-size:14px;line-height:1.7;color:#172033;">
+            Status: <strong>${esc(settings.automationEnabled ? "Enabled" : "Disabled")}</strong><br>
+            Active riders: <strong>${esc(String(activeRiders || 0))}</strong><br>
+            Email delivery: <strong>${esc(mailConfigured ? "SMTP ready" : "SMTP not configured")}</strong>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field">
+            <label>Automation enabled</label>
+            <select id="delivery_automation_enabled">
+              <option value="1" ${settings.automationEnabled ? "selected" : ""}>Yes</option>
+              <option value="0" ${!settings.automationEnabled ? "selected" : ""}>No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Email subject prefix</label>
+            <input id="delivery_email_subject_prefix" value="${esc(settings.emailSubjectPrefix || "")}">
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Dispatch intro</label>
+          <textarea id="delivery_dispatch_intro" rows="4">${esc(settings.dispatchIntro || "")}</textarea>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Rider roster</label>
+          <div id="deliveryRidersList" style="display:grid;gap:10px;margin-top:8px;">
+            ${riders.map((rider) => deliveryRiderRowTemplate(rider, rider.id || createAdminDraftKey("rider"))).join("")}
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+            <button class="btn-admin" id="btnAddDeliveryRider" type="button">+ Add rider</button>
+            <button class="btn-admin primary" id="saveDeliveryAutomation" type="button">Save automation</button>
+          </div>
+        </div>
+        <div class="field" style="margin-top:16px;">
+          <label>Recent dispatch history</label>
+          <div style="display:grid;gap:8px;margin-top:8px;">${renderDeliveryDispatchHistory(history)}</div>
+        </div>`);
+
+      document.getElementById("btnAddDeliveryRider").addEventListener("click", () => {
+        const list = document.getElementById("deliveryRidersList");
+        const rowKey = createAdminDraftKey("rider");
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = deliveryRiderRowTemplate({
+          id: rowKey,
+          name: "",
+          email: "",
+          phone: "",
+          coverage: "",
+          isActive: true,
+        }, rowKey);
+        list.appendChild(wrapper.firstElementChild);
+      });
+
+      document.getElementById("saveDeliveryAutomation").addEventListener("click", async () => {
+        await api("/api/admin/delivery", {
+          method: "PATCH",
+          body: JSON.stringify({
+            automationEnabled: document.getElementById("delivery_automation_enabled").value === "1",
+            emailSubjectPrefix: document.getElementById("delivery_email_subject_prefix").value.trim(),
+            dispatchIntro: document.getElementById("delivery_dispatch_intro").value.trim(),
+            riders: collectDeliveryRidersFromEditor(),
+          }),
+        });
+        await refreshDashboard();
+        await openDeliveryAutomation();
+      });
+    }
+
+    async function openUsersTable() {
+      const { users } = await api("/api/admin/users");
+      const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
+      openModal("Customers", `
+        <div class="muted" style="margin-bottom:12px;">Saved billing profiles help checkout move faster because returning shoppers do not need to re-enter the same details.</div>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Loyalty</th><th>Orders</th><th>Total spent</th><th>Latest order</th></tr></thead>
+          <tbody>${userList.length ? userList.map((user) => `
+            <tr>
+              <td>
+                ${esc(user.name || "Customer")}
+                <div class="muted">${esc(user.billingProfile?.city ? `${user.billingProfile.city}, ${user.billingProfile.country || ""}` : "No saved billing city yet")}</div>
+              </td>
+              <td>${esc(user.email || "")}</td>
+              <td>${esc(user.phone || "Not provided")}</td>
+              <td>${esc(String(user.loyaltyPoints || 0))} pts<div class="muted">${esc(user.loyalty?.tierName || "Starter")}</div></td>
+              <td>${esc(String(user.orderCount || 0))}</td>
+              <td>${esc(formatCurrency(user.totalSpent || 0))}</td>
+              <td>${esc(user.latestOrderReference || "No orders yet")}<div class="muted">${esc(user.latestOrderStatus ? humanizeOrderStatus(user.latestOrderStatus) : "")}</div></td>
+            </tr>`).join("") : `<tr><td colspan="7" class="muted">No customer accounts have been created yet.</td></tr>`}</tbody>
+        </table>`);
+    }
+
+    // Products
+    function dedupeAdminValues(values, options = {}) {
+      const normalize = typeof options.normalizer === "function"
+        ? options.normalizer
+        : (value) => String(value || "").trim().toLowerCase();
+      const seen = new Set();
+      return (values || [])
+        .map((value) => String(value || "").trim())
+        .filter((value) => {
+          const token = normalize(value);
+          if (!value || seen.has(token)) return false;
+          seen.add(token);
+          return true;
+        });
+    }
+    function uniqueAdminValues(values) {
+      return dedupeAdminValues(values).sort((a, b) => a.localeCompare(b));
+    }
+    function normalizeAdminCategoryToken(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+    function parseAdminCategoryInput(value, options = {}) {
+      const source = Array.isArray(value) ? value : String(value || "").split(",");
+      const seen = new Set();
+      const categories = source
+        .map((entry) => String(entry || "").trim())
+        .filter((entry) => {
+          const token = normalizeAdminCategoryToken(entry);
+          if (!entry || seen.has(token)) return false;
+          seen.add(token);
+          return true;
+        });
+      if (categories.length) return categories;
+      if (options.allowEmpty) return [];
+      const fallback = String(options.fallback || "general").trim();
+      return fallback ? [fallback] : ["general"];
+    }
+    function createAdminDraftKey(prefix = "draft") {
+      return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+    function formatAdminProductCategories(product) {
+      return parseAdminCategoryInput(Array.isArray(product?.categories) ? product.categories : [product?.cat || product?.category]);
+    }
+    function humanizeAdminValue(value) {
+      return String(value || "")
+        .trim()
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    async function loadAdminCatalogContext() {
+      const [{ products }, { settings: shop }] = await Promise.all([api("/api/products/admin"), api("/api/cms/shop")]);
+      const productList = Array.isArray(products) ? products : [];
+      const shopSettings = shop && typeof shop === "object" ? shop : { filters: [] };
+      const filterList = Array.isArray(shopSettings.filters) ? shopSettings.filters : [];
+      const categories = uniqueAdminValues([
+        ...productList.flatMap((product) => formatAdminProductCategories(product)),
+      ]);
+      const activeCategories = uniqueAdminValues(
+        productList.filter((product) => product && product.isActive !== false).flatMap((product) => formatAdminProductCategories(product))
+      );
+      const seeMoreFilters = uniqueAdminValues(["all", ...filterList.map((filter) => filter?.value)]).map((value) => {
+        const matchingFilter = filterList.find((filter) => String(filter?.value || "").trim() === value);
+        return {
+          value,
+          label: matchingFilter?.label || (value === "all" ? "All Products" : humanizeAdminValue(value)),
+        };
+      });
+      return {
+        products: productList,
+        productMap: new Map(productList.map((product) => [String(product?.id || ""), product])),
+        shop: shopSettings,
+        categories,
+        activeCategories,
+        activeCategoryMap: new Map(activeCategories.map((category) => [normalizeAdminCategoryToken(category), category])),
+        seeMoreFilters,
+        seeMoreFilterMap: new Map(seeMoreFilters.map((filter) => [normalizeAdminCategoryToken(filter.value), filter])),
+      };
+    }
+    function productCategoryOptions(values, currentValue) {
+      return uniqueAdminValues([...(values || []), ...parseAdminCategoryInput(currentValue || "")]).map((value) => `<option value="${esc(value)}"></option>`).join("");
+    }
+    let productPreviewObjectUrl = null;
+    function releaseProductPreviewObjectUrl() {
+      if (productPreviewObjectUrl) {
+        URL.revokeObjectURL(productPreviewObjectUrl);
+        productPreviewObjectUrl = null;
+      }
+    }
+    function getProductPreviewImageSrc() {
+      const file = document.getElementById("f_image_file")?.files?.[0];
+      if (file) {
+        releaseProductPreviewObjectUrl();
+        productPreviewObjectUrl = URL.createObjectURL(file);
+        return productPreviewObjectUrl;
+      }
+      releaseProductPreviewObjectUrl();
+      return document.getElementById("f_image")?.value.trim() || "";
+    }
+    function createProductPreviewMarkup() {
+      const name = document.getElementById("f_name")?.value.trim() || "Product name";
+      const desc = document.getElementById("f_desc")?.value.trim() || "Short product description appears here.";
+      const categories = parseAdminCategoryInput(document.getElementById("f_categories")?.value.trim() || "general");
+      const price = Number(document.getElementById("f_price")?.value || 0);
+      const oldPrice = document.getElementById("f_old_price")?.value;
+      const badge = document.getElementById("f_badge")?.value.trim();
+      const stockQty = Number(document.getElementById("f_stock")?.value || 0);
+      const imageSrc = getProductPreviewImageSrc();
+      return `
+        <div style="border:1px solid #e4eaf8;border-radius:22px;background:#ffffff;overflow:hidden;box-shadow:0 16px 32px rgba(24,39,75,0.06);">
+          <div style="position:relative;min-height:220px;background:linear-gradient(135deg,#eff4ff 0%,#f7f9fe 100%);display:grid;place-items:center;">
+            ${badge ? `<div style="position:absolute;top:14px;left:14px;padding:6px 10px;border-radius:999px;background:#172033;color:#fff;font-size:12px;font-weight:700;">${esc(badge)}</div>` : ""}
+            ${imageSrc ? `<img src="${esc(imageSrc)}" alt="${esc(name)}" style="width:100%;height:220px;object-fit:cover;">` : `<div style="display:grid;gap:6px;justify-items:center;color:#6f7d98;"><strong style="font-size:42px;line-height:1;">${esc(name.slice(0, 1).toUpperCase() || "P")}</strong><span style="font-size:12px;">No image selected</span></div>`}
+          </div>
+          <div style="padding:16px 16px 18px;display:grid;gap:8px;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">${categories.map((category) => `<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#4a5672;background:#eef3fb;padding:6px 10px;border-radius:999px;">${esc(humanizeAdminValue(category))}</span>`).join("")}</div>
+            <div style="font-size:18px;font-weight:800;letter-spacing:-0.02em;color:#172033;">${esc(name)}</div>
+            <div style="font-size:13px;line-height:1.55;color:#7f8aa3;">${esc(desc)}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:6px;">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;">
+                <strong style="font-size:18px;color:#172033;">${esc(formatCurrency(price))}</strong>
+                ${oldPrice ? `<span style="font-size:13px;color:#9aa6bf;text-decoration:line-through;">${esc(formatCurrency(oldPrice))}</span>` : ""}
+              </div>
+              <span style="font-size:12px;color:#7f8aa3;">${esc(`${stockQty} in stock`)}</span>
+            </div>
+          </div>
+        </div>`;
+    }
+    function renderProductPreview() {
+      const node = document.getElementById("productPreviewCard");
+      if (node) node.innerHTML = createProductPreviewMarkup();
+    }
+    function bindProductFormPreview() {
+      const previewFields = ["f_name", "f_desc", "f_categories", "f_price", "f_stock", "f_image", "f_badge", "f_old_price"];
+      previewFields.forEach((id) => document.getElementById(id)?.addEventListener("input", renderProductPreview));
+      document.getElementById("f_image_file")?.addEventListener("change", () => {
+        const fileName = document.getElementById("f_image_file_name");
+        const file = document.getElementById("f_image_file")?.files?.[0];
+        if (fileName) fileName.textContent = file ? file.name : "No file selected";
+        renderProductPreview();
+      });
+      document.getElementById("btnSuggestProductDescription")?.addEventListener("click", requestProductDescriptionSuggestion);
+      renderProductPreview();
+    }
+    function setProductDescriptionStatus(message, tone = "muted") {
+      const node = document.getElementById("f_desc_ai_status");
+      if (!node) return;
+      node.textContent = message;
+      node.style.color = tone === "error" ? "#c2410c" : tone === "success" ? "#25603b" : "#6f7d98";
+    }
+    async function requestProductDescriptionSuggestion() {
+      const nameInput = document.getElementById("f_name");
+      const descriptionInput = document.getElementById("f_desc");
+      const button = document.getElementById("btnSuggestProductDescription");
+      if (!nameInput || !descriptionInput || !button) return;
+      if (!nameInput.value.trim()) {
+        setProductDescriptionStatus("Add a product name first so AI has something to work from.", "error");
+        nameInput.focus();
+        return;
+      }
+
+      const originalLabel = button.textContent;
+      button.disabled = true;
+      button.textContent = "Suggesting...";
+      setProductDescriptionStatus("Generating a product description from the current item details...");
+
+      try {
+        const payload = getProductPayload();
+        const { description, provider } = await api("/api/ai/product-description", {
+          method: "POST",
+          body: JSON.stringify({
+            name: payload.name,
+            category: payload.cat || "general",
+            categories: payload.categories || [],
+            price: Number.isFinite(payload.price) ? payload.price : undefined,
+            badge: payload.badge || "",
+            stockQty: Number.isFinite(payload.stockQty) ? payload.stockQty : undefined,
+            currentDescription: payload.description || "",
+          }),
+        });
+        descriptionInput.value = description || "";
+        renderProductPreview();
+        setProductDescriptionStatus(
+          provider === "openai"
+            ? "AI suggestion ready. You can edit the wording before saving."
+            : "Draft created from the product details. You can refine it before saving.",
+          "success"
+        );
+      } catch (e) {
+        setProductDescriptionStatus(e.message || "Failed to generate a description suggestion.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = originalLabel;
+      }
+    }
+    function buildProductRequestOptions() {
+      const payload = getProductPayload();
+      const imageFile = document.getElementById("f_image_file")?.files?.[0];
+      if (!imageFile) {
+        return { body: JSON.stringify(payload) };
+      }
+
+      const form = new FormData();
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value == null) return;
+        form.append(key, value);
+      });
+      form.append("image", imageFile);
+      return { body: form };
+    }
+    function productForm(item = {}, context = {}) {
+      const categoryValue = formatAdminProductCategories(item).join(", ") || context.categories?.[0] || "general";
+      return `
+        <div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.95fr);gap:18px;align-items:start;">
+          <div>
+            <div class="field"><label>Name</label><input id="f_name" value="${esc(item.name || "")}" /></div>
+            <div class="field" style="margin-top:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+                <label for="f_desc" style="margin:0;">Description</label>
+                <button class="btn-admin ghost" id="btnSuggestProductDescription" type="button">Suggest with AI</button>
+              </div>
+              <textarea id="f_desc">${esc(item.description || item.desc || "")}</textarea>
+              <div class="muted" id="f_desc_ai_status" style="font-size:12px;margin-top:6px;">Use the current product details to draft a clean storefront description.</div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field">
+                <label>Categories</label>
+                <input id="f_categories" list="adminProductCategories" value="${esc(categoryValue)}" placeholder="electronics, essentials, travel" />
+                <datalist id="adminProductCategories">${productCategoryOptions(context.categories || [], categoryValue)}</datalist>
+                <div class="muted" style="font-size:12px;">Separate categories with commas. The first category becomes the primary label, and every category can appear in shop filters.</div>
+              </div>
+              <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Stock Qty</label><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" /></div>
+              <div class="field"><label>Old Price</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" /></div>
+            </div>
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field"><label>Badge</label><input id="f_badge" value="${esc(item.badge || "")}" /></div>
+              <div class="field"><label>Active</label>
+                <select id="f_active"><option value="1" ${item.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${item.isActive === false ? "selected" : ""}>No</option></select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px;"><label>Image URL</label><input id="f_image" value="${esc(item.imageUrl || "")}" placeholder="https://example.com/product.jpg or /uploads/my-image.jpg" /></div>
+            <div class="field" style="margin-top:12px;">
+              <label>Upload image file</label>
+              <input id="f_image_file" type="file" accept="image/*" />
+              <div class="muted" id="f_image_file_name" style="font-size:12px;">No file selected</div>
+              <div class="muted" style="font-size:12px;">You can use either a direct image URL or an uploaded file. If both are provided, the uploaded file wins.</div>
+            </div>
+          </div>
+          <aside style="display:grid;gap:10px;">
+            <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:0.12em;">Product preview</div>
+            <div id="productPreviewCard"></div>
+          </aside>
+        </div>`;
+    }
+    function getProductPayload() {
+      const categories = parseAdminCategoryInput(document.getElementById("f_categories").value.trim());
+      return {
+        name: document.getElementById("f_name").value.trim(),
+        description: document.getElementById("f_desc").value.trim(),
+        cat: categories[0],
+        categories,
+        price: Number(document.getElementById("f_price").value),
+        stockQty: Number(document.getElementById("f_stock").value),
+        imageUrl: document.getElementById("f_image").value.trim(),
+        badge: document.getElementById("f_badge").value.trim() || null,
+        oldPrice: document.getElementById("f_old_price").value || null,
+        isActive: document.getElementById("f_active").value === "1",
+      };
+    }
+    async function openProductsTable() {
+      const { products } = await loadAdminCatalogContext();
+      openModal("Products", `
+        <div class="muted" style="margin-bottom:12px;">Categories now sync with the shop filter system automatically, and deals remove deleted or hidden featured products.</div>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${products.map((p) => `
+            <tr>
+              <td>${esc(p.name)}</td>
+              <td>${esc(formatAdminProductCategories(p).map(humanizeAdminValue).join(", "))}</td>
+              <td>${esc(formatCurrency(p.price))}</td>
+              <td>${esc(String(Number(p.stockQty || 0)))}</td>
+              <td>${esc(p.isActive !== false ? "Live" : "Hidden")}</td>
+              <td><a href="#" data-action="edit-product" data-id="${esc(p.id)}">Edit</a> - <a href="#" data-action="delete-product" data-id="${esc(p.id)}">Delete</a></td>
+            </tr>`).join("")}</tbody>
+        </table>`);
+    }
+    async function openAddProduct() {
+      const context = await loadAdminCatalogContext();
+      const draft = { categories: [context.categories?.[0] || "general"], isActive: true };
+      openModal("Add Product", `${productForm(draft, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
+      bindProductFormPreview();
+      document.getElementById("btnSaveProduct").addEventListener("click", async () => {
+        try {
+          await api("/api/products/admin", { method: "POST", ...buildProductRequestOptions() });
+          releaseProductPreviewObjectUrl();
+          await refreshDashboard();
+          await openProductsTable();
+        } catch (e) {
+          alert(e.message || "Failed to save product");
+        }
+      });
+    }
+    async function openEditProduct(id) {
+      const context = await loadAdminCatalogContext();
+      const item = context.products.find((product) => String(product.id) === String(id));
+      if (!item) return alert("Product not found");
+      openModal("Edit Product", `${productForm(item, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
+      bindProductFormPreview();
+      document.getElementById("btnSaveProduct").addEventListener("click", async () => {
+        try {
+          await api(`/api/products/admin/${id}`, { method: "PATCH", ...buildProductRequestOptions() });
+          releaseProductPreviewObjectUrl();
+          await refreshDashboard();
+          await openProductsTable();
+        } catch (e) {
+          alert(e.message || "Failed to update product");
+        }
+      });
+    }
+    async function deleteProduct(id) {
+      if (!confirm("Delete this product?")) return;
+      try {
+        await api(`/api/products/admin/${id}`, { method: "DELETE" });
+        await refreshDashboard();
+        await openProductsTable();
+      } catch (e) {
+        alert(e.message || "Failed to delete product");
+      }
+    }
+
+    function normalizeAdminAdsDraft(settings = {}) {
+      if (Array.isArray(settings.ads) && settings.ads.length) {
+        return settings.ads.map((ad, index) => ({
+          id: ad.id || createAdminDraftKey(`ad-${index + 1}`),
+          imageUrl: String(ad.imageUrl || "").trim(),
+          title: String(ad.title || "").trim(),
+          subtitle: String(ad.subtitle || "").trim(),
+          ctaLabel: String(ad.ctaLabel || "Shop now").trim() || "Shop now",
+          ctaTarget: String(ad.ctaTarget || "shop").trim() || "shop",
+          isActive: ad.isActive !== false,
+        }));
+      }
+      return (Array.isArray(settings.adImages) ? settings.adImages : []).map((imageUrl, index) => ({
+        id: createAdminDraftKey(`ad-${index + 1}`),
+        imageUrl: String(imageUrl || "").trim(),
+        title: index === 0 ? "Discover better deals without the guesswork." : `Featured ad ${index + 1}`,
+        subtitle: "Shop curated products, compare ratings quickly, and move through checkout with confidence.",
+        ctaLabel: "Shop now",
+        ctaTarget: "shop",
+        isActive: true,
+      }));
+    }
+    function homeAdRowTemplate(ad, rowKey) {
+      return `
+        <div class="home-ad-row" data-home-ad-row="${esc(rowKey)}" style="border:1px solid #e7eaff;padding:12px;border-radius:16px;margin-bottom:12px;background:#fff;">
+          <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start;">
+            <div style="display:grid;gap:10px;">
+              <div style="width:120px;height:84px;border-radius:14px;overflow:hidden;border:1px solid #dde6fb;background:#f5f7ff;display:grid;place-items:center;">
+                ${ad.imageUrl ? `<img src="${esc(ad.imageUrl)}" alt="${esc(ad.title || "Ad image")}" style="width:100%;height:100%;object-fit:cover;">` : `<span class="muted" style="font-size:12px;">No image</span>`}
+              </div>
+              <div class="field" style="margin:0;">
+                <label>Upload image</label>
+                <input type="file" accept="image/*" data-home-ad-upload="${esc(rowKey)}">
+              </div>
+            </div>
+            <div style="display:grid;gap:10px;">
+              <div class="grid2">
+                <div class="field"><label>Headline</label><input data-home-ad="${esc(rowKey)}" data-k="title" value="${esc(ad.title)}"></div>
+                <div class="field"><label>CTA text</label><input data-home-ad="${esc(rowKey)}" data-k="ctaLabel" value="${esc(ad.ctaLabel || "Shop now")}"></div>
+              </div>
+              <div class="field"><label>Image URL</label><input data-home-ad="${esc(rowKey)}" data-k="imageUrl" value="${esc(ad.imageUrl)}" placeholder="/uploads/ad.jpg or https://..."></div>
+              <div class="field"><label>Subtitle</label><textarea data-home-ad="${esc(rowKey)}" data-k="subtitle" rows="2">${esc(ad.subtitle || "")}</textarea></div>
+              <div class="grid2">
+                <div class="field"><label>CTA target</label><input data-home-ad="${esc(rowKey)}" data-k="ctaTarget" value="${esc(ad.ctaTarget || "shop")}" placeholder="shop, about, ai, https://..."></div>
+                <div class="field"><label>Active</label><select data-home-ad="${esc(rowKey)}" data-k="isActive"><option value="1" ${ad.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${ad.isActive === false ? "selected" : ""}>No</option></select></div>
+              </div>
+              <input type="hidden" data-home-ad="${esc(rowKey)}" data-k="id" value="${esc(ad.id)}">
+              <div><button type="button" class="btn-admin danger" data-action="remove-home-ad-row">Remove ad</button></div>
+            </div>
+          </div>
+        </div>`;
+    }
+    function collectHomeAdsFromEditor() {
+      const map = {};
+      document.querySelectorAll(".home-ad-row [data-home-ad]").forEach((el) => {
+        const row = el.getAttribute("data-home-ad");
+        const key = el.getAttribute("data-k");
+        if (!map[row]) map[row] = {};
+        map[row][key] = el.value;
+      });
+      return Object.values(map).map((ad, index) => ({
+        id: ad.id || createAdminDraftKey(`ad-${index + 1}`),
+        imageUrl: String(ad.imageUrl || "").trim(),
+        title: String(ad.title || "").trim(),
+        subtitle: String(ad.subtitle || "").trim(),
+        ctaLabel: String(ad.ctaLabel || "Shop now").trim() || "Shop now",
+        ctaTarget: String(ad.ctaTarget || "shop").trim() || "shop",
+        isActive: ad.isActive === "1",
+      })).filter((ad) => ad.imageUrl && ad.title);
+    }
+
+    // Home ads / hero
+    async function openHomeImagesCms() {
+      const { settings } = await api("/api/cms/home");
+      const ads = normalizeAdminAdsDraft(settings || {});
+      openModal("Ads & Hero", `
+        <div class="muted">Manage each homepage ad as a full campaign slide with an image, headline, supporting copy, CTA button, and destination target.</div>
+        <div id="homeAdsList" style="display:grid;gap:10px;margin-top:12px;">
+          ${ads.map((ad) => homeAdRowTemplate(ad, ad.id || createAdminDraftKey("ad"))).join("")}
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button class="btn-admin" id="btnAddHomeAd" type="button">+ Add ad</button>
+          <button class="btn-admin primary" id="btnSaveHomeImages" type="button">Save</button>
+        </div>`);
+
+      document.getElementById("btnAddHomeAd").addEventListener("click", () => {
+        const list = document.getElementById("homeAdsList");
+        const ad = {
+          id: createAdminDraftKey("ad"),
+          imageUrl: "",
+          title: "New homepage ad",
+          subtitle: "",
+          ctaLabel: "Shop now",
+          ctaTarget: "shop",
+          isActive: true,
+        };
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = homeAdRowTemplate(ad, ad.id);
+        list.appendChild(wrapper.firstElementChild);
+      });
+
+      document.getElementById("homeAdsList").addEventListener("change", async (event) => {
+        const input = event.target;
+        if (!input.matches("[data-home-ad-upload]")) return;
+        const file = input.files?.[0];
+        if (!file) return;
+        const rowKey = input.getAttribute("data-home-ad-upload");
+        const imageUrl = await uploadImage(file);
+        const imageInput = document.querySelector(`.home-ad-row [data-home-ad="${rowKey}"][data-k="imageUrl"]`);
+        if (imageInput) imageInput.value = imageUrl;
+        const row = input.closest(".home-ad-row");
+        if (row) {
+          const preview = row.querySelector("img");
+          if (preview) preview.src = imageUrl;
+        }
+        input.value = "";
+      });
+
+      document.getElementById("btnSaveHomeImages").addEventListener("click", async () => {
+        const adsPayload = collectHomeAdsFromEditor();
+        if (!adsPayload.length) return alert("Add at least one active ad with an image and headline.");
+        if (!adsPayload.some((ad) => ad.isActive)) return alert("Keep at least one homepage ad active.");
+        await api("/api/cms/home", { method: "PUT", body: JSON.stringify({ ads: adsPayload }) });
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+
+    function serializeAdminTitleTextItems(items) {
+      return (Array.isArray(items) ? items : [])
+        .map((item) => `${String(item?.title || "").trim()} :: ${String(item?.text || "").trim()}`.trim())
+        .filter(Boolean)
+        .join("\n");
+    }
+    function parseAdminTitleTextItems(value) {
+      return String(value || "")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [title, ...rest] = line.split("::");
+          return {
+            title: String(title || "").trim(),
+            text: rest.join("::").trim(),
+          };
+        })
+        .filter((item) => item.title && item.text);
+    }
+    function serializeAdminPillars(items) {
+      return (Array.isArray(items) ? items : [])
+        .map((item) => `${String(item?.title || "").trim()} :: ${(Array.isArray(item?.items) ? item.items : []).map((entry) => String(entry || "").trim()).filter(Boolean).join(" | ")}`.trim())
+        .filter(Boolean)
+        .join("\n");
+    }
+    function parseAdminPillars(value) {
+      return String(value || "")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [title, ...rest] = line.split("::");
+          const items = rest.join("::").split("|").map((entry) => entry.trim()).filter(Boolean);
+          return {
+            title: String(title || "").trim(),
+            items,
+          };
+        })
+        .filter((pillar) => pillar.title && pillar.items.length);
+    }
+    async function openAboutCms() {
+      const { settings } = await api("/api/cms/about");
+      openModal("About Page", `
+        <div class="muted">Update the storefront's brand story, hero section, value stats, and trust pillars from one place.</div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field"><label>Badge</label><input id="about_badge" value="${esc(settings.badge || "")}"></div>
+          <div class="field"><label>Hero title</label><input id="about_title" value="${esc(settings.title || "")}"></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Intro</label><textarea id="about_intro" rows="4">${esc(settings.intro || "")}</textarea></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Primary CTA label</label><input id="about_primary_label" value="${esc(settings.primaryCtaLabel || "")}"></div>
+          <div class="field"><label>Primary CTA target</label><input id="about_primary_target" value="${esc(settings.primaryCtaTarget || "")}" placeholder="shop, about, ai, https://..."></div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Secondary CTA label</label><input id="about_secondary_label" value="${esc(settings.secondaryCtaLabel || "")}"></div>
+          <div class="field"><label>Secondary CTA target</label><input id="about_secondary_target" value="${esc(settings.secondaryCtaTarget || "")}" placeholder="ai, faq, https://..."></div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Stats</label>
+          <textarea id="about_stats" rows="5" placeholder="Transparent :: Clear pricing and trust signals">${esc(serializeAdminTitleTextItems(settings.stats || []))}</textarea>
+          <div class="muted" style="font-size:12px;">One line per stat using: title :: text</div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Story cards</label>
+          <textarea id="about_cards" rows="6" placeholder="Our Identity :: Explain who the brand is">${esc(serializeAdminTitleTextItems(settings.cards || []))}</textarea>
+          <div class="muted" style="font-size:12px;">One line per card using: title :: text</div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Trust pillars</label>
+          <textarea id="about_pillars" rows="6" placeholder="How we serve shoppers :: AI chat support | Secure checkout | Order tracking">${esc(serializeAdminPillars(settings.pillars || []))}</textarea>
+          <div class="muted" style="font-size:12px;">One line per section using: title :: item one | item two | item three</div>
+        </div>
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAbout" type="button">Save</button></div>`);
+
+      document.getElementById("saveAbout").addEventListener("click", async () => {
+        const payload = {
+          badge: document.getElementById("about_badge").value.trim(),
+          title: document.getElementById("about_title").value.trim(),
+          intro: document.getElementById("about_intro").value.trim(),
+          primaryCtaLabel: document.getElementById("about_primary_label").value.trim(),
+          primaryCtaTarget: document.getElementById("about_primary_target").value.trim(),
+          secondaryCtaLabel: document.getElementById("about_secondary_label").value.trim(),
+          secondaryCtaTarget: document.getElementById("about_secondary_target").value.trim(),
+          stats: parseAdminTitleTextItems(document.getElementById("about_stats").value),
+          cards: parseAdminTitleTextItems(document.getElementById("about_cards").value),
+          pillars: parseAdminPillars(document.getElementById("about_pillars").value),
+        };
+        await api("/api/cms/about", { method: "PUT", body: JSON.stringify(payload) });
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+    function renderReportHistory(history) {
+      const rows = Array.isArray(history) ? history : [];
+      if (!rows.length) return `<div class="muted">No reports have been generated yet.</div>`;
+      return rows.slice(0, 10).map((entry) => `
+        <div style="display:grid;gap:4px;padding:12px 14px;border:1px solid #e7ecfa;border-radius:14px;background:#fff;">
+          <strong style="font-size:14px;">${esc(humanizeAdminValue(entry.type || "report"))}</strong>
+          <div class="muted" style="font-size:12px;">${esc(formatDateTime(entry.generatedAt))} - email ${esc(entry.emailStatus || "unknown")}${entry.emailTo ? ` to ${esc(entry.emailTo)}` : ""}</div>
+          <div style="font-size:13px;color:#172033;">${esc(entry.summary || "")}</div>
+        </div>
+      `).join("");
+    }
+    async function openReportsDashboard() {
+      const { settings, history, overview, mailConfigured, scheduler } = await api("/api/admin/reports");
+      const schedulerRunning = scheduler?.started === true && Number(scheduler?.activeTaskCount || 0) > 0;
+      openModal("Reports & Analytics", `
+        <div class="muted">Track revenue, funnel performance, and inventory health, then schedule daily and weekly summaries with cron-driven email delivery.</div>
+        <div class="field" style="margin-top:12px;padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:${schedulerRunning ? "#eefbf3" : "#fff7e8"};">
+          <label>Automation status</label>
+          <div style="font-size:14px;line-height:1.7;color:#172033;">
+            Scheduler: <strong>${esc(schedulerRunning ? "Running" : "Not active")}</strong><br>
+            Active schedules: <strong>${esc(String(scheduler?.activeTaskCount || 0))}</strong><br>
+            Backend note: <strong>Cron only runs while the Node server is running.</strong>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:12px;">
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>Today's revenue</label>
+            <div style="font-size:24px;font-weight:800;color:#172033;">${esc(formatCurrency(overview.sales?.todayRevenue || 0))}</div>
+            <div class="muted">${esc(`${overview.sales?.todayOrders || 0} orders today`)}</div>
+          </div>
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>7-day revenue</label>
+            <div style="font-size:24px;font-weight:800;color:#172033;">${esc(formatCurrency(overview.sales?.weekRevenue || 0))}</div>
+            <div class="muted">${esc(`${overview.sales?.weekOrders || 0} orders in the last 7 days`)}</div>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>Funnel</label>
+            <div style="font-size:14px;line-height:1.7;color:#172033;">Views to cart: <strong>${esc(`${Number(overview.funnel?.viewToCartPercent || 0).toFixed(1)}%`)}</strong><br>Cart to purchase: <strong>${esc(`${Number(overview.funnel?.cartToPurchasePercent || 0).toFixed(1)}%`)}</strong><br>Views to purchase: <strong>${esc(`${Number(overview.funnel?.viewToPurchasePercent || 0).toFixed(1)}%`)}</strong></div>
+          </div>
+          <div class="field" style="padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:#fff;">
+            <label>Inventory watch</label>
+            <div style="font-size:14px;line-height:1.7;color:#172033;">Low stock: <strong>${esc(String(overview.inventory?.lowStockCount || 0))}</strong><br>Slow movers: <strong>${esc(String((overview.inventory?.slowMoving || []).length))}</strong><br>Active products: <strong>${esc(String(overview.inventory?.activeProducts || 0))}</strong></div>
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Recent 7-day revenue</label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;">
+            ${(Array.isArray(overview.revenue?.chart) ? overview.revenue.chart : []).map((entry) => `
+              <div style="padding:10px 12px;border:1px solid #e7ecfa;border-radius:14px;background:#fbfcff;">
+                <div class="muted" style="font-size:11px;">${esc(entry.date)}</div>
+                <strong style="display:block;margin-top:6px;">${esc(formatCurrency(entry.revenue || 0))}</strong>
+                <div class="muted" style="font-size:11px;">${esc(`${entry.orders || 0} orders`)}</div>
+              </div>`).join("")}
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Report delivery</label>
+          <div class="muted" style="font-size:12px;margin-bottom:8px;">${mailConfigured ? "SMTP is configured. Scheduled reports can be emailed." : "SMTP is not configured yet. Reports will still be generated and saved in history, but email delivery will be skipped until SMTP env vars are set."}</div>
+          <div class="grid2">
+            <div class="field"><label>Email enabled</label><select id="report_email_enabled"><option value="1" ${settings.emailEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.emailEnabled ? "selected" : ""}>No</option></select></div>
+            <div class="field"><label>Recipient email</label><input id="report_email_to" type="email" value="${esc(settings.emailTo || "")}" placeholder="owner@example.com"></div>
+          </div>
+          <div class="grid2" style="margin-top:10px;">
+            <div class="field"><label>Subject prefix</label><input id="report_subject_prefix" value="${esc(settings.emailSubjectPrefix || "")}"></div>
+            <div class="field"><label>Timezone</label><input id="report_timezone" value="${esc(settings.timezone || "")}" placeholder="Africa/Accra"></div>
+          </div>
+          <div class="grid2" style="margin-top:10px;">
+            <div class="field"><label>Daily cron</label><input id="report_daily_cron" value="${esc(settings.dailyCron || "")}" placeholder="0 8 * * *"></div>
+            <div class="field"><label>Weekly sales cron</label><input id="report_weekly_cron" value="${esc(settings.weeklyCron || "")}" placeholder="0 9 * * 1"></div>
+          </div>
+          <div class="field" style="margin-top:10px;"><label>Inventory cron</label><input id="report_inventory_cron" value="${esc(settings.inventoryCron || "")}" placeholder="0 10 * * 1"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn-admin" type="button" id="runDailyReport">Run daily report</button>
+          <button class="btn-admin" type="button" id="runWeeklyReport">Run weekly report</button>
+          <button class="btn-admin" type="button" id="runInventoryReport">Run inventory report</button>
+          <button class="btn-admin primary" type="button" id="saveReportSettings">Save schedule</button>
+        </div>
+        <div class="panel-header" style="margin-top:18px;">Recent report history</div>
+        <div style="display:grid;gap:8px;">${renderReportHistory(history)}</div>`);
+
+      document.getElementById("saveReportSettings").addEventListener("click", async () => {
+        try {
+          await api("/api/admin/reports/settings", {
+            method: "PATCH",
+            body: JSON.stringify({
+              emailEnabled: document.getElementById("report_email_enabled").value === "1",
+              emailTo: document.getElementById("report_email_to").value.trim(),
+              emailSubjectPrefix: document.getElementById("report_subject_prefix").value.trim(),
+              timezone: document.getElementById("report_timezone").value.trim(),
+              dailyCron: document.getElementById("report_daily_cron").value.trim(),
+              weeklyCron: document.getElementById("report_weekly_cron").value.trim(),
+              inventoryCron: document.getElementById("report_inventory_cron").value.trim(),
+            }),
+          });
+          await refreshDashboard();
+          await openReportsDashboard();
+        } catch (error) {
+          alert(error.message || "Failed to save report settings");
+        }
+      });
+
+      const bindRunButton = (id, type) => {
+        document.getElementById(id).addEventListener("click", async () => {
+          try {
+            await api("/api/admin/reports/run", {
+              method: "POST",
+              body: JSON.stringify({ type }),
+            });
+            await refreshDashboard();
+            await openReportsDashboard();
+          } catch (error) {
+            alert(error.message || "Failed to run report");
+          }
+        });
+      };
+      bindRunButton("runDailyReport", "daily");
+      bindRunButton("runWeeklyReport", "weekly");
+      bindRunButton("runInventoryReport", "inventory");
+    }
+
+    // Shop filters - label, value (dropdown), visibility (dropdown)
+    function filterValueOptions(current, cats) {
+      const values = uniqueAdminValues([...(cats || []), current]).filter((value) => value.toLowerCase() !== "all");
+      if (!values.length) return `<option value="">No active categories yet</option>`;
+      return values.map((value) => `<option value="${esc(value)}" ${String(current) === String(value) ? "selected" : ""}>${esc(humanizeAdminValue(value))}</option>`).join("");
+    }
+    function normalizeShopFiltersDraft(filters, categories) {
+      const seen = new Set(["all"]);
+      const next = [{ label: "All Products", value: "all", showInShop: true }];
+      (filters || []).forEach((filter) => {
+        const value = String(filter?.value || "").trim();
+        const token = value.toLowerCase();
+        if (!value || token === "all" || seen.has(token)) return;
+        seen.add(token);
+        next.push({
+          label: String(filter?.label || humanizeAdminValue(value)).trim() || humanizeAdminValue(value),
+          value,
+          showInShop: filter?.showInShop !== false,
+        });
+      });
+      uniqueAdminValues(categories || []).forEach((category) => {
+        const token = String(category || "").trim().toLowerCase();
+        if (!token || seen.has(token)) return;
+        seen.add(token);
+        next.push({
+          label: humanizeAdminValue(category),
+          value: category,
+          showInShop: true,
+        });
+      });
+      return next;
+    }
+    function buildShopFiltersFromEditor(categories) {
+      const controls = Array.from(document.querySelectorAll("#filtersWrap [data-filter-row]"));
+      const map = {};
+      controls.forEach((el) => {
+        const row = el.getAttribute("data-filter-row");
+        const key = el.getAttribute("data-k");
+        if (!map[row]) map[row] = { label: "", value: "", showInShop: true };
+        if (key === "showInShop") map[row][key] = el.value === "1";
+        else map[row][key] = el.value.trim();
+      });
+      return normalizeShopFiltersDraft(Object.values(map).filter((filter) => filter.value), categories);
+    }
+    function renderShopFilterPreview(categories) {
+      const preview = document.getElementById("shopFilterPreview");
+      if (!preview) return;
+      const filters = buildShopFiltersFromEditor(categories);
+      const visible = filters.filter((filter) => filter.showInShop !== false);
+      preview.innerHTML = `
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          ${visible.map((filter) => `<span style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;background:#f3f6fc;border:1px solid #e2e9f8;font-size:13px;font-weight:700;color:#172033;">${esc(filter.label)}</span>`).join("") || `<span class="muted">No visible filters yet.</span>`}
+        </div>
+        <div class="muted" style="font-size:12px;margin-top:8px;">"All Products" is pinned automatically, duplicate values are merged, and missing live categories are added for you.</div>`;
+    }
+    function renderFilterRows(filters, cats) {
+      return filters.map((f, i) => `
+        <div class="admin-filter-row" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;">
+          <input data-filter-row="${i}" data-k="label" placeholder="Label (e.g. Electronics)" value="${esc(f.label)}" />
+          <select data-filter-row="${i}" data-k="value">${filterValueOptions(f.value, cats)}</select>
+          <select data-filter-row="${i}" data-k="showInShop">
+            <option value="1" ${f.showInShop !== false ? "selected" : ""}>Visible on shop</option>
+            <option value="0" ${f.showInShop === false ? "selected" : ""}>Hidden on shop</option>
+          </select>
+          <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>
+        </div>`).join("");
+    }
+    async function openShopCms() {
+      const context = await loadAdminCatalogContext();
+      const settings = context.shop || { title: "", subtitle: "", filters: [] };
+      const filters = normalizeShopFiltersDraft(Array.isArray(settings.filters) ? settings.filters : [], context.activeCategories);
+      const editableFilters = filters.filter((filter) => String(filter.value || "").trim().toLowerCase() !== "all");
+      openModal("Shop Settings", `
+        <div class="muted">Filters now follow the real active product categories. "All Products" is always included, and hidden filters stay available for deals and admin links.</div>
+        <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
+        <div class="field" style="margin-top:12px;"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
+        <div class="field" style="margin-top:12px;">
+          <label>Live category preview</label>
+          <div id="shopFilterPreview" style="padding:14px;border:1px solid #e4eaf8;border-radius:16px;background:#fff;"></div>
+        </div>
+        <div class="field" style="margin-top:12px;"><label>Filters</label>
+          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(editableFilters, context.activeCategories)}</div>
+          <button type="button" class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
+        </div>
+        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveShop">Save</button></div>`);
+      renderShopFilterPreview(context.activeCategories);
+
+      document.getElementById("btnAddFilterRow").addEventListener("click", () => {
+        const wrap = document.getElementById("filtersWrap");
+        const rows = wrap.querySelectorAll(".admin-filter-row");
+        const next = rows.length;
+        const firstCat = context.activeCategories[0] || "";
+        const div = document.createElement("div");
+        div.className = "admin-filter-row";
+        div.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;";
+        div.innerHTML = `
+          <input data-filter-row="${next}" data-k="label" placeholder="Label">
+          <select data-filter-row="${next}" data-k="value">${filterValueOptions(firstCat, context.activeCategories)}</select>
+          <select data-filter-row="${next}" data-k="showInShop">
+            <option value="1" selected>Visible on shop</option>
+            <option value="0">Hidden on shop</option>
+          </select>
+          <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>`;
+        wrap.appendChild(div);
+        renderShopFilterPreview(context.activeCategories);
+      });
+      document.getElementById("filtersWrap").addEventListener("input", () => renderShopFilterPreview(context.activeCategories));
+      document.getElementById("filtersWrap").addEventListener("change", () => renderShopFilterPreview(context.activeCategories));
+
+      document.getElementById("saveShop").addEventListener("click", async () => {
+        const nextFilters = buildShopFiltersFromEditor(context.activeCategories);
+        await api("/api/cms/shop", {
+          method: "PUT",
+          body: JSON.stringify({
+            title: document.getElementById("s_title").value,
+            subtitle: document.getElementById("s_subtitle").value,
+            filters: nextFilters,
+          }),
+        });
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+
+    // Deals - category-aware fallback + product picker
+    function getAdminDealPinnedProductIds(deal) {
+      return dedupeAdminValues(Array.isArray(deal?.productIds) ? deal.productIds : [], {
+        normalizer: (value) => String(value || "").trim(),
+      });
+    }
+    function getAdminDealDerivedCategories(productIds, context) {
+      return dedupeAdminValues(
+        (productIds || [])
+          .map((id) => context.productMap?.get(String(id)))
+          .filter((product) => product && product.isActive !== false)
+          .flatMap((product) => formatAdminProductCategories(product))
+          .map((category) => context.activeCategoryMap?.get(normalizeAdminCategoryToken(category)) || "")
+          .filter(Boolean)
+      );
+    }
+    function getAdminDealSourceCategories(deal, context, options = {}) {
+      const requestedCategories = parseAdminCategoryInput(
+        Array.isArray(deal?.sourceCategories) ? deal.sourceCategories : deal?.sourceCategory || "",
+        { allowEmpty: true }
+      );
+      const validRequestedCategories = dedupeAdminValues(
+        requestedCategories
+          .map((category) => context.activeCategoryMap?.get(normalizeAdminCategoryToken(category)) || "")
+          .filter(Boolean)
+      );
+      if (validRequestedCategories.length) return validRequestedCategories;
+      const derivedCategories = getAdminDealDerivedCategories(getAdminDealPinnedProductIds(deal), context);
+      if (derivedCategories.length) return derivedCategories;
+      if (options.fallbackToFirstActive && context.activeCategories?.length) return [context.activeCategories[0]];
+      return [];
+    }
+    function resolveAdminDealSeeMoreFilterValue(currentValue, sourceCategories, context) {
+      const requestedToken = normalizeAdminCategoryToken(currentValue);
+      if (requestedToken === "all") return "all";
+      if (requestedToken && context.seeMoreFilterMap?.has(requestedToken)) {
+        return context.seeMoreFilterMap.get(requestedToken).value;
+      }
+      const fallbackCategory = (sourceCategories || []).find((category) =>
+        context.seeMoreFilterMap?.has(normalizeAdminCategoryToken(category))
+      );
+      if (fallbackCategory) {
+        return context.seeMoreFilterMap.get(normalizeAdminCategoryToken(fallbackCategory)).value;
+      }
+      return "all";
+    }
+    function dealSourceCategoryValue(deal, context) {
+      return getAdminDealSourceCategories(deal, context).join(", ");
+    }
+    function dealSeeMoreOptions(filters, currentValue) {
+      return (filters || []).map((filter) => `<option value="${esc(filter.value)}" ${filter.value === currentValue ? "selected" : ""}>${esc(filter.label)} (${esc(filter.value)})</option>`).join("");
+    }
+    function buildAdminDealDraftFromRow(row, context) {
+      if (!row) return null;
+      const raw = {};
+      row.querySelectorAll("[data-deal]").forEach((el) => {
+        const key = el.getAttribute("data-k");
+        if (key) raw[key] = el.value;
+      });
+      const selectedProductIds = dedupeAdminValues(
+        Array.from(row.querySelectorAll("input[data-deal-product]:checked")).map((el) => el.value),
+        { normalizer: (value) => String(value || "").trim() }
+      );
+      const maxItems = Math.max(1, Number(raw.maxItems || 8));
+      const sourceCategories = getAdminDealSourceCategories(
+        {
+          sourceCategories: parseAdminCategoryInput(raw.sourceCategories || raw.sourceCategory || "", { allowEmpty: true }),
+          sourceCategory: "",
+          productIds: selectedProductIds,
+        },
+        context
+      );
+      return {
+        rowKey: row.getAttribute("data-deal-row") || "",
+        id: raw.id || createAdminDraftKey("deal"),
+        name: String(raw.name || "").trim(),
+        timerSeconds: Number(raw.timerSeconds || 0),
+        sourceCategory: sourceCategories[0] || "",
+        sourceCategories,
+        seeMoreFilter: resolveAdminDealSeeMoreFilterValue(raw.seeMoreFilter, sourceCategories, context),
+        maxItems,
+        isActive: raw.isActive === "1",
+        productIds: selectedProductIds,
+      };
+    }
+    function dealSummaryMarkup(deal, context) {
+      const sourceCategories = getAdminDealSourceCategories(deal, context);
+      const selectedCount = getAdminDealPinnedProductIds(deal).length;
+      const maxItems = Math.max(1, Number(deal?.maxItems || 1));
+      const showingCount = Math.min(selectedCount, maxItems);
+      const seeMoreValue = resolveAdminDealSeeMoreFilterValue(deal?.seeMoreFilter, sourceCategories, context);
+      const seeMoreLabel = context.seeMoreFilterMap?.get(normalizeAdminCategoryToken(seeMoreValue))?.label || humanizeAdminValue(seeMoreValue);
+      const statusLabel = !sourceCategories.length && !selectedCount
+        ? "Needs setup"
+        : deal?.isActive === false
+          ? "Saved as inactive"
+          : "Ready for homepage";
+      const fallbackLabel = sourceCategories.length
+        ? sourceCategories.map(humanizeAdminValue).join(", ")
+        : "Choose a category or pin products";
+      return `
+        <div style="font-size:12px;line-height:1.6;color:#5d6885;">
+          <strong style="display:block;font-size:13px;color:#172033;">${esc(statusLabel)}</strong>
+          <div>Fallback categories: ${esc(fallbackLabel)}</div>
+          <div>See more link: ${esc(seeMoreLabel)} (${esc(seeMoreValue)})</div>
+          <div>Pinned products: ${esc(`${showingCount}/${maxItems}`)}${selectedCount > maxItems ? ` <span style="color:#c2410c;">Only the first ${esc(maxItems)} selected items will show.</span>` : ""}</div>
+        </div>`;
+    }
+    function syncDealRowSummary(row, context) {
+      const summary = row?.querySelector("[data-deal-summary]");
+      if (!summary) return;
+      const draft = buildAdminDealDraftFromRow(row, context);
+      if (!draft) return;
+      summary.innerHTML = dealSummaryMarkup(draft, context);
+    }
+    function dealProductPicker(rowKey, deal, products) {
+      const activeProducts = (products || []).filter((product) => product && product.isActive !== false);
+      if (!activeProducts.length) {
+        return `<div class="muted" style="font-size:12px;">Add or activate products before pinning featured items into a deal.</div>`;
+      }
+      const selectedIds = new Set(getAdminDealPinnedProductIds(deal).map(String));
+      const sortedProducts = [...activeProducts].sort((left, right) => {
+        const leftSelected = selectedIds.has(String(left.id)) ? 1 : 0;
+        const rightSelected = selectedIds.has(String(right.id)) ? 1 : 0;
+        if (leftSelected !== rightSelected) return rightSelected - leftSelected;
+        return String(left.name || "").localeCompare(String(right.name || ""));
+      });
+      return `
+        <div style="display:grid;gap:8px;max-height:220px;overflow:auto;padding:10px;border:1px solid #e7eaff;border-radius:14px;background:#fbfcff;">
+          ${sortedProducts.map((product) => {
+            const productId = String(product.id);
+            return `
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid ${selectedIds.has(productId) ? "#cdddff" : "#edf1fb"};background:${selectedIds.has(productId) ? "#f5f8ff" : "#ffffff"};">
+                <input type="checkbox" data-deal-product="${esc(rowKey)}" value="${esc(productId)}" ${selectedIds.has(productId) ? "checked" : ""} style="margin-top:3px;">
+                <span style="display:grid;gap:4px;">
+                  <strong style="font-size:14px;">${esc(product.name)}</strong>
+                  <span class="muted" style="font-size:12px;">${esc(formatAdminProductCategories(product).map(humanizeAdminValue).join(", "))} - ${esc(formatCurrency(product.price))} - ${esc(`${Number(product.stockQty || 0)} in stock`)}</span>
+                </span>
+              </label>`;
+          }).join("")}
+        </div>`;
+    }
+    function dealRowTemplate(d, rowKey, context) {
+      const sourceCategoryValue = dealSourceCategoryValue(d, context);
+      const seeMoreFilter = resolveAdminDealSeeMoreFilterValue(d.seeMoreFilter, getAdminDealSourceCategories(d, context), context);
+      return `
+        <div class="deal-admin-row" data-deal-row="${esc(rowKey)}" style="border:1px solid #e7eaff;padding:12px;border-radius:14px;margin-bottom:10px;background:#fff;">
+          <div class="grid2">
+            <div class="field"><label>Deal name</label><input data-deal="${esc(rowKey)}" data-k="name" value="${esc(d.name)}"></div>
+            <div class="field"><label>Timer (seconds)</label><input type="number" data-deal="${esc(rowKey)}" data-k="timerSeconds" value="${esc(d.timerSeconds || 3600)}"></div>
+          </div>
+          <div class="grid2" style="margin-top:8px;">
+            <div class="field">
+              <label>Fallback source categories</label>
+              <input data-deal="${esc(rowKey)}" data-k="sourceCategories" list="dealSourceCategories_${esc(rowKey)}" value="${esc(sourceCategoryValue)}" placeholder="electronics, personal care, oriamo" />
+              <datalist id="dealSourceCategories_${esc(rowKey)}">${productCategoryOptions(context.activeCategories || [], sourceCategoryValue)}</datalist>
+              <div class="muted" style="font-size:12px;">Separate categories with commas. Leave this empty only when pinned products should define the deal automatically.</div>
+            </div>
+            <div class="field"><label>See more shop filter</label><select data-deal="${esc(rowKey)}" data-k="seeMoreFilter">${dealSeeMoreOptions(context.seeMoreFilters, seeMoreFilter)}</select></div>
+          </div>
+          <div class="field" style="margin-top:8px;">
+            <label>Featured products (optional)</label>
+            <div class="muted" style="font-size:12px;margin-bottom:6px;">Pinned products always show first. If none are selected, the homepage row falls back to the source categories.</div>
+            ${dealProductPicker(rowKey, d, context.products)}
+          </div>
+          <div data-deal-summary="${esc(rowKey)}" style="margin-top:8px;padding:10px 12px;border:1px solid #edf1fb;border-radius:12px;background:#fbfcff;">${dealSummaryMarkup(d, context)}</div>
+          <div class="grid2" style="margin-top:8px;">
+            <div class="field"><label>Max items</label><input type="number" data-deal="${esc(rowKey)}" data-k="maxItems" value="${esc(d.maxItems || 8)}"></div>
+            <div class="field"><label>Active</label><select data-deal="${esc(rowKey)}" data-k="isActive"><option value="1" ${d.isActive ? "selected" : ""}>Yes</option><option value="0" ${!d.isActive ? "selected" : ""}>No</option></select></div>
+          </div>
+          <input type="hidden" data-deal="${esc(rowKey)}" data-k="id" value="${esc(d.id)}">
+          <div style="margin-top:8px;"><button type="button" class="btn-admin danger" data-action="remove-deal-row">Remove deal</button></div>
+        </div>`;
+    }
+    function collectDealsFromEditor(context) {
+      return Array.from(document.querySelectorAll(".deal-admin-row")).map((row, index) => {
+        const draft = buildAdminDealDraftFromRow(row, context);
+        const fallbackName = `Deal ${index + 1}`;
+        const maxItems = Math.max(1, Number(draft?.maxItems || 8));
+        if (!draft?.name) throw new Error(`${fallbackName} needs a name.`);
+        if (!Number.isFinite(draft.timerSeconds) || draft.timerSeconds < 1) {
+          throw new Error(`Deal "${draft.name}" needs a timer greater than 0 seconds.`);
+        }
+        if (!Number.isFinite(maxItems) || maxItems < 1) {
+          throw new Error(`Deal "${draft.name}" needs at least 1 max item.`);
+        }
+        if (!draft.sourceCategories.length) {
+          throw new Error(`Deal "${draft.name}" needs at least one active source category or pinned product.`);
+        }
+        return {
+          id: draft.id || createAdminDraftKey("deal"),
+          name: draft.name,
+          timerSeconds: Math.floor(draft.timerSeconds),
+          sourceCategory: draft.sourceCategories[0] || "",
+          sourceCategories: draft.sourceCategories,
+          seeMoreFilter: draft.seeMoreFilter,
+          maxItems,
+          isActive: draft.isActive,
+          productIds: draft.productIds.slice(0, maxItems),
+        };
+      });
+    }
+    async function openDealsCms() {
+      const [{ settings: deals }, context] = await Promise.all([api("/api/cms/deals"), loadAdminCatalogContext()]);
+      const rows = Array.isArray(deals) ? deals : [];
+      openModal("Deals", `
+        <div class="muted">Pinned products stay in the order you select them, fallback categories only use live catalog values, and the "See more" link falls back to the closest valid shop filter automatically.</div>
+        ${context.activeCategories.length ? "" : `<div class="muted" style="margin-top:10px;">No active product categories are available yet. Add or activate products before creating a fallback deal.</div>`}
+        <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, d.id || createAdminDraftKey(`deal-${i}`), context)).join("")}</div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn-admin" id="btnAddDeal" type="button">+ Add deal</button>
+          <button class="btn-admin primary" id="saveDeals" type="button">Save Deals</button>
+        </div>`);
+
+      document.querySelectorAll(".deal-admin-row").forEach((row) => syncDealRowSummary(row, context));
+
+      document.getElementById("dealsWrap").addEventListener("input", (event) => {
+        const row = event.target.closest(".deal-admin-row");
+        if (row) syncDealRowSummary(row, context);
+      });
+      document.getElementById("dealsWrap").addEventListener("change", (event) => {
+        const row = event.target.closest(".deal-admin-row");
+        if (row) syncDealRowSummary(row, context);
+      });
+
+      document.getElementById("btnAddDeal").addEventListener("click", () => {
+        if (!context.activeCategories.length) return alert("Add at least one active product before creating a deal.");
+        const wrap = document.getElementById("dealsWrap");
+        const rowKey = createAdminDraftKey("deal-row");
+        const defaultCategory = context.activeCategories[0];
+        const d = {
+          id: createAdminDraftKey("deal"),
+          name: "New Deal",
+          timerSeconds: 3600,
+          sourceCategory: defaultCategory,
+          sourceCategories: [defaultCategory],
+          seeMoreFilter: resolveAdminDealSeeMoreFilterValue(defaultCategory, [defaultCategory], context),
+          maxItems: 8,
+          isActive: true,
+          productIds: [],
+        };
+        const div = document.createElement("div");
+        div.innerHTML = dealRowTemplate(d, rowKey, context);
+        wrap.appendChild(div.firstElementChild);
+      });
+
+      document.getElementById("saveDeals").addEventListener("click", async () => {
+        try {
+          const next = collectDealsFromEditor(context);
+          await api("/api/cms/deals", { method: "PUT", body: JSON.stringify(next) });
+          await refreshDashboard();
+          closeModal();
+        } catch (e) {
+          alert(e.message || "Failed to save deals");
+        }
+      });
+    }
+
+    // FAQ + board
+    function faqQaRow(q, a, i) {
+      return `
+        <div class="faq-edit-row" style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:8px;">
+          <div class="field"><label>Question</label><input data-faq="${i}" data-k="question" value="${esc(q)}"></div>
+          <div class="field"><label>Answer</label><textarea data-faq="${i}" data-k="answer" rows="3">${esc(a)}</textarea></div>
+          <button type="button" class="btn-admin danger" data-action="remove-faq-qa">Remove</button>
+        </div>`;
+    }
+    function boardRow(m, i) {
+      return `
+        <div class="board-edit-row" style="border:1px solid #e7eaff;padding:10px;border-radius:10px;margin-bottom:8px;">
+          <div class="grid2">
+            <div class="field"><label>Name</label><input data-board="${i}" data-k="name" value="${esc(m.name)}"></div>
+            <div class="field"><label>Role</label><input data-board="${i}" data-k="role" value="${esc(m.role)}"></div>
+          </div>
+          <div class="field"><label>Bio</label><textarea data-board="${i}" data-k="bio" rows="3">${esc(m.bio)}</textarea></div>
+          <div class="field"><label>Image URL</label><input data-board="${i}" data-k="imageUrl" value="${esc(m.imageUrl || "")}"></div>
+          <div class="field"><label>Upload portrait</label><input type="file" accept="image/*" data-board-upload="${i}"></div>
+          <button type="button" class="btn-admin danger" data-action="remove-board-row">Remove</button>
+        </div>`;
+    }
+    async function openFaqCms() {
+      const { settings: s } = await api("/api/cms/faq");
+      const faqs = Array.isArray(s.faqs) ? s.faqs : [];
+      const board = Array.isArray(s.board) ? s.board : [];
+      openModal("FAQ & board", `
+        <div class="field"><label>Page title (use line breaks)</label><textarea id="fq_title" rows="2">${esc(s.pageTitle || "")}</textarea></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Label pill</label><input id="fq_label" value="${esc(s.label || "")}"></div>
+          <div class="field"><label>Contact email</label><input id="fq_email" type="email" value="${esc(s.contactEmail || "")}" /></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Intro (short)</label><input id="fq_intro" value="${esc(s.intro || "")}" /></div>
+        <div class="grid2" style="margin-top:10px;">
+          <div class="field"><label>Help box title</label><input id="fq_help_title" value="${esc(s.helpTitle || "")}" /></div>
+          <div class="field"><label>Board section title</label><input id="fq_board_title" value="${esc(s.boardTitle || "")}" /></div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Help box text</label><textarea id="fq_help_text" rows="3">${esc(s.helpText || "")}</textarea></div>
+        <div class="panel-header" style="margin-top:16px;">Questions</div>
+        <div id="faqItemsWrap">${faqs.map((x, i) => faqQaRow(x.question, x.answer, i)).join("")}</div>
+        <button type="button" class="btn-admin" id="btnAddFaq">+ Add question</button>
+        <div class="panel-header" style="margin-top:16px;">Board</div>
+        <div id="faqBoardWrap">${board.map((m, i) => boardRow(m, i)).join("")}</div>
+        <button type="button" class="btn-admin" id="btnAddBoard">+ Add director</button>
+        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveFaq">Save</button></div>`);
+
+      document.getElementById("btnAddFaq").addEventListener("click", () => {
+        const wrap = document.getElementById("faqItemsWrap");
+        const i = wrap.querySelectorAll(".faq-edit-row").length;
+        const div = document.createElement("div");
+        div.innerHTML = faqQaRow("New question", "Answer...", i);
+        wrap.appendChild(div.firstElementChild);
+      });
+      document.getElementById("btnAddBoard").addEventListener("click", () => {
+        const wrap = document.getElementById("faqBoardWrap");
+        const i = wrap.querySelectorAll(".board-edit-row").length;
+        const div = document.createElement("div");
+        div.innerHTML = boardRow({ name: "Name", role: "Role", bio: "Bio", imageUrl: "" }, i);
+        wrap.appendChild(div.firstElementChild);
+      });
+      document.getElementById("faqBoardWrap").addEventListener("change", async (e) => {
+        const t = e.target;
+        if (t.matches("[data-board-upload]")) {
+          const file = t.files?.[0];
+          if (!file) return;
+          const idx = t.getAttribute("data-board-upload");
+          const url = await uploadCmsImage(file);
+          const input = document.querySelector(`#faqBoardWrap [data-board="${idx}"][data-k="imageUrl"]`);
+          if (input) input.value = url;
+          t.value = "";
+        }
+      });
+      document.getElementById("saveFaq").addEventListener("click", async () => {
+        const fq = Array.from(document.querySelectorAll("#faqItemsWrap [data-faq]"));
+        const fmap = {};
+        fq.forEach((el) => {
+          const i = el.getAttribute("data-faq");
+          const k = el.getAttribute("data-k");
+          if (!fmap[i]) fmap[i] = {};
+          fmap[i][k] = el.value.trim();
+        });
+        const nextFaqs = Object.values(fmap).map((x) => ({ question: x.question, answer: x.answer })).filter((x) => x.question && x.answer);
+        const bq = Array.from(document.querySelectorAll("#faqBoardWrap [data-board]"));
+        const bmap = {};
+        bq.forEach((el) => {
+          const i = el.getAttribute("data-board");
+          const k = el.getAttribute("data-k");
+          if (!bmap[i]) bmap[i] = {};
+          bmap[i][k] = el.value.trim();
+        });
+        const nextBoard = Object.values(bmap).map((x) => ({
+          name: x.name,
+          role: x.role,
+          bio: x.bio,
+          imageUrl: x.imageUrl || null,
+        })).filter((x) => x.name && x.role && x.bio);
+        await api("/api/cms/faq", {
+          method: "PUT",
+          body: JSON.stringify({
+            pageTitle: document.getElementById("fq_title").value,
+            label: document.getElementById("fq_label").value,
+            intro: document.getElementById("fq_intro").value,
+            helpTitle: document.getElementById("fq_help_title").value,
+            helpText: document.getElementById("fq_help_text").value,
+            contactEmail: document.getElementById("fq_email").value,
+            boardTitle: document.getElementById("fq_board_title").value,
+            faqs: nextFaqs,
+            board: nextBoard,
+          }),
+        });
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+
+    // AI
+    async function openAiSettings() {
+      const { settings } = await api("/api/cms/ai");
+      openModal("AI Settings", `
+        <div class="grid2">
+          <div class="field"><label>Chat enabled</label><select id="a_chat"><option value="1" ${settings.chatEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.chatEnabled ? "selected" : ""}>No</option></select></div>
+          <div class="field"><label>Search enabled</label><select id="a_search"><option value="1" ${settings.searchEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.searchEnabled ? "selected" : ""}>No</option></select></div>
+        </div>
+        <div class="field" style="margin-top:12px;"><label>Bot name</label><input id="a_name" value="${esc(settings.botName || "")}" /></div>
+        <div class="field" style="margin-top:12px;">
+          <label>User persona</label>
+          <textarea id="a_persona" rows="3">${esc(settings.userPersona || "")}</textarea>
+          <div class="muted" style="font-size:12px;">Describe the kind of shopper the assistant should focus on, for example value-conscious gadget buyers or busy parents shopping essentials.</div>
+        </div>
+        <div class="field" style="margin-top:12px;"><label>System prompt</label><textarea id="a_prompt" rows="8">${esc(settings.systemPrompt || "")}</textarea></div>
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAi" type="button">Save</button></div>`);
+      document.getElementById("saveAi").addEventListener("click", async () => {
+        await api("/api/cms/ai", {
+          method: "PUT",
+          body: JSON.stringify({
+            chatEnabled: document.getElementById("a_chat").value === "1",
+            searchEnabled: document.getElementById("a_search").value === "1",
+            botName: document.getElementById("a_name").value,
+            userPersona: document.getElementById("a_persona").value,
+            systemPrompt: document.getElementById("a_prompt").value,
+          }),
+        });
+        await refreshDashboard();
+        closeModal();
+      });
+    }
+
+    async function bootstrapAdminSession(user) {
+      if (!user || user.role !== "admin") throw new Error("Admin access required");
+      dashboardState.user = user;
+      renderUser(user);
+      await refreshDashboard();
+    }
+
+    async function init() {
+      await loadAdminAppearance();
+      const me = await api("/api/auth/me");
+      await bootstrapAdminSession(me.user);
+    }
+
+    document.getElementById("modalClose").addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+    adminSearch.addEventListener("input", applyAdminSearch);
+    document.getElementById("btnDashboardRefresh").addEventListener("click", async (e) => {
+      e.preventDefault();
+      syncActiveNav("dashboard");
+      await refreshDashboard().catch((err) => alert(err.message || "Failed"));
+    });
+    document.getElementById("btnActivityRefresh").addEventListener("click", () => refreshDashboard().catch((err) => alert(err.message || "Failed")));
+    document.getElementById("btnRecentRefresh").addEventListener("click", () => refreshDashboard().catch((err) => alert(err.message || "Failed")));
+
+    document.body.addEventListener("click", async (e) => {
+      const node = e.target.closest("[data-action]");
+      if (!node) return;
+      e.preventDefault();
+      const action = node.getAttribute("data-action");
+      const id = node.getAttribute("data-id");
+
+      syncNavForAction(action);
+
+      if (action === "customize-admin") return openAdminAppearance();
+      if (action === "list-orders") return openOrdersTable();
+      if (action === "manage-delivery") return openDeliveryAutomation();
+      if (action === "list-users") return openUsersTable();
+      if (action === "list-products") return openProductsTable();
+      if (action === "add-product") return openAddProduct();
+      if (action === "edit-product") return openEditProduct(id);
+      if (action === "delete-product") return deleteProduct(id);
+      if (action === "save-order-status") return saveOrderStatus(id).catch((e) => alert(e.message || "Failed to update order"));
+      if (action === "dispatch-order-rider") return dispatchOrderRider(id).catch((e) => alert(e.message || "Failed to dispatch rider"));
+      if (action === "edit-home-images") return openHomeImagesCms();
+      if (action === "edit-shop") return openShopCms();
+      if (action === "edit-deals") return openDealsCms();
+      if (action === "edit-about") return openAboutCms();
+      if (action === "edit-faq") return openFaqCms();
+      if (action === "view-reports") return openReportsDashboard();
+      if (action === "edit-ai") return openAiSettings();
+      if (action === "remove-filter-row") {
+        node.closest(".admin-filter-row")?.remove();
+        const categoryValues = uniqueAdminValues(
+          Array.from(document.querySelectorAll("#filtersWrap select[data-k=\"value\"] option"))
+            .map((el) => el.value)
+        );
+        renderShopFilterPreview(categoryValues);
+        return;
+      }
+      if (action === "remove-home-ad-row") return node.closest(".home-ad-row")?.remove();
+      if (action === "remove-delivery-rider-row") return node.closest(".delivery-rider-row")?.remove();
+      if (action === "remove-deal-row") return node.closest(".deal-admin-row")?.remove();
+      if (action === "remove-faq-qa") return node.closest(".faq-edit-row")?.remove();
+      if (action === "remove-board-row") return node.closest(".board-edit-row")?.remove();
+    });
+
+    document.getElementById("btnHome").addEventListener("click", () => window.location.href = buildSiteUrl("/"));
+    document.getElementById("btnRefresh").addEventListener("click", () => refreshDashboard().catch((e) => alert(e.message || "Failed")));
+    document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = buildSiteUrl("/"); });
+
+    init().catch((e) => {
+      const message = e.message || "Failed to load admin";
+      if (isAdminAuthError(message)) {
+        renderAdminUnavailableState("Admin sign-in required", "Sign in with an admin account to connect the dashboard.");
+        showAdminLoginModal(message);
+        return;
+      }
+      backendLooksReachable().then((isReachable) => {
+        if (isReachable) {
+          renderAdminUnavailableState("Admin sign-in required", "The backend is reachable. Sign in with your admin account to connect the dashboard.");
+          showAdminLoginModal(message);
+          return;
+        }
+        const apiHint = typeof getSiteBaseUrl === "function" ? `${getSiteBaseUrl()}/api/health` : "http://127.0.0.1:3000/api/health";
+        renderAdminUnavailableState("Admin console unavailable", `We couldn't reach the admin API. Make sure the backend server is running and check ${apiHint}.`);
+      });
+    });
+  </script>
+</body>
+</html>
