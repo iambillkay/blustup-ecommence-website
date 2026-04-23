@@ -112,6 +112,11 @@ Optional:
 - `SMTP_FROM`
 - `REPORT_EMAIL_FROM`
 
+Important:
+
+- If `STORAGE_MODE=mongo` is set but `MONGODB_URI` is missing, Vercel will fail to initialize the API and you will see a `500` / `Internal Server Error`.
+- If `MONGODB_URI` is set correctly but Atlas network access does not allow Vercel, the API can still fail during startup. Allow the Vercel deployment IPs or use `0.0.0.0/0` for a simple initial setup.
+
 ### 6. Verify
 
 After deployment:

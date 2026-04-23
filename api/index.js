@@ -5,10 +5,11 @@ module.exports = async (req, res) => {
     const app = await prepareApp();
     return app(req, res);
   } catch (error) {
-    console.error("Failed to initialize Vercel app:", error?.message || error);
-    return res.status(500).json({
+    const status = Number.isInteger(error?.status) ? error.status : 500;
+    console.error("Failed to initialize Vercel app:", error?.stack || error?.message || error);
+    return res.status(status).json({
       ok: false,
-      error: "Failed to initialize application",
+      error: error?.publicMessage || "Failed to initialize application",
     });
   }
 };

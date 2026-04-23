@@ -10,6 +10,6 @@ async function start() {
 }
 
 start().catch((e) => {
-  console.error("Failed to start:", e?.message || e);
+  console.error("Failed to start:", e?.stack || e?.message || e);
   process.exit(1);
 });
