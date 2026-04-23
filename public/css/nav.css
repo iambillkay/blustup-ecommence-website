@@ -23,7 +23,7 @@ nav {
   display: flex; align-items: center; gap: 8px; cursor: pointer;
   z-index: 201; flex-shrink: 0;
 }
-.logo-icon img { width: 140px; height: auto; }
+.logo-icon img { width: 150px; height: auto; }
 
 /* ══════════════════════════════════════
    JUMIA-STYLE SEARCH BAR
