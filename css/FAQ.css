@@ -2,7 +2,7 @@
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:60px;
-padding:80px 10%;
+padding:36px 10% 80px;
 background: #f2f3f7;
 color: #000;
 }
@@ -186,7 +186,8 @@ font-size:14px;
 
 .faq-container{
 grid-template-columns:1fr;
-gap:40px;
+gap:32px;
+padding:28px 20px 64px;
 }
 
 .faq-left h1{

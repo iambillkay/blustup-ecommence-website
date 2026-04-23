@@ -103,17 +103,17 @@ Log In
 
   <p class="drawer-section-title">Browse</p>
   <ul class="nav-links drawer-nav-main">
-    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link">Home</a></li>
-    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()">Shop</a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()">Loyalty</a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()">Orders</a></li>
+    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link"><span class="drawer-link-icon">⌂</span><span>Home</span></a></li>
+    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()"><span class="drawer-link-icon">□</span><span>Shop</span></a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()"><span class="drawer-link-icon">★</span><span>Loyalty</span></a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()"><span class="drawer-link-icon">◴</span><span>Orders</span></a></li>
   </ul>
 
   <p class="drawer-section-title">Help & policy</p>
   <ul class="nav-links drawer-nav-secondary">
-    <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()">About</a></li>
-    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()">FAQ</a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()">Privacy</a></li>
+    <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()"><span class="drawer-link-icon">i</span><span>About</span></a></li>
+    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()"><span class="drawer-link-icon">?</span><span>FAQ</span></a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()"><span class="drawer-link-icon">◍</span><span>Privacy</span></a></li>
   </ul>
 
   <div class="drawer-quick-links" aria-label="Quick links">
@@ -123,13 +123,13 @@ Log In
   </div>
 
   <div class="drawer-actions">
-    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()">Ask AI</button>
-    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile">Log In</button>
+    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon">◎</span><span>Ask AI</span></button>
+    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile"><span class="drawer-link-icon">↪</span><span>Log In</span></button>
     <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
-      🛒 Cart
+      <span class="drawer-link-icon">◧</span><span>Cart</span>
       <span class="cart-count" id="cart-count-mobile">0</span>
     </button>
-    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()">Shop Now</button>
+    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon">→</span><span>Shop Now</span></button>
   </div>
 </div>
 </nav>

@@ -3,7 +3,7 @@
 ───────────────────────────────────── */
 
 nav {
-  position: fixed;
+  position: sticky;
   top: 0; left: 0; right: 0;
   z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -199,7 +199,6 @@ nav {
   transform: translateX(100%);
   transition: transform .3s cubic-bezier(0.4,0,0.2,1);
   overflow-y: auto;
-  display: flex;
   flex-direction: column;
 }
 .mobile-drawer.open { transform: translateX(0); }
@@ -208,19 +207,19 @@ nav {
   margin-bottom: 14px;
   padding: 12px 14px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #f4f6ff 0%, #eef2ff 100%);
-  border: 1px solid #dde4ff;
+  background: #f6f4ef;
+  border: 1px solid #e4ded1;
 }
 .drawer-kicker {
   margin: 0 0 4px;
   font-size: .7rem;
   text-transform: uppercase;
   letter-spacing: .08em;
-  color: #59638a;
+  color: #79725f;
 }
 .drawer-welcome strong {
   font-size: .95rem;
-  color: #111a3a;
+  color: #111;
 }
 
 .drawer-section-title {
@@ -229,7 +228,7 @@ nav {
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: #747f9d;
+  color: #6e6656;
 }
 
 /* Drawer header */
@@ -269,11 +268,13 @@ nav {
   border-bottom: none;
 }
 .mobile-drawer .nav-links a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 16px 20px;
   font-size: 1rem;
   font-weight: 500;
-  color: #333;
+  color: #222;
   transition: all 0.2s ease;
   position: relative;
 }
@@ -297,6 +298,20 @@ nav {
 .mobile-drawer .nav-links a.active-link::before {
   transform: scaleX(1);
 }
+.drawer-link-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid #e5dfd2;
+  background: #f7f5f0;
+  color: #1f1f1f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .76rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
 
 .drawer-quick-links {
   display: flex;
@@ -305,9 +320,9 @@ nav {
   margin: 2px 0 8px;
 }
 .drawer-quick-links button {
-  border: 1px solid #d9def2;
-  background: #f8f9ff;
-  color: #3a4464;
+  border: 1px solid #e2dbcd;
+  background: #f8f5ee;
+  color: #4f4739;
   border-radius: 999px;
   padding: 7px 11px;
   font-size: .76rem;
@@ -316,7 +331,7 @@ nav {
   font-family: 'DM Sans', sans-serif;
 }
 .drawer-quick-links button:hover {
-  background: #eef1ff;
+  background: #f0eadd;
 }
 
 /* Action buttons in drawer */
@@ -347,7 +362,7 @@ nav {
   padding: 14px;
   font-size: 1rem;
   border-radius: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000;
   color: #fff;
   border: none;
   font-weight: 600;
@@ -390,6 +405,24 @@ nav {
   padding: 12px; font-size: .9rem; border-radius: 8px;
 }
 
+.drawer-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.drawer-actions .drawer-link-icon {
+  width: 18px;
+  height: 18px;
+  font-size: .68rem;
+}
+.drawer-actions .nav-ai-btn .drawer-link-icon,
+.drawer-actions .btn-primary .drawer-link-icon {
+  border-color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
 /* ─────────────────────────────────────
   RESPONSIVE BREAKPOINTS
 ───────────────────────────────────── */
@@ -409,7 +442,7 @@ nav {
   .btn-primary { display: none; }
   .hamburger { display: flex; }
   .mobile-overlay { display: block; }
-  .mobile-drawer  { display: block; }
+  .mobile-drawer  { display: flex; }
   .search-category { display: none; } /* simplify on tablet */
 }
 

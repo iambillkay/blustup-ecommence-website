@@ -1,7 +1,7 @@
 .site-page {
   background: var(--light-bg);
   min-height: 100vh;
-  padding-top: 96px;
+  padding-top: 36px;
   padding-bottom: 72px;
 }
 
@@ -457,7 +457,7 @@
 
 @media (max-width: 640px) {
   .site-page {
-    padding-top: 92px;
+    padding-top: 24px;
   }
 
   .site-page-hero {
