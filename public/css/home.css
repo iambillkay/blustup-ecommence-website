@@ -525,12 +525,12 @@ position:relative;
 @media (max-width: 540px) {
   .features-grid, .features-grid-2 { grid-template-columns: 1fr; }
   .hero-banner {
-    width: 100%;
-    margin: 94px 0 12px 0;
-    aspect-ratio: 16 / 6.8;
-    min-height: 0;
-    max-height: 180px;
-    border-radius: 0;
+    width: calc(100% - 40px);
+    margin: 100px auto 20px auto;
+    aspect-ratio: 1612 / 300;
+    border-radius: 16px;
+    transform: scale(0.94);
+    transform-origin: top center;
   }
   .hero-btn {
     width: 32px;
@@ -572,9 +572,7 @@ position:relative;
 
 @media (max-width: 380px) {
   .hero-banner {
-    margin-top: 90px;
-    aspect-ratio: 16 / 7.2;
-    max-height: 150px;
+    transform: scale(0.9);
   }
   .hero-btn {
     width: 28px;
