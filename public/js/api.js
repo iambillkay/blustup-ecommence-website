@@ -5,21 +5,29 @@
     return String(value || "").trim().replace(/\/+$/, "");
   }
 
-  function readStoredApiBase() {
-    try {
-      return (
-        trimTrailingSlash(window.BLUSTUP_API_BASE)
-        || trimTrailingSlash(localStorage.getItem("blustup_api_base"))
-        || trimTrailingSlash(sessionStorage.getItem("blustup_api_base"))
-      );
-    } catch (_e) {
-      return trimTrailingSlash(window.BLUSTUP_API_BASE);
-    }
-  }
-
   function isLocalHost(hostname) {
     const value = String(hostname || "").trim().toLowerCase();
     return value === "localhost" || value === "127.0.0.1" || value === "0.0.0.0";
+  }
+
+  function shouldUseStoredApiBase() {
+    if (window.location.protocol === "file:") return true;
+    return isLocalHost(window.location.hostname);
+  }
+
+  function readStoredApiBase() {
+    const explicitBase = trimTrailingSlash(window.BLUSTUP_API_BASE);
+    if (explicitBase) return explicitBase;
+    if (!shouldUseStoredApiBase()) return "";
+
+    try {
+      return (
+        trimTrailingSlash(localStorage.getItem("blustup_api_base"))
+        || trimTrailingSlash(sessionStorage.getItem("blustup_api_base"))
+      );
+    } catch (_e) {
+      return "";
+    }
   }
 
   function getLocalBackendOrigin() {

@@ -17,7 +17,12 @@ async function fetchProductsPage(pageNumber) {
   });
   const res = await apiFetch(`/api/products?${params.toString()}`, { cache: "no-store" });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.error || "Failed to load products");
+  if (!res.ok) {
+    if (res.status === 401 || res.status === 403) {
+      throw new Error("Product API is protected or unavailable. If this is a Vercel preview URL, sign in to Vercel or use the public production domain.");
+    }
+    throw new Error(data?.error || `Failed to load products (${res.status})`);
+  }
   return data;
 }
 
