@@ -20,6 +20,9 @@
     "url": "https://github.com/iambillkay/blustup-ecommence-website/issues"
   },
   "homepage": "https://github.com/iambillkay/blustup-ecommence-website#readme",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
