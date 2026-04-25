@@ -34,7 +34,10 @@ body {
 
 /* ── PAGE SYSTEM ── */
 .page { display: none; }
-.page.active { display: block; }
+.page.active {
+  display: block;
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
@@ -53,6 +56,30 @@ body {
   from { stroke-dashoffset: 163; }
   to   { stroke-dashoffset: 11; }
 }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes countBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* ── UTILITY ANIMATIONS ── */
+.bump { animation: countBump 0.3s ease-out; }
+
+[class*="shop-skeleton"] {
+  background: linear-gradient(90deg, #f0f1fa 25%, #e8ebff 50%, #f0f1fa 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+.product-card {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+.product-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
 
 /* ── SHARED BUTTONS ── */
 .btn-login {

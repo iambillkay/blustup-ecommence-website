@@ -105,8 +105,14 @@ function updateCartCount() {
   const count = String(getTotalItems());
   const desktop = document.getElementById("cart-count");
   const mobile = document.getElementById("cart-count-mobile");
-  if (desktop) desktop.textContent = count;
-  if (mobile) mobile.textContent = count;
+  [desktop, mobile].forEach((el) => {
+    if (el) {
+      el.textContent = count;
+      el.classList.remove("bump");
+      void el.offsetWidth; // Trigger reflow to restart animation
+      el.classList.add("bump");
+    }
+  });
 }
 
 function syncDependentViews() {

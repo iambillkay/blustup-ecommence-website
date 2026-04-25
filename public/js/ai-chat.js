@@ -189,7 +189,7 @@ function addMessage(role, text) {
   const list = document.getElementById("aiChatMessages");
   if (!list) return;
   const row = document.createElement("div");
-  row.className = `ai-msg ai-msg-${role}`;
+  row.className = `ai-msg ai-msg-${role} animate-fade-in`;
   row.innerHTML = `<div class="ai-msg-bubble">${escapeChatHtml(text)}</div>`;
   list.appendChild(row);
   list.scrollTop = list.scrollHeight;
