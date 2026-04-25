@@ -38,17 +38,17 @@ function renderFaqPage(settings) {
 
   if (!settings || !listRoot) return;
 
-  if (labelEl) labelEl.textContent = settings.label || "FAQ";
-  if (titleEl) {
+  if (labelEl !== null) labelEl.textContent = settings.label || "FAQ";
+  if (titleEl !== null) {
     const t = settings.pageTitle || "Questions";
     titleEl.innerHTML = escapeHtml(t).replace(/\n/g, "<br>");
   }
-  if (introEl) {
+  if (introEl !== null) {
     introEl.textContent = settings.intro || "";
     introEl.style.display = settings.intro ? "block" : "none";
   }
-  if (helpTitleEl) helpTitleEl.textContent = settings.helpTitle || "";
-  if (helpTextEl) helpTextEl.textContent = settings.helpText || "";
+  if (helpTitleEl !== null) helpTitleEl.textContent = settings.helpTitle || "";
+  if (helpTextEl !== null) helpTextEl.textContent = settings.helpText || "";
 
   if (helpBtn) {
     const email = (settings.contactEmail || "").trim();
@@ -76,8 +76,8 @@ function renderFaqPage(settings) {
     .join("");
   wireFaqAccordion(listRoot);
 
-  if (boardTitle) boardTitle.textContent = settings.boardTitle || "Board of directors";
-  if (boardGrid) {
+  if (boardTitle !== null) boardTitle.textContent = settings.boardTitle || "Board of directors";
+  if (boardGrid !== null) {
     const board = Array.isArray(settings.board) ? settings.board : [];
     boardGrid.innerHTML = board
       .map((m) => {

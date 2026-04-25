@@ -29,7 +29,9 @@ window.navigateToCmsTarget = navigateToCmsTarget;
 
 function bindAboutCta(button, label, target) {
   if (!button) return;
-  button.textContent = label || button.textContent;
+  if (label) {
+    button.textContent = label;
+  }
   button.onclick = () => navigateToCmsTarget(target);
 }
 
@@ -81,9 +83,9 @@ async function loadAboutContent() {
     const primaryCta = document.getElementById("about-primary-cta");
     const secondaryCta = document.getElementById("about-secondary-cta");
 
-    if (badge) badge.textContent = settings.badge || badge.textContent;
-    if (title) title.textContent = settings.title || title.textContent;
-    if (intro) intro.textContent = settings.intro || intro.textContent;
+    if (badge !== null) badge.textContent = settings.badge || badge.textContent;
+    if (title !== null) title.textContent = settings.title || title.textContent;
+    if (intro !== null) intro.textContent = settings.intro || intro.textContent;
     bindAboutCta(primaryCta, settings.primaryCtaLabel || "Explore the shop", settings.primaryCtaTarget || "shop");
     bindAboutCta(secondaryCta, settings.secondaryCtaLabel || "Ask Blustup AI", settings.secondaryCtaTarget || "ai");
     renderAboutStats(settings.stats || []);

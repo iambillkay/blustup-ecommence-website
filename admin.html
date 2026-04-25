@@ -518,6 +518,7 @@
     };
     const dashboardState = { user: null, actions: [], products: [], orders: [], users: [], analytics: null, adminAppearance: { ...DEFAULT_ADMIN_APPEARANCE } };
     const adminOrderFilters = { status: "", q: "" };
+    const adminCustomerFilters = { q: "", sort: "recent" };
     const ADMIN_ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
 
     function normalizeAdminHex(value, fallback) {
@@ -680,7 +681,7 @@
     }
     function renderOrderStatusPill(status) {
       const tone = getOrderStatusTone(status);
-      return `<span style="display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:${tone.background};color:${tone.color};font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">${esc(humanizeOrderStatus(status))}</span>`;
+      return `<span class="status-pill" style="--status-pill-bg:${tone.background};--status-pill-color:${tone.color};">${esc(humanizeOrderStatus(status))}</span>`;
     }
     function getAdminOrderCounts(orders) {
       return (Array.isArray(orders) ? orders : []).reduce((acc, order) => {
@@ -689,6 +690,79 @@
         acc.all += 1;
         return acc;
       }, { all: 0, placed: 0, processing: 0, shipped: 0, delivered: 0, cancelled: 0 });
+    }
+    function getVisibleAdminContentTarget(pageId, contentId) {
+      const page = document.getElementById(pageId);
+      const content = document.getElementById(contentId);
+      if (!page || !content) return null;
+      return !page.hidden && page.classList.contains("active") ? content : null;
+    }
+    function getOrdersRenderTarget(preferredTarget) {
+      return preferredTarget || getVisibleAdminContentTarget("ordersPage", "ordersContent");
+    }
+    function getCustomersRenderTarget(preferredTarget) {
+      return preferredTarget || getVisibleAdminContentTarget("customersPage", "customersContent");
+    }
+    function getOrdersInteractionScope() {
+      if (modalBackdrop.classList.contains("open")) return modalBody;
+      return getOrdersRenderTarget() || document;
+    }
+    function getCustomerInitials(user) {
+      return getInitials(user?.name || user?.email || "Customer");
+    }
+    function getCustomerLocationLabel(user) {
+      const city = String(user?.billingProfile?.city || "").trim();
+      const country = String(user?.billingProfile?.country || "").trim();
+      if (city && country) return `${city}, ${country}`;
+      if (city) return city;
+      if (country) return country;
+      return "Location not saved";
+    }
+    function getCustomerProfileState(user) {
+      const missing = [];
+      if (!String(user?.phone || "").trim()) missing.push("phone");
+      if (!String(user?.billingProfile?.city || "").trim()) missing.push("city");
+      if (!String(user?.billingProfile?.country || "").trim()) missing.push("country");
+      return missing.length ? `Missing ${missing.join(", ")}` : "Profile complete";
+    }
+    function getCustomerActivityTime(user) {
+      const date = new Date(user?.latestOrderAt || user?.updatedAt || user?.createdAt || 0);
+      return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+    }
+    function buildAdminCustomerSearchText(user) {
+      return [
+        user?.name,
+        user?.email,
+        user?.phone,
+        user?.billingProfile?.city,
+        user?.billingProfile?.country,
+        user?.latestOrderReference,
+        user?.latestOrderStatus,
+        user?.loyalty?.tierName,
+        user?.role,
+      ].filter(Boolean).join(" ").toLowerCase();
+    }
+    function sortAdminUsers(users, sortKey) {
+      const rows = [...(Array.isArray(users) ? users : [])];
+      const byRecent = (a, b) => getCustomerActivityTime(b) - getCustomerActivityTime(a);
+      switch (String(sortKey || "recent")) {
+        case "spent":
+          rows.sort((a, b) => Number(b.totalSpent || 0) - Number(a.totalSpent || 0) || byRecent(a, b));
+          break;
+        case "orders":
+          rows.sort((a, b) => Number(b.orderCount || 0) - Number(a.orderCount || 0) || byRecent(a, b));
+          break;
+        case "loyalty":
+          rows.sort((a, b) => Number(b.loyaltyPoints || 0) - Number(a.loyaltyPoints || 0) || byRecent(a, b));
+          break;
+        case "name":
+          rows.sort((a, b) => String(a?.name || a?.email || "").localeCompare(String(b?.name || b?.email || ""), undefined, { sensitivity: "base" }) || byRecent(a, b));
+          break;
+        default:
+          rows.sort(byRecent);
+          break;
+      }
+      return rows;
     }
     function buildAdminOrdersQuery() {
       const query = new URLSearchParams();
@@ -1156,128 +1230,202 @@
       const { orders } = await api(`/api/admin/orders${buildAdminOrdersQuery()}`);
       const orderList = Array.isArray(orders) ? orders : [];
       const counts = getAdminOrderCounts(Array.isArray(dashboardState.orders) && dashboardState.orders.length ? dashboardState.orders : orderList);
+      const visibleRevenue = orderList.reduce((sum, order) => sum + Number(order?.total || 0), 0);
+      const activeVisibleOrders = orderList.filter((order) => !["delivered", "cancelled"].includes(String(order?.status || "").trim().toLowerCase()));
+      const awaitingDispatchCount = orderList.filter((order) => {
+        const status = String(order?.status || "").trim().toLowerCase();
+        const dispatchStatus = String(order?.deliveryAssignment?.status || "").trim().toLowerCase();
+        return status === "shipped" && !dispatchStatus;
+      }).length;
+      const guestCheckoutCount = orderList.filter((order) => !String(order?.userId || "").trim()).length;
       const statusButtons = [
         { key: "", label: "All" },
         ...ADMIN_ORDER_STATUSES.map((status) => ({ key: status, label: humanizeOrderStatus(status) })),
       ];
 
       const html = `
-        <div class="muted" style="margin-bottom:12px;">Update order progress here so customers and admins see the latest delivery status immediately.</div>
-        <div style="display:grid;gap:14px;">
-          <div style="display:flex;justify-content:flex-end;">
-            <button class="btn-admin" type="button" data-action="manage-delivery">Delivery automation</button>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;">
-            ${statusButtons.map((button) => {
-              const tone = button.key ? getOrderStatusTone(button.key) : { background: "#f3f6fc", color: "#172033" };
-              const count = button.key ? counts[button.key] || 0 : counts.all || 0;
-              const isActive = adminOrderFilters.status === button.key;
-              return `
-                <button
-                  type="button"
-                  data-order-quick-filter="${esc(button.key)}"
-                  style="text-align:left;padding:12px 14px;border-radius:16px;border:1px solid ${isActive ? tone.color : "#dfe5f2"};background:${isActive ? tone.background : "#fff"};cursor:pointer;"
-                >
-                  <div style="font-size:12px;color:${tone.color};font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">${esc(button.label)}</div>
-                  <div style="margin-top:6px;font-size:22px;font-weight:800;color:#172033;">${esc(String(count))}</div>
-                </button>
-              `;
-            }).join("")}
-          </div>
-          <form id="adminOrdersFilterForm" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-            <input id="adminOrderSearchInput" value="${esc(adminOrderFilters.q)}" placeholder="Search reference, customer, or email" style="flex:1;min-width:220px;">
-            <select id="adminOrderStatusFilter" style="min-width:180px;">
-              <option value="">All statuses</option>
-              ${orderStatusOptions(adminOrderFilters.status)}
-            </select>
-            <button class="btn-admin primary" type="submit">Apply</button>
-            <button class="btn-admin" id="adminOrderResetBtn" type="button">Reset</button>
-          </form>
-          <div class="muted">${esc(orderList.length ? `Showing ${orderList.length} order(s).` : "No orders match the current filter.")}</div>
-        </div>
-        <table class="admin-table" style="margin-top:14px;">
-          <thead><tr><th>Reference</th><th>Customer</th><th>Tracking</th><th>Commercial</th><th>Actions</th></tr></thead>
-          <tbody>${orderList.length ? orderList.map((order) => {
-            const latestEntry = getLatestOrderHistoryEntry(order);
-            const totalItems = (order.items || []).reduce((sum, item) => sum + Number(item.qty || 0), 0);
-            const dispatch = order.deliveryAssignment || null;
-            return `
-            <tr>
-              <td>
-                <strong>${esc(order.reference)}</strong>
-                <div class="muted">${esc(`${totalItems} item(s)`)}${order.promoCode ? ` · ${esc(order.promoCode)}` : ""}</div>
-              </td>
-              <td>
-                ${esc(order.customerName || "Guest order")}
-                <div class="muted">${esc(order.customerEmail || "")}</div>
-                <div class="muted">${esc(order.customerPhone || "No phone")}</div>
-              </td>
-              <td>
-                ${renderOrderStatusPill(order.status)}
-                <div class="muted" style="margin-top:8px;">${esc(latestEntry?.note || "No status note yet.")}</div>
-                <div class="muted">${dispatch ? esc(`Dispatch: ${humanizeAdminValue(dispatch.status || "pending")}`) : "Dispatch: not started"}</div>
-                <div class="muted">${dispatch ? esc(dispatch.riderName || dispatch.riderEmail || dispatch.riderPhone || "Rider pending") : "Rider pending"}</div>
-                <div class="muted">${esc(formatDateTime(order.updatedAt || order.createdAt))}</div>
-              </td>
-              <td>
-                <strong>${esc(formatCurrency(order.total || 0))}</strong>
-                <div class="muted">${esc(humanizePaymentMethod(order.paymentMethod))}</div>
-                <div class="muted">${Number(order.loyaltyEarned || 0) > 0 ? esc(`+${Math.floor(Number(order.loyaltyEarned || 0))} pts earned`) : "Guest / no points earned"}</div>
-              </td>
-              <td>
-                <div style="display:grid;gap:8px;min-width:240px;">
-                  <select data-order-status="${esc(order.id)}">${orderStatusOptions(order.status)}</select>
-                  <input data-order-note="${esc(order.id)}" placeholder="${esc(latestEntry?.note || "Optional status note")}" />
-                  <button class="btn-admin primary" type="button" data-action="save-order-status" data-id="${esc(order.id)}">Save status</button>
-                  ${String(order.status || "").trim().toLowerCase() === "shipped" ? `<button class="btn-admin" type="button" data-action="dispatch-order-rider" data-id="${esc(order.id)}">Dispatch rider</button>` : ""}
-                </div>
-              </td>
-            </tr>`;
-          }).join("") : `<tr><td colspan="5" class="muted">No orders have been placed yet.</td></tr>`}</tbody>
-        </table>`;
+        <div class="ops-shell">
+          <section class="ops-panel ops-panel-highlight">
+            <div class="ops-panel-head">
+              <div>
+                <p class="eyebrow">Fulfillment overview</p>
+                <h2>Orders ready for action</h2>
+              </div>
+              <button class="btn-admin" type="button" data-action="manage-delivery">Delivery automation</button>
+            </div>
+            <p class="ops-panel-copy">Update order progress here so customers and admins see the latest delivery status immediately.</p>
+            <div class="ops-inline-metrics">
+              <div class="ops-inline-metric"><span>Visible revenue</span><strong>${esc(formatCurrency(visibleRevenue))}</strong></div>
+              <div class="ops-inline-metric"><span>Open orders</span><strong>${esc(String(activeVisibleOrders.length))}</strong></div>
+              <div class="ops-inline-metric"><span>Awaiting rider</span><strong>${esc(String(awaitingDispatchCount))}</strong></div>
+              <div class="ops-inline-metric"><span>Guest checkout</span><strong>${esc(String(guestCheckoutCount))}</strong></div>
+            </div>
+            <div class="ops-stat-grid">
+              ${statusButtons.map((button) => {
+                const tone = button.key ? getOrderStatusTone(button.key) : { background: "#f4f7ff", color: "#172033" };
+                const count = button.key ? counts[button.key] || 0 : counts.all || 0;
+                const isActive = adminOrderFilters.status === button.key;
+                return `
+                  <button
+                    type="button"
+                    class="ops-stat-card${isActive ? " is-active" : ""}"
+                    data-order-quick-filter="${esc(button.key)}"
+                    aria-pressed="${isActive ? "true" : "false"}"
+                    style="--ops-tone:${tone.color};--ops-surface:${tone.background};"
+                  >
+                    <span class="ops-stat-label">${esc(button.label)}</span>
+                    <strong class="ops-stat-value">${esc(String(count))}</strong>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </section>
 
-      if (targetElement) {
-        targetElement.innerHTML = html;
+          <section class="ops-panel">
+            <div class="section-heading compact">
+              <div><p class="eyebrow">Filter queue</p><h2>Find the right order fast</h2></div>
+              <div class="muted">${esc(orderList.length ? `Showing ${orderList.length} order(s).` : "No orders match the current filter.")}</div>
+            </div>
+            <form id="adminOrdersFilterForm" class="ops-toolbar">
+              <div class="field ops-toolbar-field ops-toolbar-search">
+                <label for="adminOrderSearchInput">Search orders</label>
+                <input id="adminOrderSearchInput" value="${esc(adminOrderFilters.q)}" placeholder="Search reference, customer, or email">
+              </div>
+              <div class="field ops-toolbar-field">
+                <label for="adminOrderStatusFilter">Status</label>
+                <select id="adminOrderStatusFilter">
+                  <option value="">All statuses</option>
+                  ${orderStatusOptions(adminOrderFilters.status)}
+                </select>
+              </div>
+              <div class="ops-toolbar-buttons">
+                <button class="btn-admin primary" type="submit">Apply filters</button>
+                <button class="btn-admin" id="adminOrderResetBtn" type="button">Reset</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="ops-panel">
+            <div class="section-heading compact">
+              <div><p class="eyebrow">Live queue</p><h2>Orders in motion</h2></div>
+              <div class="muted">${esc(orderList.length ? `${activeVisibleOrders.length} active and ${Math.max(orderList.length - activeVisibleOrders.length, 0)} closed.` : "New orders will appear here after checkout goes live.")}</div>
+            </div>
+            <div class="order-card-list">
+              ${orderList.length ? orderList.map((order) => {
+                const latestEntry = getLatestOrderHistoryEntry(order);
+                const totalItems = (order.items || []).reduce((sum, item) => sum + Number(item.qty || 0), 0);
+                const dispatch = order.deliveryAssignment || null;
+                const dispatchStatus = dispatch ? humanizeAdminValue(dispatch.status || "pending") : "Not started";
+                const dispatchContact = dispatch ? (dispatch.riderName || dispatch.riderEmail || dispatch.riderPhone || "Rider pending") : "Rider pending";
+                const loyaltyCopy = Number(order.loyaltyEarned || 0) > 0 ? `Earned ${Math.floor(Number(order.loyaltyEarned || 0))} pts` : "No loyalty points earned";
+                return `
+                  <article class="order-card">
+                    <div class="order-card-top">
+                      <div class="order-card-heading">
+                        <div class="order-ref">${esc(order.reference || "Order")}</div>
+                        <div class="muted">Updated ${esc(formatDateTime(order.updatedAt || order.createdAt))}</div>
+                      </div>
+                      ${renderOrderStatusPill(order.status)}
+                    </div>
+                    <div class="order-chip-row">
+                      <span class="soft-chip">${esc(`${totalItems} item${totalItems === 1 ? "" : "s"}`)}</span>
+                      <span class="soft-chip">${esc(humanizePaymentMethod(order.paymentMethod))}</span>
+                      ${order.promoCode ? `<span class="soft-chip soft-chip-accent">Promo ${esc(order.promoCode)}</span>` : ""}
+                      <span class="soft-chip${order.userId ? "" : " soft-chip-warm"}">${esc(order.userId ? "Account order" : "Guest checkout")}</span>
+                    </div>
+                    <div class="order-card-summary">
+                      <div class="info-tile">
+                        <span class="info-label">Customer</span>
+                        <div class="info-primary">${esc(order.customerName || "Guest order")}</div>
+                        <div class="info-secondary">${esc(order.customerEmail || "No email saved")}</div>
+                        <div class="info-secondary">${esc(order.customerPhone || "No phone number")}</div>
+                      </div>
+                      <div class="info-tile">
+                        <span class="info-label">Commercial</span>
+                        <div class="info-primary">${esc(formatCurrency(order.total || 0))}</div>
+                        <div class="info-secondary">${esc(`${humanizePaymentMethod(order.paymentMethod)} / ${loyaltyCopy}`)}</div>
+                        <div class="info-secondary">${esc(order.promoCode ? `Promo applied: ${order.promoCode}` : "No promo applied")}</div>
+                      </div>
+                      <div class="info-tile">
+                        <span class="info-label">Dispatch</span>
+                        <div class="info-primary">${esc(dispatchStatus)}</div>
+                        <div class="info-secondary">${esc(dispatchContact)}</div>
+                        <div class="info-secondary">${esc(latestEntry?.note || "No status note yet.")}</div>
+                      </div>
+                    </div>
+                    <div class="order-editor">
+                      <div class="field">
+                        <label>Status</label>
+                        <select data-order-status="${esc(order.id)}">${orderStatusOptions(order.status)}</select>
+                      </div>
+                      <div class="field">
+                        <label>Update note</label>
+                        <input data-order-note="${esc(order.id)}" placeholder="${esc(latestEntry?.note || "Optional status note")}" />
+                      </div>
+                      <div class="order-editor-actions">
+                        <button class="btn-admin primary" type="button" data-action="save-order-status" data-id="${esc(order.id)}">Save status</button>
+                        ${String(order.status || "").trim().toLowerCase() === "shipped" ? `<button class="btn-admin" type="button" data-action="dispatch-order-rider" data-id="${esc(order.id)}">Dispatch rider</button>` : ""}
+                      </div>
+                    </div>
+                  </article>
+                `;
+              }).join("") : `
+                <div class="empty-state-card">
+                  <h3>No orders have been placed yet</h3>
+                  <p>New customer checkouts will appear here as soon as your storefront starts receiving orders.</p>
+                </div>
+              `}
+            </div>
+          </section>
+        </div>`;
+
+      let renderTarget = getOrdersRenderTarget(targetElement);
+      if (renderTarget) {
+        renderTarget.innerHTML = html;
       } else {
         openModal("Orders", html);
+        renderTarget = modalBody;
       }
 
-      document.getElementById("adminOrdersFilterForm")?.addEventListener("submit", (event) => {
+      const searchInput = renderTarget.querySelector("#adminOrderSearchInput");
+      const statusFilter = renderTarget.querySelector("#adminOrderStatusFilter");
+      renderTarget.querySelector("#adminOrdersFilterForm")?.addEventListener("submit", (event) => {
         event.preventDefault();
         openOrdersTable({
-          status: document.getElementById("adminOrderStatusFilter")?.value || "",
-          q: document.getElementById("adminOrderSearchInput")?.value || "",
+          status: statusFilter?.value || "",
+          q: searchInput?.value || "",
         }, targetElement).catch((error) => alert(error.message || "Failed to filter orders"));
       });
-      document.getElementById("adminOrderStatusFilter")?.addEventListener("change", (event) => {
+      statusFilter?.addEventListener("change", (event) => {
         openOrdersTable({
           status: event.target?.value || "",
-          q: document.getElementById("adminOrderSearchInput")?.value || "",
+          q: searchInput?.value || "",
         }, targetElement).catch((error) => alert(error.message || "Failed to filter orders"));
       });
-      document.getElementById("adminOrderResetBtn")?.addEventListener("click", () => {
+      renderTarget.querySelector("#adminOrderResetBtn")?.addEventListener("click", () => {
         openOrdersTable({ status: "", q: "" }, targetElement).catch((error) => alert(error.message || "Failed to reset filters"));
       });
-      document.querySelectorAll("[data-order-quick-filter]").forEach((button) => {
+      renderTarget.querySelectorAll("[data-order-quick-filter]").forEach((button) => {
         button.addEventListener("click", () => {
           openOrdersTable({
             status: button.getAttribute("data-order-quick-filter") || "",
-            q: document.getElementById("adminOrderSearchInput")?.value || "",
+            q: searchInput?.value || "",
           }, targetElement).catch((error) => alert(error.message || "Failed to filter orders"));
         });
       });
     }
 
     async function saveOrderStatus(id) {
-      const status = document.querySelector(`[data-order-status="${String(id)}"]`)?.value;
-      const note = document.querySelector(`[data-order-note="${String(id)}"]`)?.value || "";
+      const scope = getOrdersInteractionScope();
+      const status = scope.querySelector(`[data-order-status="${String(id)}"]`)?.value;
+      const note = scope.querySelector(`[data-order-note="${String(id)}"]`)?.value || "";
       if (!status) return alert("Choose a status first.");
       const result = await api(`/api/admin/orders/${id}/status`, {
         method: "PATCH",
         body: JSON.stringify({ status, note }),
       });
       await refreshDashboard();
-      await openOrdersTable();
+      await openOrdersTable({}, getOrdersRenderTarget());
       if (result?.dispatch?.note) {
         alert(result.dispatch.note);
       }
@@ -1288,7 +1436,7 @@
         method: "POST",
       });
       await refreshDashboard();
-      await openOrdersTable();
+      await openOrdersTable({}, getOrdersRenderTarget());
       if (result?.dispatch?.note) {
         alert(result.dispatch.note);
       }
@@ -1448,33 +1596,173 @@
       }
     }
 
-    async function openUsersTable(targetElement) {
+    async function openUsersTable(nextFilters = {}, targetElement) {
+      if (nextFilters.q !== undefined) adminCustomerFilters.q = String(nextFilters.q || "").trim();
+      if (nextFilters.sort !== undefined) adminCustomerFilters.sort = String(nextFilters.sort || "recent").trim() || "recent";
+
       const { users } = await api("/api/admin/users");
       const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
-      const html = `
-        <div class="muted" style="margin-bottom:12px;">Saved billing profiles help checkout move faster because returning shoppers do not need to re-enter the same details.</div>
-        <table class="admin-table">
-          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Loyalty</th><th>Orders</th><th>Total spent</th><th>Latest order</th></tr></thead>
-          <tbody>${userList.length ? userList.map((user) => `
-            <tr>
-              <td>
-                ${esc(user.name || "Customer")}
-                <div class="muted">${esc(user.billingProfile?.city ? `${user.billingProfile.city}, ${user.billingProfile.country || ""}` : "No saved billing city yet")}</div>
-              </td>
-              <td>${esc(user.email || "")}</td>
-              <td>${esc(user.phone || "Not provided")}</td>
-              <td>${esc(String(user.loyaltyPoints || 0))} pts<div class="muted">${esc(user.loyalty?.tierName || "Starter")}</div></td>
-              <td>${esc(String(user.orderCount || 0))}</td>
-              <td>${esc(formatCurrency(user.totalSpent || 0))}</td>
-              <td>${esc(user.latestOrderReference || "No orders yet")}<div class="muted">${esc(user.latestOrderStatus ? humanizeOrderStatus(user.latestOrderStatus) : "")}</div></td>
-            </tr>`).join("") : `<tr><td colspan="7" class="muted">No customer accounts have been created yet.</td></tr>`}</tbody>
-        </table>`;
+      const searchNeedle = adminCustomerFilters.q.toLowerCase();
+      const filteredUsers = sortAdminUsers(
+        userList.filter((user) => !searchNeedle || buildAdminCustomerSearchText(user).includes(searchNeedle)),
+        adminCustomerFilters.sort
+      );
+      const repeatBuyers = userList.filter((user) => Number(user.orderCount || 0) > 1).length;
+      const loyaltyMembers = userList.filter((user) => Number(user.loyaltyPoints || 0) > 0).length;
+      const guestCustomers = userList.filter((user) => String(user.role || "").trim().toLowerCase() === "guest").length;
+      const incompleteProfiles = userList.filter((user) => getCustomerProfileState(user) !== "Profile complete").length;
+      const trackedRevenue = userList.reduce((sum, user) => sum + Number(user.totalSpent || 0), 0);
 
-      if (targetElement) {
-        targetElement.innerHTML = html;
+      const html = `
+        <div class="ops-shell">
+          <section class="ops-panel ops-panel-highlight">
+            <div class="ops-panel-head">
+              <div>
+                <p class="eyebrow">Customer desk</p>
+                <h2>Keep your best shoppers close</h2>
+              </div>
+            </div>
+            <p class="ops-panel-copy">Saved billing profiles help checkout move faster because returning shoppers do not need to re-enter the same details.</p>
+            <div class="ops-inline-metrics">
+              <div class="ops-inline-metric"><span>Tracked revenue</span><strong>${esc(formatCurrency(trackedRevenue))}</strong></div>
+              <div class="ops-inline-metric"><span>Repeat buyers</span><strong>${esc(String(repeatBuyers))}</strong></div>
+              <div class="ops-inline-metric"><span>Loyalty members</span><strong>${esc(String(loyaltyMembers))}</strong></div>
+              <div class="ops-inline-metric"><span>Profile gaps</span><strong>${esc(String(incompleteProfiles))}</strong></div>
+            </div>
+            <div class="ops-summary-grid">
+              <div class="ops-summary-card">
+                <span class="ops-summary-label">Shoppers tracked</span>
+                <strong class="ops-summary-value">${esc(String(userList.length))}</strong>
+                <div class="muted">Registered customers and guest checkouts in one place.</div>
+              </div>
+              <div class="ops-summary-card">
+                <span class="ops-summary-label">Repeat buyers</span>
+                <strong class="ops-summary-value">${esc(String(repeatBuyers))}</strong>
+                <div class="muted">Customers with more than one order already on file.</div>
+              </div>
+              <div class="ops-summary-card">
+                <span class="ops-summary-label">Guest checkouts</span>
+                <strong class="ops-summary-value">${esc(String(guestCustomers))}</strong>
+                <div class="muted">Shoppers who ordered without a full account profile.</div>
+              </div>
+              <div class="ops-summary-card">
+                <span class="ops-summary-label">Loyalty ready</span>
+                <strong class="ops-summary-value">${esc(String(loyaltyMembers))}</strong>
+                <div class="muted">Customers already collecting points and moving up tiers.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="ops-panel">
+            <div class="section-heading compact">
+              <div><p class="eyebrow">Filter customers</p><h2>Review the right shoppers faster</h2></div>
+              <div class="muted">${esc(filteredUsers.length ? `Showing ${filteredUsers.length} of ${userList.length} shopper(s).` : "No customers match the current filter.")}</div>
+            </div>
+            <form id="adminCustomersFilterForm" class="ops-toolbar">
+              <div class="field ops-toolbar-field ops-toolbar-search">
+                <label for="adminCustomerSearchInput">Search customers</label>
+                <input id="adminCustomerSearchInput" value="${esc(adminCustomerFilters.q)}" placeholder="Search name, email, phone, city, or latest order">
+              </div>
+              <div class="field ops-toolbar-field">
+                <label for="adminCustomerSortSelect">Sort by</label>
+                <select id="adminCustomerSortSelect">
+                  <option value="recent" ${adminCustomerFilters.sort === "recent" ? "selected" : ""}>Recent activity</option>
+                  <option value="spent" ${adminCustomerFilters.sort === "spent" ? "selected" : ""}>Highest spend</option>
+                  <option value="orders" ${adminCustomerFilters.sort === "orders" ? "selected" : ""}>Most orders</option>
+                  <option value="loyalty" ${adminCustomerFilters.sort === "loyalty" ? "selected" : ""}>Most loyalty points</option>
+                  <option value="name" ${adminCustomerFilters.sort === "name" ? "selected" : ""}>Name A-Z</option>
+                </select>
+              </div>
+              <div class="ops-toolbar-buttons">
+                <button class="btn-admin primary" type="submit">Apply filters</button>
+                <button class="btn-admin" id="adminCustomerResetBtn" type="button">Reset</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="ops-panel">
+            <div class="section-heading compact">
+              <div><p class="eyebrow">Relationship view</p><h2>Customer profiles</h2></div>
+              <div class="muted">${esc(filteredUsers.length ? "Spot top spenders, repeat shoppers, and profile gaps at a glance." : "Customer cards will appear here once shoppers place orders or create accounts.")}</div>
+            </div>
+            <div class="customer-card-grid">
+              ${filteredUsers.length ? filteredUsers.map((user) => `
+                <article class="customer-card">
+                  <div class="customer-card-head">
+                    <div class="customer-card-identity">
+                      <div class="customer-avatar">${esc(getCustomerInitials(user))}</div>
+                      <div class="customer-ident">
+                        <div class="customer-name">${esc(user.name || "Customer")}</div>
+                        <div class="customer-email">${esc(user.email || "No email saved")}</div>
+                        <div class="customer-chip-row">
+                          <span class="soft-chip">${esc(getCustomerLocationLabel(user))}</span>
+                          <span class="soft-chip${String(user.role || "").trim().toLowerCase() === "guest" ? " soft-chip-warm" : " soft-chip-cool"}">${esc(String(user.role || "").trim().toLowerCase() === "guest" ? "Guest checkout" : (user.loyalty?.tierName || "Starter tier"))}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="customer-value">
+                      <span class="customer-value-label">Total spent</span>
+                      <strong>${esc(formatCurrency(user.totalSpent || 0))}</strong>
+                    </div>
+                  </div>
+                  <div class="customer-facts">
+                    <div class="fact-tile">
+                      <div class="fact-label">Orders</div>
+                      <div class="fact-value">${esc(String(user.orderCount || 0))}</div>
+                      <div class="fact-sub">${esc(user.latestOrderReference || "No orders yet")}</div>
+                    </div>
+                    <div class="fact-tile">
+                      <div class="fact-label">Loyalty</div>
+                      <div class="fact-value">${esc(String(user.loyaltyPoints || 0))} pts</div>
+                      <div class="fact-sub">${esc(user.loyalty?.tierName || "Starter tier")}</div>
+                    </div>
+                    <div class="fact-tile">
+                      <div class="fact-label">Latest status</div>
+                      <div class="fact-value">${esc(user.latestOrderStatus ? humanizeOrderStatus(user.latestOrderStatus) : "Prospect")}</div>
+                      <div class="fact-sub">${esc(formatDateTime(user.latestOrderAt || user.updatedAt || user.createdAt))}</div>
+                    </div>
+                  </div>
+                  <div class="customer-notes">
+                    <span>${esc(user.phone || "Phone not provided")}</span>
+                    <span>${esc(getCustomerProfileState(user))}</span>
+                  </div>
+                </article>
+              `).join("") : `
+                <div class="empty-state-card">
+                  <h3>No customer accounts yet</h3>
+                  <p>Customer records will show up here after shoppers create accounts or complete their first orders.</p>
+                </div>
+              `}
+            </div>
+          </section>
+        </div>`;
+
+      let renderTarget = getCustomersRenderTarget(targetElement);
+      if (renderTarget) {
+        renderTarget.innerHTML = html;
       } else {
         openModal("Customers", html);
+        renderTarget = modalBody;
       }
+
+      const searchInput = renderTarget.querySelector("#adminCustomerSearchInput");
+      const sortSelect = renderTarget.querySelector("#adminCustomerSortSelect");
+      renderTarget.querySelector("#adminCustomersFilterForm")?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        openUsersTable({
+          q: searchInput?.value || "",
+          sort: sortSelect?.value || "recent",
+        }, targetElement).catch((error) => alert(error.message || "Failed to filter customers"));
+      });
+      sortSelect?.addEventListener("change", (event) => {
+        openUsersTable({
+          q: searchInput?.value || "",
+          sort: event.target?.value || "recent",
+        }, targetElement).catch((error) => alert(error.message || "Failed to sort customers"));
+      });
+      renderTarget.querySelector("#adminCustomerResetBtn")?.addEventListener("click", () => {
+        openUsersTable({ q: "", sort: "recent" }, targetElement).catch((error) => alert(error.message || "Failed to reset customers"));
+      });
     }
 
     // Products
@@ -2795,7 +3083,7 @@
             await openDeliveryAutomation(contentElement);
             break;
           case 'customersPage':
-            await openUsersTable(contentElement);
+            await openUsersTable({}, contentElement);
             break;
           case 'productsPage':
             await openProductsTable(contentElement);

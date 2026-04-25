@@ -149,8 +149,8 @@ function setOrdersAccountState(html) {
 function setOrdersResultsTitle(title, copy) {
   const titleNode = document.getElementById("ordersResultsTitle");
   const copyNode = document.getElementById("ordersResultsCopy");
-  if (titleNode) titleNode.textContent = title;
-  if (copyNode) copyNode.textContent = copy;
+  if (titleNode !== null) titleNode.textContent = title;
+  if (copyNode !== null) copyNode.textContent = copy;
 }
 
 function setOrdersResultsHtml(html) {
@@ -307,8 +307,9 @@ async function lookupOrder(reference, email) {
 
 function syncSuccessTrackButton() {
   const button = document.getElementById("successTrackOrderBtn");
-  if (!button) return;
-  button.textContent = typeof getToken === "function" && getToken() ? "View order updates" : "Track this order";
+  if (button) {
+    button.textContent = (typeof getToken === "function" && getToken()) ? "View order updates" : "Track this order";
+  }
 }
 
 async function refreshOrdersPage() {
