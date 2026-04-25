@@ -85,53 +85,89 @@ Log In
 <div class="mobile-overlay" id="mobileOverlay"></div>
 
 <!-- Mobile drawer -->
-<div class="mobile-drawer" id="mobileDrawer">
-  <div class="drawer-welcome">
-    <p class="drawer-kicker">Quick menu</p>
-    <strong>Shop faster on mobile</strong>
+<aside
+  class="mobile-drawer"
+  id="mobileDrawer"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="mobileDrawerTitle"
+  tabindex="-1"
+>
+  <div class="drawer-topbar">
+    <div class="drawer-heading">
+      <p class="drawer-kicker">Mobile menu</p>
+      <strong id="mobileDrawerTitle">Browse Blustup</strong>
+      <p class="drawer-summary">Shop, track orders, and reach support without leaving the page.</p>
+    </div>
+    <button class="drawer-close" id="mobileDrawerClose" type="button" aria-label="Close menu">
+      <span></span><span></span>
+    </button>
   </div>
 
-  <!-- Search in drawer -->
-  <div class="mobile-search">
-    <input type="text" placeholder="Search products…" aria-label="Search" id="mobileSearchInput" />
-    <button aria-label="Search" onclick="handleMobileSearch()">
+  <div class="mobile-search drawer-search-shell">
+    <input type="text" placeholder="Search products and brands" aria-label="Search" id="mobileSearchInput" />
+    <button type="button" aria-label="Search" onclick="handleMobileSearch()">
       <svg viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
       </svg>
     </button>
   </div>
 
-  <p class="drawer-section-title">Browse</p>
-  <ul class="nav-links drawer-nav-main">
-    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link"><span class="drawer-link-icon">⌂</span><span>Home</span></a></li>
-    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()"><span class="drawer-link-icon">□</span><span>Shop</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()"><span class="drawer-link-icon">★</span><span>Loyalty</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()"><span class="drawer-link-icon">◴</span><span>Orders</span></a></li>
-  </ul>
+  <section class="drawer-account-panel" aria-label="Account">
+    <div class="drawer-account-copy">
+      <span class="drawer-account-label" id="mobileAccountLabel">Guest checkout ready</span>
+      <strong id="mobileAccountName">Sign in to track orders and loyalty rewards</strong>
+      <p id="mobileAccountMeta">Save your details, review purchases, and move through checkout faster on mobile.</p>
+    </div>
+    <button class="btn-login drawer-account-btn" type="button" onclick="showPage('login'); closeMenu()" id="loginBtnMobile">Log In</button>
+  </section>
 
-  <p class="drawer-section-title">Help & policy</p>
-  <ul class="nav-links drawer-nav-secondary">
-    <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()"><span class="drawer-link-icon">i</span><span>About</span></a></li>
-    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()"><span class="drawer-link-icon">?</span><span>FAQ</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()"><span class="drawer-link-icon">◍</span><span>Privacy</span></a></li>
-  </ul>
+  <div class="drawer-section">
+    <p class="drawer-section-title">Shop</p>
+    <ul class="nav-links drawer-nav-main">
+      <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link"><span class="drawer-link-icon">HM</span><span>Home</span></a></li>
+      <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()"><span class="drawer-link-icon">SH</span><span>Shop</span></a></li>
+      <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()"><span class="drawer-link-icon">RW</span><span>Rewards</span></a></li>
+      <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()"><span class="drawer-link-icon">OR</span><span>Orders</span></a></li>
+    </ul>
+  </div>
 
-  <div class="drawer-quick-links" aria-label="Quick links">
-    <button type="button" onclick="showPage('shop'); closeMenu()">Top deals</button>
-    <button type="button" onclick="showPage('shop'); closeMenu()">Baby care</button>
-    <button type="button" onclick="showPage('shop'); closeMenu()">Electronics</button>
+  <div class="drawer-section">
+    <p class="drawer-section-title">Support</p>
+    <ul class="nav-links drawer-nav-secondary">
+      <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()"><span class="drawer-link-icon">AB</span><span>About</span></a></li>
+      <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()"><span class="drawer-link-icon">FQ</span><span>FAQ</span></a></li>
+      <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()"><span class="drawer-link-icon">PP</span><span>Privacy</span></a></li>
+      <li><a href="mailto:support@blustup.local" onclick="closeMenu()"><span class="drawer-link-icon">CS</span><span>Contact support</span></a></li>
+    </ul>
+  </div>
+
+  <div class="drawer-section">
+    <p class="drawer-section-title">Popular</p>
+    <div class="drawer-quick-links" aria-label="Popular categories">
+      <button type="button" onclick="showPage('shop'); closeMenu()">Top deals</button>
+      <button type="button" onclick="showPage('shop'); closeMenu()">Baby care</button>
+      <button type="button" onclick="showPage('shop'); closeMenu()">Electronics</button>
+      <button type="button" onclick="showPage('shop'); closeMenu()">Home picks</button>
+    </div>
   </div>
 
   <div class="drawer-actions">
-    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon">◎</span><span>Ask AI</span></button>
-    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile"><span class="drawer-link-icon">↪</span><span>Log In</span></button>
-    <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
-      <span class="drawer-link-icon">◧</span><span>Cart</span>
+    <button class="cart-btn" type="button" onclick="showPage('cart'); closeMenu()">
+      <span class="drawer-link-icon">CT</span><span>Cart</span>
       <span class="cart-count" id="cart-count-mobile">0</span>
     </button>
-    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon">→</span><span>Shop Now</span></button>
+    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon">AI</span><span>Ask AI</span></button>
+    <button class="btn-primary drawer-btn" type="button" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon">GO</span><span>Shop now</span></button>
   </div>
-</div>
+
+  <div class="drawer-trust-strip" aria-label="Store standards">
+    <span>Fast checkout</span>
+    <span>Secure payment</span>
+    <span>Helpful support</span>
+  </div>
+</aside>
 </nav>
 
   <!-- ═══════════════ HOME PAGE ═══════════════ -->

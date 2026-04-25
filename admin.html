@@ -17,24 +17,31 @@
             <img class="brand-mark" id="adminBrandMark" src="logos/Layer 2.png" alt="Blustup"  />
             <div class="brand-subtitle" id="adminBrandSubtitle">Commerce Admin</div>
           </div>
+          <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Collapse sidebar">›</button>
         </div>
         <span class="sidebar-status" id="adminSidebarStatus">Live console</span>
       </div>
 
       <nav class="sidebar-nav" aria-label="Admin sections">
-        <a href="#" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon"></span><span>Dashboard</span></a>
-        <a href="#" class="sidebar-link" data-action="customize-admin"><span class="nav-icon"></span><span>Customize admin</span></a>
-        <a href="#" class="sidebar-link" data-action="list-orders"><span class="nav-icon"></span><span>Orders</span></a>
-        <a href="#" class="sidebar-link" data-action="manage-delivery"><span class="nav-icon"></span><span>Delivery automation</span></a>
-        <a href="#" class="sidebar-link" data-action="list-users"><span class="nav-icon"></span><span>Customers</span></a>
-        <a href="#" class="sidebar-link" data-action="list-products"><span class="nav-icon"></span><span>Products</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-shop"><span class="nav-icon"></span><span>Shop setup</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Ads & hero</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-deals"><span class="nav-icon"></span><span>Deals</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-about"><span class="nav-icon"></span><span>About page</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-faq"><span class="nav-icon"></span><span>FAQ and board</span></a>
-        <a href="#" class="sidebar-link" data-action="view-reports"><span class="nav-icon"></span><span>Reports</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-ai"><span class="nav-icon"></span><span>AI settings</span></a>
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Primary</div>
+          <a href="#dashboard" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10Zm10 8V11h8v10h-8ZM13 3v6h8V3h-8Zm-2 6H3v10h8V9Z" fill="currentColor"/><circle cx="19" cy="7" r="1.5" fill="currentColor"/><circle cx="5" cy="7" r="1.5" fill="currentColor"/><circle cx="11" cy="15" r="1.5" fill="currentColor"/><circle cx="19" cy="15" r="1.5" fill="currentColor"/></svg></span><span>Dashboard</span></a>
+          <a href="#orders" class="sidebar-link" data-action="list-orders"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4V2C7 1.45 7.45 1 8 1h8c.55 0 1 .45 1 1v2h3c.55 0 1 .45 1 1s-.45 1-1 1h-1v13c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V6H3c-.55 0-1-.45-1-1s.45-1 1-1h3Zm2 0h6V3H9v1Zm-2 3v11h10V7H7Zm4 2h2v2h-2V9Zm0 3h2v2h-2v-2Z" fill="currentColor"/><circle cx="16" cy="9" r="1" fill="currentColor"/><circle cx="16" cy="12" r="1" fill="currentColor"/></svg></span><span>Orders</span></a>
+          <a href="#delivery" class="sidebar-link" data-action="manage-delivery"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 8h-3V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h1v2c0 .55.45 1 1 1s1-.45 1-1v-2h10v2c0 .55.45 1 1 1s1-.45 1-1v-2h1c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2Zm-5-2h2v2h-2V6Zm-4 0h2v2h-2V6Zm-4 0h2v2H7V6Zm12 10H5v-6h14v6Z" fill="currentColor"/><circle cx="7" cy="12" r="1.5" fill="currentColor"/><circle cx="17" cy="12" r="1.5" fill="currentColor"/><path d="M8 16h8v2H8v-2Z" fill="currentColor"/><path d="M6 10h2v4H6v-4Zm10 0h2v4h-2v-4Z" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><path d="M10 12h4M12 10v4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg></span><span>Delivery automation</span></a>
+          <a href="#customers" class="sidebar-link" data-action="list-users"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="8" cy="8" r="1" fill="currentColor"/><path d="M16 14c-1.33 0-4 .67-4 2v2h8v-2c0-1.33-2.67-2-4-2Z" fill="currentColor"/><path d="M8 14c1.33 0 4 .67 4 2v2H4v-2c0-1.33 2.67-2 4-2Z" fill="currentColor"/></svg></span><span>Customers</span></a>
+          <a href="#products" class="sidebar-link" data-action="list-products"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 7V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v2H2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7h-2Zm-4 0H8V6c0-.55.45-1 1-1h6c.55 0 1 .45 1 1v1Z" fill="currentColor"/><rect x="8" y="9" width="8" height="2" fill="currentColor"/><rect x="8" y="12" width="4" height="2" fill="currentColor"/><rect x="12" y="12" width="4" height="2" fill="currentColor"/><circle cx="6" cy="9" r="1" fill="currentColor"/><circle cx="6" cy="12" r="1" fill="currentColor"/><circle cx="18" cy="9" r="1" fill="currentColor"/><circle cx="18" cy="12" r="1" fill="currentColor"/></svg></span><span>Products</span></a>
+          <a href="#reports" class="sidebar-link" data-action="view-reports"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm0 16H5V5h14v14Z" fill="currentColor"/><path d="M9 7h6v2H9V7Zm0 3h6v2H9v-2Zm0 3h4v2H9v-2Z" fill="currentColor"/><circle cx="7" cy="8" r="1" fill="currentColor"/><circle cx="7" cy="11" r="1" fill="currentColor"/><circle cx="7" cy="14" r="1" fill="currentColor"/><path d="M16 7v6l2 2v-8h-2Z" fill="currentColor"/></svg></span><span>Reports</span></a>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Tools</div>
+          <a href="#customize" class="sidebar-link" data-action="customize-admin"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.37h-3.84c-.24 0-.43.17-.47.37l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 9.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.37h3.84c.24 0 .43-.17.47-.37l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Customize admin</span></a>
+          <a href="#shop" class="sidebar-link" data-action="edit-shop"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7H3Zm16 10H5V9h14v8Zm-2-6h-4v2h4v-2Zm-6 0H7v2h4v-2Z" fill="currentColor"/><path d="M19 3H5c-1.1 0-2 .9-2 2v2h18V5c0-1.1-.9-2-2-2Z" fill="currentColor"/><circle cx="9" cy="11" r="1" fill="currentColor"/><circle cx="15" cy="11" r="1" fill="currentColor"/><path d="M7 17h10v2H7v-2Z" fill="currentColor"/></svg></span><span>Shop setup</span></a>
+          <a href="#ads" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm0 16H3V5h18v14Z" fill="currentColor"/><rect x="5" y="7" width="14" height="2" fill="currentColor"/><rect x="5" y="11" width="10" height="2" fill="currentColor"/><rect x="5" y="15" width="8" height="2" fill="currentColor"/><circle cx="19" cy="9" r="1.5" fill="currentColor"/><circle cx="19" cy="13" r="1.5" fill="currentColor"/><circle cx="19" cy="17" r="1.5" fill="currentColor"/></svg></span><span>Ads & hero</span></a>
+          <a href="#deals" class="sidebar-link" data-action="edit-deals"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/><path d="M9 11l1.5-3L12 8l1.5-3L15 11H9z" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/><path d="M6 20h12v2H6v-2Z" fill="currentColor"/></svg></span><span>Deals</span></a>
+          <a href="#about" class="sidebar-link" data-action="edit-about"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 8v4M12 16h.01" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1" fill="white"/><circle cx="12" cy="16" r="1" fill="white"/><path d="M8 12h8M10 10l-2 2 2 2M14 10l2 2-2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>About page</span></a>
+          <a href="#faq" class="sidebar-link" data-action="edit-faq"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M9.5 9.5c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5c0 1-.5 1.5-1.5 2l-1 1c-.5.5-.5 1-.5 1.5" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1" fill="white"/><path d="M8 8l2-2M16 8l-2-2M8 16l2 2M16 16l-2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>FAQ and board</span></a>
+          <a href="#ai" class="sidebar-link" data-action="edit-ai"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93Zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39Z" fill="currentColor"/><circle cx="12" cy="8" r="1" fill="currentColor"/><circle cx="8" cy="12" r="1" fill="currentColor"/><circle cx="16" cy="12" r="1" fill="currentColor"/><path d="M12 16c.55 0 1-.45 1-1v-2h-2v2c0 .55.45 1 1 1Z" fill="currentColor"/></svg></span><span>AI settings</span></a>
+        </div>
       </nav>
 
       <div class="sidebar-support">
@@ -53,7 +60,10 @@
         <label class="admin-search" for="adminSearch">
           <span class="search-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
-              <path d="M10.5 4a6.5 6.5 0 1 1 0 13a6.5 6.5 0 0 1 0-13Zm0 1.8a4.7 4.7 0 1 0 0 9.4a4.7 4.7 0 0 0 0-9.4Zm8.37 11.8l2.63 2.63l-1.27 1.27l-2.63-2.63z" />
+              <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="11" cy="11" r="3" fill="currentColor"/>
+              <path d="M13 9l-2 2-2-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </span>
           <input id="adminSearch" type="search" placeholder="Search products, tools or recent changes" />
@@ -62,7 +72,12 @@
         <div class="workspace-actions">
           <button class="icon-btn" id="btnRefresh" type="button" aria-label="Refresh dashboard">
             <svg viewBox="0 0 24 24" focusable="false">
-              <path d="M17.65 6.35A7.95 7.95 0 0 0 12 4V1L7 6l5 5V7a5 5 0 1 1-4.9 6.01H5.02A7 7 0 1 0 17.65 6.35Z" />
+              <path d="M4 12a8 8 0 0 1 8-8V2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M4 12a8 8 0 0 1 8 8v1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M20 12a8 8 0 0 1-8 8v1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M20 12a8 8 0 0 1-8-8V2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <circle cx="12" cy="12" r="2" fill="currentColor"/>
+              <path d="M9 12l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
 
@@ -78,118 +93,91 @@
         </div>
       </header>
 
-      <section class="workspace-hero">
-        <div class="hero-copy">
-          <p class="eyebrow" id="adminHeroEyebrow">Admin cockpit</p>
-          <h1 id="adminGreeting">Hi, Blustup team</h1>
-          <p id="adminGreetingSub">Manage products, storefront content, and automation from one calm workspace.</p>
-          <p id="adminGreetingLive" class="hero-live-copy"></p>
-        </div>
-        <div class="hero-controls">
-          <button class="hero-arrow" type="button" data-action="edit-home-images" aria-label="Edit home images">
-            <svg viewBox="0 0 24 24" focusable="false"><path d="M14 7l-5 5l5 5v-3h7v-4h-7z" /></svg>
-          </button>
-          <button class="hero-arrow" type="button" data-action="edit-deals" aria-label="Edit deals">
-            <svg viewBox="0 0 24 24" focusable="false"><path d="M10 7l5 5l-5 5v-3H3v-4h7z" /></svg>
-          </button>
-        </div>
-      </section>
-
-      <section class="product-strip" id="dashboardPreview">
-        <article class="product-card placeholder-card">
-          <div class="product-card-media"></div>
-          <div class="product-card-body">
-            <div class="product-card-title">Loading catalog</div>
-            <div class="product-card-meta">Pulling your latest products into the dashboard.</div>
+      <div class="page-container active" id="dashboardPage">
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow" id="adminHeroEyebrow">Admin cockpit</p>
+            <h1 id="adminGreeting">Hi, Blustup team</h1>
+            <p id="adminGreetingSub">Manage products, storefront content, and automation from one calm workspace.</p>
+            <p id="adminGreetingLive" class="hero-live-copy"></p>
           </div>
-        </article>
-        <article class="product-card placeholder-card">
-          <div class="product-card-media"></div>
-          <div class="product-card-body">
-            <div class="product-card-title">Syncing updates</div>
-            <div class="product-card-meta">Recent admin activity will appear here in a moment.</div>
+          <div class="hero-controls">
+            <button class="hero-arrow" type="button" data-action="edit-home-images" aria-label="Edit home images">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.1"/>
+                <path d="M14 7l-5 5 5 5v-3h7v-4h-7z" fill="currentColor"/>
+                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+              </svg>
+            </button>
+            <button class="hero-arrow" type="button" data-action="edit-deals" aria-label="Edit deals">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.1"/>
+                <path d="M10 7l5 5-5 5v-3H3v-4h7z" fill="currentColor"/>
+                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+              </svg>
+            </button>
           </div>
-        </article>
-        <article class="product-card placeholder-card">
-          <div class="product-card-media"></div>
-          <div class="product-card-body">
-            <div class="product-card-title">Preparing insights</div>
-            <div class="product-card-meta">Quick metrics will refresh as soon as the console loads.</div>
-          </div>
-        </article>
-      </section>
+        </section>
 
-      <section class="command-board">
-        <article class="command-card" data-search-text="orders shipping delivery fulfillment status tracking">
-          <div class="command-card-top"><div><p class="eyebrow">Orders</p><h2>Fulfillment board</h2></div><span class="command-stat" id="ordersStat">0 active orders</span></div>
-          <p>Track new purchases, update order status, and keep delivery progress visible for your team.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-orders">Open orders</a></div>
-        </article>
+        <section class="product-strip" id="dashboardPreview">
+          <article class="product-card placeholder-card">
+            <div class="product-card-media"></div>
+            <div class="product-card-body">
+              <div class="product-card-title">Loading catalog</div>
+              <div class="product-card-meta">Pulling your latest products into the dashboard.</div>
+            </div>
+          </article>
+          <article class="product-card placeholder-card">
+            <div class="product-card-media"></div>
+            <div class="product-card-body">
+              <div class="product-card-title">Syncing updates</div>
+              <div class="product-card-meta">Recent admin activity will appear here in a moment.</div>
+            </div>
+          </article>
+          <article class="product-card placeholder-card">
+            <div class="product-card-media"></div>
+            <div class="product-card-body">
+              <div class="product-card-title">Preparing insights</div>
+              <div class="product-card-meta">Quick metrics will refresh as soon as the console loads.</div>
+            </div>
+          </article>
+        </section>
 
-        <article class="command-card" data-search-text="delivery riders dispatch shipping automation courier">
-          <div class="command-card-top"><div><p class="eyebrow">Delivery</p><h2>Rider dispatch automation</h2></div><span class="command-stat" id="deliveryStat">Dispatch ready</span></div>
-          <p>Assign riders automatically when orders are shipped and keep a simple roster with recent dispatch history.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="manage-delivery">Manage delivery</a></div>
+        <section class="command-board">
+          <article class="command-card" data-search-text="orders shipping delivery fulfillment status tracking">
+          <div class="command-card-top"><div><p class="eyebrow">Orders</p><h2>Orders & delivery</h2></div><span class="command-stat" id="ordersStat">0 active orders</span></div>
+          <p>Track open orders, manage fulfillment, and keep deliveries moving from one consolidated view.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-orders">Open orders</a><a href="#" class="btn-admin ghost" data-action="manage-delivery">Delivery</a></div>
         </article>
 
         <article class="command-card" data-search-text="customers consumers users accounts billing profile">
           <div class="command-card-top"><div><p class="eyebrow">Customers</p><h2>Customer desk</h2></div><span class="command-stat" id="customersStat">0 shoppers</span></div>
-          <p>Review customer accounts, saved billing details, and who has been ordering most recently.</p>
+          <p>Review customer accounts, saved billing details, and the shoppers who matter most right now.</p>
           <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-users">Open customers</a></div>
         </article>
 
         <article class="command-card command-card-primary" data-search-text="products catalog inventory add edit">
-          <div class="command-card-top"><div><p class="eyebrow">Store</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
-          <p>Review product listings, add new inventory, and keep the storefront catalog clean.</p>
+          <div class="command-card-top"><div><p class="eyebrow">Catalog</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
+          <p>Review product listings, add inventory, and keep the storefront catalog clean and current.</p>
           <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-products">Open catalog</a><a href="#" class="btn-admin ghost" data-action="add-product">Add product</a></div>
         </article>
 
-        <article class="command-card" data-search-text="shop filters categories title subtitle">
-          <div class="command-card-top"><div><p class="eyebrow">Shop</p><h2>Filter and category setup</h2></div><span class="command-stat" id="shopStat">0 categories</span></div>
-          <p>Adjust the shop title, subtitle, and category filter system that drives discovery.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-shop">Edit shop</a></div>
+        <article class="command-card" data-search-text="shop ads hero deals promotions campaign content">
+          <div class="command-card-top"><div><p class="eyebrow">Storefront</p><h2>Shop, ads & deals</h2></div><span class="command-stat" id="shopStat">0 categories</span></div>
+          <p>Adjust shop filters, homepage hero content, and featured promotions from one shared workflow.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-shop">Edit shop</a><a href="#" class="btn-admin ghost" data-action="edit-home-images">Manage ads</a><a href="#" class="btn-admin ghost" data-action="edit-deals">Manage deals</a></div>
         </article>
 
-        <article class="command-card" data-search-text="faq board directors help content">
-          <div class="command-card-top"><div><p class="eyebrow">Content</p><h2>FAQ and leadership section</h2></div><span class="command-stat">Support content</span></div>
-          <p>Maintain the FAQ experience, board profiles, and support messaging shown to customers.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-faq">Open content</a></div>
+        <article class="command-card" data-search-text="about faq board support help content">
+          <div class="command-card-top"><div><p class="eyebrow">Content</p><h2>Brand & support</h2></div><span class="command-stat" id="aboutStat">Brand story</span></div>
+          <p>Maintain About page copy, FAQ messaging, and leadership content with consistent storefront tone.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-about">Edit about</a><a href="#" class="btn-admin ghost" data-action="edit-faq">Open content</a></div>
         </article>
 
-        <article class="command-card" data-search-text="deals promotions timers campaigns offers">
-          <div class="command-card-top"><div><p class="eyebrow">Deals</p><h2>Campaign scheduling</h2></div><span class="command-stat" id="dealsStat">Promotions ready</span></div>
-          <p>Control featured deals, timers, and the product rows highlighted on the homepage.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-deals">Manage deals</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="home hero media images banners upload ads campaigns">
-          <div class="command-card-top"><div><p class="eyebrow">Homepage</p><h2>Ads and hero control</h2></div><span class="command-stat" id="homeStat">Hero ads</span></div>
-          <p>Manage hero slides, campaign headlines, CTA links, and the ad imagery customers see first.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-home-images">Manage ads</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="about brand story mission page copy content">
-          <div class="command-card-top"><div><p class="eyebrow">Brand</p><h2>About page content</h2></div><span class="command-stat" id="aboutStat">Brand story</span></div>
-          <p>Update the About page headline, stats, story cards, and the trust pillars shown on the storefront.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-about">Edit about page</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="admin appearance dashboard branding theme colors logo customize">
-          <div class="command-card-top"><div><p class="eyebrow">Appearance</p><h2>Admin page customization</h2></div><span class="command-stat">Theme ready</span></div>
-          <p>Change the admin logo, dashboard copy, button labels, and colors so the console matches your brand.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="customize-admin">Customize admin</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="reports analytics dashboard cron email revenue funnel inventory">
-          <div class="command-card-top"><div><p class="eyebrow">Reports</p><h2>Analytics and automation</h2></div><span class="command-stat" id="reportsStat">Reports ready</span></div>
-          <p>Review revenue, funnel activity, slow movers, and schedule daily or weekly report emails.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="view-reports">Open reports</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="ai chatbot search automation bot prompt">
-          <div class="command-card-top"><div><p class="eyebrow">Automation</p><h2>AI assistant controls</h2></div><span class="command-stat" id="aiStat">Assistant online</span></div>
-          <p>Update chatbot availability, search behavior, and the prompt that guides the AI experience.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-ai">Tune AI</a></div>
+        <article class="command-card" data-search-text="reports analytics automation ai appearance theme settings">
+          <div class="command-card-top"><div><p class="eyebrow">Insights</p><h2>Reports & automation</h2></div><span class="command-stat" id="reportsStat">Reports ready</span></div>
+          <p>Review business metrics, schedule reports, and tune AI assistant behavior from one place.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="view-reports">Open reports</a><a href="#" class="btn-admin ghost" data-action="edit-ai">Tune AI</a></div>
         </article>
       </section>
 
@@ -207,6 +195,139 @@
           </table>
         </div>
       </section>
+      </div>
+
+      <div class="page-container" id="ordersPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Order management</p>
+            <h1>Orders</h1>
+            <p>Track and manage customer orders, fulfillment status, and delivery coordination.</p>
+          </div>
+        </section>
+        <div id="ordersContent"></div>
+      </div>
+
+      <div class="page-container" id="deliveryPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Delivery automation</p>
+            <h1>Delivery Management</h1>
+            <p>Configure automated delivery workflows, manage riders, and track shipments.</p>
+          </div>
+        </section>
+        <div id="deliveryContent"></div>
+      </div>
+
+      <div class="page-container" id="customersPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Customer management</p>
+            <h1>Customers</h1>
+            <p>View customer accounts, order history, and manage user data.</p>
+          </div>
+        </section>
+        <div id="customersContent"></div>
+      </div>
+
+      <div class="page-container" id="productsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Product catalog</p>
+            <h1>Products</h1>
+            <p>Manage your product catalog, inventory levels, and pricing.</p>
+          </div>
+        </section>
+        <div id="productsContent"></div>
+      </div>
+
+      <div class="page-container" id="reportsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Business analytics</p>
+            <h1>Reports</h1>
+            <p>View detailed business metrics, sales reports, and performance analytics.</p>
+          </div>
+        </section>
+        <div id="reportsContent"></div>
+      </div>
+
+      <div class="page-container" id="customizePage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Admin customization</p>
+            <h1>Customize Admin</h1>
+            <p>Personalize the admin interface appearance and behavior.</p>
+          </div>
+        </section>
+        <div id="customizeContent"></div>
+      </div>
+
+      <div class="page-container" id="shopPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Shop configuration</p>
+            <h1>Shop Setup</h1>
+            <p>Configure shop filters, categories, and storefront settings.</p>
+          </div>
+        </section>
+        <div id="shopContent"></div>
+      </div>
+
+      <div class="page-container" id="adsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Homepage content</p>
+            <h1>Ads & Hero</h1>
+            <p>Manage homepage hero images, promotional banners, and featured content.</p>
+          </div>
+        </section>
+        <div id="adsContent"></div>
+      </div>
+
+      <div class="page-container" id="dealsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Promotions</p>
+            <h1>Deals</h1>
+            <p>Create and manage promotional deals, discounts, and special offers.</p>
+          </div>
+        </section>
+        <div id="dealsContent"></div>
+      </div>
+
+      <div class="page-container" id="aboutPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Brand content</p>
+            <h1>About Page</h1>
+            <p>Edit your company story, mission, and brand information.</p>
+          </div>
+        </section>
+        <div id="aboutContent"></div>
+      </div>
+
+      <div class="page-container" id="faqPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Support content</p>
+            <h1>FAQ & Board</h1>
+            <p>Manage frequently asked questions and leadership team information.</p>
+          </div>
+        </section>
+        <div id="faqContent"></div>
+      </div>
+
+      <div class="page-container" id="aiPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">AI configuration</p>
+            <h1>AI Settings</h1>
+            <p>Configure AI assistant behavior, chat settings, and search functionality.</p>
+          </div>
+        </section>
+        <div id="aiContent"></div>
+      </div>
     </main>
 
     <aside class="admin-rail">
@@ -815,8 +936,8 @@
       if (ordersStat) ordersStat.textContent = `${openOrders.length} active orders`;
       if (customersStat) customersStat.textContent = `${userList.length} shoppers`;
       shopStat.textContent = `${categoryCount} categories`;
-      dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
-      homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
+      if (dealsStat) dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
+      if (homeStat) homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
       if (aboutStat) aboutStat.textContent = activeProducts.length ? "Story synced" : "Brand story";
       if (deliveryStat) {
         const dispatchedOrders = orderList.filter((order) => order?.deliveryAssignment?.status);
@@ -935,9 +1056,9 @@
       return refreshDashboard();
     }
 
-    async function openAdminAppearance() {
+    async function openAdminAppearance(targetElement) {
       const appearance = getAdminAppearance();
-      openModal("Customize Admin Page", `
+      const html = `
         <div class="muted">Update the admin console branding, hero copy, sidebar support card, and dashboard colors from one place.</div>
         <div class="grid2" style="margin-top:12px;">
           <div class="field"><label>Browser title</label><input id="admin_page_title" value="${esc(appearance.pageTitle || "")}"></div>
@@ -976,7 +1097,13 @@
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
           <button class="btn-admin" type="button" id="adminAppearanceReset">Reset defaults</button>
           <button class="btn-admin primary" type="button" id="adminAppearanceSave">Save appearance</button>
-        </div>`);
+        </div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Customize Admin Page", html);
+      }
 
       document.getElementById("admin_logo_upload")?.addEventListener("change", async (event) => {
         const file = event.target?.files?.[0];
@@ -1022,7 +1149,7 @@
       });
     }
 
-    async function openOrdersTable(nextFilters = {}) {
+    async function openOrdersTable(nextFilters = {}, targetElement) {
       if (nextFilters.status !== undefined) adminOrderFilters.status = String(nextFilters.status || "").trim().toLowerCase();
       if (nextFilters.q !== undefined) adminOrderFilters.q = String(nextFilters.q || "").trim();
 
@@ -1034,7 +1161,7 @@
         ...ADMIN_ORDER_STATUSES.map((status) => ({ key: status, label: humanizeOrderStatus(status) })),
       ];
 
-      openModal("Orders", `
+      const html = `
         <div class="muted" style="margin-bottom:12px;">Update order progress here so customers and admins see the latest delivery status immediately.</div>
         <div style="display:grid;gap:14px;">
           <div style="display:flex;justify-content:flex-end;">
@@ -1107,30 +1234,36 @@
               </td>
             </tr>`;
           }).join("") : `<tr><td colspan="5" class="muted">No orders have been placed yet.</td></tr>`}</tbody>
-        </table>`);
+        </table>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Orders", html);
+      }
 
       document.getElementById("adminOrdersFilterForm")?.addEventListener("submit", (event) => {
         event.preventDefault();
         openOrdersTable({
           status: document.getElementById("adminOrderStatusFilter")?.value || "",
           q: document.getElementById("adminOrderSearchInput")?.value || "",
-        }).catch((error) => alert(error.message || "Failed to filter orders"));
+        }, targetElement).catch((error) => alert(error.message || "Failed to filter orders"));
       });
       document.getElementById("adminOrderStatusFilter")?.addEventListener("change", (event) => {
         openOrdersTable({
           status: event.target?.value || "",
           q: document.getElementById("adminOrderSearchInput")?.value || "",
-        }).catch((error) => alert(error.message || "Failed to filter orders"));
+        }, targetElement).catch((error) => alert(error.message || "Failed to filter orders"));
       });
       document.getElementById("adminOrderResetBtn")?.addEventListener("click", () => {
-        openOrdersTable({ status: "", q: "" }).catch((error) => alert(error.message || "Failed to reset filters"));
+        openOrdersTable({ status: "", q: "" }, targetElement).catch((error) => alert(error.message || "Failed to reset filters"));
       });
       document.querySelectorAll("[data-order-quick-filter]").forEach((button) => {
         button.addEventListener("click", () => {
           openOrdersTable({
             status: button.getAttribute("data-order-quick-filter") || "",
             q: document.getElementById("adminOrderSearchInput")?.value || "",
-          }).catch((error) => alert(error.message || "Failed to filter orders"));
+          }, targetElement).catch((error) => alert(error.message || "Failed to filter orders"));
         });
       });
     }
@@ -1216,10 +1349,10 @@
       `).join("");
     }
 
-    async function openDeliveryAutomation() {
+    async function openDeliveryAutomation(targetElement) {
       const { settings, history, activeRiders, mailConfigured } = await api("/api/admin/delivery");
       const riders = Array.isArray(settings.riders) ? settings.riders : [];
-      openModal("Delivery Automation", `
+      const html = `
         <div class="muted">When an order is moved into <strong>shipped</strong>, the system can assign the next active rider and email a delivery brief automatically.</div>
         <div class="field" style="margin-top:12px;padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:${settings.automationEnabled ? "#eefbf3" : "#fff7e8"};">
           <label>Automation overview</label>
@@ -1259,42 +1392,66 @@
         <div class="field" style="margin-top:16px;">
           <label>Recent dispatch history</label>
           <div style="display:grid;gap:8px;margin-top:8px;">${renderDeliveryDispatchHistory(history)}</div>
-        </div>`);
+        </div>`;
 
-      document.getElementById("btnAddDeliveryRider").addEventListener("click", () => {
-        const list = document.getElementById("deliveryRidersList");
-        const rowKey = createAdminDraftKey("rider");
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = deliveryRiderRowTemplate({
-          id: rowKey,
-          name: "",
-          email: "",
-          phone: "",
-          coverage: "",
-          isActive: true,
-        }, rowKey);
-        list.appendChild(wrapper.firstElementChild);
-      });
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Delivery Automation", html);
+      }
 
-      document.getElementById("saveDeliveryAutomation").addEventListener("click", async () => {
-        await api("/api/admin/delivery", {
-          method: "PATCH",
-          body: JSON.stringify({
-            automationEnabled: document.getElementById("delivery_automation_enabled").value === "1",
-            emailSubjectPrefix: document.getElementById("delivery_email_subject_prefix").value.trim(),
-            dispatchIntro: document.getElementById("delivery_dispatch_intro").value.trim(),
-            riders: collectDeliveryRidersFromEditor(),
-          }),
+      // Attach event listeners after rendering
+      const addRiderBtn = document.getElementById("btnAddDeliveryRider");
+      const saveBtn = document.getElementById("saveDeliveryAutomation");
+
+      if (addRiderBtn) {
+        addRiderBtn.addEventListener("click", () => {
+          const list = document.getElementById("deliveryRidersList");
+          if (list) {
+            const rowKey = createAdminDraftKey("rider");
+            const wrapper = document.createElement("div");
+            wrapper.innerHTML = deliveryRiderRowTemplate({
+              id: rowKey,
+              name: "",
+              email: "",
+              phone: "",
+              coverage: "",
+              isActive: true,
+            }, rowKey);
+            list.appendChild(wrapper.firstElementChild);
+          }
         });
-        await refreshDashboard();
-        await openDeliveryAutomation();
-      });
+      }
+
+      if (saveBtn) {
+        saveBtn.addEventListener("click", async () => {
+          try {
+            await api("/api/admin/delivery", {
+              method: "PATCH",
+              body: JSON.stringify({
+                automationEnabled: document.getElementById("delivery_automation_enabled")?.value === "1",
+                emailSubjectPrefix: document.getElementById("delivery_email_subject_prefix")?.value?.trim() || "",
+                dispatchIntro: document.getElementById("delivery_dispatch_intro")?.value?.trim() || "",
+                riders: collectDeliveryRidersFromEditor(),
+              }),
+            });
+            await refreshDashboard();
+            if (targetElement) {
+              await openDeliveryAutomation(targetElement);
+            } else {
+              await openDeliveryAutomation();
+            }
+          } catch (error) {
+            alert(error.message || "Failed to save delivery automation settings");
+          }
+        });
+      }
     }
 
-    async function openUsersTable() {
+    async function openUsersTable(targetElement) {
       const { users } = await api("/api/admin/users");
       const userList = Array.isArray(users) ? users.filter((user) => user.role !== "admin") : [];
-      openModal("Customers", `
+      const html = `
         <div class="muted" style="margin-bottom:12px;">Saved billing profiles help checkout move faster because returning shoppers do not need to re-enter the same details.</div>
         <table class="admin-table">
           <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Loyalty</th><th>Orders</th><th>Total spent</th><th>Latest order</th></tr></thead>
@@ -1311,7 +1468,13 @@
               <td>${esc(formatCurrency(user.totalSpent || 0))}</td>
               <td>${esc(user.latestOrderReference || "No orders yet")}<div class="muted">${esc(user.latestOrderStatus ? humanizeOrderStatus(user.latestOrderStatus) : "")}</div></td>
             </tr>`).join("") : `<tr><td colspan="7" class="muted">No customer accounts have been created yet.</td></tr>`}</tbody>
-        </table>`);
+        </table>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Customers", html);
+      }
     }
 
     // Products
@@ -1585,9 +1748,9 @@
         isActive: document.getElementById("f_active").value === "1",
       };
     }
-    async function openProductsTable() {
+    async function openProductsTable(targetElement) {
       const { products } = await loadAdminCatalogContext();
-      openModal("Products", `
+      const html = `
         <div class="muted" style="margin-bottom:12px;">Categories now sync with the shop filter system automatically, and deals remove deleted or hidden featured products.</div>
         <table class="admin-table">
           <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
@@ -1600,7 +1763,13 @@
               <td>${esc(p.isActive !== false ? "Live" : "Hidden")}</td>
               <td><a href="#" data-action="edit-product" data-id="${esc(p.id)}">Edit</a> - <a href="#" data-action="delete-product" data-id="${esc(p.id)}">Delete</a></td>
             </tr>`).join("")}</tbody>
-        </table>`);
+        </table>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Products", html);
+      }
     }
     async function openAddProduct() {
       const context = await loadAdminCatalogContext();
@@ -1718,10 +1887,10 @@
     }
 
     // Home ads / hero
-    async function openHomeImagesCms() {
+    async function openHomeImagesCms(targetElement) {
       const { settings } = await api("/api/cms/home");
       const ads = normalizeAdminAdsDraft(settings || {});
-      openModal("Ads & Hero", `
+      const html = `
         <div class="muted">Manage each homepage ad as a full campaign slide with an image, headline, supporting copy, CTA button, and destination target.</div>
         <div id="homeAdsList" style="display:grid;gap:10px;margin-top:12px;">
           ${ads.map((ad) => homeAdRowTemplate(ad, ad.id || createAdminDraftKey("ad"))).join("")}
@@ -1729,7 +1898,13 @@
         <div style="margin-top:14px;display:flex;gap:8px;">
           <button class="btn-admin" id="btnAddHomeAd" type="button">+ Add ad</button>
           <button class="btn-admin primary" id="btnSaveHomeImages" type="button">Save</button>
-        </div>`);
+        </div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Ads & Hero", html);
+      }
 
       document.getElementById("btnAddHomeAd").addEventListener("click", () => {
         const list = document.getElementById("homeAdsList");
@@ -1815,9 +1990,9 @@
         })
         .filter((pillar) => pillar.title && pillar.items.length);
     }
-    async function openAboutCms() {
+    async function openAboutCms(targetElement) {
       const { settings } = await api("/api/cms/about");
-      openModal("About Page", `
+      const html = `
         <div class="muted">Update the storefront's brand story, hero section, value stats, and trust pillars from one place.</div>
         <div class="grid2" style="margin-top:12px;">
           <div class="field"><label>Badge</label><input id="about_badge" value="${esc(settings.badge || "")}"></div>
@@ -1845,9 +2020,15 @@
         <div class="field" style="margin-top:10px;">
           <label>Trust pillars</label>
           <textarea id="about_pillars" rows="6" placeholder="How we serve shoppers :: AI chat support | Secure checkout | Order tracking">${esc(serializeAdminPillars(settings.pillars || []))}</textarea>
-          <div class="muted" style="font-size:12px;">One line per section using: title :: item one | item two | item three</div>
+          <div class="muted" style="font-size:12px;">One line per section using: title :: section one | section two | section three</div>
         </div>
-        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAbout" type="button">Save</button></div>`);
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAbout" type="button">Save</button></div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("About Page", html);
+      }
 
       document.getElementById("saveAbout").addEventListener("click", async () => {
         const payload = {
@@ -1878,10 +2059,10 @@
         </div>
       `).join("");
     }
-    async function openReportsDashboard() {
+    async function openReportsDashboard(targetElement) {
       const { settings, history, overview, mailConfigured, scheduler } = await api("/api/admin/reports");
       const schedulerRunning = scheduler?.started === true && Number(scheduler?.activeTaskCount || 0) > 0;
-      openModal("Reports & Analytics", `
+      const html = `
         <div class="muted">Track revenue, funnel performance, and inventory health, then schedule daily and weekly summaries with cron-driven email delivery.</div>
         <div class="field" style="margin-top:12px;padding:14px;border:1px solid #e7ecfa;border-radius:16px;background:${schedulerRunning ? "#eefbf3" : "#fff7e8"};">
           <label>Automation status</label>
@@ -1948,7 +2129,13 @@
           <button class="btn-admin primary" type="button" id="saveReportSettings">Save schedule</button>
         </div>
         <div class="panel-header" style="margin-top:18px;">Recent report history</div>
-        <div style="display:grid;gap:8px;">${renderReportHistory(history)}</div>`);
+        <div style="display:grid;gap:8px;">${renderReportHistory(history)}</div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Reports & Analytics", html);
+      }
 
       document.getElementById("saveReportSettings").addEventListener("click", async () => {
         try {
@@ -2057,12 +2244,12 @@
           <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>
         </div>`).join("");
     }
-    async function openShopCms() {
+    async function openShopCms(targetElement) {
       const context = await loadAdminCatalogContext();
       const settings = context.shop || { title: "", subtitle: "", filters: [] };
       const filters = normalizeShopFiltersDraft(Array.isArray(settings.filters) ? settings.filters : [], context.activeCategories);
       const editableFilters = filters.filter((filter) => String(filter.value || "").trim().toLowerCase() !== "all");
-      openModal("Shop Settings", `
+      const html = `
         <div class="muted">Filters now follow the real active product categories. "All Products" is always included, and hidden filters stay available for deals and admin links.</div>
         <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
         <div class="field" style="margin-top:12px;"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
@@ -2074,7 +2261,13 @@
           <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(editableFilters, context.activeCategories)}</div>
           <button type="button" class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
         </div>
-        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveShop">Save</button></div>`);
+        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveShop">Save</button></div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Shop Settings", html);
+      }
       renderShopFilterPreview(context.activeCategories);
 
       document.getElementById("btnAddFilterRow").addEventListener("click", () => {
@@ -2316,17 +2509,23 @@
         };
       });
     }
-    async function openDealsCms() {
+    async function openDealsCms(targetElement) {
       const [{ settings: deals }, context] = await Promise.all([api("/api/cms/deals"), loadAdminCatalogContext()]);
       const rows = Array.isArray(deals) ? deals : [];
-      openModal("Deals", `
+      const html = `
         <div class="muted">Pinned products stay in the order you select them, fallback categories only use live catalog values, and the "See more" link falls back to the closest valid shop filter automatically.</div>
         ${context.activeCategories.length ? "" : `<div class="muted" style="margin-top:10px;">No active product categories are available yet. Add or activate products before creating a fallback deal.</div>`}
         <div id="dealsWrap" style="margin-top:10px;">${rows.map((d, i) => dealRowTemplate(d, d.id || createAdminDraftKey(`deal-${i}`), context)).join("")}</div>
         <div style="display:flex;gap:8px;margin-top:10px;">
           <button class="btn-admin" id="btnAddDeal" type="button">+ Add deal</button>
           <button class="btn-admin primary" id="saveDeals" type="button">Save Deals</button>
-        </div>`);
+        </div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("Deals", html);
+      }
 
       document.querySelectorAll(".deal-admin-row").forEach((row) => syncDealRowSummary(row, context));
 
@@ -2394,11 +2593,11 @@
           <button type="button" class="btn-admin danger" data-action="remove-board-row">Remove</button>
         </div>`;
     }
-    async function openFaqCms() {
+    async function openFaqCms(targetElement) {
       const { settings: s } = await api("/api/cms/faq");
       const faqs = Array.isArray(s.faqs) ? s.faqs : [];
       const board = Array.isArray(s.board) ? s.board : [];
-      openModal("FAQ & board", `
+      const html = `
         <div class="field"><label>Page title (use line breaks)</label><textarea id="fq_title" rows="2">${esc(s.pageTitle || "")}</textarea></div>
         <div class="grid2" style="margin-top:10px;">
           <div class="field"><label>Label pill</label><input id="fq_label" value="${esc(s.label || "")}"></div>
@@ -2416,7 +2615,13 @@
         <div class="panel-header" style="margin-top:16px;">Board</div>
         <div id="faqBoardWrap">${board.map((m, i) => boardRow(m, i)).join("")}</div>
         <button type="button" class="btn-admin" id="btnAddBoard">+ Add director</button>
-        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveFaq">Save</button></div>`);
+        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveFaq">Save</button></div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("FAQ & board", html);
+      }
 
       document.getElementById("btnAddFaq").addEventListener("click", () => {
         const wrap = document.getElementById("faqItemsWrap");
@@ -2488,9 +2693,9 @@
     }
 
     // AI
-    async function openAiSettings() {
+    async function openAiSettings(targetElement) {
       const { settings } = await api("/api/cms/ai");
-      openModal("AI Settings", `
+      const html = `
         <div class="grid2">
           <div class="field"><label>Chat enabled</label><select id="a_chat"><option value="1" ${settings.chatEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.chatEnabled ? "selected" : ""}>No</option></select></div>
           <div class="field"><label>Search enabled</label><select id="a_search"><option value="1" ${settings.searchEnabled ? "selected" : ""}>Yes</option><option value="0" ${!settings.searchEnabled ? "selected" : ""}>No</option></select></div>
@@ -2502,7 +2707,13 @@
           <div class="muted" style="font-size:12px;">Describe the kind of shopper the assistant should focus on, for example value-conscious gadget buyers or busy parents shopping essentials.</div>
         </div>
         <div class="field" style="margin-top:12px;"><label>System prompt</label><textarea id="a_prompt" rows="8">${esc(settings.systemPrompt || "")}</textarea></div>
-        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAi" type="button">Save</button></div>`);
+        <div style="margin-top:14px;"><button class="btn-admin primary" id="saveAi" type="button">Save</button></div>`;
+
+      if (targetElement) {
+        targetElement.innerHTML = html;
+      } else {
+        openModal("AI Settings", html);
+      }
       document.getElementById("saveAi").addEventListener("click", async () => {
         await api("/api/cms/ai", {
           method: "PUT",
@@ -2532,14 +2743,127 @@
       await bootstrapAdminSession(me.user);
     }
 
+    // Page routing
+    const pageRoutes = {
+      '#dashboard': 'dashboardPage',
+      '#orders': 'ordersPage',
+      '#delivery': 'deliveryPage',
+      '#customers': 'customersPage',
+      '#products': 'productsPage',
+      '#reports': 'reportsPage',
+      '#customize': 'customizePage',
+      '#shop': 'shopPage',
+      '#ads': 'adsPage',
+      '#deals': 'dealsPage',
+      '#about': 'aboutPage',
+      '#faq': 'faqPage',
+      '#ai': 'aiPage'
+    };
+
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page-container').forEach(container => {
+        container.classList.remove('active');
+        container.hidden = true;
+      });
+      
+      // Show the selected page
+      const pageElement = document.getElementById(pageId);
+      if (pageElement) {
+        pageElement.classList.add('active');
+        pageElement.hidden = false;
+        
+        // Load content for the page if needed
+        loadPageContent(pageId);
+      }
+    }
+
+    async function loadPageContent(pageId) {
+      const contentElement = document.getElementById(pageId.replace('Page', 'Content'));
+      if (!contentElement) return;
+      
+      // Clear existing content
+      contentElement.innerHTML = '<div class="muted">Loading...</div>';
+      
+      try {
+        // Load content based on page
+        switch (pageId) {
+          case 'ordersPage':
+            await openOrdersTable({}, contentElement);
+            break;
+          case 'deliveryPage':
+            await openDeliveryAutomation(contentElement);
+            break;
+          case 'customersPage':
+            await openUsersTable(contentElement);
+            break;
+          case 'productsPage':
+            await openProductsTable(contentElement);
+            break;
+          case 'reportsPage':
+            await openReportsDashboard(contentElement);
+            break;
+          case 'customizePage':
+            await openAdminAppearance(contentElement);
+            break;
+          case 'shopPage':
+            await openShopCms(contentElement);
+            break;
+          case 'adsPage':
+            await openHomeImagesCms(contentElement);
+            break;
+          case 'dealsPage':
+            await openDealsCms(contentElement);
+            break;
+          case 'aboutPage':
+            await openAboutCms(contentElement);
+            break;
+          case 'faqPage':
+            await openFaqCms(contentElement);
+            break;
+          case 'aiPage':
+            await openAiSettings(contentElement);
+            break;
+        }
+      } catch (error) {
+        contentElement.innerHTML = `<div class="error">Failed to load content: ${error.message}</div>`;
+      }
+    }
+
+    function handleHashChange() {
+      const hash = window.location.hash || '#dashboard';
+      const pageId = pageRoutes[hash] || 'dashboardPage';
+      
+      // Update active nav
+      const actionMap = {
+        'dashboardPage': 'dashboard',
+        'ordersPage': 'list-orders',
+        'deliveryPage': 'manage-delivery',
+        'customersPage': 'list-users',
+        'productsPage': 'list-products',
+        'reportsPage': 'view-reports',
+        'customizePage': 'customize-admin',
+        'shopPage': 'edit-shop',
+        'adsPage': 'edit-home-images',
+        'dealsPage': 'edit-deals',
+        'aboutPage': 'edit-about',
+        'faqPage': 'edit-faq',
+        'aiPage': 'edit-ai'
+      };
+      
+      const action = actionMap[pageId] || 'dashboard';
+      syncActiveNav(action);
+      
+      showPage(pageId);
+    }
+
     document.getElementById("modalClose").addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
     adminSearch.addEventListener("input", applyAdminSearch);
     document.getElementById("btnDashboardRefresh").addEventListener("click", async (e) => {
       e.preventDefault();
-      syncActiveNav("dashboard");
-      await refreshDashboard().catch((err) => alert(err.message || "Failed"));
+      window.location.hash = '#dashboard';
     });
     document.getElementById("btnActivityRefresh").addEventListener("click", () => refreshDashboard().catch((err) => alert(err.message || "Failed")));
     document.getElementById("btnRecentRefresh").addEventListener("click", () => refreshDashboard().catch((err) => alert(err.message || "Failed")));
@@ -2553,23 +2877,33 @@
 
       syncNavForAction(action);
 
-      if (action === "customize-admin") return openAdminAppearance();
-      if (action === "list-orders") return openOrdersTable();
-      if (action === "manage-delivery") return openDeliveryAutomation();
-      if (action === "list-users") return openUsersTable();
-      if (action === "list-products") return openProductsTable();
+      // Handle page navigation
+      const hashMap = {
+        "customize-admin": "#customize",
+        "list-orders": "#orders",
+        "manage-delivery": "#delivery",
+        "list-users": "#customers",
+        "list-products": "#products",
+        "view-reports": "#reports",
+        "edit-shop": "#shop",
+        "edit-home-images": "#ads",
+        "edit-deals": "#deals",
+        "edit-about": "#about",
+        "edit-faq": "#faq",
+        "edit-ai": "#ai"
+      };
+
+      if (hashMap[action]) {
+        window.location.hash = hashMap[action];
+        return;
+      }
+
+      // Handle other actions that don't navigate
       if (action === "add-product") return openAddProduct();
       if (action === "edit-product") return openEditProduct(id);
       if (action === "delete-product") return deleteProduct(id);
       if (action === "save-order-status") return saveOrderStatus(id).catch((e) => alert(e.message || "Failed to update order"));
       if (action === "dispatch-order-rider") return dispatchOrderRider(id).catch((e) => alert(e.message || "Failed to dispatch rider"));
-      if (action === "edit-home-images") return openHomeImagesCms();
-      if (action === "edit-shop") return openShopCms();
-      if (action === "edit-deals") return openDealsCms();
-      if (action === "edit-about") return openAboutCms();
-      if (action === "edit-faq") return openFaqCms();
-      if (action === "view-reports") return openReportsDashboard();
-      if (action === "edit-ai") return openAiSettings();
       if (action === "remove-filter-row") {
         node.closest(".admin-filter-row")?.remove();
         const categoryValues = uniqueAdminValues(
@@ -2586,9 +2920,34 @@
       if (action === "remove-board-row") return node.closest(".board-edit-row")?.remove();
     });
 
+    const sidebarEl = document.querySelector(".admin-sidebar");
+    const adminShell = document.querySelector(".admin-app-shell");
+    const sidebarToggle = document.getElementById("sidebarToggle");
+
+    function setSidebarCollapsed(collapsed) {
+      sidebarEl?.classList.toggle("is-collapsed", collapsed);
+      adminShell?.classList.toggle("is-sidebar-collapsed", collapsed);
+      if (sidebarToggle) {
+        sidebarToggle.textContent = collapsed ? "‹" : "›";
+        sidebarToggle.setAttribute("aria-label", collapsed ? "Open sidebar" : "Collapse sidebar");
+      }
+    }
+
+    sidebarToggle?.addEventListener("click", () => {
+      const nextState = !sidebarEl.classList.contains("is-collapsed");
+      setSidebarCollapsed(nextState);
+      localStorage.setItem("adminSidebarCollapsed", String(nextState));
+    });
+
+    setSidebarCollapsed(localStorage.getItem("adminSidebarCollapsed") === "true");
+
     document.getElementById("btnHome").addEventListener("click", () => window.location.href = buildSiteUrl("/"));
     document.getElementById("btnRefresh").addEventListener("click", () => refreshDashboard().catch((e) => alert(e.message || "Failed")));
     document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = buildSiteUrl("/"); });
+
+    // Initialize routing
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Handle initial load
 
     init().catch((e) => {
       const message = e.message || "Failed to load admin";

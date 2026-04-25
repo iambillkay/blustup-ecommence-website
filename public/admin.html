@@ -15,24 +15,31 @@
             <img class="brand-mark" id="adminBrandMark" src="logos/Layer 2.png" alt="Blustup"  />
             <div class="brand-subtitle" id="adminBrandSubtitle">Commerce Admin</div>
           </div>
+          <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Collapse sidebar">›</button>
         </div>
         <span class="sidebar-status" id="adminSidebarStatus">Live console</span>
       </div>
 
       <nav class="sidebar-nav" aria-label="Admin sections">
-        <a href="#" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon"></span><span>Dashboard</span></a>
-        <a href="#" class="sidebar-link" data-action="customize-admin"><span class="nav-icon"></span><span>Customize admin</span></a>
-        <a href="#" class="sidebar-link" data-action="list-orders"><span class="nav-icon"></span><span>Orders</span></a>
-        <a href="#" class="sidebar-link" data-action="manage-delivery"><span class="nav-icon"></span><span>Delivery automation</span></a>
-        <a href="#" class="sidebar-link" data-action="list-users"><span class="nav-icon"></span><span>Customers</span></a>
-        <a href="#" class="sidebar-link" data-action="list-products"><span class="nav-icon"></span><span>Products</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-shop"><span class="nav-icon"></span><span>Shop setup</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon"></span><span>Ads & hero</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-deals"><span class="nav-icon"></span><span>Deals</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-about"><span class="nav-icon"></span><span>About page</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-faq"><span class="nav-icon"></span><span>FAQ and board</span></a>
-        <a href="#" class="sidebar-link" data-action="view-reports"><span class="nav-icon"></span><span>Reports</span></a>
-        <a href="#" class="sidebar-link" data-action="edit-ai"><span class="nav-icon"></span><span>AI settings</span></a>
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Primary</div>
+          <a href="#dashboard" class="sidebar-link active" id="btnDashboardRefresh" data-nav="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4Zm9 0h7v4h-7V4Zm0 6h7v10h-7V10ZM4 12h7v8H4v-8Z"/></svg></span><span>Dashboard</span></a>
+          <a href="#orders" class="sidebar-link" data-action="list-orders"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7Zm2-3h4v2h-4V4Zm4 2V4h-4v2h4Z"/></svg></span><span>Orders</span></a>
+          <a href="#delivery" class="sidebar-link" data-action="manage-delivery"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11h3l7-4v10l-7-4H3V11Zm13 1V9h-3v3h3Zm-9 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg></span><span>Delivery automation</span></a>
+          <a href="#customers" class="sidebar-link" data-action="list-users"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm-6 12a6 6 0 0 1 12 0v1H6v-1Z"/></svg></span><span>Customers</span></a>
+          <a href="#products" class="sidebar-link" data-action="list-products"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v10H4V8Zm8-2.67L6 8.2V17h12V8.2l-6-2.87Z"/></svg></span><span>Products</span></a>
+          <a href="#reports" class="sidebar-link" data-action="view-reports"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20h3V10H5v10Zm5 0h3V4h-3v16Zm5 0h3V14h-3v6Z"/></svg></span><span>Reports</span></a>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Tools</div>
+          <a href="#customize" class="sidebar-link" data-action="customize-admin"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16v2H4V7Zm0 11h10v2H4v-2Zm0-6h8v2H4v-2Z"/></svg></span><span>Customize admin</span></a>
+          <a href="#shop" class="sidebar-link" data-action="edit-shop"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16l-2 7H6L4 7Zm0 8h16v5H4v-5Z"/></svg></span><span>Shop setup</span></a>
+          <a href="#ads" class="sidebar-link" data-action="edit-home-images"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11h3l7-4v10l-7-4H3V11Zm13.5-6L21 9v6l-4.5 4V5Z"/></svg></span><span>Ads & hero</span></a>
+          <a href="#deals" class="sidebar-link" data-action="edit-deals"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10v10h10l6-6V4H4Zm4 5a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg></span><span>Deals</span></a>
+          <a href="#about" class="sidebar-link" data-action="edit-about"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-6h2v6Zm0-8h-2V7h2v2Z"/></svg></span><span>About page</span></a>
+          <a href="#faq" class="sidebar-link" data-action="edit-faq"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-2h2v2Zm1.07-7.75c-.9.93-1.07 1.34-1.07 2.25h-2v-.5c0-1.2.43-1.83 1.43-2.83.8-.8.85-1.17.85-1.42 0-.55-.45-1-1-1s-1 .45-1 1H9c0-1.65 1.35-3 3-3s3 1.35 3 3c0 .92-.36 1.5-1.93 2.75Z"/></svg></span><span>FAQ and board</span></a>
+          <a href="#ai" class="sidebar-link" data-action="edit-ai"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v1H6v4h2v6h8v-6h2V7h-2V6a4 4 0 0 0-4-4Zm0 2a2 2 0 0 1 2 2v1H10V6a2 2 0 0 1 2-2Z"/></svg></span><span>AI settings</span></a>
+        </div>
       </nav>
 
       <div class="sidebar-support">
@@ -76,118 +83,83 @@
         </div>
       </header>
 
-      <section class="workspace-hero">
-        <div class="hero-copy">
-          <p class="eyebrow" id="adminHeroEyebrow">Admin cockpit</p>
-          <h1 id="adminGreeting">Hi, Blustup team</h1>
-          <p id="adminGreetingSub">Manage products, storefront content, and automation from one calm workspace.</p>
-          <p id="adminGreetingLive" class="hero-live-copy"></p>
-        </div>
-        <div class="hero-controls">
-          <button class="hero-arrow" type="button" data-action="edit-home-images" aria-label="Edit home images">
-            <svg viewBox="0 0 24 24" focusable="false"><path d="M14 7l-5 5l5 5v-3h7v-4h-7z" /></svg>
-          </button>
-          <button class="hero-arrow" type="button" data-action="edit-deals" aria-label="Edit deals">
-            <svg viewBox="0 0 24 24" focusable="false"><path d="M10 7l5 5l-5 5v-3H3v-4h7z" /></svg>
-          </button>
-        </div>
-      </section>
-
-      <section class="product-strip" id="dashboardPreview">
-        <article class="product-card placeholder-card">
-          <div class="product-card-media"></div>
-          <div class="product-card-body">
-            <div class="product-card-title">Loading catalog</div>
-            <div class="product-card-meta">Pulling your latest products into the dashboard.</div>
+      <div class="page-container active" id="dashboardPage">
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow" id="adminHeroEyebrow">Admin cockpit</p>
+            <h1 id="adminGreeting">Hi, Blustup team</h1>
+            <p id="adminGreetingSub">Manage products, storefront content, and automation from one calm workspace.</p>
+            <p id="adminGreetingLive" class="hero-live-copy"></p>
           </div>
-        </article>
-        <article class="product-card placeholder-card">
-          <div class="product-card-media"></div>
-          <div class="product-card-body">
-            <div class="product-card-title">Syncing updates</div>
-            <div class="product-card-meta">Recent admin activity will appear here in a moment.</div>
+          <div class="hero-controls">
+            <button class="hero-arrow" type="button" data-action="edit-home-images" aria-label="Edit home images">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M14 7l-5 5l5 5v-3h7v-4h-7z" /></svg>
+            </button>
+            <button class="hero-arrow" type="button" data-action="edit-deals" aria-label="Edit deals">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M10 7l5 5l-5 5v-3H3v-4h7z" /></svg>
+            </button>
           </div>
-        </article>
-        <article class="product-card placeholder-card">
-          <div class="product-card-media"></div>
-          <div class="product-card-body">
-            <div class="product-card-title">Preparing insights</div>
-            <div class="product-card-meta">Quick metrics will refresh as soon as the console loads.</div>
-          </div>
-        </article>
-      </section>
+        </section>
 
-      <section class="command-board">
-        <article class="command-card" data-search-text="orders shipping delivery fulfillment status tracking">
-          <div class="command-card-top"><div><p class="eyebrow">Orders</p><h2>Fulfillment board</h2></div><span class="command-stat" id="ordersStat">0 active orders</span></div>
-          <p>Track new purchases, update order status, and keep delivery progress visible for your team.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-orders">Open orders</a></div>
-        </article>
+        <section class="product-strip" id="dashboardPreview">
+          <article class="product-card placeholder-card">
+            <div class="product-card-media"></div>
+            <div class="product-card-body">
+              <div class="product-card-title">Loading catalog</div>
+              <div class="product-card-meta">Pulling your latest products into the dashboard.</div>
+            </div>
+          </article>
+          <article class="product-card placeholder-card">
+            <div class="product-card-media"></div>
+            <div class="product-card-body">
+              <div class="product-card-title">Syncing updates</div>
+              <div class="product-card-meta">Recent admin activity will appear here in a moment.</div>
+            </div>
+          </article>
+          <article class="product-card placeholder-card">
+            <div class="product-card-media"></div>
+            <div class="product-card-body">
+              <div class="product-card-title">Preparing insights</div>
+              <div class="product-card-meta">Quick metrics will refresh as soon as the console loads.</div>
+            </div>
+          </article>
+        </section>
 
-        <article class="command-card" data-search-text="delivery riders dispatch shipping automation courier">
-          <div class="command-card-top"><div><p class="eyebrow">Delivery</p><h2>Rider dispatch automation</h2></div><span class="command-stat" id="deliveryStat">Dispatch ready</span></div>
-          <p>Assign riders automatically when orders are shipped and keep a simple roster with recent dispatch history.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="manage-delivery">Manage delivery</a></div>
+        <section class="command-board">
+          <article class="command-card" data-search-text="orders shipping delivery fulfillment status tracking">
+          <div class="command-card-top"><div><p class="eyebrow">Orders</p><h2>Orders & delivery</h2></div><span class="command-stat" id="ordersStat">0 active orders</span></div>
+          <p>Track open orders, manage fulfillment, and keep deliveries moving from one consolidated view.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-orders">Open orders</a><a href="#" class="btn-admin ghost" data-action="manage-delivery">Delivery</a></div>
         </article>
 
         <article class="command-card" data-search-text="customers consumers users accounts billing profile">
           <div class="command-card-top"><div><p class="eyebrow">Customers</p><h2>Customer desk</h2></div><span class="command-stat" id="customersStat">0 shoppers</span></div>
-          <p>Review customer accounts, saved billing details, and who has been ordering most recently.</p>
+          <p>Review customer accounts, saved billing details, and the shoppers who matter most right now.</p>
           <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-users">Open customers</a></div>
         </article>
 
         <article class="command-card command-card-primary" data-search-text="products catalog inventory add edit">
-          <div class="command-card-top"><div><p class="eyebrow">Store</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
-          <p>Review product listings, add new inventory, and keep the storefront catalog clean.</p>
+          <div class="command-card-top"><div><p class="eyebrow">Catalog</p><h2>Catalog control</h2></div><span class="command-stat" id="catalogStat">0 active products</span></div>
+          <p>Review product listings, add inventory, and keep the storefront catalog clean and current.</p>
           <div class="command-actions"><a href="#" class="btn-admin primary" data-action="list-products">Open catalog</a><a href="#" class="btn-admin ghost" data-action="add-product">Add product</a></div>
         </article>
 
-        <article class="command-card" data-search-text="shop filters categories title subtitle">
-          <div class="command-card-top"><div><p class="eyebrow">Shop</p><h2>Filter and category setup</h2></div><span class="command-stat" id="shopStat">0 categories</span></div>
-          <p>Adjust the shop title, subtitle, and category filter system that drives discovery.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-shop">Edit shop</a></div>
+        <article class="command-card" data-search-text="shop ads hero deals promotions campaign content">
+          <div class="command-card-top"><div><p class="eyebrow">Storefront</p><h2>Shop, ads & deals</h2></div><span class="command-stat" id="shopStat">0 categories</span></div>
+          <p>Adjust shop filters, homepage hero content, and featured promotions from one shared workflow.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-shop">Edit shop</a><a href="#" class="btn-admin ghost" data-action="edit-home-images">Manage ads</a><a href="#" class="btn-admin ghost" data-action="edit-deals">Manage deals</a></div>
         </article>
 
-        <article class="command-card" data-search-text="faq board directors help content">
-          <div class="command-card-top"><div><p class="eyebrow">Content</p><h2>FAQ and leadership section</h2></div><span class="command-stat">Support content</span></div>
-          <p>Maintain the FAQ experience, board profiles, and support messaging shown to customers.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-faq">Open content</a></div>
+        <article class="command-card" data-search-text="about faq board support help content">
+          <div class="command-card-top"><div><p class="eyebrow">Content</p><h2>Brand & support</h2></div><span class="command-stat" id="aboutStat">Brand story</span></div>
+          <p>Maintain About page copy, FAQ messaging, and leadership content with consistent storefront tone.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-about">Edit about</a><a href="#" class="btn-admin ghost" data-action="edit-faq">Open content</a></div>
         </article>
 
-        <article class="command-card" data-search-text="deals promotions timers campaigns offers">
-          <div class="command-card-top"><div><p class="eyebrow">Deals</p><h2>Campaign scheduling</h2></div><span class="command-stat" id="dealsStat">Promotions ready</span></div>
-          <p>Control featured deals, timers, and the product rows highlighted on the homepage.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-deals">Manage deals</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="home hero media images banners upload ads campaigns">
-          <div class="command-card-top"><div><p class="eyebrow">Homepage</p><h2>Ads and hero control</h2></div><span class="command-stat" id="homeStat">Hero ads</span></div>
-          <p>Manage hero slides, campaign headlines, CTA links, and the ad imagery customers see first.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-home-images">Manage ads</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="about brand story mission page copy content">
-          <div class="command-card-top"><div><p class="eyebrow">Brand</p><h2>About page content</h2></div><span class="command-stat" id="aboutStat">Brand story</span></div>
-          <p>Update the About page headline, stats, story cards, and the trust pillars shown on the storefront.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-about">Edit about page</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="admin appearance dashboard branding theme colors logo customize">
-          <div class="command-card-top"><div><p class="eyebrow">Appearance</p><h2>Admin page customization</h2></div><span class="command-stat">Theme ready</span></div>
-          <p>Change the admin logo, dashboard copy, button labels, and colors so the console matches your brand.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="customize-admin">Customize admin</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="reports analytics dashboard cron email revenue funnel inventory">
-          <div class="command-card-top"><div><p class="eyebrow">Reports</p><h2>Analytics and automation</h2></div><span class="command-stat" id="reportsStat">Reports ready</span></div>
-          <p>Review revenue, funnel activity, slow movers, and schedule daily or weekly report emails.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="view-reports">Open reports</a></div>
-        </article>
-
-        <article class="command-card" data-search-text="ai chatbot search automation bot prompt">
-          <div class="command-card-top"><div><p class="eyebrow">Automation</p><h2>AI assistant controls</h2></div><span class="command-stat" id="aiStat">Assistant online</span></div>
-          <p>Update chatbot availability, search behavior, and the prompt that guides the AI experience.</p>
-          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="edit-ai">Tune AI</a></div>
+        <article class="command-card" data-search-text="reports analytics automation ai appearance theme settings">
+          <div class="command-card-top"><div><p class="eyebrow">Insights</p><h2>Reports & automation</h2></div><span class="command-stat" id="reportsStat">Reports ready</span></div>
+          <p>Review business metrics, schedule reports, and tune AI assistant behavior from one place.</p>
+          <div class="command-actions"><a href="#" class="btn-admin primary" data-action="view-reports">Open reports</a><a href="#" class="btn-admin ghost" data-action="edit-ai">Tune AI</a></div>
         </article>
       </section>
 
@@ -205,6 +177,139 @@
           </table>
         </div>
       </section>
+      </div>
+
+      <div class="page-container" id="ordersPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Order management</p>
+            <h1>Orders</h1>
+            <p>Track and manage customer orders, fulfillment status, and delivery coordination.</p>
+          </div>
+        </section>
+        <div id="ordersContent"></div>
+      </div>
+
+      <div class="page-container" id="deliveryPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Delivery automation</p>
+            <h1>Delivery Management</h1>
+            <p>Configure automated delivery workflows, manage riders, and track shipments.</p>
+          </div>
+        </section>
+        <div id="deliveryContent"></div>
+      </div>
+
+      <div class="page-container" id="customersPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Customer management</p>
+            <h1>Customers</h1>
+            <p>View customer accounts, order history, and manage user data.</p>
+          </div>
+        </section>
+        <div id="customersContent"></div>
+      </div>
+
+      <div class="page-container" id="productsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Product catalog</p>
+            <h1>Products</h1>
+            <p>Manage your product catalog, inventory levels, and pricing.</p>
+          </div>
+        </section>
+        <div id="productsContent"></div>
+      </div>
+
+      <div class="page-container" id="reportsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Business analytics</p>
+            <h1>Reports</h1>
+            <p>View detailed business metrics, sales reports, and performance analytics.</p>
+          </div>
+        </section>
+        <div id="reportsContent"></div>
+      </div>
+
+      <div class="page-container" id="customizePage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Admin customization</p>
+            <h1>Customize Admin</h1>
+            <p>Personalize the admin interface appearance and behavior.</p>
+          </div>
+        </section>
+        <div id="customizeContent"></div>
+      </div>
+
+      <div class="page-container" id="shopPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Shop configuration</p>
+            <h1>Shop Setup</h1>
+            <p>Configure shop filters, categories, and storefront settings.</p>
+          </div>
+        </section>
+        <div id="shopContent"></div>
+      </div>
+
+      <div class="page-container" id="adsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Homepage content</p>
+            <h1>Ads & Hero</h1>
+            <p>Manage homepage hero images, promotional banners, and featured content.</p>
+          </div>
+        </section>
+        <div id="adsContent"></div>
+      </div>
+
+      <div class="page-container" id="dealsPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Promotions</p>
+            <h1>Deals</h1>
+            <p>Create and manage promotional deals, discounts, and special offers.</p>
+          </div>
+        </section>
+        <div id="dealsContent"></div>
+      </div>
+
+      <div class="page-container" id="aboutPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Brand content</p>
+            <h1>About Page</h1>
+            <p>Edit your company story, mission, and brand information.</p>
+          </div>
+        </section>
+        <div id="aboutContent"></div>
+      </div>
+
+      <div class="page-container" id="faqPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Support content</p>
+            <h1>FAQ & Board</h1>
+            <p>Manage frequently asked questions and leadership team information.</p>
+          </div>
+        </section>
+        <div id="faqContent"></div>
+      </div>
+
+      <div class="page-container" id="aiPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">AI configuration</p>
+            <h1>AI Settings</h1>
+            <p>Configure AI assistant behavior, chat settings, and search functionality.</p>
+          </div>
+        </section>
+        <div id="aiContent"></div>
+      </div>
     </main>
 
     <aside class="admin-rail">
@@ -813,8 +918,8 @@
       if (ordersStat) ordersStat.textContent = `${openOrders.length} active orders`;
       if (customersStat) customersStat.textContent = `${userList.length} shoppers`;
       shopStat.textContent = `${categoryCount} categories`;
-      dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
-      homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
+      if (dealsStat) dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
+      if (homeStat) homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
       if (aboutStat) aboutStat.textContent = activeProducts.length ? "Story synced" : "Brand story";
       if (deliveryStat) {
         const dispatchedOrders = orderList.filter((order) => order?.deliveryAssignment?.status);
@@ -2583,6 +2688,27 @@
       if (action === "remove-faq-qa") return node.closest(".faq-edit-row")?.remove();
       if (action === "remove-board-row") return node.closest(".board-edit-row")?.remove();
     });
+
+    const sidebarEl = document.querySelector(".admin-sidebar");
+    const adminShell = document.querySelector(".admin-app-shell");
+    const sidebarToggle = document.getElementById("sidebarToggle");
+
+    function setSidebarCollapsed(collapsed) {
+      sidebarEl?.classList.toggle("is-collapsed", collapsed);
+      adminShell?.classList.toggle("is-sidebar-collapsed", collapsed);
+      if (sidebarToggle) {
+        sidebarToggle.textContent = collapsed ? "‹" : "›";
+        sidebarToggle.setAttribute("aria-label", collapsed ? "Open sidebar" : "Collapse sidebar");
+      }
+    }
+
+    sidebarToggle?.addEventListener("click", () => {
+      const nextState = !sidebarEl.classList.contains("is-collapsed");
+      setSidebarCollapsed(nextState);
+      localStorage.setItem("adminSidebarCollapsed", String(nextState));
+    });
+
+    setSidebarCollapsed(localStorage.getItem("adminSidebarCollapsed") === "true");
 
     document.getElementById("btnHome").addEventListener("click", () => window.location.href = buildSiteUrl("/"));
     document.getElementById("btnRefresh").addEventListener("click", () => refreshDashboard().catch((e) => alert(e.message || "Failed")));
