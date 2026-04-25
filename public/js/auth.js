@@ -337,6 +337,7 @@ function setButtonState(button, label, handler) {
 function updateLoginUI(name, user) {
   const desktopButton = document.getElementById("loginBtn");
   const mobileButton = document.getElementById("loginBtnMobile");
+  if (typeof loadCartFromStorage === "function") loadCartFromStorage();
 
   if (!name) {
     setButtonState(desktopButton, "Log In", () => showPage("login"));

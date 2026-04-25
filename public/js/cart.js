@@ -64,10 +64,18 @@ function cartItemFromProduct(product, qty) {
 
 function loadCartFromStorage() {
   try {
-    const raw = localStorage.getItem(CART_KEY);
-    if (!raw) return;
+    const user = typeof getStoredUser === "function" ? getStoredUser() : null;
+    const key = user?.id ? `${CART_KEY}_u${user.id}` : `${CART_KEY}_guest`;
+    const raw = localStorage.getItem(key);
+    if (!raw) {
+      cart = [];
+      return;
+    }
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return;
+    if (!Array.isArray(parsed)) {
+      cart = [];
+      return;
+    }
     cart = parsed.map((row) => ({
       ...row,
       id: String(row.id),
@@ -81,7 +89,9 @@ function loadCartFromStorage() {
 
 function saveCartToStorage() {
   try {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    const user = typeof getStoredUser === "function" ? getStoredUser() : null;
+    const key = user?.id ? `${CART_KEY}_u${user.id}` : `${CART_KEY}_guest`;
+    localStorage.setItem(key, JSON.stringify(cart));
   } catch (_e) {}
 }
 
