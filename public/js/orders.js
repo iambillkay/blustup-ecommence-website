@@ -89,7 +89,7 @@ function renderOrderTrackingProgress(order) {
     <div class="order-progress-steps" aria-label="Order progress">
       ${ORDER_TRACKING_STEPS.map((step, index) => `
         <div class="order-progress-step ${tracking.completedIndex > index ? "is-complete" : ""} ${tracking.completedIndex === index ? "is-current" : ""}">
-          <div class="order-progress-dot">${tracking.completedIndex > index ? "✓" : index + 1}</div>
+          <div class="order-progress-dot">${tracking.completedIndex > index ? '<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>' : index + 1}</div>
           <div class="order-progress-copy">
             <strong>${escapeOrdersHtml(humanizeOrderStatus(step))}</strong>
             <span>${escapeOrdersHtml(
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const reference = document.getElementById("orderLookupRef")?.value.trim() || "";
     const email = document.getElementById("orderLookupEmail")?.value.trim() || "";
     if (!reference || !email) {
-      showToast("!", "Enter your order reference and email.");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Enter your order reference and email.");
       return;
     }
 

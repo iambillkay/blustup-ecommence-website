@@ -195,7 +195,7 @@ function showToast(iconOrMessage, maybeMessage) {
   const icon = hasExplicitMessage ? iconOrMessage : "!";
   const message = hasExplicitMessage ? maybeMessage : iconOrMessage;
 
-  iconEl.textContent = icon;
+  iconEl.innerHTML = icon;
   msgEl.textContent = message;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 2800);

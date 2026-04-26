@@ -50,7 +50,9 @@ function truncateStorefrontText(value, maxLength = 88) {
 function renderRatingStars(rating) {
   const rounded = Math.max(1, Math.min(5, Math.round(Number(rating || 0))));
   return Array.from({ length: 5 }, (_, index) =>
-    `<span class="product-star ${index < rounded ? "is-filled" : ""}">&#9733;</span>`
+    `<span class="product-star ${index < rounded ? "is-filled" : ""}">
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg>
+    </span>`
   ).join("");
 }
 
@@ -177,15 +179,15 @@ function renderProductReviewForm(product = {}) {
           <span class="product-review-label">Rating</span>
           <div class="product-review-rating-picker" aria-label="Choose your rating">
             <input id="productReviewRating5-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="5" checked>
-            <label for="productReviewRating5-${escapeStorefrontHtml(productId)}" aria-label="5 stars" title="5 stars">&#9733;</label>
+            <label for="productReviewRating5-${escapeStorefrontHtml(productId)}" aria-label="5 stars" title="5 stars"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></label>
             <input id="productReviewRating4-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="4">
-            <label for="productReviewRating4-${escapeStorefrontHtml(productId)}" aria-label="4 stars" title="4 stars">&#9733;</label>
+            <label for="productReviewRating4-${escapeStorefrontHtml(productId)}" aria-label="4 stars" title="4 stars"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></label>
             <input id="productReviewRating3-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="3">
-            <label for="productReviewRating3-${escapeStorefrontHtml(productId)}" aria-label="3 stars" title="3 stars">&#9733;</label>
+            <label for="productReviewRating3-${escapeStorefrontHtml(productId)}" aria-label="3 stars" title="3 stars"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></label>
             <input id="productReviewRating2-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="2">
-            <label for="productReviewRating2-${escapeStorefrontHtml(productId)}" aria-label="2 stars" title="2 stars">&#9733;</label>
+            <label for="productReviewRating2-${escapeStorefrontHtml(productId)}" aria-label="2 stars" title="2 stars"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></label>
             <input id="productReviewRating1-${escapeStorefrontHtml(productId)}" type="radio" name="rating" value="1">
-            <label for="productReviewRating1-${escapeStorefrontHtml(productId)}" aria-label="1 star" title="1 star">&#9733;</label>
+            <label for="productReviewRating1-${escapeStorefrontHtml(productId)}" aria-label="1 star" title="1 star"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></label>
           </div>
         </div>
       </div>
@@ -408,7 +410,9 @@ function renderProductDetailMarkup(product = {}) {
                 onclick="toggleWishlist('${String(product.id).replace(/'/g, "\\'")}', event)"
                 aria-pressed="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'true' : 'false'}"
                 aria-label="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}">
-                <span class="pill-icon">${typeof isInWishlist === 'function' && isInWishlist(product.id) ? '&#9829;' : '&#9825;'}</span>
+                <span class="pill-icon">
+                  <svg class="icon" aria-hidden="true"><use xlink:href="#icon-heart"></use></svg>
+                </span>
               </button>
             </div>
           </div>

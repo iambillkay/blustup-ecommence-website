@@ -93,14 +93,14 @@ async function toggleWishlist(productId, event) {
       else wishlistIds.delete(id);
       saveWishlistToStorage();
       updateWishlistHearts();
-      if (typeof showToast === "function") showToast("!", "Sync failed");
+      if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Sync failed");
     }
   } else {
     if (isWishlistPageActive()) renderWishlistPage();
   }
 
   if (typeof showToast === "function") {
-    showToast("💖", wasIn ? "Removed from wishlist" : "Added to wishlist");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-heart"></use></svg>', wasIn ? "Removed from wishlist" : "Added to wishlist");
   }
 }
 
@@ -119,14 +119,14 @@ async function moveToCart(productId, event) {
   await toggleWishlist(productId, null);
   
   if (typeof showToast === "function") {
-    showToast("🛒", "Moved to cart!");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg>', "Moved to cart!");
   }
 }
 
 function shareWishlist() {
   const items = Array.from(wishlistIds);
   if (!items.length) {
-    if (typeof showToast === "function") showToast("!", "Wishlist is empty");
+    if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Wishlist is empty");
     return;
   }
 
@@ -150,7 +150,7 @@ function copyWishlistLink() {
   dummy.select();
   document.execCommand("copy");
   document.body.removeChild(dummy);
-  if (typeof showToast === "function") showToast("🔗", "Link copied to clipboard!");
+  if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-link"></use></svg>', "Link copied to clipboard!");
 }
 
 async function loadWishlist() {
@@ -186,7 +186,7 @@ function renderWishlistPage() {
     if (empty) {
       empty.innerHTML = `
         <div class="wishlist-empty-state">
-          <div class="icon">💝</div>
+          <div class="icon"><svg class="icon" style="font-size:48px;" aria-hidden="true"><use xlink:href="#icon-heart"></use></svg></div>
           <h2>Your wishlist is empty</h2>
           <p>Browse our shop and tap the heart icon on any product to save it for later.</p>
           <button class="checkout-btn" onclick="showPage('shop')">Browse the Shop</button>
@@ -228,7 +228,7 @@ function renderWishlistPage() {
             ${formatWishlistMoney(p.price)}
           </div>
           <button class="add-to-cart-btn" onclick="moveToCart('${String(p.id).replace(/'/g, "\\'")}', event)">
-            <span class="add-btn-icon">🛒</span>
+            <span class="add-btn-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></span>
             Move to Cart
           </button>
         </div>

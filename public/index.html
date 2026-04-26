@@ -20,8 +20,40 @@
   <link rel="stylesheet" href="css/cart-checkout.css">
   <link rel="stylesheet" href="css/ai-chat.css">
   <link rel="stylesheet" href="css/info-pages.css">
+  <link rel="stylesheet" href="css/icons.css">
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-cart" viewBox="0 0 24 24"><path d="M3 3h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12L10.1 13h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0 0 22 5H6"></path></symbol>
+  <symbol id="icon-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></symbol>
+  <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></symbol>
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></symbol>
+  <symbol id="icon-shop" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/></symbol>
+  <symbol id="icon-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="icon-orders" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+  <symbol id="icon-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="8"/></symbol>
+  <symbol id="icon-ai" viewBox="0 0 24 24"><path d="M12 2L14.5 9L22 12L14.5 15L12 22L9.5 15L2 12L9.5 9L12 2Z"/></symbol>
+  <symbol id="icon-sparkle" viewBox="0 0 24 24"><path d="M12 2L14.5 9L22 12L14.5 15L12 22L9.5 15L2 12L9.5 9L12 2Z"/></symbol>
+  <symbol id="icon-login" viewBox="0 0 24 24"><path d="M15 12h-9"/><polyline points="12 15 15 12 12 9"/></symbol>
+  <symbol id="icon-drawer-cart" viewBox="0 0 24 24"><path d="M3 3h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12L10.1 13h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0 0 22 5H6"></path></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="icon-location" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+  <symbol id="icon-card" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
+  <symbol id="icon-package" viewBox="0 0 24 24"><path d="M21 10H3"/><path d="M21 6H3"/><path d="M21 14H3"/><path d="M21 18H3"/></symbol>
+  <symbol id="icon-cross" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="icon-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></symbol>
+  <symbol id="icon-chevron-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="icon-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="icon-minus" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+  <symbol id="icon-history" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></symbol>
+</svg>
+
 
 <!-- ═══════════════ NAVIGATION ═══════════════ -->
 
@@ -71,7 +103,8 @@
 <button class="btn-login" onclick="showPage('login')" id="loginBtn">
 Log In
 </button>    <button class="cart-btn" onclick="showPage('cart')">
-      🛒 Cart
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg>
+      <span class="sr-only">Cart</span> Cart
       <span class="cart-count" id="cart-count">0</span>
     </button>
     <!-- Hamburger (mobile only) -->
@@ -103,17 +136,17 @@ Log In
 
   <p class="drawer-section-title">Browse</p>
   <ul class="nav-links drawer-nav-main">
-    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link"><span class="drawer-link-icon">⌂</span><span>Home</span></a></li>
-    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()"><span class="drawer-link-icon">□</span><span>Shop</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()"><span class="drawer-link-icon">★</span><span>Loyalty</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()"><span class="drawer-link-icon">◴</span><span>Orders</span></a></li>
+    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home"></use></svg></span><span>Home</span></a></li>
+    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-grid"></use></svg></span><span>Shop</span></a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></span><span>Loyalty</span></a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-history"></use></svg></span><span>Orders</span></a></li>
   </ul>
 
   <p class="drawer-section-title">Help & policy</p>
   <ul class="nav-links drawer-nav-secondary">
     <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()"><span class="drawer-link-icon">i</span><span>About</span></a></li>
     <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()"><span class="drawer-link-icon">?</span><span>FAQ</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()"><span class="drawer-link-icon">◍</span><span>Privacy</span></a></li>
+    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg></span><span>Privacy</span></a></li>
   </ul>
 
   <div class="drawer-quick-links" aria-label="Quick links">
@@ -123,13 +156,13 @@ Log In
   </div>
 
   <div class="drawer-actions">
-    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon">◎</span><span>Ask AI</span></button>
-    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile"><span class="drawer-link-icon">↪</span><span>Log In</span></button>
+    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-ai"></use></svg></span><span>Ask AI</span></button>
+    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-login"></use></svg></span><span>Log In</span></button>
     <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
-      <span class="drawer-link-icon">◧</span><span>Cart</span>
+        <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg><span class="sr-only">Cart</span>
       <span class="cart-count" id="cart-count-mobile">0</span>
     </button>
-    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon">→</span><span>Shop Now</span></button>
+    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg></span><span>Shop Now</span></button>
   </div>
 </div>
 </nav>
@@ -149,8 +182,8 @@ Log In
         </div>
     </div>
 
-    <button class="hero-btn prev">❮</button>
-    <button class="hero-btn next">❯</button>
+      <button class="hero-btn prev"><svg class="icon icon-arrow-left" aria-hidden="true"><use xlink:href="#icon-arrow-left"></use></svg></button>
+      <button class="hero-btn next"><svg class="icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg></button>
 
     <div class="hero-dots"></div>
 </section>
@@ -171,9 +204,9 @@ Log In
     <a href="#" onclick="event.preventDefault(); showPage('shop')">See All ></a>
   </div>
   <div class="scroll-wrapper">
-    <button class="scroll-btn left-btn" onclick="scrollLeft(this)">‹</button>
-  <div class="product-row" id="productRow1"></div>
-    <button class="scroll-btn right-btn" onclick="scrollRight(this)">›</button>
+    <button class="scroll-btn left-btn" onclick="scrollLeft(this)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-left"></use></svg></button>
+    <div class="product-row" id="productRow1"></div>
+    <button class="scroll-btn right-btn" onclick="scrollRight(this)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-right"></use></svg></button>
   </div>
 </section>
 
@@ -184,9 +217,9 @@ Log In
     <a href="#" onclick="event.preventDefault(); showPage('shop')">See All ></a>
   </div>
   <div class="scroll-wrapper">
-    <button class="scroll-btn left-btn" onclick="scrollLeft(this)">‹</button>
+    <button class="scroll-btn left-btn" onclick="scrollLeft(this)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-left"></use></svg></button>
   <div class="product-row" id="productRow2"></div>
-    <button class="scroll-btn right-btn" onclick="scrollRight(this)">›</button>
+    <button class="scroll-btn right-btn" onclick="scrollRight(this)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-right"></use></svg></button>
   </div>
 </section>
     <!-- FOOTER -->
@@ -467,12 +500,12 @@ Log In
 
   <div id="page-cart" class="page">
     <div class="cart-container">
-      <h1>Your Cart 🛒</h1>
+      <h1>Your Cart <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></h1>
       <div class="cart-layout">
         <div>
           <div class="cart-items" id="cart-items-container"></div>
           <div id="empty-cart" style="display:none;text-align:center;padding:60px 0;color:var(--text-light);">
-            <div style="font-size:56px;margin-bottom:16px;">🛒</div>
+            <div style="font-size:56px;margin-bottom:16px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></div>
             <p style="font-size:1.1rem;font-weight:600;color:var(--text-dark);">Your cart is empty</p>
             <p style="margin-top:8px;font-size:.9rem;">Discover amazing travel deals in our shop</p>
             <button class="btn-primary" style="margin-top:24px;" onclick="showPage('shop')">Browse Shop →</button>
@@ -491,7 +524,7 @@ Log In
             <button class="checkout-btn" id="cartCheckoutBtn" onclick="showPage('checkout')">Proceed to Checkout →</button>
             <button type="button" class="cart-secondary-btn" id="clearCartBtn">Clear Cart</button>
           </div>
-          <div class="secure-note">🔒 Secure &amp; encrypted checkout</div>
+          <div class="secure-note"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> Secure &amp; encrypted checkout</div>
         </div>
       </div>
     </div>
@@ -502,7 +535,7 @@ Log In
     <div class="checkout-container">
       <h1>Checkout</h1>
       <div class="checkout-steps">
-        <div class="step done"><div class="step-num">✓</div>Cart</div>
+        <div class="step done"><div class="step-num"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></div>Cart</div>
         <div class="step-divider"></div>
         <div class="step active"><div class="step-num">2</div>Details</div>
         <div class="step-divider"></div>
@@ -524,7 +557,7 @@ Log In
             </div>
           </div>
           <div class="form-section">
-            <h3><span class="sec-icon">👤</span>Contact Information</h3>
+            <h3><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user"></use></svg> Contact Information</h3>
             <div class="form-grid">
               <div class="form-group"><label>First Name</label><input id="co-first" type="text" placeholder="John" autocomplete="given-name"></div>
               <div class="form-group"><label>Last Name</label><input id="co-last" type="text" placeholder="Doe" autocomplete="family-name"></div>
@@ -533,7 +566,7 @@ Log In
             </div>
           </div>
           <div class="form-section">
-            <h3><span class="sec-icon">📍</span>Billing Address</h3>
+            <h3><svg class="icon" aria-hidden="true"><use xlink:href="#icon-location"></use></svg> Billing Address</h3>
             <div class="form-grid full"><div class="form-group"><label>Street Address</label><input id="co-street" type="text" placeholder="123 Main Street" autocomplete="street-address"></div></div>
             <div class="form-grid" style="margin-top:16px;">
               <div class="form-group"><label>City</label><input id="co-city" type="text" placeholder="New York" autocomplete="address-level2"></div>
@@ -543,10 +576,10 @@ Log In
             </div>
           </div>
           <div class="form-section">
-            <h3><span class="sec-icon">💳</span>Payment Method</h3>
+            <h3><svg class="icon" aria-hidden="true"><use xlink:href="#icon-card"></use></svg> Payment Method</h3>
             <div class="payment-icons">
-              <div class="pay-icon active" data-method="card">💳 Card</div>
-              <div class="pay-icon" data-method="cod">📦 Pay on delivery</div>
+              <div class="pay-icon active" data-method="card"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-card"></use></svg> Card</div>
+              <div class="pay-icon" data-method="cod"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-package"></use></svg> Pay on delivery</div>
               <div class="pay-icon" data-method="paypal">PayPal</div>
               <div class="pay-icon" data-method="apple">Apple Pay</div>
               <div class="pay-icon" data-method="google">Google Pay</div>
@@ -562,7 +595,7 @@ Log In
               </div>
             </div>
           </div>
-          <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">🔒 Place Order &amp; Pay</button>
+          <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> Place Order &amp; Pay</button>
         </div>
         <div class="checkout-summary">
           <div class="cart-summary">
@@ -571,7 +604,7 @@ Log In
             <div style="height:1px;background:#f0f1fa;margin:16px 0;"></div>
             <div id="checkout-summary-rows"></div>
             <div class="summary-row total"><span>Total</span><span id="checkout-total-display">₵0.00</span></div>
-            <div class="secure-note" style="margin-top:16px;">🔒 SSL / SET protected payment</div>
+            <div class="secure-note" style="margin-top:16px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> SSL / SET protected payment</div>
             <div id="checkout-loyalty-note" class="checkout-loyalty-note">Sign in before payment to earn loyalty points and unlock free shipping once you reach Silver.</div>
           </div>
         </div>
@@ -942,7 +975,7 @@ Already have an account?
 
   <div id="page-success" class="page">
     <div class="success-card">
-      <div class="success-icon">✓</div>
+      <div class="success-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></div>
       <h1>Order Confirmed!</h1>
       <p>Thank you for your purchase. A confirmation with your order details has been sent to your email.</p>
       <div class="success-ref">Order Reference: <span id="order-ref">#bag-00000</span></div>
@@ -962,7 +995,7 @@ Already have an account?
   </div>
 
   <div class="toast" id="toast">
-    <span id="toast-icon">✓</span>
+    <span id="toast-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></span>
     <span id="toast-msg">Added to cart!</span>
   </div>
 

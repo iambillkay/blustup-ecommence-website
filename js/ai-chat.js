@@ -67,7 +67,7 @@ function createChatWidget() {
   root.id = "aiChatRoot";
   root.innerHTML = `
     <button type="button" id="aiChatToggle" class="ai-chat-fab" aria-expanded="false" aria-controls="aiChatPanel">
-      <span class="ai-fab-icon" aria-hidden="true">&#10022;</span>
+      <span class="ai-fab-icon" aria-hidden="true"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-ai"></use></svg></span>
       <span class="ai-fab-label">Help</span>
     </button>
     <div id="aiChatPanel" class="ai-chat-panel" role="dialog" aria-label="Chat assistant" hidden>

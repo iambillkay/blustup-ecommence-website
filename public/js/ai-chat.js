@@ -296,7 +296,7 @@ async function initializeAiChat() {
 async function openAiChat(prefill = "") {
   const ready = await initializeAiChat();
   if (!ready) {
-    if (typeof showToast === "function") showToast("!", "AI chat is unavailable right now.");
+    if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "AI chat is unavailable right now.");
     return false;
   }
 

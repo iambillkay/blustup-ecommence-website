@@ -266,7 +266,7 @@ if (signupForm) {
       });
       setAuth(token, user, { remember: true });
       setSignupFeedback("Account created successfully. Redirecting you now...", "success");
-      showToast("OK", "Account created!");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', "Account created!");
       showPage("home");
     } catch (err) {
       setSignupFeedback(err.message || "Signup failed", "error");
@@ -317,7 +317,7 @@ if (loginForm) {
       });
 
       setAuth(token, user, { remember: rememberMe?.checked !== false });
-      showToast("OK", "Logged in!");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', "Logged in!");
       showPage("home");
     } catch (err) {
       setLoginFeedback(err.message || "Login failed", "error");
@@ -467,9 +467,9 @@ function handleAuthHash() {
     if (tokenMatch) {
       const token = decodeURIComponent(tokenMatch[1]);
       api(`/api/auth/verify-email?token=${encodeURIComponent(token)}`).then((res) => {
-        if (typeof showToast === "function") showToast("OK", res.message || "Email verified!");
+        if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', res.message || "Email verified!");
       }).catch((err) => {
-        if (typeof showToast === "function") showToast("!", err.message || "Verification failed.");
+        if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', err.message || "Verification failed.");
       });
       window.location.hash = "";
     }

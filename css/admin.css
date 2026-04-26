@@ -62,6 +62,8 @@ body.admin {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .brand-lockup {
@@ -72,43 +74,49 @@ body.admin {
 }
 
 .sidebar-toggle {
-  border: 0;
-  background: rgba(47, 107, 255, 0.08);
+  border: 1px solid var(--admin-border);
+  background: #ffffff;
   color: var(--admin-link);
-  width: 38px;
-  height: 38px;
-  border-radius: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
   display: inline-grid;
   place-items: center;
   cursor: pointer;
   font-size: 1.1rem;
-  transition: background 0.18s ease, transform 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .sidebar-toggle:hover {
-  background: rgba(47, 107, 255, 0.14);
-  transform: translateX(2px);
+  background: #f8fafc;
+  transform: translateX(2px) scale(1.05);
+  color: var(--admin-link);
+  box-shadow: 0 4px 12px rgba(47, 107, 255, 0.08);
 }
 
 .admin-sidebar {
-  width: 240px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(247, 249, 254, 0.92) 100%);
-  border-right: 1px solid var(--admin-border);
+  width: 260px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 255, 0.95) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(0, 0, 0, 0.04);
   padding: 28px 22px;
   display: flex;
   flex-direction: column;
   gap: 28px;
-  transition: width 0.24s ease, padding 0.24s ease;
+  transition: width 0.24s cubic-bezier(0.4, 0, 0.2, 1), padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.01);
 }
 
 .admin-sidebar.is-collapsed {
-  width: 84px;
+  width: 88px;
   padding-left: 18px;
   padding-right: 18px;
 }
 
 .admin-app-shell.is-sidebar-collapsed {
-  grid-template-columns: 84px minmax(0, 1fr) 305px;
+  grid-template-columns: 88px minmax(0, 1fr) 305px;
 }
 
 .admin-sidebar.is-collapsed .brand-lockup {
@@ -120,7 +128,9 @@ body.admin {
 }
 
 .admin-sidebar.is-collapsed .brand-mark {
-  width: 36px;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
 
 .admin-sidebar.is-collapsed .brand-subtitle,
@@ -143,7 +153,15 @@ body.admin {
 .admin-sidebar.is-collapsed .sidebar-link:hover,
 .admin-sidebar.is-collapsed .sidebar-link.active {
   transform: none;
-  box-shadow: 0 6px 16px rgba(20, 34, 66, 0.05);
+  box-shadow: 0 4px 12px rgba(20, 34, 66, 0.05);
+}
+
+.admin-sidebar.is-collapsed .sidebar-link.active::before {
+  left: 0;
+  height: 100%;
+  top: 0;
+  transform: none;
+  border-radius: 4px 0 0 4px;
 }
 
 .admin-sidebar.is-collapsed .nav-icon {
@@ -236,20 +254,55 @@ body.admin {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 13px 14px;
-  border-radius: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
   text-decoration: none;
   color: var(--admin-muted);
   font-weight: 600;
-  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  font-size: 0.94rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
-.sidebar-link:hover,
+.sidebar-link:hover {
+  background: rgba(47, 107, 255, 0.04);
+  color: var(--admin-text);
+  transform: translateX(3px);
+}
+
 .sidebar-link.active {
   background: #ffffff;
-  color: var(--admin-text);
+  color: var(--admin-link);
   transform: translateX(4px);
-  box-shadow: 0 6px 16px rgba(20, 34, 66, 0.05);
+  box-shadow: 0 4px 16px rgba(47, 107, 255, 0.06);
+  border: 1px solid rgba(47, 107, 255, 0.06);
+}
+
+.sidebar-link.active::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 4px;
+  background: var(--admin-link);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(47, 107, 255, 0.4);
+}
+
+.sidebar-link.active .nav-icon {
+  color: var(--admin-link);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .nav-icon {
@@ -271,9 +324,12 @@ body.admin {
 .sidebar-support {
   margin-top: auto;
   padding: 20px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, #f8f9fd 0%, #eef3fb 100%);
-  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
 }
 
 .sidebar-support h3,

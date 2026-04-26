@@ -153,7 +153,7 @@ function addToCart(id, e) {
   e?.stopPropagation?.();
   const product = findProductById(id);
   if (!product) {
-    showToast("!", "This product is currently unavailable.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "This product is currently unavailable.");
     return;
   }
 
@@ -163,7 +163,7 @@ function addToCart(id, e) {
   else cart.push(cartItemFromProduct(product, 1));
 
   syncDependentViews();
-  showToast("OK", `${product.name} added to cart`);
+  showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', `${product.name} added to cart`);
 
   // Track add to cart
   if (window.tracker) {
@@ -215,7 +215,7 @@ function applyPromo() {
   const value = String(input?.value || "").trim().toUpperCase();
 
   if (!value) {
-    showToast("!", "Enter a promo code");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Enter a promo code");
     return;
   }
 
@@ -223,7 +223,7 @@ function applyPromo() {
   if (!promo) {
     appliedPromo = { code: null, percent: 0, label: "", freeShip: false };
     savePromoToStorage();
-    showToast("X", "Invalid or expired promo code");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-cross"></use></svg>', "Invalid or expired promo code");
     renderCart();
     return;
   }
@@ -235,7 +235,7 @@ function applyPromo() {
     freeShip: !!promo.freeShip,
   };
   savePromoToStorage();
-  showToast("OK", `${promo.label} applied`);
+  showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', `${promo.label} applied`);
   renderCart();
 }
 
@@ -375,9 +375,9 @@ function renderCart() {
             <div class="name">${escapeCartHtml(item.name)}</div>
             <div class="desc">${escapeCartHtml(item.desc)}</div>
             <div class="qty-control">
-              <button type="button" class="qty-btn" onclick="changeQty('${safeId}', -1)">-</button>
+              <button type="button" class="qty-btn" onclick="changeQty('${safeId}', -1)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-minus"></use></svg></button>
               <span class="qty-val">${item.qty}</span>
-              <button type="button" class="qty-btn" onclick="changeQty('${safeId}', 1)">+</button>
+              <button type="button" class="qty-btn" onclick="changeQty('${safeId}', 1)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-plus"></use></svg></button>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">

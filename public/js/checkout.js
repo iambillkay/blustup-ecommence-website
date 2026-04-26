@@ -507,21 +507,21 @@ function setPlaceOrderSubmitting(submitting) {
 
 async function placeOrder() {
   if (!Array.isArray(cart) || !cart.length) {
-    showToast("!", "Your cart is empty");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg>', "Your cart is empty");
     showPage("shop");
     return;
   }
 
   const cartRefresh = await refreshCheckoutCartBeforeSubmit();
   if (!cartRefresh.ok) {
-    showToast("!", cartRefresh.message || "Please review your cart before placing the order.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', cartRefresh.message || "Please review your cart before placing the order.");
     if (!Array.isArray(cart) || !cart.length) showPage("cart");
     return;
   }
 
   const error = validateCheckoutForm() || validatePaymentFields();
   if (error) {
-    showToast("!", error);
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', error);
     return;
   }
 
@@ -594,7 +594,7 @@ async function placeOrder() {
     if (typeof refreshOrdersPage === "function") refreshOrdersPage();
     showPage("success");
   } catch (requestError) {
-    showToast("!", requestError.message || "Failed to place your order.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', requestError.message || "Failed to place your order.");
   } finally {
     setPlaceOrderSubmitting(false);
   }

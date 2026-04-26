@@ -275,7 +275,7 @@ function renderProducts(filterValue) {
               ${formatShopMoney(product.price)}
             </div>
             <button class="add-to-cart-btn" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">
-              <span class="add-btn-icon">+</span>
+              <span class="add-btn-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-plus"></use></svg></span>
               <span class="add-btn-text">Add</span>
             </button>
           </div>

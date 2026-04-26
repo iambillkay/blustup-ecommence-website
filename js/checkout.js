@@ -139,7 +139,7 @@ function syncPaymentFields() {
   if (cardFields) cardFields.hidden = method !== "card";
   if (placeOrderButton) {
     if (method === "paystack") {
-      placeOrderButton.textContent = "\uD83D\uDD12 Pay with Paystack";
+      placeOrderButton.innerHTML = '<svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> Pay with Paystack';
     } else if (method === "card") {
       placeOrderButton.textContent = "Place Order & Pay";
     } else if (method === "cod") {
@@ -572,14 +572,14 @@ function handleOrderSuccess(response) {
 async function placeOrderPaystack() {
   const cartRefresh = await refreshCheckoutCartBeforeSubmit();
   if (!cartRefresh.ok) {
-    showToast("!", cartRefresh.message || "Please review your cart before placing the order.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', cartRefresh.message || "Please review your cart before placing the order.");
     if (!Array.isArray(cart) || !cart.length) showPage("cart");
     return;
   }
 
   const formError = validateCheckoutForm();
   if (formError) {
-    showToast("!", formError);
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', formError);
     return;
   }
 
@@ -623,7 +623,7 @@ async function placeOrderPaystack() {
 
     const key = paystackPublicKey;
     if (!key) {
-      showToast("!", "Paystack is not configured. Contact support.");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Paystack is not configured. Contact support.");
       setPlaceOrderSubmitting(false);
       return;
     }
@@ -632,7 +632,7 @@ async function placeOrderPaystack() {
 
     // 2. Open Paystack Popup
     if (typeof PaystackPop === "undefined") {
-      showToast("!", "Paystack script not loaded. Please reload the page.");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Paystack script not loaded. Please reload the page.");
       return;
     }
 
@@ -660,24 +660,24 @@ async function placeOrderPaystack() {
 
           handleOrderSuccess(verifyResponse);
         } catch (err) {
-          showToast("!", err.message || "Payment verified but order creation failed.");
+          showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', err.message || "Payment verified but order creation failed.");
         } finally {
           setPlaceOrderSubmitting(false);
         }
       },
       onCancel: () => {
-        showToast("!", "Payment was cancelled.");
+        showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg>', "Payment was cancelled.");
       },
     });
   } catch (err) {
-    showToast("!", err.message || "Failed to start payment.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', err.message || "Failed to start payment.");
     setPlaceOrderSubmitting(false);
   }
 }
 
 async function placeOrder() {
   if (!Array.isArray(cart) || !cart.length) {
-    showToast("!", "Your cart is empty");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg>', "Your cart is empty");
     showPage("shop");
     return;
   }
@@ -689,14 +689,14 @@ async function placeOrder() {
 
   const cartRefresh = await refreshCheckoutCartBeforeSubmit();
   if (!cartRefresh.ok) {
-    showToast("!", cartRefresh.message || "Please review your cart before placing the order.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', cartRefresh.message || "Please review your cart before placing the order.");
     if (!Array.isArray(cart) || !cart.length) showPage("cart");
     return;
   }
 
   const error = validateCheckoutForm() || validatePaymentFields();
   if (error) {
-    showToast("!", error);
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', error);
     return;
   }
 
@@ -718,7 +718,7 @@ async function placeOrder() {
 
     handleOrderSuccess(response);
   } catch (requestError) {
-    showToast("!", requestError.message || "Failed to place your order.");
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', requestError.message || "Failed to place your order.");
   } finally {
     setPlaceOrderSubmitting(false);
   }

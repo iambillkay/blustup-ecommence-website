@@ -74,7 +74,7 @@ function renderFaqList(faqs) {
     <div class="faq-item" data-category="${escapeHtml(item.category || 'general')}">
       <button class="faq-question" type="button">
         <span>${escapeHtml(item.question)}</span>
-        <span class="faq-icon">▼</span>
+        <span class="faq-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-right"></use></svg></span>
       </button>
       <div class="faq-answer">${escapeHtml(item.answer)}</div>
     </div>`)
@@ -102,7 +102,7 @@ function renderFaqPage(settings) {
       .map((m) => {
         const photo = m.imageUrl
           ? `<img src="${escapeHtml(m.imageUrl)}" alt="${escapeHtml(m.name)}" class="board-photo">`
-          : `<div class="board-photo board-photo-placeholder" aria-hidden="true">★</div>`;
+          : `<div class="board-photo board-photo-placeholder" aria-hidden="true"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></div>`;
         
         return `
       <article class="board-card">

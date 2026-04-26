@@ -11,10 +11,7 @@ function escapeHtml(s) {
 function setFaqItemState(item, isActive) {
   item.classList.toggle("active", isActive);
   const trigger = item.querySelector(".faq-question");
-  const icon = item.querySelector(".faq-icon");
-  const answer = item.querySelector(".faq-answer");
   if (trigger) trigger.setAttribute("aria-expanded", isActive ? "true" : "false");
-  if (icon) icon.innerHTML = isActive ? "&#9650;" : "&#9660;";
   if (answer) {
     answer.style.maxHeight = isActive ? `${answer.scrollHeight}px` : "0px";
     answer.setAttribute("aria-hidden", isActive ? "false" : "true");
@@ -75,7 +72,7 @@ function renderFaqPage(settings) {
     <div class="faq-item ${i === 0 ? "active" : ""}">
       <button class="faq-question" type="button">
         <span>${escapeHtml(item.question)}</span>
-        <span class="faq-icon">${i === 0 ? "&#9650;" : "&#9660;"}</span>
+        <span class="faq-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-right"></use></svg></span>
       </button>
       <div class="faq-answer">${escapeHtml(item.answer)}</div>
     </div>`
@@ -90,7 +87,7 @@ function renderFaqPage(settings) {
       .map((m) => {
         const img = m.imageUrl
           ? `<img src="${escapeHtml(m.imageUrl)}" alt="" class="board-photo">`
-          : `<div class="board-photo board-photo-placeholder" aria-hidden="true">★</div>`;
+          : `<div class="board-photo board-photo-placeholder" aria-hidden="true"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></div>`;
         return `
       <article class="board-card">
         ${img}
