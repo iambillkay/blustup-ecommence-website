@@ -25,18 +25,16 @@
 }
 
 .about-hero-premium {
-  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('../about_hero_modern_workspace_1777227304332.png');
-  background-size: cover;
-  background-position: center;
-  color: #fff;
-  min-height: 480px;
+  background: #E8E2D8;
+  color: #0a1040;
+  min-height: 440px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.about-hero-premium h1 { color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-.about-hero-premium p { color: rgba(255,255,255,0.9); }
-.about-hero-premium .section-badge { background: #3d5eff; color: #fff; }
+.about-hero-premium h1 { color: #0a1040; text-shadow: none; }
+.about-hero-premium p { color: #64748b; }
+.about-hero-premium .section-badge { background: #000000; color: #fff; width: 130px;}
 
 /* ── TRUST STATS ── */
 .trust-stats-bar {
@@ -360,11 +358,16 @@
   margin-bottom: 16px;
 }
 
-.about-board-lead {
-  font-size: 1.1rem;
-  color: #64748b;
-  max-width: 600px;
-  margin: 0 auto;
+/* ── BOARD OF DIRECTORS ── */
+.about-board-section {
+  margin-top: 120px;
+  padding-top: 80px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.board-header {
+  text-align: center;
+  margin-bottom: 60px;
 }
 
 .board-grid {
@@ -409,7 +412,7 @@
 }
 
 .board-body {
-  padding: 24px;
+  padding: 32px 24px;
   text-align: center;
 }
 
@@ -418,6 +421,7 @@
   font-size: 1.25rem;
   font-weight: 800;
   color: #0a1040;
+  margin-bottom: 8px;
 }
 
 .board-role {
@@ -426,6 +430,14 @@
   color: #3d5eff;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.board-bio {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.6;
+}
   margin: 8px 0 16px;
 }
 
