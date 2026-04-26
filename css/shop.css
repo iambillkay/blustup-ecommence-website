@@ -297,48 +297,32 @@ body.product-detail-open {
   outline-offset: 3px;
 }
 
-.product-detail-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(6, 12, 26, 0.56);
-  backdrop-filter: blur(12px);
+.product-page-wrapper {
+  padding: 32px 16px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.product-detail-backdrop.open {
-  display: flex;
+.product-detail-page-nav {
+  margin-bottom: 24px;
 }
 
-.product-detail-sheet {
-  position: relative;
-  width: min(1080px, 100%);
-  max-height: min(88vh, 920px);
-  overflow: auto;
-  border-radius: 28px;
-  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
-  box-shadow: 0 28px 90px rgba(8, 18, 45, 0.28);
-  border: 1px solid rgba(228, 234, 248, 0.9);
-}
-
-.product-detail-close {
-  position: sticky;
-  top: 18px;
-  left: calc(100% - 66px);
-  z-index: 3;
-  width: 44px;
-  height: 44px;
-  margin: 18px 18px 0 auto;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(17, 31, 78, 0.08);
-  color: #172033;
-  font-size: 28px;
-  line-height: 1;
+.product-detail-page-nav .btn-back {
+  background: transparent;
+  border: none;
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  color: #5f6b95;
+  font-size: 1rem;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.product-detail-page-nav .btn-back:hover {
+  color: #1a1b1e;
+  transform: translateX(-4px);
 }
 
 .product-detail-body {
@@ -347,13 +331,13 @@ body.product-detail-open {
 
 .product-detail-shell {
   display: grid;
-  gap: 24px;
+  gap: 16px;
 }
 
 .product-detail-hero {
   display: grid;
   grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.05fr);
-  gap: 28px;
+  gap: 20px;
   align-items: start;
 }
 
@@ -382,6 +366,32 @@ body.product-detail-open {
 
 .product-detail-gallery:hover img {
   transform: scale(1.03);
+}
+
+.product-detail-thumbnails {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.product-thumbnail-box {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+}
+
+.product-thumbnail-box:hover {
+  transform: translateY(-2px);
+  border-color: #3d5eff;
 }
 
 .premium-badge {
@@ -528,7 +538,7 @@ body.product-detail-open {
 .product-detail-columns {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-  gap: 24px;
+  gap: 20px;
   align-items: start;
 }
 

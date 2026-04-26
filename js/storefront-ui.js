@@ -353,19 +353,32 @@ function renderProductDetailMarkup(product = {}) {
   const categories = getStorefrontProductCategories(product);
   const reviewSummary = getProductReviewSummary(product);
 
+  const galleryImages = Array.isArray(product.images) && product.images.length > 0 
+    ? product.images 
+    : (product.imageUrl ? [product.imageUrl] : []);
+
+  const galleryMarkup = galleryImages.length > 1 
+    ? `<div class="product-detail-thumbnails">
+         ${galleryImages.map(img => `<img src="${escapeStorefrontHtml(img)}" class="product-thumbnail-box" onclick="document.getElementById('mainProductImage').src = this.src" alt="Thumbnail">`).join('')}
+       </div>`
+    : "";
+
   return `
     <div class="product-detail-shell">
       <div class="product-detail-page-nav">
         <button class="btn-back" onclick="showPage('shop')">← Back to Shop</button>
       </div>
       <section class="product-detail-hero">
-        <div class="product-detail-gallery" style="background:${escapeStorefrontHtml(product.color || "radial-gradient(ellipse at center, #ffffff 0%, #f4f6fb 100%)")}">
-        ${product.badge ? `<div class="product-badge-tag premium-badge ${escapeStorefrontHtml(product.badgeType || "")}">${escapeStorefrontHtml(product.badge)}</div>` : ""}
-        ${
-          product.imageUrl
-            ? `<img src="${escapeStorefrontHtml(product.imageUrl)}" alt="${escapeStorefrontHtml(product.name || "Product image")}">`
-            : `<div class="product-detail-image-fallback">No image</div>`
-        }
+        <div class="product-detail-hero-left">
+          <div class="product-detail-gallery" style="background:${escapeStorefrontHtml(product.color || "radial-gradient(ellipse at center, #ffffff 0%, #f4f6fb 100%)")}">
+          ${product.badge ? `<div class="product-badge-tag premium-badge ${escapeStorefrontHtml(product.badgeType || "")}">${escapeStorefrontHtml(product.badge)}</div>` : ""}
+          ${
+            galleryImages.length > 0
+              ? `<img id="mainProductImage" src="${escapeStorefrontHtml(galleryImages[0])}" alt="${escapeStorefrontHtml(product.name || "Product image")}">`
+              : `<div class="product-detail-image-fallback">No image</div>`
+          }
+          </div>
+          ${galleryMarkup}
         </div>
         <div class="product-detail-content">
           <div class="product-detail-category-list">
@@ -442,14 +455,53 @@ function renderProductDetailMarkup(product = {}) {
           </div>
         </div>
       </section>
+
+      ${renderRelatedProductsMarkup(product)}
     </div>
   `;
 }
 
+function renderRelatedProductsMarkup(product) {
+  const allProducts = typeof getStorefrontCatalogProducts === "function" ? getStorefrontCatalogProducts() : [];
+  const targetCategory = product.cat;
+  
+  if (!allProducts || !allProducts.length) return "";
+  const related = allProducts.filter(p => p.cat === targetCategory && String(p.id) !== String(product.id)).slice(0, 6);
+  
+  if (related.length === 0) return "";
+  
+  const cardsHtml = related.map(p => `
+    <div class="product-card product-card-selectable" role="button" tabindex="0" onclick="openProductSelection('${String(p.id).replace(/'/g, "\\'")}')" onkeydown="handleProductCardKeydown(event, '${String(p.id).replace(/'/g, "\\'")}')">
+      <div class="product-img" style="background:${p.color || '#f5f7ff'}">
+        ${p.imageUrl ? `<img src="${escapeStorefrontHtml(p.imageUrl)}" style="width:100%;height:100%;object-fit:cover;border-top-left-radius:20px;border-top-right-radius:20px;">` : `<div>No image</div>`}
+      </div>
+      <div class="product-info">
+        <div class="product-category-list"><span class="product-category-chip">${escapeStorefrontHtml(p.cat || 'General')}</span></div>
+        <div class="product-name">${escapeStorefrontHtml(p.name)}</div>
+        <div class="product-footer">
+          <div class="product-price">${formatStorefrontMoney(p.price)}</div>
+          <button class="add-to-cart-btn" onclick="addToCart('${String(p.id).replace(/'/g, "\\'")}', event)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  return `
+    <section class="product-detail-panel related-products-section">
+      <div class="product-detail-section-top">
+        <h3>Related Products</h3>
+        <span>You might also like</span>
+      </div>
+      <div class="product-row" style="display:flex; gap: 20px; overflow-x: auto; padding-bottom: 12px; margin-top: 16px;">
+        ${cardsHtml}
+      </div>
+    </section>
+  `;
+}
+
 function closeProductSelection() {
-  if (typeof showPage === "function") {
-    showPage("shop");
-  }
+  // Legacy hook used by app.js:showPage() to dismiss the legacy CSS modal.
+  // With the module now operating natively as a route (#page-product), this is safely stubbed.
 }
 
 function openProductSelection(productId, event) {
@@ -469,6 +521,20 @@ function openProductSelection(productId, event) {
   }
 
   body.innerHTML = renderProductDetailMarkup(product);
+  
+  if (typeof showPage === "function") {
+    showPage("product");
+  } else {
+    document.getElementById("page-product").style.display = "block";
+  }
+  
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function handleProductCardKeydown(event, productId) {
+  if (!event || (event.key !== "Enter" && event.key !== " ")) return;
+  event.preventDefault();
+  openProductSelection(productId);
 }
 
 function buildFallbackLoyalty(pointsValue) {
