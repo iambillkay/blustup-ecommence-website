@@ -1,12 +1,9 @@
 /* ─── Wishlist Core Logic ─── */
 const WISHLIST_STORAGE_KEY = "blustup_wishlist";
 
-// Stores a Set of String product IDs.
 let wishlistIds = new Set();
-// Stores the actual product data fetched from either DB or Catalog
 let wishlistProducts = [];
 
-/* Formatting helpers */
 function getWishlistCurrency() {
   return typeof STOREFRONT_CURRENCY_SYMBOL === "string" ? STOREFRONT_CURRENCY_SYMBOL : "\u20B5";
 }
@@ -29,7 +26,6 @@ function getWishlistProductCategories(product) {
   });
 }
 
-/* Local Storage Cache */
 function loadWishlistFromStorage() {
   try {
     const raw = localStorage.getItem(WISHLIST_STORAGE_KEY);
@@ -47,35 +43,14 @@ function isInWishlist(productId) {
   return wishlistIds.has(String(productId));
 }
 
-/* DOM Syncing */
 function updateWishlistHearts() {
-  // Sync the standard heart icons on ALL product cards
-  document.querySelectorAll(".wishlist-heart").forEach((btn) => {
+  document.querySelectorAll(".wishlist-btn").forEach((btn) => {
     const id = btn.getAttribute("data-wishlist-id");
     if (!id) return;
     const active = isInWishlist(id);
     btn.classList.toggle("wishlist-active", active);
-    btn.setAttribute("aria-pressed", String(active));
-    btn.setAttribute("aria-label", active ? "Remove from wishlist" : "Add to wishlist");
-    btn.innerHTML = active ? "&#9829;" : "&#9825;"; // Unicodes for filled/empty heart
   });
 
-  // Sync the specialized animated pill buttons
-  document.querySelectorAll(".pill-wishlist-btn").forEach((btn) => {
-    const id = btn.getAttribute("data-wishlist-id");
-    if (!id) return;
-    const active = isInWishlist(id);
-    btn.classList.toggle("wishlist-active", active);
-    btn.setAttribute("aria-pressed", String(active));
-    btn.setAttribute("aria-label", active ? "Remove from wishlist" : "Add to wishlist");
-    
-    const textSpan = btn.querySelector(".pill-text");
-    const iconSpan = btn.querySelector(".pill-icon");
-    if (textSpan) textSpan.innerHTML = active ? "Saved" : "Wishlist";
-    if (iconSpan) iconSpan.innerHTML = active ? "&#9829;" : "&#9825;";
-  });
-
-  // Update nav badge count
   const count = wishlistIds.size;
   const badges = [document.getElementById("wishlist-count"), document.getElementById("wishlist-count-mobile")];
   badges.forEach((badge) => {
@@ -86,7 +61,6 @@ function updateWishlistHearts() {
   });
 }
 
-/* Toggle Logic */
 async function toggleWishlist(productId, event) {
   if (event) {
     event.stopPropagation();
@@ -97,146 +71,116 @@ async function toggleWishlist(productId, event) {
   const token = typeof getToken === "function" ? getToken() : null;
   const wasIn = isInWishlist(id);
 
-  // 1. Optimistic UI update immediately
   if (wasIn) wishlistIds.delete(id);
   else wishlistIds.add(id);
   saveWishlistToStorage();
   updateWishlistHearts();
 
-  // If signed in, sync specifically the single change to the backend APIs
   if (token) {
     try {
       const endpoint = `/api/wishlist/${encodeURIComponent(id)}`;
       const method = wasIn ? "DELETE" : "POST";
-
-      const result = typeof api === "function"
-        ? await api(endpoint, { method })
-        : await fetch(typeof buildApiUrl === "function" ? buildApiUrl(endpoint) : endpoint, {
-            method,
-            headers: { Authorization: `Bearer ${token}` },
-          }).then(async (r) => {
-            const d = await r.json().catch(() => ({}));
-            if (!r.ok) throw new Error(d.error || "Wishlist update failed");
-            return d;
-          });
-
+      const result = await api(endpoint, { method });
       if (result && result.wishlist) {
         wishlistProducts = result.wishlist;
         wishlistIds = new Set(result.wishlist.map((p) => String(p.id)));
         saveWishlistToStorage();
         updateWishlistHearts();
-        
-        // Check if we are currently viewing the wishlist page!
-        const currentActivePage = document.querySelector('.page[style*="display: block"]') || document.querySelector('.page:not([style*="display: none"])');
-        if (currentActivePage && currentActivePage.id === "page-wishlist") {
-          renderWishlistPage();
-        }
+        if (isWishlistPageActive()) renderWishlistPage();
       }
     } catch (err) {
-      // Revert if API failed
       if (wasIn) wishlistIds.add(id);
       else wishlistIds.delete(id);
       saveWishlistToStorage();
       updateWishlistHearts();
-      if (typeof showToast === "function") showToast("!", err.message || "Failed to update wishlist");
-      return;
+      if (typeof showToast === "function") showToast("!", "Sync failed");
     }
   } else {
-    // Guest User updates the wishlist grid in real time if they are on it
-    const currentActivePage = document.querySelector('.page[style*="display: block"]') || document.querySelector('.page:not([style*="display: none"])');
-    if (currentActivePage && currentActivePage.id === "page-wishlist") {
-       renderWishlistPage();
-    }
+    if (isWishlistPageActive()) renderWishlistPage();
   }
 
   if (typeof showToast === "function") {
-    showToast("OK", wasIn ? "Removed from wishlist" : "Added to wishlist");
+    showToast("💖", wasIn ? "Removed from wishlist" : "Added to wishlist");
   }
 }
 
-/* Boot & Merge Data */
-async function loadWishlist() {
-  const token = typeof getToken === "function" ? getToken() : null;
-  loadWishlistFromStorage(); // Always start with local cache
+function isWishlistPageActive() {
+  const page = document.getElementById("page-wishlist");
+  return page && (page.style.display === "block" || !page.style.display);
+}
 
-  if (!token) {
-    updateWishlistHearts();
+async function moveToCart(productId, event) {
+  if (event) event.stopPropagation();
+  // 1. Add to cart
+  if (typeof addToCart === "function") {
+    await addToCart(productId, null);
+  }
+  // 2. Remove from wishlist
+  await toggleWishlist(productId, null);
+  
+  if (typeof showToast === "function") {
+    showToast("🛒", "Moved to cart!");
+  }
+}
+
+function shareWishlist() {
+  const items = Array.from(wishlistIds);
+  if (!items.length) {
+    if (typeof showToast === "function") showToast("!", "Wishlist is empty");
     return;
   }
 
-  // ─── The Merge Logic (Hydrate Server) ─── //
-  // Pushes any guest items added prior to login
-  const pendingLocalIds = [...wishlistIds];
-  
-  try {
-    // 1. Fetch from server
-    let result = typeof api === "function"
-      ? await api("/api/wishlist")
-      : await fetch(typeof buildApiUrl === "function" ? buildApiUrl("/api/wishlist") : "/api/wishlist", {
-          headers: { Authorization: `Bearer ${token}` },
-        }).then(async (r) => {
-          const d = await r.json().catch(() => ({}));
-          if (!r.ok) throw new Error(d.error || "Failed");
-          return d;
-        });
+  const shareData = {
+    title: "My Blustup Wishlist",
+    text: `Check out these products I saved on Blustup: ${items.length} items.`,
+    url: window.location.href // In a real app, this would be a specific share URL
+  };
 
-    let srvItems = result.wishlist || [];
-    const srvIds = new Set(srvItems.map(p => String(p.id)));
-
-    // 2. Identify missing items on server
-    const toPush = pendingLocalIds.filter(id => !srvIds.has(id));
-
-    // 3. Push missing items to backend sequentially
-    for (const missingId of toPush) {
-      const endpoint = `/api/wishlist/${encodeURIComponent(missingId)}`;
-      const reqRes = typeof api === "function"
-        ? await api(endpoint, { method: "POST" })
-        : await fetch(typeof buildApiUrl === "function" ? buildApiUrl(endpoint) : endpoint, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-          }).then(async (r) => {
-            const d = await r.json().catch(() => ({}));
-            if (!r.ok) throw new Error(d.error || "Failed");
-            return d;
-          }).catch(() => null);
-
-      if (reqRes && reqRes.wishlist) {
-        srvItems = reqRes.wishlist; 
-      }
-    }
-
-    // 4. Overwrite context cleanly
-    wishlistProducts = srvItems;
-    wishlistIds = new Set(srvItems.map((p) => String(p.id)));
-    saveWishlistToStorage();
-
-  } catch (_e) {
-    // fallback context
-    loadWishlistFromStorage();
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => copyWishlistLink());
+  } else {
+    copyWishlistLink();
   }
+}
 
+function copyWishlistLink() {
+  const dummy = document.createElement("input");
+  document.body.appendChild(dummy);
+  dummy.value = window.location.href;
+  dummy.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummy);
+  if (typeof showToast === "function") showToast("🔗", "Link copied to clipboard!");
+}
+
+async function loadWishlist() {
+  const token = typeof getToken === "function" ? getToken() : null;
+  loadWishlistFromStorage();
+
+  if (token) {
+    try {
+      const result = await api("/api/wishlist");
+      if (result && result.wishlist) {
+        wishlistProducts = result.wishlist;
+        wishlistIds = new Set(result.wishlist.map(p => String(p.id)));
+        saveWishlistToStorage();
+      }
+    } catch (_e) {}
+  }
   updateWishlistHearts();
 }
 
-/* Page Render */
 function renderWishlistPage() {
   const grid = document.getElementById("wishlist-grid");
   const empty = document.getElementById("wishlist-empty");
   if (!grid) return;
 
-  const token = typeof getToken === "function" ? getToken() : null;
-  
-  // 1. Extract Full Product Models
-  const localCatalog = typeof getStorefrontCatalogProducts === "function" ? getStorefrontCatalogProducts() : [];
-  
-  // Merge items. For users: priority on wishlistProducts. For guests: heavily reliant on localCatalog.
+  const localCatalog = typeof getCatalogProducts === "function" ? getCatalogProducts() : [];
   const items = [...wishlistIds].map((id) => {
     const srv = wishlistProducts.find((p) => String(p.id) === id);
-    if (srv) return srv;
-    return localCatalog.find((p) => String(p.id) === id);
+    return srv || localCatalog.find((p) => String(p.id) === id);
   }).filter(Boolean);
 
-  // 2. Empty State Handling 
   if (!items.length) {
     grid.innerHTML = "";
     if (empty) {
@@ -245,65 +189,59 @@ function renderWishlistPage() {
           <div class="icon">💝</div>
           <h2>Your wishlist is empty</h2>
           <p>Browse our shop and tap the heart icon on any product to save it for later.</p>
-          <button class="btn-primary" onclick="showPage('shop')">Browse the Shop</button>
+          <button class="checkout-btn" onclick="showPage('shop')">Browse the Shop</button>
         </div>
       `;
-      empty.style.display = "";
+      empty.style.display = "block";
     }
     return;
   }
 
   if (empty) empty.style.display = "none";
 
-  // 3. Grid Rendering
   grid.innerHTML = items.map((p) => `
-    <div class="product-card product-card-selectable" role="button" tabindex="0"
-      onclick="openProductSelection('${String(p.id).replace(/'/g, "\\'")}')"
-      onkeydown="handleProductCardKeydown(event, '${String(p.id).replace(/'/g, "\\'")}')"
-      aria-label="View details for ${escWish(p.name)}">
-      
-      <div class="product-img" style="background:${p.color || '#f5f7ff'}">
-        ${p.badge ? `<div class="product-badge-tag ${p.badgeType || ""}">${escWish(p.badge)}</div>` : ""}
-        <button class="wishlist-heart wishlist-active" type="button" data-wishlist-id="${escWish(p.id)}"
-          onclick="toggleWishlist('${String(p.id).replace(/'/g, "\\'")}', event)" 
-          aria-pressed="true" aria-label="Remove from wishlist">&#9829;</button>
+    <div class="product-card" onclick="openProductSelection('${String(p.id).replace(/'/g, "\\'")}')">
+      <div class="product-quick-actions">
+        <button class="quick-action-btn wishlist-btn wishlist-active" onclick="toggleWishlist('${String(p.id).replace(/'/g, "\\'")}', event)">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+
+      <div class="product-img" style="background:${p.color || '#f8fafc'}">
+        ${p.badge ? `<div class="product-badge-tag">${escWish(p.badge)}</div>` : ""}
         ${p.imageUrl
-          ? `<img src="${escWish(p.imageUrl)}" alt="${escWish(p.name)}" style="width:100%;height:100%;object-fit:cover;">`
-          : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5f6b95;font-weight:600;">No image</div>`}
+          ? `<img src="${escWish(p.imageUrl)}" alt="${escWish(p.name)}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg><span>Image coming soon</span></div>'">`
+          : `<div class="no-image-placeholder">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+               <span>Image coming soon</span>
+             </div>`}
       </div>
       
       <div class="product-info">
         <div class="product-category-list">
-          ${getWishlistProductCategories(p)
-            .slice(0, 3)
-            .map((cat) => `<span class="product-category-chip">${escWish(cat.replace(/-/g, ' '))}</span>`)
-            .join("")}
+          ${getWishlistProductCategories(p).map((cat) => `<span class="product-category-chip">${escWish(cat)}</span>`).join("")}
         </div>
-        <div class="product-name">${escWish(p.name)}</div>
-        ${typeof renderProductRatingMarkup === "function" ? renderProductRatingMarkup(p) : ""}
-        
+        <h2 class="product-name">${escWish(p.name)}</h2>
         <div class="product-footer">
           <div class="product-price">
             ${p.oldPrice ? `<span class="old-price">${formatWishlistMoney(p.oldPrice)}</span>` : ""}
             ${formatWishlistMoney(p.price)}
           </div>
-          <button class="add-to-cart-btn" onclick="addToCart('${String(p.id).replace(/'/g, "\\'")}', event)">+ Add</button>
+          <button class="add-to-cart-btn" onclick="moveToCart('${String(p.id).replace(/'/g, "\\'")}', event)">
+            <span class="add-btn-icon">🛒</span>
+            Move to Cart
+          </button>
         </div>
       </div>
     </div>
   `).join("");
 }
 
-// Ensure overrides available
 window.toggleWishlist = toggleWishlist;
-window.isInWishlist = isInWishlist;
-window.loadWishlist = loadWishlist;
+window.moveToCart = moveToCart;
+window.shareWishlist = shareWishlist;
 window.renderWishlistPage = renderWishlistPage;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Always boot on layout ready
-  loadWishlistFromStorage();
-  updateWishlistHearts();
-  // Safe async trigger
   loadWishlist();
 });

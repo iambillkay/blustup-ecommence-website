@@ -247,12 +247,17 @@ function renderProducts(filterValue) {
           </button>
         </div>
 
-        <div class="product-img" style="background:${product.color || "#f5f7ff"}">
+        <div class="product-img" style="background:${product.color || "#f8fafc"}">
           ${product.badge ? `<div class="product-badge-tag ${product.badgeType || ""}">${escapeShopHtml(product.badge)}</div>` : ""}
           ${
             product.imageUrl
-              ? `<img src="${escapeShopHtml(product.imageUrl)}" alt="${escapeShopHtml(product.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
-              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5f6b95;font-weight:600;">No image</div>`
+              ? `<img src="${escapeShopHtml(product.imageUrl)}" 
+                      alt="${escapeShopHtml(product.name)}" 
+                      onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg><span>Image coming soon</span></div>'">`
+              : `<div class="no-image-placeholder">
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                   <span>Image coming soon</span>
+                 </div>`
           }
         </div>
         <div class="product-info">
