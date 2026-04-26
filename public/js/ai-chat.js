@@ -67,7 +67,7 @@ function createChatWidget() {
   root.id = "aiChatRoot";
   root.innerHTML = `
     <button type="button" id="aiChatToggle" class="ai-chat-fab" aria-expanded="false" aria-controls="aiChatPanel">
-      <span class="ai-fab-icon" aria-hidden="true">&#10022;</span>
+      <span class="ai-fab-icon" aria-hidden="true"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-ai"></use></svg></span>
       <span class="ai-fab-label">Help</span>
     </button>
     <div id="aiChatPanel" class="ai-chat-panel" role="dialog" aria-label="Chat assistant" hidden>
@@ -189,7 +189,7 @@ function addMessage(role, text) {
   const list = document.getElementById("aiChatMessages");
   if (!list) return;
   const row = document.createElement("div");
-  row.className = `ai-msg ai-msg-${role} animate-fade-in`;
+  row.className = `ai-msg ai-msg-${role}`;
   row.innerHTML = `<div class="ai-msg-bubble">${escapeChatHtml(text)}</div>`;
   list.appendChild(row);
   list.scrollTop = list.scrollHeight;
@@ -296,7 +296,7 @@ async function initializeAiChat() {
 async function openAiChat(prefill = "") {
   const ready = await initializeAiChat();
   if (!ready) {
-    if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "AI chat is unavailable right now.");
+    if (typeof showToast === "function") showToast("!", "AI chat is unavailable right now.");
     return false;
   }
 

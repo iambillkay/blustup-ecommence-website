@@ -266,7 +266,7 @@ if (signupForm) {
       });
       setAuth(token, user, { remember: true });
       setSignupFeedback("Account created successfully. Redirecting you now...", "success");
-      showToast("OK", "Account created!");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', "Account created!");
       showPage("home");
     } catch (err) {
       setSignupFeedback(err.message || "Signup failed", "error");
@@ -317,7 +317,7 @@ if (loginForm) {
       });
 
       setAuth(token, user, { remember: rememberMe?.checked !== false });
-      showToast("OK", "Logged in!");
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', "Logged in!");
       showPage("home");
     } catch (err) {
       setLoginFeedback(err.message || "Login failed", "error");
@@ -394,6 +394,92 @@ window.getStoredUser = getStoredUser;
 window.persistStoredUser = persistStoredUser;
 window.logout = logout;
 
+/* ─── FORGOT PASSWORD ─── */
+async function forgotPassword(event) {
+  if (event) event.preventDefault();
+  const email = document.getElementById("forgot-email")?.value?.trim();
+  const feedback = document.getElementById("forgot-feedback");
+  const btn = document.getElementById("forgot-submit-btn");
+
+  if (!email) {
+    if (feedback) { feedback.textContent = "Please enter your email address."; feedback.className = "auth-feedback error"; }
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = "Sending..."; }
+
+  try {
+    const res = await api("/api/auth/forgot-password", { method: "POST", body: JSON.stringify({ email }) });
+    if (feedback) { feedback.textContent = res.message || "Check your email for a reset link."; feedback.className = "auth-feedback success"; }
+  } catch (err) {
+    if (feedback) { feedback.textContent = err.message || "Something went wrong."; feedback.className = "auth-feedback error"; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "Send Reset Link"; }
+  }
+}
+
+async function resetPassword(event) {
+  if (event) event.preventDefault();
+  const password = document.getElementById("reset-password")?.value;
+  const confirm = document.getElementById("reset-password-confirm")?.value;
+  const feedback = document.getElementById("reset-feedback");
+  const btn = document.getElementById("reset-submit-btn");
+
+  const hash = window.location.hash || "";
+  const tokenMatch = hash.match(/[?&]token=([^&]+)/);
+  const token = tokenMatch ? decodeURIComponent(tokenMatch[1]) : "";
+
+  if (!token) {
+    if (feedback) { feedback.textContent = "Invalid reset link. Please request a new one."; feedback.className = "auth-feedback error"; }
+    return;
+  }
+  if (!password || password.length < 8) {
+    if (feedback) { feedback.textContent = "Password must be at least 8 characters."; feedback.className = "auth-feedback error"; }
+    return;
+  }
+  if (password !== confirm) {
+    if (feedback) { feedback.textContent = "Passwords do not match."; feedback.className = "auth-feedback error"; }
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = "Resetting..."; }
+
+  try {
+    const res = await api("/api/auth/reset-password", { method: "POST", body: JSON.stringify({ token, password }) });
+    if (feedback) { feedback.textContent = res.message || "Password reset! You can now sign in."; feedback.className = "auth-feedback success"; }
+    setTimeout(() => showPage("login"), 3000);
+  } catch (err) {
+    if (feedback) { feedback.textContent = err.message || "Failed to reset password."; feedback.className = "auth-feedback error"; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "Reset Password"; }
+  }
+}
+
+window.forgotPassword = forgotPassword;
+window.resetPassword = resetPassword;
+
+/* ─── HASH-BASED ROUTING FOR TOKENS ─── */
+function handleAuthHash() {
+  const hash = window.location.hash || "";
+
+  if (hash.startsWith("#verify-email")) {
+    const tokenMatch = hash.match(/[?&]token=([^&]+)/);
+    if (tokenMatch) {
+      const token = decodeURIComponent(tokenMatch[1]);
+      api(`/api/auth/verify-email?token=${encodeURIComponent(token)}`).then((res) => {
+        if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', res.message || "Email verified!");
+      }).catch((err) => {
+        if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', err.message || "Verification failed.");
+      });
+      window.location.hash = "";
+    }
+  }
+
+  if (hash.startsWith("#reset-password")) {
+    if (typeof showPage === "function") showPage("reset-password");
+  }
+}
+
 /* AUTO LOGIN */
 document.addEventListener("DOMContentLoaded", async () => {
   wireLoginExperience();
@@ -402,6 +488,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = getToken();
   if (!token) {
     updateLoginUI(null);
+    handleAuthHash();
     return;
   }
 
@@ -412,4 +499,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearAuth();
     updateLoginUI(null);
   }
+
+  handleAuthHash();
 });

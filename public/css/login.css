@@ -1015,3 +1015,24 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Auth feedback for forgot/reset password */
+.auth-feedback {
+  display: none;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.auth-feedback.error {
+  display: block;
+  color: #ffd7df;
+  background: rgba(159, 18, 57, 0.24);
+  border: 1px solid rgba(254, 205, 211, 0.24);
+}
+.auth-feedback.success {
+  display: block;
+  color: #d1fae5;
+  background: rgba(22, 101, 52, 0.24);
+  border: 1px solid rgba(187, 247, 208, 0.24);
+}

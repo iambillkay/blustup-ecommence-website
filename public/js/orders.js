@@ -308,7 +308,7 @@ async function lookupOrder(reference, email) {
 function syncSuccessTrackButton() {
   const button = document.getElementById("successTrackOrderBtn");
   if (button) {
-    button.textContent = (typeof getToken === "function" && getToken()) ? "View order updates" : "Track this order";
+    button.textContent = typeof getToken === "function" && getToken() ? "View order updates" : "Track this order";
   }
 }
 

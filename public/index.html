@@ -20,7 +20,11 @@
   <link rel="stylesheet" href="css/cart-checkout.css">
   <link rel="stylesheet" href="css/ai-chat.css">
   <link rel="stylesheet" href="css/info-pages.css">
+  <link rel="stylesheet" href="css/wishlist.css">
   <link rel="stylesheet" href="css/icons.css">
+
+  <!-- Paystack Popup -->
+  <script src="https://js.paystack.co/v2/inline.js" defer></script>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -54,6 +58,55 @@
   <symbol id="icon-history" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></symbol>
 </svg>
 
+  <!-- ── GLOBAL APP SKELETON ── -->
+  <style id="skeleton-styles">
+    #app-site-skeleton {
+      position: fixed; inset: 0; z-index: 99999;
+      background: #fafcff; display: flex; flex-direction: column;
+      transition: opacity 0.4s ease, visibility 0.4s;
+    }
+    .skel-nav {
+      height: 72px; background: #fff; border-bottom: 1px solid #edf1fa;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 4vw;
+    }
+    .skel-shimmer {
+      position: relative; overflow: hidden; background: #eef3fb; border-radius: 12px;
+    }
+    .skel-shimmer::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: shimmerApp 1.8s infinite;
+    }
+    @keyframes shimmerApp { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    .skel-logo { width: 110px; height: 36px; }
+    .skel-search { flex: 1; max-width: 400px; height: 44px; margin: 0 20px; border-radius: 999px; }
+    .skel-icons { width: 120px; height: 36px; }
+    .skel-body { flex: 1; padding: 4vw; overflow: hidden; }
+    .skel-hero { height: clamp(240px, 30vw, 360px); border-radius: 28px; margin-bottom: 32px; width: 100%; }
+    .skel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .skel-card { height: 340px; border-radius: 20px; }
+    @media (max-width: 768px) {
+      .skel-search, .skel-icons { display: none; }
+      .skel-hero { height: 180px; }
+    }
+  </style>
+  <div id="app-site-skeleton">
+    <div class="skel-nav">
+      <div class="skel-shimmer skel-logo"></div>
+      <div class="skel-shimmer skel-search"></div>
+      <div class="skel-shimmer skel-icons"></div>
+    </div>
+    <div class="skel-body">
+      <div class="skel-shimmer skel-hero"></div>
+      <div class="skel-grid">
+        <div class="skel-shimmer skel-card"></div>
+        <div class="skel-shimmer skel-card"></div>
+        <div class="skel-shimmer skel-card"></div>
+        <div class="skel-shimmer skel-card"></div>
+        <div class="skel-shimmer skel-card"></div>
+      </div>
+    </div>
+  </div>
 
 <!-- ═══════════════ NAVIGATION ═══════════════ -->
 <div id="announcement-bar" class="announcement-bar" style="display:none; text-align:center; padding:10px; font-weight:700; font-size:14px; position:relative; z-index:1001;"></div>
@@ -103,10 +156,14 @@
   <div class="nav-right">
 <button class="btn-login" onclick="showPage('login')" id="loginBtn">
 Log In
-</button>    <button class="cart-btn" onclick="openCartDrawer()">
+</button>    <button class="cart-btn" onclick="showPage('cart')">
       <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg>
       <span class="sr-only">Cart</span> Cart
       <span class="cart-count" id="cart-count">0</span>
+    </button>
+    <button class="cart-btn wishlist-nav-btn" onclick="showPage('wishlist')" aria-label="Wishlist">
+      <svg class="icon" aria-hidden="true"><use xlink:href="#icon-heart"></use></svg>
+      <span class="cart-count" id="wishlist-count" style="display:none;">0</span>
     </button>
     <!-- Hamburger (mobile only) -->
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
@@ -119,137 +176,110 @@ Log In
 <div class="mobile-overlay" id="mobileOverlay"></div>
 
 <!-- Mobile drawer -->
-<div class="mobile-drawer" id="mobileDrawer">
-  <div class="drawer-welcome">
-    <p class="drawer-kicker">Quick menu</p>
-    <strong>Shop faster on mobile</strong>
-  </div>
-
-  <!-- Search in drawer -->
-  <div class="mobile-search">
-    <input type="text" placeholder="Search products…" aria-label="Search" id="mobileSearchInput" />
-    <button aria-label="Search" onclick="handleMobileSearch()">
-      <svg viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+<aside
+  class="mobile-drawer"
+  id="mobileDrawer"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="mobileDrawerTitle"
+  tabindex="-1"
+>
+  <div class="drawer-header">
+    <div class="logo" onclick="showPage('home'); closeMenu()">
+      <div class="logo-icon">
+        <img src="logos/Layer 2.png" alt="Blustup Logo" />
+      </div>
+    </div>
+    <button class="drawer-close" id="mobileDrawerClose" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
       </svg>
     </button>
   </div>
 
-  <p class="drawer-section-title">Browse</p>
-  <ul class="nav-links drawer-nav-main">
-    <li><a href="#" data-nav-page="home" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home"></use></svg></span><span>Home</span></a></li>
-    <li><a href="#" data-nav-page="shop" onclick="event.preventDefault(); showPage('shop'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-grid"></use></svg></span><span>Shop</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-star"></use></svg></span><span>Loyalty</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-history"></use></svg></span><span>Orders</span></a></li>
-  </ul>
-
-  <p class="drawer-section-title">Help & policy</p>
-  <ul class="nav-links drawer-nav-secondary">
-    <li><a href="#" data-nav-page="about" onclick="event.preventDefault(); showPage('about'); closeMenu()"><span class="drawer-link-icon">i</span><span>About</span></a></li>
-    <li><a href="#" data-nav-page="faq" onclick="event.preventDefault(); showPage('faq'); closeMenu()"><span class="drawer-link-icon">?</span><span>FAQ</span></a></li>
-    <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg></span><span>Privacy</span></a></li>
-  </ul>
-
-  <div class="drawer-quick-links" aria-label="Quick links">
-    <button type="button" onclick="showPage('shop'); closeMenu()">Top deals</button>
-    <button type="button" onclick="showPage('shop'); closeMenu()">Baby care</button>
-    <button type="button" onclick="showPage('shop'); closeMenu()">Electronics</button>
-  </div>
-
-  <div class="drawer-actions">
-    <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-ai"></use></svg></span><span>Ask AI</span></button>
-    <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-login"></use></svg></span><span>Log In</span></button>
-    <button class="cart-btn" onclick="openCartDrawer(); closeMenu()">
-        <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg><span class="sr-only">Cart</span>
-      <span class="cart-count" id="cart-count-mobile">0</span>
-    </button>
-    <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg></span><span>Shop Now</span></button>
-  </div>
-</div>
-
-<!-- Cart Side Drawer -->
-<div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="closeCartDrawer()"></div>
-<div class="cart-drawer" id="cartDrawer" aria-hidden="true">
-  <div class="drawer-header">
-    <div class="drawer-title">
-      <svg class="icon"><use xlink:href="#icon-cart"></use></svg>
-      <div>
-        <span>Your Cart</span>
-        <span class="drawer-count-badge" id="drawer-cart-count">0</span>
-        <div class="drawer-delivery-estimate" id="drawer-delivery-note"></div>
+  <div class="drawer-content">
+    <!-- Account Section -->
+    <section class="drawer-profile-card">
+      <div class="profile-info">
+        <div class="profile-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="profile-text">
+          <span class="profile-label" id="mobileAccountLabel">Welcome back</span>
+          <strong id="mobileAccountName">Guest Explorer</strong>
+        </div>
       </div>
-    </div>
-    <button class="drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">
-      <svg viewBox="0 0 24 24" width="24" height="24"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
+      <button class="btn-login profile-action" type="button" onclick="showPage('login'); closeMenu()" id="loginBtnMobile">Sign In</button>
+    </section>
 
-  <div class="drawer-shipping-promo">
-    <div class="shipping-progress-header">
-      <span id="shipping-progress-text">Spend ₵50.00 more for FREE shipping</span>
-    </div>
-    <div class="shipping-progress-bar"><div class="progress-fill" id="shipping-progress-fill" style="width: 0%"></div></div>
-  </div>
-
-  <div class="drawer-body">
-    <div id="drawer-cart-items-container"></div>
-    
-    <div id="drawer-recommendations-container" class="drawer-recommendations" style="display: none;">
-      <p class="rec-title">You might also like</p>
-      <div id="drawer-rec-list" class="rec-list"></div>
+    <!-- Main Navigation -->
+    <div class="drawer-nav-group">
+      <p class="drawer-label">Discover</p>
+      <ul class="drawer-menu">
+        <li>
+          <a href="#" onclick="event.preventDefault(); showPage('home'); closeMenu()" class="active-link">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="event.preventDefault(); showPage('shop'); closeMenu()">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span>Shop All</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="event.preventDefault(); showPage('wishlist'); closeMenu()">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span>Wishlist</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="event.preventDefault(); showPage('orders'); closeMenu()">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>My Orders</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="event.preventDefault(); showPage('loyalty'); closeMenu()">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Rewards</span>
+          </a>
+        </li>
+      </ul>
     </div>
 
-    <div id="drawer-empty-cart" class="drawer-empty" style="display: none;">
-      <div class="empty-icon"><svg class="icon"><use xlink:href="#icon-cart"></use></svg></div>
-      <p>Your cart is empty</p>
-      
-      <div class="empty-trending">
-        <p class="trending-title">Trending Now</p>
-        <div id="drawer-trending-list" class="trending-list"></div>
-      </div>
+    <!-- Secondary Navigation -->
+    <div class="drawer-nav-group">
+      <p class="drawer-label">Support</p>
+      <ul class="drawer-menu secondary">
+        <li><a href="#" onclick="event.preventDefault(); showPage('faq'); closeMenu()">FAQ</a></li>
+        <li><a href="#" onclick="event.preventDefault(); showPage('about'); closeMenu()">Our Story</a></li>
+        <li><a href="#" onclick="event.preventDefault(); showPage('privacy'); closeMenu()">Privacy Policy</a></li>
+        <li><a href="mailto:support@blustup.local">Contact Us</a></li>
+      </ul>
+    </div>
 
-      <button class="btn-primary" onclick="showPage('shop'); closeCartDrawer()" style="margin-top: 20px;">Shop All Products</button>
+    <!-- Quick Actions -->
+    <div class="drawer-footer">
+      <div class="drawer-footer-actions">
+        <button class="action-btn cart" onclick="showPage('cart'); closeMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span>Cart</span>
+          <span class="badge" id="cart-count-mobile">0</span>
+        </button>
+        <button class="action-btn ai" onclick="openAiChat(); closeMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Ask AI</span>
+        </button>
+      </div>
+      <button class="btn-primary shop-now-btn" onclick="showPage('shop'); closeMenu()">Shop New Arrivals</button>
     </div>
   </div>
-
-  <div class="drawer-footer">
-    <div class="drawer-summary">
-      <div class="summary-line">
-        <span>Subtotal</span>
-        <span id="drawer-subtotal">₵0.00</span>
-      </div>
-      <div class="summary-line discount" id="drawer-discount-row" style="display: none;">
-        <span id="drawer-discount-label">Discount</span>
-        <span id="drawer-discount-val">-₵0.00</span>
-      </div>
-      <div class="summary-line total">
-        <span>Total</span>
-        <span id="drawer-total">₵0.00</span>
-      </div>
-    </div>
-    <button class="drawer-checkout-btn" onclick="showPage('checkout'); closeCartDrawer()">
-      Checkout Now — <span id="drawer-btn-total">₵0.00</span>
-    </button>
-
-    <div class="drawer-trust-badges">
-      <div class="trust-badge">
-        <svg class="icon"><use xlink:href="#icon-shield"></use></svg>
-        <span>Secure</span>
-      </div>
-      <div class="trust-badge">
-        <svg class="icon"><use xlink:href="#icon-history"></use></svg>
-        <span>14-day Returns</span>
-      </div>
-      <div class="trust-badge">
-        <svg class="icon"><use xlink:href="#icon-info"></use></svg>
-        <span>24/7 Support</span>
-      </div>
-    </div>
-
-    <p class="drawer-footer-note">Shipping & taxes calculated at checkout</p>
-  </div>
-</div>
-
+</aside>
 </nav>
 
   <!-- ═══════════════ HOME PAGE ═══════════════ -->
@@ -267,8 +297,8 @@ Log In
         </div>
     </div>
 
-      <button class="hero-btn prev"><svg class="icon icon-arrow-left" aria-hidden="true"><use xlink:href="#icon-arrow-left"></use></svg></button>
-      <button class="hero-btn next"><svg class="icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg></button>
+    <button class="hero-btn prev"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left"></use></svg></button>
+    <button class="hero-btn next"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg></button>
 
     <div class="hero-dots"></div>
 </section>
@@ -303,7 +333,7 @@ Log In
   </div>
   <div class="scroll-wrapper">
     <button class="scroll-btn left-btn" onclick="scrollLeft(this)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-left"></use></svg></button>
-  <div class="product-row" id="productRow2"></div>
+    <div class="product-row" id="productRow2"></div>
     <button class="scroll-btn right-btn" onclick="scrollRight(this)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chevron-right"></use></svg></button>
   </div>
 </section>
@@ -330,10 +360,32 @@ Log In
       <p>Africa's biggest retail shop for all your essentials</p>
     </div>
     <div class="shop-body">
-      <div class="shop-filters">
-        <!-- Filled from /api/cms/shop (pill buttons) -->
+      <div class="shop-content-wrapper">
+        <aside class="shop-sidebar-desktop" id="shopSidebar">
+          <div class="sidebar-block">
+            <h3>Categories</h3>
+            <div class="sidebar-filters-list" id="sidebarFilters">
+              <!-- Desktop filters will be mirrored here -->
+            </div>
+          </div>
+          <div class="sidebar-block">
+            <h3>Price Range</h3>
+            <div class="price-range-inputs">
+              <input type="number" placeholder="Min" id="minPrice">
+              <span>-</span>
+              <input type="number" placeholder="Max" id="maxPrice">
+              <button onclick="applyPriceFilter()">Apply</button>
+            </div>
+          </div>
+        </aside>
+        
+        <main class="shop-main-content">
+          <div class="shop-filters">
+            <!-- Mobile pills / Category row -->
+          </div>
+          <div class="products-grid" id="products-grid"></div>
+        </main>
       </div>
-      <div class="products-grid" id="products-grid"></div>
     </div>
     <footer>
       <div class="footer-grid">
@@ -353,127 +405,142 @@ Log In
   <div id="page-faq" class="page">
     <section class="faq-container">
       <div class="faq-left">
-        <span class="faq-label" id="faq-label">● Have Questions?</span>
-        <h1 id="faq-page-title">Frequently asked<br>questions</h1>
-        <p id="faq-intro" class="faq-intro" style="display:none;"></p>
-        <div class="faq-help">
-          <h3 id="faq-help-title">Still have a question?</h3>
-          <p id="faq-help-text">Loading…</p>
-          <button class="faq-email-btn" type="button" id="faq-email-btn">Send email</button>
+        <span class="faq-label" id="faq-label">● Help Center</span>
+        <h1 id="faq-page-title">How can we<br>help you?</h1>
+        
+        <div class="faq-search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="faqSearchInput" placeholder="Search for answers..." onkeyup="handleFaqSearch()">
+        </div>
+
+        <div class="faq-quick-links">
+          <span>Popular:</span>
+          <button onclick="document.getElementById('faqSearchInput').value='Delivery'; handleFaqSearch()">Delivery</button>
+          <button onclick="document.getElementById('faqSearchInput').value='Refunds'; handleFaqSearch()">Refunds</button>
+          <button onclick="document.getElementById('faqSearchInput').value='Points'; handleFaqSearch()">Points</button>
+        </div>
+
+        <div class="faq-categories" id="faqCategories">
+          <button class="cat-chip active" onclick="filterFaq('all')">All</button>
+          <button class="cat-chip" onclick="filterFaq('shipping')">Shipping</button>
+          <button class="cat-chip" onclick="filterFaq('payment')">Payment</button>
+          <button class="cat-chip" onclick="filterFaq('account')">Account</button>
+        </div>
+
+        <div class="faq-help premium-help-card">
+          <div class="help-badge">AI Powered</div>
+          <h3 id="faq-help-title">Instant Answers</h3>
+          <p id="faq-help-text">Our AI Assistant can help you with orders, returns, and tracking in real-time.</p>
+          <div class="faq-help-actions">
+            <button class="btn-primary" onclick="openAiChat()">Ask Blustup AI</button>
+            <button class="faq-email-btn" type="button" id="faq-email-btn">Email Support</button>
+          </div>
         </div>
       </div>
       <div class="faq-right">
         <div class="faq-list" id="faq-list-root">
-          <div class="faq-item active">
-            <button class="faq-question" type="button">
-              <span>How do I create an account?</span>
-              <span class="faq-icon">&#9650;</span>
-            </button>
-            <div class="faq-answer">
-              Click on "Create account" from the login page, enter your name, email, and password, then click "Create Account". You'll be logged in automatically!
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>How do I add products to my cart?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              Browse the shop, find a product you like, and click the "+ Add" button. Your cart count will update at the top right.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>Is my personal information secure?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              Yes! We use 256-bit SSL encryption to protect all your data. Your password is hashed with bcryptjs for extra security.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>Can I use promo codes?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              Yes! Enter a valid promo code in your cart summary and click "Apply" to get discounts on your order.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>What payment methods do you accept?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              We accept credit/debit cards, PayPal, Apple Pay, and Google Pay at checkout.
-            </div>
-          </div>
+          <!-- Populated by JS -->
         </div>
       </div>
-    </section>
-    <section class="faq-board-section">
-      <h2 class="faq-board-heading" id="faq-board-title">Board of directors</h2>
-      <p class="faq-board-lead">Meet the team guiding Blustup.</p>
-      <div class="board-grid" id="faq-board-grid"></div>
     </section>
   </div>
 
   <!-- ABOUT / PRIVACY / LOYALTY PAGES -->
   <div id="page-about" class="page site-page">
     <div class="site-page-shell">
-      <section class="site-page-hero">
-        <div class="section-badge" id="about-badge">About Blustup</div>
-        <h1 id="about-title">Blustup helps everyday shoppers buy with more clarity, more trust, and less friction.</h1>
-        <p id="about-intro">We built Blustup around a simple promise: product discovery should feel transparent, checkout should feel secure, and support should be available the moment a shopper needs it. That is why the storefront combines curated catalog design, loyalty rewards, and AI-guided assistance in one place.</p>
+      <section class="site-page-hero about-hero-premium">
+        <div class="section-badge" id="about-badge">The Blustup Story</div>
+        <h1 id="about-title">Buying with clarity, trust, and zero friction.</h1>
+        <p id="about-intro">We built Blustup because we believed shopping should feel like a conversation, not a transaction. By combining curated design with AI-guided assistance, we've created a storefront where trust is the default.</p>
         <div class="site-page-hero-actions">
-          <button class="checkout-btn" type="button" id="about-primary-cta" onclick="showPage('shop')">Explore the shop</button>
-          <button class="cart-secondary-btn" type="button" id="about-secondary-cta" onclick="openAiChat()">Ask Blustup AI</button>
+          <button class="checkout-btn" type="button" onclick="showPage('shop')">Explore the shop</button>
+          <button class="cart-secondary-btn" type="button" onclick="openAiChat()">Ask Blustup AI</button>
         </div>
-        <div class="about-stats" id="about-stats-root">
-          <div class="about-stat"><strong>Transparent</strong><span>Clear pricing, visible ratings, and plain-language trust signals through checkout.</span></div>
-          <div class="about-stat"><strong>Helpful</strong><span>AI support, loyalty perks, and guidance that reduces checkout friction.</span></div>
-          <div class="about-stat"><strong>Reliable</strong><span>A brand built around secure payments, dependable fulfillment, and customer confidence.</span></div>
+      </section>
+
+      <div class="trust-stats-bar">
+        <div class="trust-stat-item">
+          <strong>10k+</strong>
+          <span>Happy Shoppers</span>
+        </div>
+        <div class="trust-stat-item">
+          <strong>99.9%</strong>
+          <span>Secure Payments</span>
+        </div>
+        <div class="trust-stat-item">
+          <strong>24/7</strong>
+          <span>Guided Support</span>
+        </div>
+      </div>
+
+      <div class="about-values-grid" id="about-stats-root" style="margin-top: 80px;">
+          <div class="value-card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <strong>Transparent</strong>
+            <span>Clear pricing and honest reviews from real shoppers.</span>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <strong>Helpful</strong>
+            <span>24/7 AI-guided assistance for every step of your journey.</span>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20m10-10H2"/><circle cx="12" cy="12" r="9"/></svg>
+            </div>
+            <strong>Reliable</strong>
+            <span>Secure payments and a promise to deliver on every order.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Founder's Story Section -->
+      <section class="about-founder-section">
+        <div class="founder-image">
+          <img src="product-imgs/about/founder-placeholder.png" alt="Founder of Blustup" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop'">
+          <div class="founder-badge">Founder & CEO</div>
+        </div>
+        <div class="founder-content">
+          <span class="founder-label">A message from our leadership</span>
+          <h2>"We didn't just want to build a store; we wanted to build a standard for trust in Africa's e-commerce."</h2>
+          <p>At Blustup, we believe that the biggest hurdle in online shopping isn't logistics—it's confidence. We spend every day refining our AI and auditing our product selections to ensure that when you click 'Place Order', you do so with complete peace of mind.</p>
+          <div class="founder-signature">
+            <p>The Blustup Team</p>
+            <span>Quality Guaranteed</span>
+          </div>
         </div>
       </section>
 
       <div class="site-page-grid three-up" id="about-cards-root">
         <article class="info-card">
+          <div class="card-num">01</div>
           <h3>Our Identity</h3>
-          <p>Blustup is positioned as a modern e-business brand for practical shoppers who want strong value without sacrificing trust. The experience blends confident visuals, curated products, and support that feels available before, during, and after purchase.</p>
+          <p>Blustup is a modern e-business brand for practical shoppers. We blend confident visuals with a curated catalog to make shopping effortless.</p>
         </article>
         <article class="info-card">
+          <div class="card-num">02</div>
           <h3>Our Promise</h3>
-          <p>We focus on making every stage of online shopping easier to understand: what a product offers, how customers feel about it, and how payment and delivery choices affect the final order.</p>
+          <p>We focus on making every stage of online shopping easier to understand: from product value to delivery choices.</p>
         </article>
         <article class="info-card">
+          <div class="card-num">03</div>
           <h3>Our Voice</h3>
-          <p>Helpful, direct, and practical. From the product cards to the AI assistant, the brand is designed to feel supportive rather than overwhelming.</p>
+          <p>Helpful, direct, and practical. Our brand is designed to feel like a supportive guide rather than an overwhelming catalog.</p>
         </article>
       </div>
 
-      <div class="site-page-grid two-up" id="about-pillars-root">
-        <article class="info-card">
-          <h2>What shapes the business</h2>
-          <ul>
-            <li>Product pages emphasize clear value, ratings, and short customer proof.</li>
-            <li>Loyalty points encourage repeat purchases and stronger customer retention.</li>
-            <li>Visible privacy and payment messaging reinforce trust at the moment it matters most.</li>
-          </ul>
-        </article>
-        <article class="info-card">
-          <h2>How we serve shoppers</h2>
-          <ul>
-            <li>AI chat answers product, offer, and checkout questions in real time.</li>
-            <li>Secure checkout messaging keeps payment confidence front and center.</li>
-            <li>Account-linked order tracking helps repeat buyers move faster on future purchases.</li>
-          </ul>
-        </article>
-      </div>
+      <!-- Moved Board Section -->
+      <section class="about-board-section">
+        <div class="board-header">
+          <h2 class="about-board-heading" id="about-board-title">Board of directors</h2>
+          <p class="about-board-lead">The leadership team dedicated to redefining the e-commerce landscape in Africa.</p>
+        </div>
+        <div class="board-grid" id="about-board-grid"></div>
+      </section>
     </div>
   </div>
 
@@ -531,32 +598,68 @@ Log In
       </section>
 
       <div class="loyalty-layout">
-        <article class="info-card loyalty-balance-card">
-          <h2>Your loyalty balance</h2>
-          <div class="loyalty-balance-number" id="loyaltyPointsValue">0</div>
-          <div class="loyalty-tier-pill" id="loyaltyTierBadge">Sign in</div>
-          <div class="loyalty-progress-shell" aria-label="Loyalty progress">
+        <div class="loyalty-card-wrapper">
+          <div class="loyalty-membership-card" id="loyaltyCard">
+            <div class="card-glass-glow"></div>
+            <div class="card-header">
+              <div class="card-logo">✦ Blustup</div>
+              <div class="card-tier" id="loyaltyTierBadge">Starter</div>
+            </div>
+            <div class="card-balance">
+              <span class="label">Total Points</span>
+              <div class="value" id="loyaltyPointsValue">0</div>
+            </div>
+            <div class="card-footer">
+              <div class="user-name" id="loyaltyAccountName">Guest Explorer</div>
+              <div class="member-since">Active Member</div>
+            </div>
+          </div>
+          
+          <div class="loyalty-progress-panel">
             <div class="loyalty-progress-top">
-              <span id="loyaltyCurrentTierRange">Starter starts at 0 pts</span>
+              <span id="loyaltyCurrentTierRange">Starter</span>
               <span id="loyaltyNextTierTarget">Silver unlocks at 150 pts</span>
             </div>
             <div class="loyalty-progress-bar"><span id="loyaltyProgressFill" style="width:0%"></span></div>
-            <div class="loyalty-progress-copy" id="loyaltyProgressText">Sign in to watch your progress toward free shipping and higher loyalty tiers.</div>
+            <p id="loyaltyProgressText">Sign in to track your progress.</p>
           </div>
-          <div class="loyalty-mini-stats">
-            <div class="loyalty-mini-stat">
-              <strong id="loyaltySpendToNextTier">Sign in</strong>
-              <span>Spend to next tier</span>
+        </div>
+
+        <div class="loyalty-perks-panel">
+          <div class="perk-stats">
+            <div class="perk-stat-item">
+              <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20m10-10H2"/><circle cx="12" cy="12" r="9"/></svg></div>
+              <div class="stat-info">
+                <strong id="loyaltySpendToNextTier">--</strong>
+                <span>Next Tier Spend</span>
+              </div>
             </div>
-            <div class="loyalty-mini-stat">
-              <strong id="loyaltyPerkStatus">Locked</strong>
-              <span>Shipping perk</span>
+            <div class="perk-stat-item">
+              <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+              <div class="stat-info">
+                <strong id="loyaltyPerkStatus">Locked</strong>
+                <span>Current Perk</span>
+              </div>
             </div>
           </div>
-          <p class="loyalty-support-copy" id="loyaltyTierSummary">Sign in before checkout to start earning loyalty points on every order.</p>
-          <p class="loyalty-support-copy" id="loyaltyNextTier">Starter members begin earning immediately after the first signed-in purchase.</p>
-          <p class="loyalty-support-copy" id="loyaltyAccountNote">Create an account or sign in to turn purchases into loyalty points and shipping perks.</p>
-        </article>
+
+          <div class="loyalty-perks-list-v2">
+            <h3>Membership Perks</h3>
+            <div class="perk-item active">
+              <div class="perk-bullet"></div>
+              <span>Earn 1 point for every ₵1 spent</span>
+            </div>
+            <div class="perk-item" id="perk-shipping">
+              <div class="perk-bullet"></div>
+              <span>Unlock FREE shipping at Silver tier</span>
+            </div>
+            <div class="perk-item">
+              <div class="perk-bullet"></div>
+              <span>Early access to Brand Day sales</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
         <article class="info-card">
           <h2>Program perks</h2>
@@ -583,33 +686,96 @@ Log In
     </div>
   </div>
 
+  <div id="page-wishlist" class="page">
+    <div class="site-page-shell">
+      <div class="wishlist-layout-header">
+        <div class="wishlist-title-wrap">
+          <h1>My Wishlist <svg class="icon" aria-hidden="true"><use xlink:href="#icon-heart"></use></svg></h1>
+          <p class="wishlist-subtitle">Items you've saved for later.</p>
+        </div>
+        <button class="wishlist-share-btn" onclick="shareWishlist()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Share List
+        </button>
+      </div>
+      <div id="wishlist-empty"></div>
+      <div class="products-grid" id="wishlist-grid"></div>
+    </div>
+  </div>
+
   <div id="page-cart" class="page">
-    <div class="cart-container">
-      <h1>Your Cart <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></h1>
-      <div class="cart-layout">
-        <div>
+    <div class="cart-container-v2">
+      <div class="cart-header-row">
+        <h1>Shopping Cart <span class="cart-count-badge" id="cart-page-count">0</span></h1>
+        <button class="clear-all-link" onclick="resetCartState()">Clear All</button>
+      </div>
+
+      <div class="cart-grid-v2">
+        <!-- TOP LEFT: Cart Items -->
+        <div class="cart-items-section">
           <div class="cart-items" id="cart-items-container"></div>
-          <div id="empty-cart" style="display:none;text-align:center;padding:60px 0;color:var(--text-light);">
-            <div style="font-size:56px;margin-bottom:16px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></div>
-            <p style="font-size:1.1rem;font-weight:600;color:var(--text-dark);">Your cart is empty</p>
-            <p style="margin-top:8px;font-size:.9rem;">Discover amazing travel deals in our shop</p>
-            <button class="btn-primary" style="margin-top:24px;" onclick="showPage('shop')">Browse Shop →</button>
+          <div id="empty-cart" style="display:none;text-align:center;padding:100px 0;background:#fff;border-radius:32px;border:1px solid #eef2fa;">
+            <div style="font-size:64px;margin-bottom:24px;opacity:0.2;">🛒</div>
+            <h2 style="font-family:'Sora',sans-serif;font-weight:800;color:#0a1040;margin-bottom:12px;">Your cart is empty</h2>
+            <p style="color:#64748b;margin-bottom:32px;">Discover something new for your next journey.</p>
+            <button class="checkout-btn" style="width:auto;padding:16px 40px;" onclick="showPage('shop')">Explore Shop</button>
           </div>
         </div>
-        <div class="cart-summary">
-          <h2>Order Summary</h2>
-          <div id="cart-summary-rows"></div>
-          <div class="promo-input">
-            <input type="text" placeholder="Promo code" id="promo-input" autocomplete="off">
-            <button type="button" id="promoApplyBtn" onclick="applyPromo()">Apply</button>
+
+        <!-- TOP RIGHT: Stacked Summary & Shipping -->
+        <div class="cart-sidebar-section">
+          <div class="cart-summary-v2">
+            <h2>Order Summary</h2>
+            <div id="cart-summary-rows"></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row total">
+              <span>Total Amount</span>
+              <span id="cart-total-display">₵0.00</span>
+            </div>
+            <button class="checkout-btn" id="cartCheckoutBtn" onclick="showPage('checkout')" style="margin-top:24px;">Proceed to Checkout</button>
+            <div class="secure-checkout-tag">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Secure & Encrypted
+            </div>
           </div>
-          <p class="promo-hint" id="promo-status">Try AIRLUME20, BLUSTUP10, or FREESHIP</p>
-          <div class="summary-row total"><span>Total</span><span id="cart-total-display">₵0.00</span></div>
-          <div class="cart-summary-actions">
-            <button class="checkout-btn" id="cartCheckoutBtn" onclick="showPage('checkout')">Proceed to Checkout →</button>
-            <button type="button" class="cart-secondary-btn" id="clearCartBtn">Clear Cart</button>
+
+          <div class="cart-promo-section-v2">
+            <div class="cart-shipping-promo-v2">
+              <div class="shipping-header">
+                <span id="cart-page-shipping-text">Add <strong>₵50.00</strong> for FREE Shipping</span>
+              </div>
+              <div class="shipping-progress-bar"><span class="progress-fill" id="cart-page-shipping-fill"></span></div>
+            </div>
+            <div class="promo-box-v2">
+              <input type="text" placeholder="Promo Code" id="promo-input">
+              <button onclick="applyPromo()">Apply</button>
+            </div>
           </div>
-          <div class="secure-note"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> Secure &amp; encrypted checkout</div>
+        </div>
+
+        <!-- MIDDLE: Recommendations -->
+        <div class="cart-recommendations-section-v2" id="cart-page-recommendations">
+          <div class="section-head">
+            <h3>You Might Also Like</h3>
+            <p>Complete your order with these trending items.</p>
+          </div>
+          <div class="rec-grid-v2" id="cart-page-rec-list"></div>
+        </div>
+
+        <!-- BOTTOM: Trust Footer -->
+        <div class="cart-trust-footer-v2">
+          <div class="trust-item">
+            <div class="trust-icon">💳</div>
+            <div class="trust-text"><strong>Secure Payment</strong> SSL Encrypted</div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🚚</div>
+            <div class="trust-text"><strong>Fast Delivery</strong> Nationwide Shipping</div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🔄</div>
+            <div class="trust-text"><strong>Easy Returns</strong> 30-Day Guarantee</div>
+          </div>
         </div>
       </div>
     </div>
@@ -620,13 +786,23 @@ Log In
     <div class="checkout-container">
       <h1>Checkout</h1>
       <div class="checkout-steps">
-        <div class="step done"><div class="step-num"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></div>Cart</div>
-        <div class="step-divider"></div>
-        <div class="step active"><div class="step-num">2</div>Details</div>
-        <div class="step-divider"></div>
-        <div class="step"><div class="step-num">3</div>Payment</div>
-        <div class="step-divider"></div>
-        <div class="step"><div class="step-num">4</div>Confirm</div>
+        <div class="step-divider"><div class="step-divider-fill" id="checkout-progress-bar"></div></div>
+        <div class="step done" id="step-cart">
+          <div class="step-num"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></div>
+          <span>Cart</span>
+        </div>
+        <div class="step active" id="step-details">
+          <div class="step-num">2</div>
+          <span>Details</span>
+        </div>
+        <div class="step" id="step-payment">
+          <div class="step-num">3</div>
+          <span>Payment</span>
+        </div>
+        <div class="step" id="step-confirm">
+          <div class="step-num">4</div>
+          <span>Confirm</span>
+        </div>
       </div>
       <div class="checkout-layout">
         <div class="checkout-form-wrap">
@@ -642,7 +818,7 @@ Log In
             </div>
           </div>
           <div class="form-section">
-            <h3><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user"></use></svg> Contact Information</h3>
+            <h3><span class="sec-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user"></use></svg></span>Contact Information</h3>
             <div class="form-grid">
               <div class="form-group"><label>First Name</label><input id="co-first" type="text" placeholder="John" autocomplete="given-name"></div>
               <div class="form-group"><label>Last Name</label><input id="co-last" type="text" placeholder="Doe" autocomplete="family-name"></div>
@@ -651,7 +827,7 @@ Log In
             </div>
           </div>
           <div class="form-section">
-            <h3><svg class="icon" aria-hidden="true"><use xlink:href="#icon-location"></use></svg> Billing Address</h3>
+            <h3><span class="sec-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-location"></use></svg></span>Billing Address</h3>
             <div class="form-grid full"><div class="form-group"><label>Street Address</label><input id="co-street" type="text" placeholder="123 Main Street" autocomplete="street-address"></div></div>
             <div class="form-grid" style="margin-top:16px;">
               <div class="form-group"><label>City</label><input id="co-city" type="text" placeholder="New York" autocomplete="address-level2"></div>
@@ -661,11 +837,12 @@ Log In
             </div>
           </div>
           <div class="form-section">
-            <h3><svg class="icon" aria-hidden="true"><use xlink:href="#icon-card"></use></svg> Payment Method</h3>
+            <h3><span class="sec-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-card"></use></svg></span>Payment Method</h3>
             <div class="payment-icons">
               <div class="pay-icon active" data-method="card"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-card"></use></svg> Card</div>
               <div class="pay-icon" data-method="cod"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-package"></use></svg> Pay on delivery</div>
               <div class="pay-icon" data-method="paypal">PayPal</div>
+              <div class="pay-icon" data-method="paystack">Paystack</div>
               <div class="pay-icon" data-method="apple">Apple Pay</div>
               <div class="pay-icon" data-method="google">Google Pay</div>
             </div>
@@ -805,7 +982,7 @@ Apple
 <div class="login-field">
 <div class="login-field-head">
 <label for="loginPassword">Password</label>
-<button type="button" class="field-link" id="forgotPasswordBtn">Forgot password?</button>
+<button type="button" class="field-link" id="forgotPasswordBtn" onclick="showPage('forgot-password')">Forgot password?</button>
 </div>
 <div class="input-with-action">
 <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
@@ -843,7 +1020,66 @@ Don't have an account?
 
 </div>
 
-<!-- ═══════════════ SIGNUP PAGE ═══════════════ -->
+  <!-- ═══════════════ FORGOT PASSWORD PAGE ═══════════════ -->
+  <div id="page-forgot-password" class="page">
+    <div class="login-wrapper">
+      <div class="login-shell">
+        <div class="login-body">
+          <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;color:var(--text-dark);margin-bottom:8px;">Forgot your password?</h2>
+          <p style="color:var(--text-light);margin-bottom:24px;font-size:.92rem;">Enter your email address and we'll send you a link to reset your password.</p>
+
+          <form onsubmit="forgotPassword(event)" style="display:grid;gap:16px;">
+            <div class="login-field">
+              <label for="forgot-email">Email</label>
+              <input type="email" id="forgot-email" placeholder="eg. john@example.com" required>
+            </div>
+            <div id="forgot-feedback" class="auth-feedback" style="display:none;"></div>
+            <button class="login-btn" type="submit" id="forgot-submit-btn">
+              <span class="login-btn-label">Send Reset Link</span>
+            </button>
+          </form>
+
+          <p class="signup-link" style="margin-top:20px;">
+            Remember your password?
+            <a onclick="showPage('login')">Sign In</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ RESET PASSWORD PAGE ═══════════════ -->
+  <div id="page-reset-password" class="page">
+    <div class="login-wrapper">
+      <div class="login-shell">
+        <div class="login-body">
+          <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;color:var(--text-dark);margin-bottom:8px;">Reset your password</h2>
+          <p style="color:var(--text-light);margin-bottom:24px;font-size:.92rem;">Choose a new password for your account.</p>
+
+          <form onsubmit="resetPassword(event)" style="display:grid;gap:16px;">
+            <div class="login-field">
+              <label for="reset-password">New Password</label>
+              <input type="password" id="reset-password" placeholder="Minimum 8 characters" minlength="8" required>
+            </div>
+            <div class="login-field">
+              <label for="reset-password-confirm">Confirm Password</label>
+              <input type="password" id="reset-password-confirm" placeholder="Repeat your new password" minlength="8" required>
+            </div>
+            <div id="reset-feedback" class="auth-feedback" style="display:none;"></div>
+            <button class="login-btn" type="submit" id="reset-submit-btn">
+              <span class="login-btn-label">Reset Password</span>
+            </button>
+          </form>
+
+          <p class="signup-link" style="margin-top:20px;">
+            <a onclick="showPage('login')">← Back to Sign In</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SIGNUP PAGE ═══════════════ -->
 <div id="page-signup" class="page">
 
 <div class="signup-wrapper">
@@ -1072,9 +1308,9 @@ Already have an account?
   </div>
 
   <!-- ═══════════════ TOAST ═══════════════ -->
-  <div id="productDetailBackdrop" class="product-detail-backdrop" hidden aria-hidden="true">
-    <div class="product-detail-sheet" role="dialog" aria-modal="true" aria-labelledby="productDetailTitle">
-      <button class="product-detail-close" type="button" data-product-detail-close aria-label="Close product details">×</button>
+  <!-- ═══════════════ PRODUCT PAGE ═══════════════ -->
+  <div id="page-product" class="page">
+    <div class="product-page-wrapper">
       <div id="productDetailBody" class="product-detail-body"></div>
     </div>
   </div>
@@ -1114,6 +1350,7 @@ Already have an account?
   <script src="js/shop.js"></script>
   <script src="js/checkout.js"></script>
   <script src="js/orders.js"></script>
+  <script src="js/wishlist.js"></script>
   <script src="js/app.js"></script>
   
 
@@ -1155,7 +1392,7 @@ Already have an account?
               ogImg.setAttribute('property', 'og:image');
               document.head.appendChild(ogImg);
             }
-            ogImg.content = seo.ogImage;
+            ogImg.content = seo.seoImage;
           }
         }
       } catch (e) {

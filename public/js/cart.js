@@ -62,84 +62,26 @@ function cartItemFromProduct(product, qty) {
   };
 }
 
-function getCartRecommendations(count = 3) {
-  const catalog = getProductCatalog();
-  const cartIds = new Set(cart.map((item) => String(item.id)));
-  
-  // Exclude items already in cart
-  const available = catalog.filter((p) => !cartIds.has(String(p.id)));
-  
-  // Shuffle and pick
-  return available
-    .sort(() => 0.5 - Math.random())
-    .slice(0, count);
-}
-
-function renderRecCard(product) {
-  const safeId = String(product.id).replace(/'/g, "\\'");
-  return `
-    <div class="mini-rec-card">
-      <div class="rec-thumb" style="background:${escapeCartHtml(product.color || "#f0f2ff")}">
-        ${product.imageUrl ? `<img src="${escapeCartHtml(product.imageUrl)}" alt="">` : `<span>${escapeCartHtml(product.icon || "★")}</span>`}
-      </div>
-      <div class="rec-info">
-        <div class="rec-name">${escapeCartHtml(product.name)}</div>
-        <div class="rec-price">${formatCartMoney(product.price)}</div>
-      </div>
-      <button class="rec-add-btn" onclick="addToCart('${safeId}', event)" aria-label="Add to cart">
-        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="none" stroke="currentColor" stroke-width="2.5" d="M12 5v14M5 12h14"/></svg>
-      </button>
-    </div>
-  `;
-}
-
-async function loadCartFromStorage() {
+function loadCartFromStorage() {
   try {
-    const user = typeof getStoredUser === "function" ? getStoredUser() : null;
-    const key = user?.id ? `${CART_KEY}_u${user.id}` : `${CART_KEY}_guest`;
-    const raw = localStorage.getItem(key);
-    if (!raw) {
-      cart = [];
-      return;
-    }
+    const raw = localStorage.getItem(CART_KEY);
+    if (!raw) return;
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      cart = [];
-      return;
-    }
+    if (!Array.isArray(parsed)) return;
     cart = parsed.map((row) => ({
       ...row,
       id: String(row.id),
       price: Number(row.price),
       qty: Math.max(1, Number(row.qty) || 1),
     }));
-
-    // Sync from server if logged in
-    if (user?.id && typeof api === "function") {
-      try {
-        const response = await api("/api/cart");
-        if (response && Array.isArray(response.cart)) {
-          cart = response.cart;
-          updateCartCount();
-          renderCart();
-        }
-      } catch (err) {
-        console.warn("Could not sync cart from server", err);
-      }
-    }
   } catch (_e) {
     cart = [];
   }
 }
 
-async function saveCartToStorage() {
+function saveCartToStorage() {
   try {
-    const user = typeof getStoredUser === "function" ? getStoredUser() : null;
-    const key = user?.id ? `${CART_KEY}_u${user.id}` : `${CART_KEY}_guest`;
-    localStorage.setItem(key, JSON.stringify(cart));
-    if (user?.id && typeof api === "function") {
-      api("/api/cart", { method: "PUT", body: JSON.stringify({ cart }) }).catch(() => {});
-    }
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
   } catch (_e) {}
 }
 
@@ -160,50 +102,12 @@ function savePromoToStorage() {
 }
 
 function updateCartCount() {
-  const count = getTotalItems();
-  const badges = document.querySelectorAll(".cart-count");
-  const pageBadge = document.getElementById("cart-page-count");
-  
-  badges.forEach((b) => {
-    b.textContent = count;
-    b.style.display = count > 0 ? "flex" : "none";
-    if (count > 0) {
-      b.classList.remove("bump");
-      void b.offsetWidth; // trigger reflow
-      b.classList.add("bump");
-    }
-  });
-
-  if (pageBadge) {
-    pageBadge.textContent = count;
-    pageBadge.style.display = count > 0 ? "inline-flex" : "none";
-  }
+  const count = String(getTotalItems());
+  const desktop = document.getElementById("cart-count");
+  const mobile = document.getElementById("cart-count-mobile");
+  if (desktop) desktop.textContent = count;
+  if (mobile) mobile.textContent = count;
 }
-
-function openCartDrawer() {
-  const drawer = document.getElementById("cartDrawer");
-  const backdrop = document.getElementById("cartDrawerBackdrop");
-  if (!drawer || !backdrop) return;
-
-  drawer.classList.add("open");
-  drawer.setAttribute("aria-hidden", "false");
-  backdrop.classList.add("active");
-  document.body.style.overflow = "hidden"; // Prevent background scroll
-  renderCart(); // Refresh view
-}
-window.openCartDrawer = openCartDrawer;
-
-function closeCartDrawer() {
-  const drawer = document.getElementById("cartDrawer");
-  const backdrop = document.getElementById("cartDrawerBackdrop");
-  if (!drawer || !backdrop) return;
-
-  drawer.classList.remove("open");
-  drawer.setAttribute("aria-hidden", "true");
-  backdrop.classList.remove("active");
-  document.body.style.overflow = "";
-}
-window.closeCartDrawer = closeCartDrawer;
 
 function syncDependentViews() {
   updateCartCount();
@@ -227,9 +131,6 @@ function addToCart(id, e) {
 
   syncDependentViews();
   showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg>', `${product.name} added to cart`);
-  
-  // Premium improvement: Automatically open drawer on add
-  setTimeout(openCartDrawer, 400);
 
   // Track add to cart
   if (window.tracker) {
@@ -385,135 +286,46 @@ function renderCart() {
   const checkoutButton = document.getElementById("cartCheckoutBtn");
   const clearButton = document.getElementById("clearCartBtn");
 
-  // Drawer Elements
-  const drawerContainer = document.getElementById("drawer-cart-items-container");
-  const drawerEmpty = document.getElementById("drawer-empty-cart");
-  const drawerSubtotal = document.getElementById("drawer-subtotal");
-  const drawerTotal = document.getElementById("drawer-total");
-  const drawerBtnTotal = document.getElementById("drawer-btn-total");
-  const drawerShippingText = document.getElementById("shipping-progress-text");
-  const drawerShippingFill = document.getElementById("shipping-progress-fill");
-  const drawerDiscountRow = document.getElementById("drawer-discount-row");
-  const drawerDiscountLabel = document.getElementById("drawer-discount-label");
-  const drawerDiscountVal = document.getElementById("drawer-discount-val");
-  const drawerDeliveryNote = document.getElementById("drawer-delivery-note");
+  if (!container || !summaryRows || !totalEl) return;
 
-  // Full Page Elements
-  const pageShippingText = document.getElementById("cart-page-shipping-text");
-  const pageShippingFill = document.getElementById("cart-page-shipping-fill");
-  const pageRecList = document.getElementById("cart-page-rec-list");
-  const pageRecContainer = document.getElementById("cart-page-recommendations");
-
-  const subtotal = getSubtotal();
-  const total = getTotal();
-  const discount = getDiscount();
-  const threshold = 50;
-
-  // Update Delivery Estimate
-  if (drawerDeliveryNote) {
-    const date = new Date();
-    date.setDate(date.getDate() + 3);
-    const options = { month: 'short', day: 'numeric' };
-    drawerDeliveryNote.textContent = `Get it by ${date.toLocaleDateString('en-US', options)}`;
-  }
-
-  // Update Drawer Summary
-  if (drawerSubtotal) drawerSubtotal.textContent = formatCartMoney(subtotal);
-  if (drawerTotal) drawerTotal.textContent = formatCartMoney(total);
-  if (drawerBtnTotal) drawerBtnTotal.textContent = formatCartMoney(total);
-
-  if (drawerDiscountRow) {
-    if (appliedPromo.code && discount > 0) {
-      drawerDiscountRow.style.display = "flex";
-      if (drawerDiscountLabel) drawerDiscountLabel.textContent = `Discount (${appliedPromo.code})`;
-      if (drawerDiscountVal) drawerDiscountVal.textContent = `-${formatCartMoney(discount)}`;
-    } else {
-      drawerDiscountRow.style.display = "none";
-    }
-  }
-
-  // Update Shipping Progress
-  const afterDiscount = getSubtotalAfterDiscount();
-  const isFreeShip = afterDiscount >= threshold || appliedPromo.freeShip;
-  
-  const updateProgress = (textEl, fillEl) => {
-    if (!textEl || !fillEl) return;
-    if (isFreeShip) {
-      textEl.innerHTML = "<strong>Congrats!</strong> You've unlocked FREE shipping";
-      fillEl.style.width = "100%";
-      fillEl.style.background = "#00c882";
-    } else {
-      const remaining = threshold - afterDiscount;
-      textEl.innerHTML = `Add <strong>${formatCartMoney(remaining)}</strong> more for FREE shipping`;
-      const pct = Math.min(100, (afterDiscount / threshold) * 100);
-      fillEl.style.width = `${pct}%`;
-      fillEl.style.background = "linear-gradient(90deg, #3d5eff, #6c63ff)";
-    }
-  };
-
-  updateProgress(drawerShippingText, drawerShippingFill);
-  updateProgress(pageShippingText, pageShippingFill);
-
-  // Handle Empty States
   if (!cart.length) {
-    if (container) container.style.display = "none";
+    container.style.display = "none";
     if (empty) empty.style.display = "block";
-    if (drawerContainer) drawerContainer.innerHTML = "";
-    if (drawerEmpty) drawerEmpty.style.display = "flex";
-
-    const recContainer = document.getElementById("drawer-recommendations-container");
-    if (recContainer) recContainer.style.display = "none";
-
-    const trendingList = document.getElementById("drawer-trending-list");
-    if (trendingList) {
-      const trending = getCartRecommendations(2); // Use same logic for now
-      trendingList.innerHTML = trending.map(renderRecCard).join("");
-    }
-    
-    if (summaryRows) {
-      summaryRows.innerHTML = `
-        <div class="summary-row"><span>Subtotal</span><span>${formatCartMoney(0)}</span></div>
-        <div class="summary-row"><span>Shipping</span><span>${formatCartMoney(0)}</span></div>
-        <div class="summary-row"><span>Estimated tax</span><span>${formatCartMoney(0)}</span></div>
-      `;
-    }
-    if (totalEl) totalEl.textContent = formatCartMoney(0);
+    summaryRows.innerHTML = `
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>${formatCartMoney(0)}</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>${formatCartMoney(0)}</span>
+      </div>
+      <div class="summary-row">
+        <span>Estimated tax</span>
+        <span>${formatCartMoney(0)}</span>
+      </div>
+    `;
+    totalEl.textContent = formatCartMoney(0);
     if (promoHint) promoHint.textContent = "Add items to your cart to apply a promo code.";
     if (promoInput) {
       promoInput.disabled = true;
       promoInput.value = "";
     }
+    if (promoApplyButton) promoApplyButton.disabled = true;
+    if (checkoutButton) checkoutButton.disabled = true;
+    if (clearButton) clearButton.disabled = true;
     return;
   }
 
-  if (container) container.style.display = "flex";
+  container.style.display = "flex";
   if (empty) empty.style.display = "none";
-  if (drawerEmpty) drawerEmpty.style.display = "none";
 
-  // Render Drawer Recommendations
-  const recContainer = document.getElementById("drawer-recommendations-container");
-  const recList = document.getElementById("drawer-rec-list");
-  if (recContainer && recList) {
-    const recs = getCartRecommendations(3);
-    if (recs.length > 0) {
-      recContainer.style.display = "block";
-      recList.innerHTML = recs.map(renderRecCard).join("");
-    } else {
-      recContainer.style.display = "none";
-    }
-    // Full Page Recommendations
-    if (pageRecList && pageRecContainer) {
-      const recs = getCartRecommendations(4);
-      if (recs.length > 0) {
-        pageRecContainer.style.display = "block";
-        pageRecList.innerHTML = recs.map((p) => renderRecCard(p)).join("");
-      } else {
-        pageRecContainer.style.display = "none";
-      }
-    }
-  }
+  if (promoInput) promoInput.disabled = false;
+  if (promoApplyButton) promoApplyButton.disabled = false;
+  if (checkoutButton) checkoutButton.disabled = false;
+  if (clearButton) clearButton.disabled = false;
 
-  const cartHtml = cart
+  container.innerHTML = cart
     .map((item) => {
       const safeId = String(item.id).replace(/'/g, "\\'");
       return `
@@ -522,13 +334,13 @@ function renderCart() {
             ${
               item.imageUrl
                 ? `<img src="${escapeCartHtml(item.imageUrl)}" alt="${escapeCartHtml(item.name)}">`
-                : `<div class="cart-thumb-fallback" style="background:${escapeCartHtml(item.color || "#e8ebff")}">${escapeCartHtml(item.icon || "*")}</div>`
+                : `<div class="cart-thumb-fallback" style="background:${escapeCartHtml(item.color || "#e8ebff")}"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></div>`
             }
           </div>
           <div class="cart-item-info">
             <div class="cat">${escapeCartHtml(item.cat)}</div>
             <div class="name">${escapeCartHtml(item.name)}</div>
-            <div class="desc">${escapeCartHtml(truncateStorefrontText(item.desc, 40))}</div>
+            <div class="desc">${escapeCartHtml(item.desc)}</div>
             <div class="qty-control">
               <button type="button" class="qty-btn" onclick="changeQty('${safeId}', -1)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-minus"></use></svg></button>
               <span class="qty-val">${item.qty}</span>
@@ -537,49 +349,45 @@ function renderCart() {
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
             <div class="cart-item-price">${formatCartMoney(item.price * item.qty)}</div>
-            <button type="button" class="remove-btn" onclick="removeFromCart('${safeId}')"><svg class="icon" style="width:14px;height:14px;"><use xlink:href="#icon-cross"></use></svg></button>
+            <button type="button" class="remove-btn" onclick="removeFromCart('${safeId}')">Remove</button>
           </div>
         </div>
       `;
     })
     .join("");
 
-  if (container) container.innerHTML = cartHtml;
-  if (drawerContainer) drawerContainer.innerHTML = cartHtml;
-
   const shipping = getShipping();
+  const discount = getDiscount();
   const loyalty = typeof getCurrentLoyaltyState === "function"
     ? getCurrentLoyaltyState(typeof getStoredUser === "function" ? getStoredUser() : null)
     : null;
   const shippingLabel = loyalty?.freeShippingEligible
     ? `(included with ${escapeCartHtml(loyalty.tierName || "loyalty")})`
-    : getSubtotalAfterDiscount() < threshold && !appliedPromo.freeShip
-      ? `(free over ${formatCartMoney(threshold)})`
+    : getSubtotalAfterDiscount() < 50 && !appliedPromo.freeShip
+      ? `(free over ${formatCartMoney(50)})`
       : "";
   const discountLine =
     appliedPromo.code && discount > 0
       ? `<div class="summary-row discount"><span>Discount (${escapeCartHtml(appliedPromo.code)})</span><span>-${formatCartMoney(discount)}</span></div>`
       : "";
 
-  if (summaryRows) {
-    summaryRows.innerHTML = `
-      <div class="summary-row">
-        <span>Subtotal (${getTotalItems()} items)</span>
-        <span>${formatCartMoney(subtotal)}</span>
-      </div>
-      ${discountLine}
-      <div class="summary-row">
-        <span>Shipping ${shippingLabel}</span>
-        <span>${shipping === 0 ? "FREE" : formatCartMoney(shipping)}</span>
-      </div>
-      <div class="summary-row">
-        <span>Estimated tax (8%)</span>
-        <span>${formatCartMoney(getTax())}</span>
-      </div>
-    `;
-  }
+  summaryRows.innerHTML = `
+    <div class="summary-row">
+      <span>Subtotal (${getTotalItems()} items)</span>
+      <span>${formatCartMoney(getSubtotal())}</span>
+    </div>
+    ${discountLine}
+    <div class="summary-row">
+      <span>Shipping ${shippingLabel}</span>
+      <span>${shipping === 0 ? "FREE" : formatCartMoney(shipping)}</span>
+    </div>
+    <div class="summary-row">
+      <span>Estimated tax (8%)</span>
+      <span>${formatCartMoney(getTax())}</span>
+    </div>
+  `;
 
-  if (totalEl) totalEl.textContent = formatCartMoney(total);
+  totalEl.textContent = formatCartMoney(getTotal());
   if (promoHint) {
     promoHint.textContent = appliedPromo.code
       ? appliedPromo.label || `Promo ${appliedPromo.code} applied`

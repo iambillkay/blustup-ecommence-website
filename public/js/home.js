@@ -115,7 +115,7 @@ function homeProductCard(p) {
             ${p.oldPrice ? `<span class="old-price">${formatHomeMoney(p.oldPrice)}</span>` : ""}
             ${formatHomeMoney(p.price)}
           </div>
-          <button class="add-to-cart-btn" onclick="addToCart('${String(p.id).replace(/'/g, "\\'")}', event)">+ Add</button>
+          <button class="add-to-cart-btn" onclick="addToCart('${String(p.id).replace(/'/g, "\\'")}', event)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-plus"></use></svg> Add</button>
         </div>
       </div>
     </div>

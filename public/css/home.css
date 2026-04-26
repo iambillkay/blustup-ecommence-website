@@ -3,11 +3,6 @@
 ───────────────────────────────────── */
 
 /* ── HERO ── */
-@keyframes heroAmbient {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(-3%, 4%, 0) scale(1.06); }
-}
-
 .hero {
   min-height: 100vh; position: relative;
   display: flex; flex-direction: column;
@@ -247,12 +242,6 @@ overflow:hidden;
 box-shadow:0 2px 10px rgba(0,0,0,0.1);
 margin:20px;
 margin-left:20px;
-transition: transform .35s ease, box-shadow .35s ease;
-}
-
-.brand-day:hover{
-transform: translateY(-4px);
-box-shadow:0 18px 34px rgba(11,26,78,0.12);
 }
 
 /* HEADER */
@@ -307,7 +296,6 @@ display:none;
   min-width: 240px;
   max-width: 240px;
   border-radius: 14px;
-  transform-origin: center top;
 }
 
 .product-row .product-img {
@@ -331,6 +319,7 @@ display:none;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -443,13 +432,6 @@ width:35px;
 height:35px;
 border-radius:50%;
 cursor:pointer;
-transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
-}
-
-.scroll-btn:hover{
-transform:translateY(-50%) scale(1.06);
-box-shadow:0 10px 20px rgba(11,26,78,0.16);
-background:#f8faff;
 }
 
 .left-btn{
@@ -473,47 +455,18 @@ position:relative;
     position: relative;
     overflow: hidden; /* This hides the images that aren't active */
     border-radius: 16px;
-    box-shadow: 0 24px 48px rgba(8, 18, 45, 0.15);
-}
-
-.hero-banner::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 18% 18%, rgba(255,255,255,0.26), transparent 34%),
-      linear-gradient(120deg, rgba(6, 12, 26, 0.12) 0%, transparent 38%, rgba(255,255,255,0.16) 100%);
-    pointer-events: none;
-    z-index: 1;
-}
-
-.hero-banner::after {
-    content: "";
-    position: absolute;
-    right: -12%;
-    bottom: -55%;
-    width: 36%;
-    aspect-ratio: 1;
-    background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 72%);
-    filter: blur(10px);
-    animation: heroAmbient 10s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
 }
 
 .hero-track {
     display: flex; /* Lines images up horizontally */
     transition: transform 0.5s ease-in-out; /* Smooth sliding effect */
     height: 100%;
-    position: relative;
-    z-index: 0;
 }
 
 .hero-slide {
     min-width: 100%; /* Each slide takes full width of banner */
     height: 100%;
     position: relative;
-    overflow: hidden;
 }
 
 .hero-slide-clickable {
@@ -524,14 +477,6 @@ position:relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scale(1.04);
-    transition: transform 6.8s cubic-bezier(0.16, 1, 0.3, 1), filter .45s ease;
-    filter: saturate(.96);
-}
-
-.hero-slide.is-active img {
-    transform: scale(1.12);
-    filter: saturate(1.02);
 }
 
 /* Basic styling for Buttons & Dots */
@@ -544,17 +489,8 @@ position:relative;
     border: none;
     padding: 10px;
     cursor: pointer;
-    z-index: 3;
+    z-index: 2;
     border-radius: 90px;
-    opacity: .82;
-    transition: transform .24s ease, background .24s ease, color .24s ease, opacity .24s ease;
-}
-
-.hero-btn:hover {
-    transform: translateY(-50%) scale(1.06);
-    background: rgba(0,0,0,0.22);
-    color: rgba(255,255,255,0.96);
-    opacity: 1;
 }
 .next { right: 10px; }
 .prev { left: 10px; }
@@ -574,24 +510,10 @@ position:relative;
     background: rgba(255,255,255,0.5);
     border-radius: 50%;
     cursor: pointer;
-    transition: width .24s ease, transform .24s ease, background .24s ease, opacity .24s ease;
-    opacity: .75;
 }
 
 .hero-dots span.active {
     background: white;
-    width: 18px;
-    border-radius: 999px;
-    opacity: 1;
-}
-
-.product-row .product-img img {
-  transition: transform .45s ease, filter .45s ease;
-}
-
-.product-row .product-card:hover .product-img img {
-  transform: scale(1.06);
-  filter: saturate(1.04);
 }
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
@@ -650,7 +572,7 @@ position:relative;
 @media (max-width: 380px) {
   .hero-banner {
     width: calc(100% - 12px);
-    margin-top: 92px;
+    margin-top: 0;
   }
   .hero-btn {
     width: 28px;

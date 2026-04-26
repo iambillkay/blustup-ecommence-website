@@ -181,6 +181,7 @@ function showPage(name) {
   if (name === "cart" && typeof renderCart === "function") renderCart();
   if (name === "checkout" && typeof renderCheckout === "function") renderCheckout();
   if (name === "orders" && typeof refreshOrdersPage === "function") refreshOrdersPage();
+  if (name === "wishlist" && typeof renderWishlistPage === "function") renderWishlistPage();
   refreshLivePageData(name, { force: true });
 }
 
@@ -194,10 +195,25 @@ function showToast(iconOrMessage, maybeMessage) {
   const icon = hasExplicitMessage ? iconOrMessage : "!";
   const message = hasExplicitMessage ? maybeMessage : iconOrMessage;
 
-  iconEl.textContent = icon;
+  iconEl.innerHTML = icon;
   msgEl.textContent = message;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 2800);
+}
+
+function removeSiteSkeleton() {
+  const skel = document.getElementById("app-site-skeleton");
+  const styles = document.getElementById("skeleton-styles");
+  if (!skel) return;
+  
+  // Trigger CSS fade smoothly
+  skel.style.opacity = "0";
+  skel.style.visibility = "hidden";
+  
+  setTimeout(() => {
+    if (skel) skel.remove();
+    if (styles) styles.remove();
+  }, 450);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -207,9 +223,13 @@ document.addEventListener("DOMContentLoaded", () => {
   queueMotionRefresh(document.getElementById("page-home"));
 
   if (typeof loadProducts === "function") {
-    loadProducts().finally(() => renderProducts("all"));
+    loadProducts().finally(() => {
+      renderProducts("all");
+      removeSiteSkeleton();
+    });
   } else {
     renderProducts("all");
+    removeSiteSkeleton();
   }
 });
 

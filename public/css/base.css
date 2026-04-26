@@ -36,14 +36,7 @@ body {
 .page { display: none; }
 .page.active {
   display: block;
-  margin-top: 0;
-  padding-top: 0;
   animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Remove any gap between nav and the first section of the page */
-.hero-banner, .shop-hero, .site-page-hero, .brand-day, .ad-hero {
-  margin-top: 0 !important;
 }
 
 /* ── ANIMATIONS ── */
@@ -117,34 +110,6 @@ body {
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
 }
 .product-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-
-  .page.active,
-  .motion-reveal,
-  .toast,
-  .product-card,
-  .hero-track,
-  .hero-slide img,
-  .faq-item,
-  .faq-answer,
-  .board-card,
-  .info-card,
-  .about-stat,
-  .loyalty-step,
-  .loyalty-mini-stat,
-  .filter-btn,
-  .add-to-cart-btn {
-    animation: none !important;
-    transition: none !important;
-    transform: none !important;
-  }
-
-  .motion-reveal {
-    opacity: 1 !important;
-  }
-}
 
 /* ── SHARED BUTTONS ── */
 .btn-login {
@@ -279,6 +244,34 @@ font-size:.9rem;
 color:#6c63ff;
 cursor:pointer;
 font-weight:600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .page.active,
+  .motion-reveal,
+  .toast,
+  .product-card,
+  .hero-track,
+  .hero-slide img,
+  .faq-item,
+  .faq-answer,
+  .board-card,
+  .info-card,
+  .about-stat,
+  .loyalty-step,
+  .loyalty-mini-stat,
+  .filter-btn,
+  .add-to-cart-btn {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .motion-reveal {
+    opacity: 1 !important;
+  }
 }
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {

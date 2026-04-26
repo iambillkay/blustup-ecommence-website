@@ -109,7 +109,7 @@ async function runAISearch() {
       showSearchResults(localFound, category, "local");
       return;
     }
-    if (typeof showToast === "function") showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', error.message || "Search failed");
+    if (typeof showToast === "function") showToast("!", error.message || "Search failed");
   }
 }
 

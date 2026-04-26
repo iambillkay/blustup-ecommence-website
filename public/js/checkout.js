@@ -6,6 +6,7 @@ const checkoutMoneyFormatter = new Intl.NumberFormat("en-GH", {
 
 let checkoutProfilePromise = null;
 let checkoutProfileLoaded = false;
+let paystackPublicKey = null;
 
 function formatCheckoutMoney(value) {
   const amount = Number(value || 0);
@@ -137,8 +138,15 @@ function syncPaymentFields() {
 
   if (cardFields) cardFields.hidden = method !== "card";
   if (placeOrderButton) {
-    placeOrderButton.textContent =
-      method === "card" ? "Place Order & Pay" : method === "cod" ? "Place Order" : "Continue";
+    if (method === "paystack") {
+      placeOrderButton.innerHTML = '<svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> Pay with Paystack';
+    } else if (method === "card") {
+      placeOrderButton.textContent = "Place Order & Pay";
+    } else if (method === "cod") {
+      placeOrderButton.textContent = "Place Order";
+    } else {
+      placeOrderButton.textContent = "Continue";
+    }
   }
 }
 
@@ -353,6 +361,7 @@ function validateCheckoutForm() {
 
 function validatePaymentFields() {
   const method = getPaymentMethod();
+  if (method === "paystack" || method === "cod") return null;
   if (method !== "card") return null;
 
   const name = readCheckoutField("co-card-name");
@@ -505,11 +514,177 @@ function setPlaceOrderSubmitting(submitting) {
   button.textContent = "Processing order...";
 }
 
+function handleOrderSuccess(response) {
+  const order = response.order;
+  if (!order) throw new Error("Order confirmation was incomplete.");
+
+  const snapshot = {
+    ref: order.reference,
+    at: order.createdAt || new Date().toISOString(),
+    total: Number(order.total || 0),
+    email: order.customerEmail,
+    method: order.paymentMethod,
+    status: order.status,
+    loyaltyEarned: Number(response.loyaltyEarned || 0),
+    loyaltyBalanceAfter: Number(order.loyaltyBalanceAfter || response.loyalty?.points || 0),
+    loyaltyTierAfter: order.loyaltyTierAfter || response.loyalty?.tierName || null,
+  };
+
+  try {
+    sessionStorage.setItem("blustup_last_order", JSON.stringify(snapshot));
+  } catch (_e) {}
+
+  if (response.user && typeof persistStoredUser === "function") {
+    persistStoredUser(response.user);
+  }
+
+  const orderRef = document.getElementById("order-ref");
+  if (orderRef) orderRef.textContent = order.reference;
+  const successLoyalty = document.getElementById("success-loyalty-note");
+  if (successLoyalty) {
+    if (response.loyaltyEarned > 0) {
+      const balanceAfter = Number(order.loyaltyBalanceAfter || response.loyalty?.points || 0);
+      const tierAfter = order.loyaltyTierAfter || response.loyalty?.tierName || "";
+      successLoyalty.textContent = balanceAfter > 0 && tierAfter
+        ? `You earned ${response.loyaltyEarned} loyalty points from this order. Your balance is now ${balanceAfter} points in ${tierAfter}.`
+        : `You earned ${response.loyaltyEarned} loyalty points from this order.`;
+      successLoyalty.hidden = false;
+    } else {
+      successLoyalty.hidden = true;
+      successLoyalty.textContent = "";
+    }
+  }
+
+  if (typeof resetCartState === "function") {
+    resetCartState();
+  } else {
+    try {
+      localStorage.removeItem("blustup_cart_v2");
+      localStorage.removeItem("blustup_cart_promo");
+    } catch (_e) {}
+  }
+
+  renderCheckout();
+  if (typeof refreshOrdersPage === "function") refreshOrdersPage();
+  showPage("success");
+}
+
+async function placeOrderPaystack() {
+  const cartRefresh = await refreshCheckoutCartBeforeSubmit();
+  if (!cartRefresh.ok) {
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', cartRefresh.message || "Please review your cart before placing the order.");
+    if (!Array.isArray(cart) || !cart.length) showPage("cart");
+    return;
+  }
+
+  const formError = validateCheckoutForm();
+  if (formError) {
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', formError);
+    return;
+  }
+
+  setPlaceOrderSubmitting(true);
+
+  try {
+    // 1. Initialize the Paystack transaction on the server
+    const initPayload = {
+      sessionId: window.tracker?.sessionId || null,
+      promoCode: typeof appliedPromo === "object" ? appliedPromo.code || null : null,
+      customer: {
+        firstName: readCheckoutField("co-first"),
+        lastName: readCheckoutField("co-last"),
+        email: readCheckoutField("co-email"),
+        phone: readCheckoutField("co-phone"),
+      },
+      billingAddress: {
+        street: readCheckoutField("co-street"),
+        city: readCheckoutField("co-city"),
+        state: readCheckoutField("co-state"),
+        zip: readCheckoutField("co-zip"),
+        country: readCheckoutField("co-country"),
+      },
+      items: cart.map((item) => ({
+        productId: String(item.id),
+        qty: Math.max(1, Number(item.qty) || 1),
+      })),
+    };
+
+    const initResponse = typeof api === "function"
+      ? await api("/api/payment/initialize", { method: "POST", body: JSON.stringify(initPayload) })
+      : await fetch(typeof buildApiUrl === "function" ? buildApiUrl("/api/payment/initialize") : "/api/payment/initialize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(initPayload),
+        }).then(async (r) => {
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error(d.error || "Failed to initialize payment.");
+          return d;
+        });
+
+    const key = paystackPublicKey;
+    if (!key) {
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Paystack is not configured. Contact support.");
+      setPlaceOrderSubmitting(false);
+      return;
+    }
+
+    setPlaceOrderSubmitting(false);
+
+    // 2. Open Paystack Popup
+    if (typeof PaystackPop === "undefined") {
+      showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', "Paystack script not loaded. Please reload the page.");
+      return;
+    }
+
+    const popup = new PaystackPop();
+    popup.newTransaction({
+      key,
+      email: readCheckoutField("co-email"),
+      amount: Math.round((initResponse.total || 0) * 100),
+      currency: "GHS",
+      ref: initResponse.reference,
+      onSuccess: async (transaction) => {
+        setPlaceOrderSubmitting(true);
+        try {
+          const verifyResponse = typeof api === "function"
+            ? await api(`/api/payment/verify/${encodeURIComponent(transaction.reference)}`)
+            : await fetch(
+                typeof buildApiUrl === "function"
+                  ? buildApiUrl(`/api/payment/verify/${encodeURIComponent(transaction.reference)}`)
+                  : `/api/payment/verify/${encodeURIComponent(transaction.reference)}`
+              ).then(async (r) => {
+                const d = await r.json().catch(() => ({}));
+                if (!r.ok) throw new Error(d.error || "Payment verification failed.");
+                return d;
+              });
+
+          handleOrderSuccess(verifyResponse);
+        } catch (err) {
+          showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', err.message || "Payment verified but order creation failed.");
+        } finally {
+          setPlaceOrderSubmitting(false);
+        }
+      },
+      onCancel: () => {
+        showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg>', "Payment was cancelled.");
+      },
+    });
+  } catch (err) {
+    showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', err.message || "Failed to start payment.");
+    setPlaceOrderSubmitting(false);
+  }
+}
+
 async function placeOrder() {
   if (!Array.isArray(cart) || !cart.length) {
     showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-info"></use></svg>', "Your cart is empty");
     showPage("shop");
     return;
+  }
+
+  const method = getPaymentMethod();
+  if (method === "paystack") {
+    return placeOrderPaystack();
   }
 
   const cartRefresh = await refreshCheckoutCartBeforeSubmit();
@@ -541,58 +716,7 @@ async function placeOrder() {
           return data;
         });
 
-    const order = response.order;
-    if (!order) throw new Error("Order confirmation was incomplete.");
-
-    const snapshot = {
-      ref: order.reference,
-      at: order.createdAt || new Date().toISOString(),
-      total: Number(order.total || 0),
-      email: order.customerEmail,
-      method: order.paymentMethod,
-      status: order.status,
-      loyaltyEarned: Number(response.loyaltyEarned || 0),
-      loyaltyBalanceAfter: Number(order.loyaltyBalanceAfter || response.loyalty?.points || 0),
-      loyaltyTierAfter: order.loyaltyTierAfter || response.loyalty?.tierName || null,
-    };
-
-    try {
-      sessionStorage.setItem("blustup_last_order", JSON.stringify(snapshot));
-    } catch (_e) {}
-
-    if (response.user && typeof persistStoredUser === "function") {
-      persistStoredUser(response.user);
-    }
-
-    const orderRef = document.getElementById("order-ref");
-    if (orderRef) orderRef.textContent = order.reference;
-    const successLoyalty = document.getElementById("success-loyalty-note");
-    if (successLoyalty) {
-      if (response.loyaltyEarned > 0) {
-        const balanceAfter = Number(order.loyaltyBalanceAfter || response.loyalty?.points || 0);
-        const tierAfter = order.loyaltyTierAfter || response.loyalty?.tierName || "";
-        successLoyalty.textContent = balanceAfter > 0 && tierAfter
-          ? `You earned ${response.loyaltyEarned} loyalty points from this order. Your balance is now ${balanceAfter} points in ${tierAfter}.`
-          : `You earned ${response.loyaltyEarned} loyalty points from this order.`;
-        successLoyalty.hidden = false;
-      } else {
-        successLoyalty.hidden = true;
-        successLoyalty.textContent = "";
-      }
-    }
-
-    if (typeof resetCartState === "function") {
-      resetCartState();
-    } else {
-      try {
-        localStorage.removeItem("blustup_cart_v2");
-        localStorage.removeItem("blustup_cart_promo");
-      } catch (_e) {}
-    }
-
-    renderCheckout();
-    if (typeof refreshOrdersPage === "function") refreshOrdersPage();
-    showPage("success");
+    handleOrderSuccess(response);
   } catch (requestError) {
     showToast('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-error"></use></svg>', requestError.message || "Failed to place your order.");
   } finally {
@@ -617,4 +741,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("co-card-number")?.addEventListener("input", formatCardNumberInput);
   document.getElementById("co-card-exp")?.addEventListener("input", formatExpiryInput);
+
+  // Load Paystack public key
+  (async () => {
+    try {
+      const res = await apiFetch("/api/payment/config");
+      const data = await res.json().catch(() => ({}));
+      if (data?.publicKey) paystackPublicKey = data.publicKey;
+    } catch (_e) {}
+  })();
 });
