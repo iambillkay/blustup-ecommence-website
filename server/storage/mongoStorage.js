@@ -543,7 +543,7 @@ module.exports = {
   },
   user: {
     findByEmail: (email) => User.findOne({ email }).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist"),
-    findById: (id) => User.findById(id).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist"),
+    findById: (id) => isValidId(id) ? User.findById(id).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist") : null,
     create: (payload) => User.create(payload),
     updateProfile: async (id, payload = {}) => {
       const update = {};
@@ -554,14 +554,17 @@ module.exports = {
       return User.findByIdAndUpdate(id, update, { new: true }).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist");
     },
     getCart: async (id) => {
+      if (!isValidId(id)) return [];
       const user = await User.findById(id).select("cart");
       return user?.cart || [];
     },
     updateCart: async (id, cartItems) => {
+      if (!isValidId(id)) return [];
       const updated = await User.findByIdAndUpdate(id, { $set: { cart: cartItems } }, { new: true });
       return updated?.cart || [];
     },
     getWishlist: async (id) => {
+      if (!isValidId(id)) return [];
       const user = await User.findById(id).select("wishlist").populate({
         path: "wishlist",
         match: { isActive: true },
@@ -570,6 +573,7 @@ module.exports = {
       return (user.wishlist || []).filter(Boolean).map(mapProductOut);
     },
     addToWishlist: async (id, productId) => {
+      if (!isValidId(id)) throw new Error("Invalid User ID");
       const user = await User.findById(id).select("wishlist");
       if (!user) throw new Error("User not found");
       const ids = (user.wishlist || []).map((wId) => wId.toString());
