@@ -3,6 +3,11 @@ const { z } = require("zod");
 const storage = require("../storage");
 const { buildLoyaltyProfile, calculateEarnedLoyaltyPoints } = require("../utils/storefront");
 const { dispatchOrderToRider } = require("../services/deliveryDispatchService");
+const { 
+  sendOrderConfirmation, 
+  sendShippingUpdate, 
+  sendDeliveryConfirmation 
+} = require("../services/notificationService");
 
 const ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
 const TAX_RATE = 0.08;
@@ -300,6 +305,12 @@ async function createOrder(req, res) {
       console.warn("Order created but failed to track purchase:", trackingError?.message || trackingError);
     }
 
+    try {
+      await sendOrderConfirmation(order);
+    } catch (notifyError) {
+      console.warn("Order created but failed to send confirmation email:", notifyError?.message || notifyError);
+    }
+
     return res.status(201).json({
       order,
       user: userResponse,
@@ -387,7 +398,17 @@ async function updateOrderStatus(req, res) {
     console.warn("Order status updated but failed to write audit log:", auditError?.message || auditError);
   }
 
-  if (dispatch?.assignment) {
+    try {
+      if (nextStatus === "shipped") {
+        await sendShippingUpdate(order);
+      } else if (nextStatus === "delivered") {
+        await sendDeliveryConfirmation(order);
+      }
+    } catch (notifyError) {
+      console.warn("Order status updated but failed to send customer email:", notifyError?.message || notifyError);
+    }
+
+    if (dispatch?.assignment) {
     try {
       await storage.audit.add({
         actorId: req.user?.sub || null,

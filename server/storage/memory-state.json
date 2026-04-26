@@ -7072,6 +7072,90 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
       "createdAt": "2026-04-26T14:58:31.031Z"
+    },
+    {
+      "_id": "fc1a3980-322f-48bd-a056-f8225358972e",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:29:54.813Z"
+    },
+    {
+      "_id": "ece52ff3-4859-4e6e-9215-0137862a50bd",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "signup"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:29:58.331Z"
+    },
+    {
+      "_id": "96e44563-e077-474a-9be7-634a84af28f4",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "login"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:30:05.270Z"
+    },
+    {
+      "_id": "81fcd6a9-9410-4971-acc1-38e7fb3c34e0",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:30:11.489Z"
+    },
+    {
+      "_id": "a6803dab-011a-47bc-a3d9-c51e13fdfe2d",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:30:23.479Z"
+    },
+    {
+      "_id": "f9e17143-a71a-495a-945a-098fa04c86ed",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:30:30.929Z"
+    },
+    {
+      "_id": "2b705880-5f25-4a78-bcbf-eae9dc20ec57",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:30:44.739Z"
     }
   ],
   "audit": [
