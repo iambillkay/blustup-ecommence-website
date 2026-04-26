@@ -34,9 +34,9 @@
 }
 
 .wishlist-heart.wishlist-active {
-  background: #ff4f7b;
-  border-color: #ff4f7b;
-  color: #ffffff;
+  background: #ffffff;
+  border-color: #000000;
+  color: #000000;
   box-shadow: 0 8px 24px rgba(255, 79, 123, 0.35);
   animation: heartBump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -56,7 +56,7 @@
   padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid rgba(0, 0, 0, 0.06);
-  background: transparent;
+  background: #E8E2D8;
   color: #1a1b1e;
   font-family: "Sora", sans-serif;
   font-size: 0.96rem;
@@ -81,9 +81,8 @@
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background: #ff4f7b;
-  color: #ffffff;
-  box-shadow: 0 4px 8px rgba(255, 79, 123, 0.3);
+  background: #000000;
+  color: #E8E2D8;
   font-size: 0.72rem;
   font-weight: 800;
   animation: heartBump 0.3s ease;
@@ -167,4 +166,61 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
   }
+}
+
+/* --- Animated Pill Button (Subscribe-Style) --- */
+.pill-wishlist-btn { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 0; 
+  background: #e8e2d8; 
+  border: 2px solid #000; 
+  border-radius: 16px; 
+  cursor: pointer; 
+  box-shadow: 4px 4px 0px #000; 
+  transition: all 0.2s ease; 
+  height: 52px; 
+  width: 52px; 
+} 
+
+.pill-wishlist-btn:hover { 
+  transform: translate(2px, 2px); 
+  box-shadow: 2px 2px 0px #000; 
+} 
+
+.pill-wishlist-btn:active { 
+  transform: translate(4px, 4px); 
+  box-shadow: 0px 0px 0px #000; 
+} 
+
+.pill-wishlist-btn .pill-icon { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 36px; 
+  height: 36px; 
+  border-radius: 50%; 
+  border: 2px solid #000; 
+  background: #ffb6b6; 
+  font-size: 1.1rem; 
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+} 
+
+.pill-wishlist-btn.wishlist-active { 
+  background: #fff; 
+} 
+
+.pill-wishlist-btn.wishlist-active .pill-icon { 
+  background: #000; 
+  color: #ffb6b6; 
+  animation: subscribeBellRing 0.5s ease; 
+} 
+
+@keyframes subscribeBellRing { 
+  0% { transform: rotate(0) scale(1); } 
+  25% { transform: rotate(-20deg) scale(1.15); } 
+  50% { transform: rotate(15deg) scale(1.15); } 
+  75% { transform: rotate(-10deg) scale(1.15); } 
+  100% { transform: rotate(0) scale(1); } 
 }

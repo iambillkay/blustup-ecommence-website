@@ -69,16 +69,10 @@ function getProductReviewSummary(product = {}) {
 }
 
 function renderProductReviewMarkup(product = {}) {
-  const reviewSummary = getProductReviewSummary(product);
   const ratingMarkup = renderProductRatingMarkup(product);
 
   return `
     ${ratingMarkup}
-    ${
-      reviewSummary.featuredReview
-        ? `<div class="product-review-quote">"${escapeStorefrontHtml(truncateStorefrontText(reviewSummary.featuredReview.comment))}"</div>`
-        : ""
-    }
   `;
 }
 
@@ -205,7 +199,10 @@ function renderProductReviewForm(product = {}) {
       </label>
       <div class="product-review-form-feedback" aria-live="polite"></div>
       <div class="product-detail-actions">
-        <button class="product-review-submit" type="submit">Submit review</button>
+        <button class="product-review-submit" type="submit">
+          <span class="btn-text">Submit review</span>
+          <span class="review-spinner" style="display:none;"></span>
+        </button>
       </div>
     </form>
   `;
@@ -231,7 +228,20 @@ function setProductReviewSubmitting(form, submitting) {
   const button = form?.querySelector(".product-review-submit");
   if (!button) return;
   button.disabled = submitting;
-  button.textContent = submitting ? "Submitting..." : "Submit review";
+
+  const text = button.querySelector(".btn-text");
+  const spinner = button.querySelector(".review-spinner");
+
+  if (submitting) {
+    if (text) text.textContent = "Submitting...";
+    if (spinner) spinner.style.display = "inline-block";
+    button.classList.add("is-submitting");
+  } else {
+    if (text) text.textContent = "Submit review";
+    if (spinner) spinner.style.display = "none";
+    button.classList.remove("is-submitting");
+  }
+
   button.setAttribute("aria-busy", String(submitting));
 }
 
@@ -303,7 +313,7 @@ async function handleProductReviewSubmit(form) {
     }
 
     if (typeof refreshLivePageData === "function") {
-      Promise.resolve(refreshLivePageData(document.body?.dataset?.page || "shop")).catch(() => {});
+      Promise.resolve(refreshLivePageData(document.body?.dataset?.page || "shop")).catch(() => { });
     }
 
     if (typeof showToast === "function") {
@@ -339,11 +349,10 @@ function renderProductDetailReviews(product = {}) {
         </div>
         ${review.title ? `<div class="product-detail-review-title">${escapeStorefrontHtml(review.title)}</div>` : ""}
         <p class="product-detail-review-copy">${escapeStorefrontHtml(review.comment || "")}</p>
-        ${
-          review.verifiedPurchase !== false
-            ? `<div class="product-detail-verified">Verified purchase</div>`
-            : ""
-        }
+        ${review.verifiedPurchase !== false
+        ? `<div class="product-detail-verified">Verified purchase</div>`
+        : ""
+      }
       </article>
     `)
     .join("");
@@ -353,11 +362,11 @@ function renderProductDetailMarkup(product = {}) {
   const categories = getStorefrontProductCategories(product);
   const reviewSummary = getProductReviewSummary(product);
 
-  const galleryImages = Array.isArray(product.images) && product.images.length > 0 
-    ? product.images 
+  const galleryImages = Array.isArray(product.images) && product.images.length > 0
+    ? product.images
     : (product.imageUrl ? [product.imageUrl] : []);
 
-  const galleryMarkup = galleryImages.length > 1 
+  const galleryMarkup = galleryImages.length > 1
     ? `<div class="product-detail-thumbnails">
          ${galleryImages.map(img => `<img src="${escapeStorefrontHtml(img)}" class="product-thumbnail-box" onclick="document.getElementById('mainProductImage').src = this.src" alt="Thumbnail">`).join('')}
        </div>`
@@ -372,11 +381,10 @@ function renderProductDetailMarkup(product = {}) {
         <div class="product-detail-hero-left">
           <div class="product-detail-gallery" style="background:${escapeStorefrontHtml(product.color || "radial-gradient(ellipse at center, #ffffff 0%, #f4f6fb 100%)")}">
           ${product.badge ? `<div class="product-badge-tag premium-badge ${escapeStorefrontHtml(product.badgeType || "")}">${escapeStorefrontHtml(product.badge)}</div>` : ""}
-          ${
-            galleryImages.length > 0
-              ? `<img id="mainProductImage" src="${escapeStorefrontHtml(galleryImages[0])}" alt="${escapeStorefrontHtml(product.name || "Product image")}">`
-              : `<div class="product-detail-image-fallback">No image</div>`
-          }
+          ${galleryImages.length > 0
+      ? `<img id="mainProductImage" src="${escapeStorefrontHtml(galleryImages[0])}" alt="${escapeStorefrontHtml(product.name || "Product image")}">`
+      : `<div class="product-detail-image-fallback">No image</div>`
+    }
           </div>
           ${galleryMarkup}
         </div>
@@ -396,49 +404,48 @@ function renderProductDetailMarkup(product = {}) {
               <button class="add-to-cart-btn product-detail-add-btn shimmer-btn" type="button" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">
                 <span class="btn-text">Add to cart</span>
               </button>
-              <button class="wishlist-heart modal-wishlist-heart ${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'wishlist-active' : ''}" type="button" data-wishlist-id="${escapeStorefrontHtml(product.id)}"
+              <button class="pill-wishlist-btn ${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'wishlist-active' : ''}" type="button" data-wishlist-id="${escapeStorefrontHtml(product.id)}"
                 onclick="toggleWishlist('${String(product.id).replace(/'/g, "\\'")}', event)"
                 aria-pressed="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'true' : 'false'}"
-                aria-label="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}">${typeof isInWishlist === 'function' && isInWishlist(product.id) ? '&#9829;' : '&#9825;'}</button>
+                aria-label="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}">
+                <span class="pill-icon">${typeof isInWishlist === 'function' && isInWishlist(product.id) ? '&#9829;' : '&#9825;'}</span>
+              </button>
             </div>
           </div>
-          <div class="product-detail-summary">
-            ${renderProductReviewMarkup(product)}
+          <div class="product-detail-summary" style="margin-top: 12px;">
+            <div class="product-detail-section-top">
+              <h3>Description</h3>
+              <span>Product overview</span>
+            </div>
+            <p class="product-detail-description">${escapeStorefrontHtml(product.desc || "No description available for this product yet.").replace(/\n/g, "<br>")}</p>
+            <div class="product-detail-meta-grid" style="margin-top: 8px;">
+              <div class="product-detail-meta-card">
+                <strong>${escapeStorefrontHtml(String(reviewSummary.reviewCount || 0))}</strong>
+                <span>Customer reviews</span>
+              </div>
+              <div class="product-detail-meta-card">
+                <strong>${escapeStorefrontHtml(Number(reviewSummary.averageRating || 0).toFixed(1))}/5</strong>
+                <span>Average rating</span>
+              </div>
+              <div class="product-detail-meta-card">
+                <strong>${escapeStorefrontHtml(String(Number(product.stockQty || 0)))}</strong>
+                <span>Units in stock</span>
+              </div>
+            </div>
+            <div style="margin-top: 10px; border-top: 1px solid #eef2fa; padding-top: 10px;">
+              ${renderProductReviewMarkup(product)}
+            </div>
           </div>
         </div>
       </section>
 
-      <div class="product-detail-columns">
-        <section class="product-detail-panel">
-          <div class="product-detail-section-top">
-            <h3>Description</h3>
-            <span>Product overview</span>
-          </div>
-          <p class="product-detail-description">${escapeStorefrontHtml(product.desc || "No description available for this product yet.").replace(/\n/g, "<br>")}</p>
-          <div class="product-detail-meta-grid">
-            <div class="product-detail-meta-card">
-              <strong>${escapeStorefrontHtml(String(reviewSummary.reviewCount || 0))}</strong>
-              <span>Customer reviews</span>
-            </div>
-            <div class="product-detail-meta-card">
-              <strong>${escapeStorefrontHtml(Number(reviewSummary.averageRating || 0).toFixed(1))}/5</strong>
-              <span>Average rating</span>
-            </div>
-            <div class="product-detail-meta-card">
-              <strong>${escapeStorefrontHtml(String(Number(product.stockQty || 0)))}</strong>
-              <span>Units in stock</span>
-            </div>
-          </div>
-        </section>
-
-        <aside class="product-detail-panel product-detail-panel-form">
-          <div class="product-detail-section-top">
-            <h3>Write a review</h3>
-            <span>Real shopper feedback</span>
-          </div>
-          ${renderProductReviewForm(product)}
-        </aside>
-      </div>
+      <aside class="product-detail-panel product-detail-panel-form">
+        <div class="product-detail-section-top">
+          <h3>Write a review</h3>
+          <span>Real shopper feedback</span>
+        </div>
+        ${renderProductReviewForm(product)}
+      </aside>
 
       <section class="product-detail-panel product-detail-comments">
         <div class="product-detail-section-top">
@@ -464,12 +471,12 @@ function renderProductDetailMarkup(product = {}) {
 function renderRelatedProductsMarkup(product) {
   const allProducts = typeof getStorefrontCatalogProducts === "function" ? getStorefrontCatalogProducts() : [];
   const targetCategory = product.cat;
-  
+
   if (!allProducts || !allProducts.length) return "";
   const related = allProducts.filter(p => p.cat === targetCategory && String(p.id) !== String(product.id)).slice(0, 6);
-  
+
   if (related.length === 0) return "";
-  
+
   const cardsHtml = related.map(p => `
     <div class="product-card product-card-selectable" role="button" tabindex="0" onclick="openProductSelection('${String(p.id).replace(/'/g, "\\'")}')" onkeydown="handleProductCardKeydown(event, '${String(p.id).replace(/'/g, "\\'")}')">
       <div class="product-img" style="background:${p.color || '#f5f7ff'}">
@@ -521,13 +528,13 @@ function openProductSelection(productId, event) {
   }
 
   body.innerHTML = renderProductDetailMarkup(product);
-  
+
   if (typeof showPage === "function") {
     showPage("product");
   } else {
     document.getElementById("page-product").style.display = "block";
   }
-  
+
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 

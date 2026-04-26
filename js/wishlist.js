@@ -49,7 +49,7 @@ function isInWishlist(productId) {
 
 /* DOM Syncing */
 function updateWishlistHearts() {
-  // Sync the heart icons on ALL product cards
+  // Sync the standard heart icons on ALL product cards
   document.querySelectorAll(".wishlist-heart").forEach((btn) => {
     const id = btn.getAttribute("data-wishlist-id");
     if (!id) return;
@@ -58,6 +58,21 @@ function updateWishlistHearts() {
     btn.setAttribute("aria-pressed", String(active));
     btn.setAttribute("aria-label", active ? "Remove from wishlist" : "Add to wishlist");
     btn.innerHTML = active ? "&#9829;" : "&#9825;"; // Unicodes for filled/empty heart
+  });
+
+  // Sync the specialized animated pill buttons
+  document.querySelectorAll(".pill-wishlist-btn").forEach((btn) => {
+    const id = btn.getAttribute("data-wishlist-id");
+    if (!id) return;
+    const active = isInWishlist(id);
+    btn.classList.toggle("wishlist-active", active);
+    btn.setAttribute("aria-pressed", String(active));
+    btn.setAttribute("aria-label", active ? "Remove from wishlist" : "Add to wishlist");
+    
+    const textSpan = btn.querySelector(".pill-text");
+    const iconSpan = btn.querySelector(".pill-icon");
+    if (textSpan) textSpan.innerHTML = active ? "Saved" : "Wishlist";
+    if (iconSpan) iconSpan.innerHTML = active ? "&#9829;" : "&#9825;";
   });
 
   // Update nav badge count
