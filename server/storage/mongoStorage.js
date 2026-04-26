@@ -551,6 +551,7 @@ module.exports = {
       if (payload.phone !== undefined) update.phone = payload.phone || null;
       if (payload.loyaltyPoints !== undefined) update.loyaltyPoints = Math.max(0, Math.floor(Number(payload.loyaltyPoints || 0)));
       if (payload.billingProfile !== undefined) update.billingProfile = normalizeBillingProfile(payload.billingProfile);
+      if (!isValidId(id)) return null;
       return User.findByIdAndUpdate(id, update, { new: true }).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist");
     },
     getCart: async (id) => {
@@ -583,6 +584,7 @@ module.exports = {
       return (updated.wishlist || []).filter(Boolean).map(mapProductOut);
     },
     removeFromWishlist: async (id, productId) => {
+      if (!isValidId(id)) return [];
       await User.findByIdAndUpdate(id, { $pull: { wishlist: productId } });
       const updated = await User.findById(id).select("wishlist").populate({ path: "wishlist", match: { isActive: true } });
       return (updated.wishlist || []).filter(Boolean).map(mapProductOut);
