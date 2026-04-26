@@ -942,6 +942,40 @@
       if (["save-order-status", "dispatch-order-rider"].includes(action)) {
         syncActiveNav("list-orders");
       }
+    }    function renderDashboardActionCenter(products, orders, actions) {
+      const activeProducts = (products || []).filter((item) => item.isActive !== false);
+      const lowStock = activeProducts.filter((item) => Number(item.stockQty || 0) <= 5);
+      const openOrders = (orders || []).filter((order) => !["delivered", "cancelled"].includes(String(order.status || "").trim().toLowerCase()));
+      
+      dashboardPreview.innerHTML = `
+        <article class="action-widget alert-orange" data-action="list-orders">
+          <div class="action-widget-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="action-widget-body">
+            <h4>${openOrders.length} Orders pending</h4>
+            <p>Action required for fulfillment</p>
+          </div>
+        </article>
+        <article class="action-widget alert-red" data-action="list-products">
+          <div class="action-widget-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div class="action-widget-body">
+            <h4>${lowStock.length} Low stock items</h4>
+            <p>Inventory running critically low</p>
+          </div>
+        </article>
+        <article class="action-widget alert-blue" data-action="list-users">
+          <div class="action-widget-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="action-widget-body">
+            <h4>${actions.length ? 'Updates' : 'Messages'}</h4>
+            <p>${actions.length ? 'Recent activity detected' : 'No new messages'}</p>
+          </div>
+        </article>
+      `;
     }
     function renderProductShowcase(products) {
       const items = (products || []).filter((item) => item.isActive !== false).slice(0, 3);
@@ -971,6 +1005,44 @@
             </div>
           </div>
         </article>`).join("");
+    }
+    function renderDashboardActionCenter(products, orders, actions) {
+      const activeProducts = (products || []).filter((item) => item.isActive !== false);
+      const lowStock = activeProducts.filter((item) => Number(item.stockQty || 0) <= 5);
+      const openOrders = (orders || []).filter((order) => !["delivered", "cancelled"].includes(String(order.status || "").trim().toLowerCase()));
+      
+      const dashboardPreview = document.getElementById("dashboardPreview");
+      if (!dashboardPreview) return;
+      
+      dashboardPreview.innerHTML = `
+        <article class="action-widget alert-orange" data-action="list-orders">
+          <div class="action-widget-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="action-widget-body">
+            <h4>${openOrders.length} Orders pending</h4>
+            <p>Action required for fulfillment</p>
+          </div>
+        </article>
+        <article class="action-widget alert-red" data-action="list-products">
+          <div class="action-widget-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div class="action-widget-body">
+            <h4>${lowStock.length} Low stock items</h4>
+            <p>Inventory running critically low</p>
+          </div>
+        </article>
+        <article class="action-widget alert-blue" data-action="list-users">
+          <div class="action-widget-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="action-widget-body">
+            <h4>${actions.length ? 'Updates' : 'Messages'}</h4>
+            <p>${actions.length ? 'Recent activity detected' : 'No new messages'}</p>
+          </div>
+        </article>
+      `;
     }
     function renderActivityTable(actions) {
       if (!actions.length) {
@@ -1037,20 +1109,28 @@
       catalogValue.textContent = formatCurrency(catalogTotal);
       activeProductCount.textContent = `${activeProducts.length} products`;
       lowStockCount.textContent = `${lowStock.length} low stock`;
-      catalogStat.textContent = `${activeProducts.length} active products`;
-      if (ordersStat) ordersStat.textContent = `${openOrders.length} active orders`;
-      if (customersStat) customersStat.textContent = `${userList.length} shoppers`;
-      shopStat.textContent = `${categoryCount} categories`;
-      if (dealsStat) dealsStat.textContent = actions.length ? `${actions.length} recent updates` : "Promotions ready";
-      if (homeStat) homeStat.textContent = analyticsSnapshot?.sales?.todayOrders ? `${analyticsSnapshot.sales.todayOrders} orders today` : "Hero ads";
-      if (aboutStat) aboutStat.textContent = activeProducts.length ? "Story synced" : "Brand story";
+      catalogValue.textContent = formatCurrency(catalogTotal);
+      activeProductCount.textContent = `${activeProducts.length} products`;
+      lowStockCount.textContent = `${lowStock.length} low stock`;
+      
+      const sparklineGreen = `<svg class="sparkline" width="60" height="20" viewBox="0 0 60 20"><path d="M0 15 Q 15 5, 30 12 T 60 8" fill="none" stroke="#22c55e" stroke-width="2" /></svg>`;
+      const sparklineBlue = `<svg class="sparkline" width="60" height="20" viewBox="0 0 60 20"><path d="M0 10 Q 15 18, 30 10 T 60 14" fill="none" stroke="#3b82f6" stroke-width="2" /></svg>`;
+      const sparklineOrange = `<svg class="sparkline" width="60" height="20" viewBox="0 0 60 20"><path d="M0 12 Q 15 15, 30 8 T 60 10" fill="none" stroke="#f59e0b" stroke-width="2" /></svg>`;
+
+      catalogStat.innerHTML = `<span>${activeProducts.length} active products</span>${sparklineBlue}`;
+      if (ordersStat) ordersStat.innerHTML = `<span>${openOrders.length} active orders</span>${sparklineGreen}`;
+      if (customersStat) customersStat.innerHTML = `<span>${userList.length} shoppers</span>${sparklineBlue}`;
+      shopStat.innerHTML = `<span>${categoryCount} categories</span>${sparklineOrange}`;
+      if (dealsStat) dealsStat.innerHTML = actions.length ? `<span>${actions.length} updates</span>${sparklineGreen}` : "<span>Promotions ready</span>";
+      if (homeStat) homeStat.innerHTML = analyticsSnapshot?.sales?.todayOrders ? `<span>${analyticsSnapshot.sales.todayOrders} orders today</span>${sparklineGreen}` : "<span>Hero ads</span>";
+      if (aboutStat) aboutStat.innerHTML = activeProducts.length ? "<span>Story synced</span>" : "<span>Brand story</span>";
       if (deliveryStat) {
         const dispatchedOrders = orderList.filter((order) => order?.deliveryAssignment?.status);
-        deliveryStat.textContent = dispatchedOrders.length
-          ? `${dispatchedOrders.length} dispatch updates`
-          : "Dispatch ready";
+        deliveryStat.innerHTML = dispatchedOrders.length
+          ? `<span>${dispatchedOrders.length} dispatch updates</span>${sparklineBlue}`
+          : "<span>Dispatch ready</span>";
       }
-      if (reportsStat) reportsStat.textContent = analyticsSnapshot?.sales?.weekOrders ? `${analyticsSnapshot.sales.weekOrders} orders this week` : "Reports ready";
+      if (reportsStat) reportsStat.innerHTML = analyticsSnapshot?.sales?.weekOrders ? `<span>${analyticsSnapshot.sales.weekOrders} orders this week</span>${sparklineGreen}` : "<span>Reports ready</span>";
       aiStat.textContent = "Assistant online";
 
       if (dashboardState.user) {
@@ -1119,7 +1199,11 @@
 
       if (hasProductData) {
         dashboardState.products = Array.isArray(productsResult.value.products) ? productsResult.value.products : [];
-        renderProductShowcase(dashboardState.products);
+        if (typeof renderDashboardActionCenter === 'function') {
+          renderDashboardActionCenter(dashboardState.products, dashboardState.orders, dashboardState.actions);
+        } else {
+          renderProductShowcase(dashboardState.products);
+        }
       } else if (!dashboardState.products.length) {
         dashboardPreview.innerHTML = `
           <article class="product-card product-card-empty">
@@ -1350,7 +1434,7 @@
                 const dispatchContact = dispatch ? (dispatch.riderName || dispatch.riderEmail || dispatch.riderPhone || "Rider pending") : "Rider pending";
                 const loyaltyCopy = Number(order.loyaltyEarned || 0) > 0 ? `Earned ${Math.floor(Number(order.loyaltyEarned || 0))} pts` : "No loyalty points earned";
                 return `
-                  <article class="order-card">
+                  <article class="order-card order-row" data-order-id="${esc(order.id)}">
                     <div class="order-card-top">
                       <div class="order-card-heading">
                         <div class="order-ref">${esc(order.reference || "Order")}</div>
@@ -3264,6 +3348,92 @@
     document.getElementById("btnHome").addEventListener("click", () => window.location.href = buildSiteUrl("/"));
     document.getElementById("btnRefresh").addEventListener("click", () => refreshDashboard().catch((e) => alert(e.message || "Failed")));
     document.getElementById("btnLogout").addEventListener("click", () => { clearAuth(); window.location.href = buildSiteUrl("/"); });
+
+    // Quick Add Menu Logic
+    const btnGlobalAdd = document.getElementById("btnGlobalAdd");
+    btnGlobalAdd?.addEventListener("click", () => {
+      openModal("Quick Add", `
+        <div class="quick-actions-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:8px 0;">
+          <button class="btn-admin" data-action="add-product" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px;">
+            <svg viewBox="0 0 24 24" style="width:24px; height:24px; opacity:0.7;"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Add Product</span>
+          </button>
+          <button class="btn-admin" data-action="list-orders" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px;">
+            <svg viewBox="0 0 24 24" style="width:24px; height:24px; opacity:0.7;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Create Order</span>
+          </button>
+          <button class="btn-admin" data-action="edit-deals" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px;">
+            <svg viewBox="0 0 24 24" style="width:24px; height:24px; opacity:0.7;"><path d="M12 2L2 7l10 5 10-5-10-5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Add Deal</span>
+          </button>
+          <button class="btn-admin" data-action="edit-home-images" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px;">
+            <svg viewBox="0 0 24 24" style="width:24px; height:24px; opacity:0.7;"><path d="M3 9a2 2 0 0 1 2-2h.93a2 2 0 0 0 1.66-.9l.82-1.2A2 2 0 0 1 10.07 4h3.86a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Upload Ad</span>
+          </button>
+        </div>
+      `);
+    });
+
+    // Order Drawer Logic
+    const orderDrawerOverlay = document.getElementById("orderDrawerOverlay");
+    const drawerClose = document.getElementById("drawerClose");
+    
+    function openOrderDrawer(orderId) {
+      document.getElementById("drawerOrderId").textContent = `Order #${orderId}`;
+      document.getElementById("drawerContent").innerHTML = '<div class="muted">Loading order details...</div>';
+      orderDrawerOverlay?.classList.add("active");
+      // Simulate loading
+      setTimeout(() => {
+        document.getElementById("drawerContent").innerHTML = `
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <section>
+              <p class="eyebrow">Customer Information</p>
+              <div style="background:#fff; border:1px solid #e2e8f0; padding:16px; border-radius:12px;">
+                <p style="font-weight:700; margin:0 0 4px;">John Doe</p>
+                <p class="muted" style="margin:0; font-size:0.9rem;">john@example.com</p>
+              </div>
+            </section>
+            <section>
+              <p class="eyebrow">Shipping Address</p>
+              <p class="muted" style="font-size:0.9rem;">123 Premium Lane, Luxury City, 90210</p>
+            </section>
+            <section>
+              <p class="eyebrow">Items</p>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f5f9;">
+                <span>Blustup Hoodie × 1</span>
+                <span style="font-weight:700;">$49.99</span>
+              </div>
+            </section>
+          </div>
+        `;
+      }, 400);
+    }
+
+    function closeOrderDrawer() {
+      orderDrawerOverlay?.classList.remove("active");
+    }
+
+    drawerClose?.addEventListener("click", closeOrderDrawer);
+    orderDrawerOverlay?.addEventListener("click", (e) => {
+      if (e.target === orderDrawerOverlay) closeOrderDrawer();
+    });
+
+    // Handle Order Tab Filtering
+    document.querySelectorAll(".batch-filter-tab")?.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tab.parentElement.querySelector(".active")?.classList.remove("active");
+        tab.classList.add("active");
+      });
+    });
+
+    // Intercept order row clicks
+    document.addEventListener("click", (e) => {
+      const orderRow = e.target.closest(".order-row");
+      if (orderRow) {
+        const id = orderRow.getAttribute("data-order-id");
+        if (id) openOrderDrawer(id);
+      }
+    });
 
     // Initialize routing
     window.addEventListener('hashchange', handleHashChange);
