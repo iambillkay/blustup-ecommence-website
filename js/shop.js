@@ -241,6 +241,12 @@ function renderProducts(filterValue) {
         onkeydown="handleProductCardKeydown(event, '${String(product.id).replace(/'/g, "\\'")}')"
         aria-label="View details for ${escapeShopHtml(product.name)}"
       >
+        <div class="product-quick-actions">
+          <button class="quick-action-btn wishlist-btn" onclick="toggleWishlist('${String(product.id).replace(/'/g, "\\'")}', event)" aria-label="Add to wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+
         <div class="product-img" style="background:${product.color || "#f5f7ff"}">
           ${product.badge ? `<div class="product-badge-tag ${product.badgeType || ""}">${escapeShopHtml(product.badge)}</div>` : ""}
           ${
@@ -252,11 +258,11 @@ function renderProducts(filterValue) {
         <div class="product-info">
           <div class="product-category-list">
             ${getShopProductCategories(product)
-              .slice(0, 3)
-              .map((category) => `<span class="product-category-chip">${escapeShopHtml(humanizeShopCategory(category))}</span>`)
+              .map((c) => `<span class="product-category-chip">${escapeShopHtml(c)}</span>`)
               .join("")}
           </div>
-          <div class="product-name">${escapeShopHtml(product.name)}</div>
+          <h2 class="product-name">${escapeShopHtml(product.name)}</h2>
+          <p class="product-desc">${escapeShopHtml(product.desc || "")}</p>
           ${typeof renderProductRatingMarkup === "function" ? renderProductRatingMarkup(product) : ""}
           <div class="product-footer">
             <div class="product-price">
@@ -280,9 +286,15 @@ function renderProducts(filterValue) {
 
 function setActiveFilterButton(filterValue) {
   const activeToken = normalizeShopCategoryToken(filterValue);
+  // Mobile pills
   document.querySelectorAll(".filter-btn").forEach((button) => {
     const buttonToken = normalizeShopCategoryToken(button.getAttribute("data-filter"));
     button.classList.toggle("active", buttonToken === activeToken);
+  });
+  // Sidebar items
+  document.querySelectorAll(".sidebar-filter-item").forEach((item) => {
+    const itemToken = normalizeShopCategoryToken(item.getAttribute("data-filter"));
+    item.classList.toggle("active", itemToken === activeToken);
   });
 }
 
@@ -306,6 +318,21 @@ window.filterProducts = filterProducts;
 window.renderProducts = renderProducts;
 window.setShopFilter = setShopFilter;
 
+function renderSidebarFilters(buttons, active) {
+  const sidebarWrap = document.getElementById("sidebarFilters");
+  if (!sidebarWrap) return;
+
+  sidebarWrap.innerHTML = buttons
+    .map((filter) => `
+      <div
+        class="sidebar-filter-item ${normalizeShopCategoryToken(filter.value) === normalizeShopCategoryToken(active.value) ? "active" : ""}"
+        data-filter="${escapeShopHtml(filter.value)}"
+        onclick="filterProducts(this, '${String(filter.value).replace(/'/g, "\\'")}')"
+      >${escapeShopHtml(filter.label)}</div>
+    `)
+    .join("");
+}
+
 function renderShopFilters(filters) {
   const wrap = document.querySelector(".shop-filters");
   if (!wrap) return;
@@ -319,6 +346,8 @@ function renderShopFilters(filters) {
   const active = buttons.find((filter) => normalizeShopCategoryToken(filter.value) === currentToken) || buttons[0];
 
   currentFilter = active.value;
+  
+  // Render Mobile Pills
   wrap.innerHTML = buttons
     .map((filter) => `
       <button
@@ -329,6 +358,9 @@ function renderShopFilters(filters) {
       >${escapeShopHtml(filter.label)}</button>
     `)
     .join("");
+
+  // Render Sidebar
+  renderSidebarFilters(buttons, active);
 
   syncNavSearchCategoryDropdown();
   renderProducts(active.value);

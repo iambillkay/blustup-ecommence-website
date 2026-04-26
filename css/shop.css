@@ -37,18 +37,117 @@
   position: relative;
 }
 
-/* ── SHOP BODY ── */
+/* ── SHOP BODY & LAYOUT ── */
 .shop-body {
-  padding: 50px 60px 80px;
+  padding: 40px 4vw 80px;
   background: var(--light-bg);
 }
 
-/* ── FILTERS (pill buttons from CMS) ── */
+.shop-content-wrapper {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .shop-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .shop-sidebar-desktop {
+    display: none;
+  }
+}
+
+/* ── SIDEBAR ── */
+.shop-sidebar-desktop {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sidebar-block h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--text-dark);
+}
+
+.sidebar-filters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-filter-item {
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.sidebar-filter-item:hover {
+  background: #fff;
+  color: #000;
+}
+
+.sidebar-filter-item.active {
+  background: #000;
+  color: #fff;
+  font-weight: 600;
+}
+
+.price-range-inputs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-range-inputs input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.price-range-inputs button {
+  grid-column: span 3;
+  margin-top: 12px;
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── FILTERS (pills for mobile) ── */
 .shop-filters {
   display: flex;
   gap: 12px;
-  margin-bottom: 36px;
-  flex-wrap: wrap;
+  margin-bottom: 24px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+.shop-filters::-webkit-scrollbar { display: none; }
+
+@media (min-width: 1025px) {
+  .shop-filters {
+    display: none; /* Hide pills on desktop since we have sidebar */
+  }
 }
 
 .shop-filter-fallback {

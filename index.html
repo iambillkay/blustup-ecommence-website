@@ -327,10 +327,32 @@ Log In
       <p>Africa's biggest retail shop for all your essentials</p>
     </div>
     <div class="shop-body">
-      <div class="shop-filters">
-        <!-- Filled from /api/cms/shop (pill buttons) -->
+      <div class="shop-content-wrapper">
+        <aside class="shop-sidebar-desktop" id="shopSidebar">
+          <div class="sidebar-block">
+            <h3>Categories</h3>
+            <div class="sidebar-filters-list" id="sidebarFilters">
+              <!-- Desktop filters will be mirrored here -->
+            </div>
+          </div>
+          <div class="sidebar-block">
+            <h3>Price Range</h3>
+            <div class="price-range-inputs">
+              <input type="number" placeholder="Min" id="minPrice">
+              <span>-</span>
+              <input type="number" placeholder="Max" id="maxPrice">
+              <button onclick="applyPriceFilter()">Apply</button>
+            </div>
+          </div>
+        </aside>
+        
+        <main class="shop-main-content">
+          <div class="shop-filters">
+            <!-- Mobile pills / Category row -->
+          </div>
+          <div class="products-grid" id="products-grid"></div>
+        </main>
       </div>
-      <div class="products-grid" id="products-grid"></div>
     </div>
     <footer>
       <div class="footer-grid">
