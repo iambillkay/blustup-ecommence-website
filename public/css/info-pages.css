@@ -433,15 +433,7 @@
 }
 
 .board-bio {
-  margin-top: 16px;
-  font-size: 0.9rem;
-  color: #64748b;
-  line-height: 1.6;
-}
-  margin: 8px 0 16px;
-}
-
-.board-bio {
+  margin: 16px 0;
   font-size: 0.9rem;
   color: #64748b;
   line-height: 1.6;

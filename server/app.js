@@ -16,7 +16,8 @@ const wishlistRoutes = require("./routes/wishlist");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const rootDir = path.join(__dirname, "..");
-const frontendIndexFile = path.join(rootDir, "index.html");
+const publicDir = path.join(rootDir, "public");
+const frontendIndexFile = path.join(publicDir, "index.html");
 
 const app = express();
 
@@ -105,11 +106,11 @@ app.use(cors((req, callback) => {
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false }));
 
-// Serve static files from root
-app.use(express.static(rootDir));
+// Serve static files from public directory
+app.use(express.static(publicDir));
 
 // Uploads (image URL support)
-app.use("/uploads", express.static(path.join(rootDir, "uploads")));
+app.use("/uploads", express.static(path.join(publicDir, "uploads")));
 
 // API
 app.get("/api/health", (_req, res) => res.json({ ok: true }));

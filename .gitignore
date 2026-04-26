@@ -10,4 +10,4 @@ Database/*.db
 Database/*.sqlite3
 
 # uploaded images
-uploads/
+# uploads/ (Now allowed to ensure exact match on Vercel)
