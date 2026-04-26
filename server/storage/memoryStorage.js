@@ -356,6 +356,16 @@ function normalizeCmsState(cms = {}) {
     shop: {
       title: String(cms?.shop?.title || defaults.shop.title),
       subtitle: String(cms?.shop?.subtitle || defaults.shop.subtitle),
+      announcement: {
+        text: String(cms?.shop?.announcement?.text || "").trim(),
+        color: String(cms?.shop?.announcement?.color || "#172033").trim(),
+        isActive: cms?.shop?.announcement?.isActive === true,
+      },
+      seo: {
+        title: String(cms?.shop?.seo?.title || "").trim(),
+        description: String(cms?.shop?.seo?.description || "").trim(),
+        ogImage: String(cms?.shop?.seo?.ogImage || "").trim(),
+      },
       filters: Array.isArray(cms?.shop?.filters) && cms.shop.filters.length
         ? cms.shop.filters.map((filter) => ({
             label: String(filter?.label || filter?.value || "").trim(),

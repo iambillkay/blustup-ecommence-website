@@ -2769,9 +2769,30 @@
       const editableFilters = filters.filter((filter) => String(filter.value || "").trim().toLowerCase() !== "all");
       openModal("Shop Settings", `
         <div class="muted">Filters now follow the real active product categories. "All Products" is always included, and hidden filters stay available for deals and admin links.</div>
-        <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
-        <div class="field" style="margin-top:12px;"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
-        <div class="field" style="margin-top:12px;">
+        
+        <div class="panel-header" style="margin-top:12px;">Brand & Messaging</div>
+        <div class="grid2">
+          <div class="field"><label>Shop title</label><input id="s_title" value="${esc(settings.title || "")}" /></div>
+          <div class="field"><label>Shop subtitle</label><input id="s_subtitle" value="${esc(settings.subtitle || "")}" /></div>
+        </div>
+
+        <div class="field" style="margin-top:12px; padding:14px; border:1px solid #e4eaf8; border-radius:16px; background:#f8fafc;">
+          <label>Sitewide Announcement Bar</label>
+          <div style="display:grid; grid-template-columns:1fr 120px 100px; gap:10px; align-items:end;">
+            <div class="field" style="margin:0;"><label style="font-size:11px;">Announcement text</label><input id="s_ann_text" value="${esc(settings.announcement?.text || "")}" placeholder="e.g. Free shipping on orders over ₵200" /></div>
+            <div class="field" style="margin:0;"><label style="font-size:11px;">Bar color</label><input id="s_ann_color" type="color" value="${esc(settings.announcement?.color || "#172033")}" style="height:42px; padding:4px;" /></div>
+            <div class="field" style="margin:0;"><label style="font-size:11px;">Active</label><select id="s_ann_active"><option value="1" ${settings.announcement?.isActive ? "selected" : ""}>Yes</option><option value="0" ${!settings.announcement?.isActive ? "selected" : ""}>No</option></select></div>
+          </div>
+          <div class="muted" style="font-size:11px; margin-top:8px;">This bar appears at the very top of the storefront for all users.</div>
+        </div>
+
+        <div class="panel-header" style="margin-top:18px;">SEO & Social Presence</div>
+        <div class="field"><label>Meta title</label><input id="s_seo_title" value="${esc(settings.seo?.title || "")}" placeholder="Blustup | Premium E-commerce Store" /></div>
+        <div class="field" style="margin-top:10px;"><label>Meta description</label><textarea id="s_seo_desc" rows="2" placeholder="Discover curated products and premium value...">${esc(settings.seo?.description || "")}</textarea></div>
+        <div class="field" style="margin-top:10px;"><label>OG Preview image URL</label><input id="s_seo_image" value="${esc(settings.seo?.ogImage || "")}" placeholder="https://..." /></div>
+
+        <div class="panel-header" style="margin-top:18px;">Navigation Filters</div>
+        <div class="field">
           <label>Live category preview</label>
           <div id="shopFilterPreview" style="padding:14px;border:1px solid #e4eaf8;border-radius:16px;background:#fff;"></div>
         </div>
@@ -2806,13 +2827,24 @@
 
       document.getElementById("saveShop").addEventListener("click", async () => {
         const nextFilters = buildShopFiltersFromEditor(context.activeCategories);
+        const payload = {
+          title: document.getElementById("s_title").value.trim(),
+          subtitle: document.getElementById("s_subtitle").value.trim(),
+          announcement: {
+            text: document.getElementById("s_ann_text").value.trim(),
+            color: document.getElementById("s_ann_color").value.trim(),
+            isActive: document.getElementById("s_ann_active").value === "1",
+          },
+          seo: {
+            title: document.getElementById("s_seo_title").value.trim(),
+            description: document.getElementById("s_seo_desc").value.trim(),
+            ogImage: document.getElementById("s_seo_image").value.trim(),
+          },
+          filters: nextFilters,
+        };
         await api("/api/cms/shop", {
           method: "PUT",
-          body: JSON.stringify({
-            title: document.getElementById("s_title").value,
-            subtitle: document.getElementById("s_subtitle").value,
-            filters: nextFilters,
-          }),
+          body: JSON.stringify(payload),
         });
         await refreshDashboard();
         closeModal();

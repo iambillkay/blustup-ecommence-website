@@ -7344,6 +7344,78 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
       "createdAt": "2026-04-26T15:43:13.153Z"
+    },
+    {
+      "_id": "dd91fae8-7fd3-436b-898d-54b83d365840",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:48:46.995Z"
+    },
+    {
+      "_id": "be2120f9-45f5-4707-b5d8-5ea278feefcb",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:48:48.421Z"
+    },
+    {
+      "_id": "c873a8bd-c9c9-43f3-9531-f2b43a566b57",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:48:51.616Z"
+    },
+    {
+      "_id": "687f09b4-9d9f-4de0-9eda-ddcdbd2aaaa5",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:49:18.530Z"
+    },
+    {
+      "_id": "27b3e0c6-18d3-42aa-87c0-2e62c3daf39b",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:49:19.484Z"
+    },
+    {
+      "_id": "b4a768d9-0b04-4eef-9344-5400b7caabb4",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:50:09.565Z"
     }
   ],
   "audit": [
@@ -8200,18 +8272,8 @@
           "showInShop": true
         },
         {
-          "label": "Fashion & Apparel",
+          "label": "Personal Care",
           "value": "personal care",
-          "showInShop": true
-        },
-        {
-          "label": "Home & Kitchen",
-          "value": "lounge",
-          "showInShop": true
-        },
-        {
-          "label": "Sports & Outdoors",
-          "value": "flights",
           "showInShop": true
         },
         {
@@ -8225,23 +8287,8 @@
           "showInShop": true
         },
         {
-          "label": "Essentials",
-          "value": "essentials",
-          "showInShop": true
-        },
-        {
-          "label": "Insurance",
-          "value": "insurance",
-          "showInShop": true
-        },
-        {
           "label": "Oriamo",
           "value": "oriamo",
-          "showInShop": true
-        },
-        {
-          "label": "Upgrades",
-          "value": "upgrades",
           "showInShop": true
         }
       ]

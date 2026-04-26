@@ -24,6 +24,16 @@ const homeSchema = z.object({
 const shopSchema = z.object({
   title: z.string().trim().min(1).max(120),
   subtitle: z.string().trim().min(1).max(220),
+  announcement: z.object({
+    text: z.string().trim().max(180).optional(),
+    color: z.string().trim().max(30).optional(),
+    isActive: z.boolean().optional(),
+  }).optional(),
+  seo: z.object({
+    title: z.string().trim().max(120).optional(),
+    description: z.string().trim().max(300).optional(),
+    ogImage: z.string().trim().max(500).optional(),
+  }).optional(),
   filters: z
     .array(
       z.object({
@@ -289,6 +299,16 @@ function normalizeShopForSave(value, context = {}) {
   return {
     title: String(value?.title || "").trim(),
     subtitle: String(value?.subtitle || "").trim(),
+    announcement: {
+      text: String(value?.announcement?.text || "").trim(),
+      color: String(value?.announcement?.color || "#172033").trim(),
+      isActive: value?.announcement?.isActive === true,
+    },
+    seo: {
+      title: String(value?.seo?.title || "").trim(),
+      description: String(value?.seo?.description || "").trim(),
+      ogImage: String(value?.seo?.ogImage || "").trim(),
+    },
     filters,
   };
 }
