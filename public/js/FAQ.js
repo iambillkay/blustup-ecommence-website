@@ -11,6 +11,7 @@ function escapeHtml(s) {
 function setFaqItemState(item, isActive) {
   item.classList.toggle("active", isActive);
   const trigger = item.querySelector(".faq-question");
+  const answer = item.querySelector(".faq-answer");
   if (trigger) trigger.setAttribute("aria-expanded", isActive ? "true" : "false");
   if (answer) {
     answer.style.maxHeight = isActive ? `${answer.scrollHeight}px` : "0px";

@@ -70,6 +70,23 @@ function renderAboutPillars(pillars) {
   `).join("");
 }
 
+function renderAboutBoard(board) {
+  const root = document.getElementById("about-board-grid");
+  if (!root || !Array.isArray(board) || !board.length) return;
+  root.innerHTML = board.map((member) => `
+    <div class="board-card">
+      <div class="board-photo-wrap">
+        <img class="board-photo" src="${escapeAboutHtml(member.imageUrl || 'https://via.placeholder.com/300x300?text=Leadership')}" alt="${escapeAboutHtml(member.name)}">
+      </div>
+      <div class="board-body">
+        <h3 class="board-name">${escapeAboutHtml(member.name)}</h3>
+        <p class="board-role">${escapeAboutHtml(member.role)}</p>
+        <p class="board-bio">${escapeAboutHtml(member.bio || '')}</p>
+      </div>
+    </div>
+  `).join("");
+}
+
 async function loadAboutContent() {
   try {
     const response = await apiFetch("/api/cms/about", { cache: "no-store" });
@@ -91,6 +108,7 @@ async function loadAboutContent() {
     renderAboutStats(settings.stats || []);
     renderAboutCards(settings.cards || []);
     renderAboutPillars(settings.pillars || []);
+    renderAboutBoard(settings.board || []);
 
     if (typeof window.queueMotionRefresh === "function") {
       window.queueMotionRefresh(document.getElementById("page-about"));

@@ -413,6 +413,13 @@ Log In
           <input type="text" id="faqSearchInput" placeholder="Search for answers..." onkeyup="handleFaqSearch()">
         </div>
 
+        <div class="faq-quick-links">
+          <span>Popular:</span>
+          <button onclick="document.getElementById('faqSearchInput').value='Delivery'; handleFaqSearch()">Delivery</button>
+          <button onclick="document.getElementById('faqSearchInput').value='Refunds'; handleFaqSearch()">Refunds</button>
+          <button onclick="document.getElementById('faqSearchInput').value='Points'; handleFaqSearch()">Points</button>
+        </div>
+
         <div class="faq-categories" id="faqCategories">
           <button class="cat-chip active" onclick="filterFaq('all')">All</button>
           <button class="cat-chip" onclick="filterFaq('shipping')">Shipping</button>
@@ -449,8 +456,24 @@ Log In
           <button class="checkout-btn" type="button" onclick="showPage('shop')">Explore the shop</button>
           <button class="cart-secondary-btn" type="button" onclick="openAiChat()">Ask Blustup AI</button>
         </div>
-        
-        <div class="about-values-grid" id="about-stats-root">
+      </section>
+
+      <div class="trust-stats-bar">
+        <div class="trust-stat-item">
+          <strong>10k+</strong>
+          <span>Happy Shoppers</span>
+        </div>
+        <div class="trust-stat-item">
+          <strong>99.9%</strong>
+          <span>Secure Payments</span>
+        </div>
+        <div class="trust-stat-item">
+          <strong>24/7</strong>
+          <span>Guided Support</span>
+        </div>
+      </div>
+
+      <div class="about-values-grid" id="about-stats-root" style="margin-top: 80px;">
           <div class="value-card">
             <div class="value-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -575,32 +598,68 @@ Log In
       </section>
 
       <div class="loyalty-layout">
-        <article class="info-card loyalty-balance-card">
-          <h2>Your loyalty balance</h2>
-          <div class="loyalty-balance-number" id="loyaltyPointsValue">0</div>
-          <div class="loyalty-tier-pill" id="loyaltyTierBadge">Sign in</div>
-          <div class="loyalty-progress-shell" aria-label="Loyalty progress">
+        <div class="loyalty-card-wrapper">
+          <div class="loyalty-membership-card" id="loyaltyCard">
+            <div class="card-glass-glow"></div>
+            <div class="card-header">
+              <div class="card-logo">✦ Blustup</div>
+              <div class="card-tier" id="loyaltyTierBadge">Starter</div>
+            </div>
+            <div class="card-balance">
+              <span class="label">Total Points</span>
+              <div class="value" id="loyaltyPointsValue">0</div>
+            </div>
+            <div class="card-footer">
+              <div class="user-name" id="loyaltyAccountName">Guest Explorer</div>
+              <div class="member-since">Active Member</div>
+            </div>
+          </div>
+          
+          <div class="loyalty-progress-panel">
             <div class="loyalty-progress-top">
-              <span id="loyaltyCurrentTierRange">Starter starts at 0 pts</span>
+              <span id="loyaltyCurrentTierRange">Starter</span>
               <span id="loyaltyNextTierTarget">Silver unlocks at 150 pts</span>
             </div>
             <div class="loyalty-progress-bar"><span id="loyaltyProgressFill" style="width:0%"></span></div>
-            <div class="loyalty-progress-copy" id="loyaltyProgressText">Sign in to watch your progress toward free shipping and higher loyalty tiers.</div>
+            <p id="loyaltyProgressText">Sign in to track your progress.</p>
           </div>
-          <div class="loyalty-mini-stats">
-            <div class="loyalty-mini-stat">
-              <strong id="loyaltySpendToNextTier">Sign in</strong>
-              <span>Spend to next tier</span>
+        </div>
+
+        <div class="loyalty-perks-panel">
+          <div class="perk-stats">
+            <div class="perk-stat-item">
+              <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20m10-10H2"/><circle cx="12" cy="12" r="9"/></svg></div>
+              <div class="stat-info">
+                <strong id="loyaltySpendToNextTier">--</strong>
+                <span>Next Tier Spend</span>
+              </div>
             </div>
-            <div class="loyalty-mini-stat">
-              <strong id="loyaltyPerkStatus">Locked</strong>
-              <span>Shipping perk</span>
+            <div class="perk-stat-item">
+              <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+              <div class="stat-info">
+                <strong id="loyaltyPerkStatus">Locked</strong>
+                <span>Current Perk</span>
+              </div>
             </div>
           </div>
-          <p class="loyalty-support-copy" id="loyaltyTierSummary">Sign in before checkout to start earning loyalty points on every order.</p>
-          <p class="loyalty-support-copy" id="loyaltyNextTier">Starter members begin earning immediately after the first signed-in purchase.</p>
-          <p class="loyalty-support-copy" id="loyaltyAccountNote">Create an account or sign in to turn purchases into loyalty points and shipping perks.</p>
-        </article>
+
+          <div class="loyalty-perks-list-v2">
+            <h3>Membership Perks</h3>
+            <div class="perk-item active">
+              <div class="perk-bullet"></div>
+              <span>Earn 1 point for every ₵1 spent</span>
+            </div>
+            <div class="perk-item" id="perk-shipping">
+              <div class="perk-bullet"></div>
+              <span>Unlock FREE shipping at Silver tier</span>
+            </div>
+            <div class="perk-item">
+              <div class="perk-bullet"></div>
+              <span>Early access to Brand Day sales</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
         <article class="info-card">
           <h2>Program perks</h2>
@@ -645,32 +704,78 @@ Log In
   </div>
 
   <div id="page-cart" class="page">
-    <div class="cart-container">
-      <h1>Your Cart <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></h1>
-      <div class="cart-layout">
-        <div>
+    <div class="cart-container-v2">
+      <div class="cart-header-row">
+        <h1>Shopping Cart <span class="cart-count-badge" id="cart-page-count">0</span></h1>
+        <button class="clear-all-link" onclick="resetCartState()">Clear All</button>
+      </div>
+
+      <div class="cart-grid-v2">
+        <!-- TOP LEFT: Cart Items -->
+        <div class="cart-items-section">
           <div class="cart-items" id="cart-items-container"></div>
-          <div id="empty-cart" style="display:none;text-align:center;padding:60px 0;color:var(--text-light);">
-            <div style="font-size:56px;margin-bottom:16px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg></div>
-            <p style="font-size:1.1rem;font-weight:600;color:var(--text-dark);">Your cart is empty</p>
-            <p style="margin-top:8px;font-size:.9rem;">Discover amazing travel deals in our shop</p>
-            <button class="btn-primary" style="margin-top:24px;" onclick="showPage('shop')">Browse Shop →</button>
+          <div id="empty-cart" style="display:none;text-align:center;padding:100px 0;background:#fff;border-radius:32px;border:1px solid #eef2fa;">
+            <div style="font-size:64px;margin-bottom:24px;opacity:0.2;">🛒</div>
+            <h2 style="font-family:'Sora',sans-serif;font-weight:800;color:#0a1040;margin-bottom:12px;">Your cart is empty</h2>
+            <p style="color:#64748b;margin-bottom:32px;">Discover something new for your next journey.</p>
+            <button class="checkout-btn" style="width:auto;padding:16px 40px;" onclick="showPage('shop')">Explore Shop</button>
           </div>
         </div>
-        <div class="cart-summary">
-          <h2>Order Summary</h2>
-          <div id="cart-summary-rows"></div>
-          <div class="promo-input">
-            <input type="text" placeholder="Promo code" id="promo-input" autocomplete="off">
-            <button type="button" id="promoApplyBtn" onclick="applyPromo()">Apply</button>
+
+        <!-- TOP RIGHT: Stacked Summary & Shipping -->
+        <div class="cart-sidebar-section">
+          <div class="cart-summary-v2">
+            <h2>Order Summary</h2>
+            <div id="cart-summary-rows"></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row total">
+              <span>Total Amount</span>
+              <span id="cart-total-display">₵0.00</span>
+            </div>
+            <button class="checkout-btn" id="cartCheckoutBtn" onclick="showPage('checkout')" style="margin-top:24px;">Proceed to Checkout</button>
+            <div class="secure-checkout-tag">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Secure & Encrypted
+            </div>
           </div>
-          <p class="promo-hint" id="promo-status">Try AIRLUME20, BLUSTUP10, or FREESHIP</p>
-          <div class="summary-row total"><span>Total</span><span id="cart-total-display">₵0.00</span></div>
-          <div class="cart-summary-actions">
-            <button class="checkout-btn" id="cartCheckoutBtn" onclick="showPage('checkout')">Proceed to Checkout →</button>
-            <button type="button" class="cart-secondary-btn" id="clearCartBtn">Clear Cart</button>
+
+          <div class="cart-promo-section-v2">
+            <div class="cart-shipping-promo-v2">
+              <div class="shipping-header">
+                <span id="cart-page-shipping-text">Add <strong>₵50.00</strong> for FREE Shipping</span>
+              </div>
+              <div class="shipping-progress-bar"><span class="progress-fill" id="cart-page-shipping-fill"></span></div>
+            </div>
+            <div class="promo-box-v2">
+              <input type="text" placeholder="Promo Code" id="promo-input">
+              <button onclick="applyPromo()">Apply</button>
+            </div>
           </div>
-          <div class="secure-note"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-lock"></use></svg> Secure &amp; encrypted checkout</div>
+        </div>
+
+        <!-- MIDDLE: Recommendations -->
+        <div class="cart-recommendations-section-v2" id="cart-page-recommendations">
+          <div class="section-head">
+            <h3>You Might Also Like</h3>
+            <p>Complete your order with these trending items.</p>
+          </div>
+          <div class="rec-grid-v2" id="cart-page-rec-list"></div>
+        </div>
+
+        <!-- BOTTOM: Trust Footer -->
+        <div class="cart-trust-footer-v2">
+          <div class="trust-item">
+            <div class="trust-icon">💳</div>
+            <div class="trust-text"><strong>Secure Payment</strong> SSL Encrypted</div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🚚</div>
+            <div class="trust-text"><strong>Fast Delivery</strong> Nationwide Shipping</div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🔄</div>
+            <div class="trust-text"><strong>Easy Returns</strong> 30-Day Guarantee</div>
+          </div>
         </div>
       </div>
     </div>
@@ -681,13 +786,23 @@ Log In
     <div class="checkout-container">
       <h1>Checkout</h1>
       <div class="checkout-steps">
-        <div class="step done"><div class="step-num"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></div>Cart</div>
-        <div class="step-divider"></div>
-        <div class="step active"><div class="step-num">2</div>Details</div>
-        <div class="step-divider"></div>
-        <div class="step"><div class="step-num">3</div>Payment</div>
-        <div class="step-divider"></div>
-        <div class="step"><div class="step-num">4</div>Confirm</div>
+        <div class="step-divider"><div class="step-divider-fill" id="checkout-progress-bar"></div></div>
+        <div class="step done" id="step-cart">
+          <div class="step-num"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-check"></use></svg></div>
+          <span>Cart</span>
+        </div>
+        <div class="step active" id="step-details">
+          <div class="step-num">2</div>
+          <span>Details</span>
+        </div>
+        <div class="step" id="step-payment">
+          <div class="step-num">3</div>
+          <span>Payment</span>
+        </div>
+        <div class="step" id="step-confirm">
+          <div class="step-num">4</div>
+          <span>Confirm</span>
+        </div>
       </div>
       <div class="checkout-layout">
         <div class="checkout-form-wrap">

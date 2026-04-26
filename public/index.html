@@ -103,7 +103,7 @@
   <div class="nav-right">
 <button class="btn-login" onclick="showPage('login')" id="loginBtn">
 Log In
-</button>    <button class="cart-btn" onclick="showPage('cart')">
+</button>    <button class="cart-btn" onclick="openCartDrawer()">
       <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg>
       <span class="sr-only">Cart</span> Cart
       <span class="cart-count" id="cart-count">0</span>
@@ -159,13 +159,97 @@ Log In
   <div class="drawer-actions">
     <button class="nav-ai-btn" type="button" onclick="openAiChat(); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-ai"></use></svg></span><span>Ask AI</span></button>
     <button class="btn-login drawer-btn" onclick="showPage('login'); closeMenu()" id="loginBtnMobile"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-login"></use></svg></span><span>Log In</span></button>
-    <button class="cart-btn" onclick="showPage('cart'); closeMenu()">
+    <button class="cart-btn" onclick="openCartDrawer(); closeMenu()">
         <svg class="icon" aria-hidden="true"><use xlink:href="#icon-cart"></use></svg><span class="sr-only">Cart</span>
       <span class="cart-count" id="cart-count-mobile">0</span>
     </button>
     <button class="btn-primary drawer-btn" onclick="showPage('shop'); closeMenu()"><span class="drawer-link-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg></span><span>Shop Now</span></button>
   </div>
 </div>
+
+<!-- Cart Side Drawer -->
+<div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="closeCartDrawer()"></div>
+<div class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="drawer-header">
+    <div class="drawer-title">
+      <svg class="icon"><use xlink:href="#icon-cart"></use></svg>
+      <div>
+        <span>Your Cart</span>
+        <span class="drawer-count-badge" id="drawer-cart-count">0</span>
+        <div class="drawer-delivery-estimate" id="drawer-delivery-note"></div>
+      </div>
+    </div>
+    <button class="drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer-shipping-promo">
+    <div class="shipping-progress-header">
+      <span id="shipping-progress-text">Spend ₵50.00 more for FREE shipping</span>
+    </div>
+    <div class="shipping-progress-bar"><div class="progress-fill" id="shipping-progress-fill" style="width: 0%"></div></div>
+  </div>
+
+  <div class="drawer-body">
+    <div id="drawer-cart-items-container"></div>
+    
+    <div id="drawer-recommendations-container" class="drawer-recommendations" style="display: none;">
+      <p class="rec-title">You might also like</p>
+      <div id="drawer-rec-list" class="rec-list"></div>
+    </div>
+
+    <div id="drawer-empty-cart" class="drawer-empty" style="display: none;">
+      <div class="empty-icon"><svg class="icon"><use xlink:href="#icon-cart"></use></svg></div>
+      <p>Your cart is empty</p>
+      
+      <div class="empty-trending">
+        <p class="trending-title">Trending Now</p>
+        <div id="drawer-trending-list" class="trending-list"></div>
+      </div>
+
+      <button class="btn-primary" onclick="showPage('shop'); closeCartDrawer()" style="margin-top: 20px;">Shop All Products</button>
+    </div>
+  </div>
+
+  <div class="drawer-footer">
+    <div class="drawer-summary">
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <span id="drawer-subtotal">₵0.00</span>
+      </div>
+      <div class="summary-line discount" id="drawer-discount-row" style="display: none;">
+        <span id="drawer-discount-label">Discount</span>
+        <span id="drawer-discount-val">-₵0.00</span>
+      </div>
+      <div class="summary-line total">
+        <span>Total</span>
+        <span id="drawer-total">₵0.00</span>
+      </div>
+    </div>
+    <button class="drawer-checkout-btn" onclick="showPage('checkout'); closeCartDrawer()">
+      Checkout Now — <span id="drawer-btn-total">₵0.00</span>
+    </button>
+
+    <div class="drawer-trust-badges">
+      <div class="trust-badge">
+        <svg class="icon"><use xlink:href="#icon-shield"></use></svg>
+        <span>Secure</span>
+      </div>
+      <div class="trust-badge">
+        <svg class="icon"><use xlink:href="#icon-history"></use></svg>
+        <span>14-day Returns</span>
+      </div>
+      <div class="trust-badge">
+        <svg class="icon"><use xlink:href="#icon-info"></use></svg>
+        <span>24/7 Support</span>
+      </div>
+    </div>
+
+    <p class="drawer-footer-note">Shipping & taxes calculated at checkout</p>
+  </div>
+</div>
+
 </nav>
 
   <!-- ═══════════════ HOME PAGE ═══════════════ -->
