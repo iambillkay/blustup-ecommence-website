@@ -48,10 +48,14 @@ window.openMenu = openMenu;
 window.closeMenu = closeMenu;
 window.handleMobileSearch = handleMobileSearch;
 
+const mobileDrawerClose = document.getElementById("mobileDrawerClose");
+
 hamburger?.addEventListener("click", () => {
   if (hamburger.classList.contains("open")) closeMenu();
   else openMenu();
 });
+
+mobileDrawerClose?.addEventListener("click", closeMenu);
 
 overlay?.addEventListener("click", closeMenu);
 

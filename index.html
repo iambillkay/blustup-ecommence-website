@@ -350,127 +350,119 @@ Log In
   <div id="page-faq" class="page">
     <section class="faq-container">
       <div class="faq-left">
-        <span class="faq-label" id="faq-label">● Have Questions?</span>
-        <h1 id="faq-page-title">Frequently asked<br>questions</h1>
-        <p id="faq-intro" class="faq-intro" style="display:none;"></p>
-        <div class="faq-help">
-          <h3 id="faq-help-title">Still have a question?</h3>
-          <p id="faq-help-text">Loading…</p>
-          <button class="faq-email-btn" type="button" id="faq-email-btn">Send email</button>
+        <span class="faq-label" id="faq-label">● Help Center</span>
+        <h1 id="faq-page-title">How can we<br>help you?</h1>
+        
+        <div class="faq-search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="faqSearchInput" placeholder="Search for answers..." onkeyup="handleFaqSearch()">
+        </div>
+
+        <div class="faq-categories" id="faqCategories">
+          <button class="cat-chip active" onclick="filterFaq('all')">All</button>
+          <button class="cat-chip" onclick="filterFaq('shipping')">Shipping</button>
+          <button class="cat-chip" onclick="filterFaq('payment')">Payment</button>
+          <button class="cat-chip" onclick="filterFaq('account')">Account</button>
+        </div>
+
+        <div class="faq-help premium-help-card">
+          <div class="help-badge">AI Powered</div>
+          <h3 id="faq-help-title">Instant Answers</h3>
+          <p id="faq-help-text">Our AI Assistant can help you with orders, returns, and tracking in real-time.</p>
+          <div class="faq-help-actions">
+            <button class="btn-primary" onclick="openAiChat()">Ask Blustup AI</button>
+            <button class="faq-email-btn" type="button" id="faq-email-btn">Email Support</button>
+          </div>
         </div>
       </div>
       <div class="faq-right">
         <div class="faq-list" id="faq-list-root">
-          <div class="faq-item active">
-            <button class="faq-question" type="button">
-              <span>How do I create an account?</span>
-              <span class="faq-icon">&#9650;</span>
-            </button>
-            <div class="faq-answer">
-              Click on "Create account" from the login page, enter your name, email, and password, then click "Create Account". You'll be logged in automatically!
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>How do I add products to my cart?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              Browse the shop, find a product you like, and click the "+ Add" button. Your cart count will update at the top right.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>Is my personal information secure?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              Yes! We use 256-bit SSL encryption to protect all your data. Your password is hashed with bcryptjs for extra security.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>Can I use promo codes?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              Yes! Enter a valid promo code in your cart summary and click "Apply" to get discounts on your order.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question" type="button">
-              <span>What payment methods do you accept?</span>
-              <span class="faq-icon">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              We accept credit/debit cards, PayPal, Apple Pay, and Google Pay at checkout.
-            </div>
-          </div>
+          <!-- Populated by JS -->
         </div>
       </div>
-    </section>
-    <section class="faq-board-section">
-      <h2 class="faq-board-heading" id="faq-board-title">Board of directors</h2>
-      <p class="faq-board-lead">Meet the team guiding Blustup.</p>
-      <div class="board-grid" id="faq-board-grid"></div>
     </section>
   </div>
 
   <!-- ABOUT / PRIVACY / LOYALTY PAGES -->
   <div id="page-about" class="page site-page">
     <div class="site-page-shell">
-      <section class="site-page-hero">
-        <div class="section-badge" id="about-badge">About Blustup</div>
-        <h1 id="about-title">Blustup helps everyday shoppers buy with more clarity, more trust, and less friction.</h1>
-        <p id="about-intro">We built Blustup around a simple promise: product discovery should feel transparent, checkout should feel secure, and support should be available the moment a shopper needs it. That is why the storefront combines curated catalog design, loyalty rewards, and AI-guided assistance in one place.</p>
+      <section class="site-page-hero about-hero-premium">
+        <div class="section-badge" id="about-badge">The Blustup Story</div>
+        <h1 id="about-title">Buying with clarity, trust, and zero friction.</h1>
+        <p id="about-intro">We built Blustup because we believed shopping should feel like a conversation, not a transaction. By combining curated design with AI-guided assistance, we've created a storefront where trust is the default.</p>
         <div class="site-page-hero-actions">
-          <button class="checkout-btn" type="button" id="about-primary-cta" onclick="showPage('shop')">Explore the shop</button>
-          <button class="cart-secondary-btn" type="button" id="about-secondary-cta" onclick="openAiChat()">Ask Blustup AI</button>
+          <button class="checkout-btn" type="button" onclick="showPage('shop')">Explore the shop</button>
+          <button class="cart-secondary-btn" type="button" onclick="openAiChat()">Ask Blustup AI</button>
         </div>
-        <div class="about-stats" id="about-stats-root">
-          <div class="about-stat"><strong>Transparent</strong><span>Clear pricing, visible ratings, and plain-language trust signals through checkout.</span></div>
-          <div class="about-stat"><strong>Helpful</strong><span>AI support, loyalty perks, and guidance that reduces checkout friction.</span></div>
-          <div class="about-stat"><strong>Reliable</strong><span>A brand built around secure payments, dependable fulfillment, and customer confidence.</span></div>
+        
+        <div class="about-values-grid" id="about-stats-root">
+          <div class="value-card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <strong>Transparent</strong>
+            <span>Clear pricing and honest reviews from real shoppers.</span>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <strong>Helpful</strong>
+            <span>24/7 AI-guided assistance for every step of your journey.</span>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20m10-10H2"/><circle cx="12" cy="12" r="9"/></svg>
+            </div>
+            <strong>Reliable</strong>
+            <span>Secure payments and a promise to deliver on every order.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Founder's Story Section -->
+      <section class="about-founder-section">
+        <div class="founder-image">
+          <img src="product-imgs/about/founder-placeholder.png" alt="Founder of Blustup" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop'">
+          <div class="founder-badge">Founder & CEO</div>
+        </div>
+        <div class="founder-content">
+          <span class="founder-label">A message from our leadership</span>
+          <h2>"We didn't just want to build a store; we wanted to build a standard for trust in Africa's e-commerce."</h2>
+          <p>At Blustup, we believe that the biggest hurdle in online shopping isn't logistics—it's confidence. We spend every day refining our AI and auditing our product selections to ensure that when you click 'Place Order', you do so with complete peace of mind.</p>
+          <div class="founder-signature">
+            <p>The Blustup Team</p>
+            <span>Quality Guaranteed</span>
+          </div>
         </div>
       </section>
 
       <div class="site-page-grid three-up" id="about-cards-root">
         <article class="info-card">
+          <div class="card-num">01</div>
           <h3>Our Identity</h3>
-          <p>Blustup is positioned as a modern e-business brand for practical shoppers who want strong value without sacrificing trust. The experience blends confident visuals, curated products, and support that feels available before, during, and after purchase.</p>
+          <p>Blustup is a modern e-business brand for practical shoppers. We blend confident visuals with a curated catalog to make shopping effortless.</p>
         </article>
         <article class="info-card">
+          <div class="card-num">02</div>
           <h3>Our Promise</h3>
-          <p>We focus on making every stage of online shopping easier to understand: what a product offers, how customers feel about it, and how payment and delivery choices affect the final order.</p>
+          <p>We focus on making every stage of online shopping easier to understand: from product value to delivery choices.</p>
         </article>
         <article class="info-card">
+          <div class="card-num">03</div>
           <h3>Our Voice</h3>
-          <p>Helpful, direct, and practical. From the product cards to the AI assistant, the brand is designed to feel supportive rather than overwhelming.</p>
+          <p>Helpful, direct, and practical. Our brand is designed to feel like a supportive guide rather than an overwhelming catalog.</p>
         </article>
       </div>
 
-      <div class="site-page-grid two-up" id="about-pillars-root">
-        <article class="info-card">
-          <h2>What shapes the business</h2>
-          <ul>
-            <li>Product pages emphasize clear value, ratings, and short customer proof.</li>
-            <li>Loyalty points encourage repeat purchases and stronger customer retention.</li>
-            <li>Visible privacy and payment messaging reinforce trust at the moment it matters most.</li>
-          </ul>
-        </article>
-        <article class="info-card">
-          <h2>How we serve shoppers</h2>
-          <ul>
-            <li>AI chat answers product, offer, and checkout questions in real time.</li>
-            <li>Secure checkout messaging keeps payment confidence front and center.</li>
-            <li>Account-linked order tracking helps repeat buyers move faster on future purchases.</li>
-          </ul>
-        </article>
-      </div>
+      <!-- Moved Board Section -->
+      <section class="about-board-section">
+        <div class="board-header">
+          <h2 class="about-board-heading" id="about-board-title">Board of directors</h2>
+          <p class="about-board-lead">The leadership team dedicated to redefining the e-commerce landscape in Africa.</p>
+        </div>
+        <div class="board-grid" id="about-board-grid"></div>
+      </section>
     </div>
   </div>
 

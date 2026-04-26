@@ -263,7 +263,10 @@ function renderProducts(filterValue) {
               ${product.oldPrice ? `<span class="old-price">${formatShopMoney(product.oldPrice)}</span>` : ""}
               ${formatShopMoney(product.price)}
             </div>
-            <button class="add-to-cart-btn" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">+ Add</button>
+            <button class="add-to-cart-btn" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">
+              <span class="add-btn-icon">+</span>
+              <span class="add-btn-text">Add</span>
+            </button>
           </div>
         </div>
       </div>

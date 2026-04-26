@@ -1,4 +1,4 @@
-// FAQ page — content from CMS (questions + board of directors)
+// faq.js — Modernized FAQ handling with Search and Filtering
 
 function escapeHtml(s) {
   return String(s)
@@ -8,92 +8,105 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+let allFaqs = [];
+
 function setFaqItemState(item, isActive) {
   item.classList.toggle("active", isActive);
   const trigger = item.querySelector(".faq-question");
-  const icon = item.querySelector(".faq-icon");
   const answer = item.querySelector(".faq-answer");
   if (trigger) trigger.setAttribute("aria-expanded", isActive ? "true" : "false");
-  if (icon) icon.innerHTML = isActive ? "&#9650;" : "&#9660;";
   if (answer) {
     answer.style.maxHeight = isActive ? `${answer.scrollHeight}px` : "0px";
     answer.setAttribute("aria-hidden", isActive ? "false" : "true");
   }
 }
+
 function wireFaqAccordion(container) {
   const items = Array.from(container.querySelectorAll(".faq-item"));
   items.forEach((item, index) => {
     const trigger = item.querySelector(".faq-question") || item;
     trigger.addEventListener("click", (event) => {
       event.preventDefault();
-      items.forEach((el, idx) => setFaqItemState(el, idx === index));
+      const isCurrentlyActive = item.classList.contains("active");
+      
+      // Close others
+      items.forEach(el => setFaqItemState(el, false));
+      
+      // Toggle current
+      setFaqItemState(item, !isCurrentlyActive);
     });
   });
-  items.forEach((item, index) => setFaqItemState(item, index === 0));
+}
+
+function handleFaqSearch() {
+  const query = document.getElementById("faqSearchInput").value.toLowerCase();
+  const filtered = allFaqs.filter(f => 
+    f.question.toLowerCase().includes(query) || 
+    f.answer.toLowerCase().includes(query)
+  );
+  renderFaqList(filtered);
+}
+
+function filterFaq(category) {
+  // Update UI
+  const chips = document.querySelectorAll('.cat-chip');
+  chips.forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const filtered = category === 'all' 
+    ? allFaqs 
+    : allFaqs.filter(f => (f.category || '').toLowerCase() === category);
+  
+  renderFaqList(filtered);
+}
+
+function renderFaqList(faqs) {
+  const listRoot = document.getElementById("faq-list-root");
+  if (!listRoot) return;
+
+  if (faqs.length === 0) {
+    listRoot.innerHTML = `<div style="padding:40px;text-align:center;color:#64748b;">No results found for your search.</div>`;
+    return;
+  }
+
+  listRoot.innerHTML = faqs
+    .map((item, i) => `
+    <div class="faq-item" data-category="${escapeHtml(item.category || 'general')}">
+      <button class="faq-question" type="button">
+        <span>${escapeHtml(item.question)}</span>
+        <span class="faq-icon">▼</span>
+      </button>
+      <div class="faq-answer">${escapeHtml(item.answer)}</div>
+    </div>`)
+    .join("");
+  
+  wireFaqAccordion(listRoot);
 }
 
 function renderFaqPage(settings) {
-  const labelEl = document.getElementById("faq-label");
-  const titleEl = document.getElementById("faq-page-title");
-  const introEl = document.getElementById("faq-intro");
-  const helpTitleEl = document.getElementById("faq-help-title");
-  const helpTextEl = document.getElementById("faq-help-text");
-  const helpBtn = document.getElementById("faq-email-btn");
   const listRoot = document.getElementById("faq-list-root");
-  const boardTitle = document.getElementById("faq-board-title");
-  const boardGrid = document.getElementById("faq-board-grid");
+  const boardGrid = document.getElementById("about-board-grid") || document.getElementById("faq-board-grid");
+  const boardTitle = document.getElementById("about-board-title") || document.getElementById("faq-board-title");
 
-  if (!settings || !listRoot) return;
+  if (!settings) return;
 
-  if (labelEl !== null) labelEl.textContent = settings.label || "FAQ";
-  if (titleEl !== null) {
-    const t = settings.pageTitle || "Questions";
-    titleEl.innerHTML = escapeHtml(t).replace(/\n/g, "<br>");
-  }
-  if (introEl !== null) {
-    introEl.textContent = settings.intro || "";
-    introEl.style.display = settings.intro ? "block" : "none";
-  }
-  if (helpTitleEl !== null) helpTitleEl.textContent = settings.helpTitle || "";
-  if (helpTextEl !== null) helpTextEl.textContent = settings.helpText || "";
+  // Store FAQs globally for searching/filtering
+  allFaqs = Array.isArray(settings.faqs) ? settings.faqs : [];
+  renderFaqList(allFaqs);
 
-  if (helpBtn) {
-    const email = (settings.contactEmail || "").trim();
-    helpBtn.onclick = () => {
-      if (email) {
-        window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Blustup support")}`;
-      } else if (typeof showToast === "function") {
-        showToast("📧", "Contact email is not set yet.");
-      }
-    };
-  }
+  if (boardTitle && settings.boardTitle) boardTitle.textContent = settings.boardTitle;
 
-  const faqs = Array.isArray(settings.faqs) ? settings.faqs : [];
-  listRoot.innerHTML = faqs
-    .map(
-      (item, i) => `
-    <div class="faq-item ${i === 0 ? "active" : ""}">
-      <button class="faq-question" type="button">
-        <span>${escapeHtml(item.question)}</span>
-        <span class="faq-icon">${i === 0 ? "&#9650;" : "&#9660;"}</span>
-      </button>
-      <div class="faq-answer">${escapeHtml(item.answer)}</div>
-    </div>`
-    )
-    .join("");
-  wireFaqAccordion(listRoot);
-
-  if (boardTitle !== null) boardTitle.textContent = settings.boardTitle || "Board of directors";
   if (boardGrid !== null) {
     const board = Array.isArray(settings.board) ? settings.board : [];
     boardGrid.innerHTML = board
       .map((m) => {
-        const img = m.imageUrl
-          ? `<img src="${escapeHtml(m.imageUrl)}" alt="" class="board-photo">`
+        const photo = m.imageUrl
+          ? `<img src="${escapeHtml(m.imageUrl)}" alt="${escapeHtml(m.name)}" class="board-photo">`
           : `<div class="board-photo board-photo-placeholder" aria-hidden="true">★</div>`;
+        
         return `
       <article class="board-card">
-        ${img}
+        <div class="board-photo-wrap">${photo}</div>
         <div class="board-body">
           <div class="board-name">${escapeHtml(m.name)}</div>
           <div class="board-role">${escapeHtml(m.role)}</div>
@@ -102,10 +115,6 @@ function renderFaqPage(settings) {
       </article>`;
       })
       .join("");
-  }
-
-  if (typeof window.queueMotionRefresh === "function") {
-    window.queueMotionRefresh(document.getElementById("page-faq"));
   }
 }
 
@@ -116,11 +125,13 @@ async function loadFaqCms() {
     if (!res.ok || !data?.settings) return;
     renderFaqPage(data.settings);
   } catch (_e) {
-    /* static HTML fallback */
+    // Fallback or static handling
   }
 }
 
 window.loadFaqCms = loadFaqCms;
+window.handleFaqSearch = handleFaqSearch;
+window.filterFaq = filterFaq;
 
 document.addEventListener("DOMContentLoaded", () => {
   loadFaqCms();
