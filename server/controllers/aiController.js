@@ -334,29 +334,37 @@ async function suggestProductDescription(req, res) {
   if (hasOpenAI()) {
     try {
       const prompt = [
-        "Write one concise ecommerce product description.",
-        "Use only the provided facts.",
-        "Keep it between 28 and 55 words.",
-        "No markdown, no bullet points, no exaggerated claims, and no invented specs.",
+        "Generate a premium ecommerce catalog entry for this product.",
+        "Return a JSON object with: { \"description\": string, \"tags\": string[], \"seoTitle\": string }",
+        "Description: 30-55 words, professional tone.",
+        "Tags: 3-5 relevant categories.",
+        "SEO Title: Catchy, under 60 chars.",
         buildDescriptionFacts(input, aiSettings),
       ].join("\n");
 
-      const description = cleanText(
-        await callOpenAIChat(
-          [{ role: "user", content: prompt }],
-          `You write polished ecommerce product descriptions for Blustup. Keep the tone clear, modern, and trustworthy for ${aiSettings.userPersona}.`,
-          { temperature: 0.45, maxTokens: 120 }
-        )
+      const response = await callOpenAIChat(
+        [{ role: "user", content: prompt }],
+        `You are a senior ecommerce copywriter for Blustup. Focus on ${aiSettings.userPersona}.`,
+        { temperature: 0.5, maxTokens: 300 }
       );
 
-      if (description) {
-        return res.json({ description, provider: "openai" });
+      try {
+        const result = JSON.parse(response);
+        if (result.description) {
+          return res.json({ ...result, provider: "openai" });
+        }
+      } catch (_e) {
+        // Fallback if AI doesn't return valid JSON
+        return res.json({ description: cleanText(response), provider: "openai" });
       }
     } catch (_e) {}
   }
 
+  // Fallback
   return res.json({
     description: buildFallbackDescription(input, aiSettings),
+    tags: [humanizeCategory(input.category || "general")],
+    seoTitle: `${input.name} - Blustup`,
     provider: "fallback",
   });
 }

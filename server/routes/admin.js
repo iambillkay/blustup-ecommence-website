@@ -24,5 +24,7 @@ router.get("/reports", requireAuth, requireRole("admin"), adminController.report
 router.get("/reports/settings", requireAuth, requireRole("admin"), adminController.reportSettings);
 router.patch("/reports/settings", requireAuth, requireRole("admin"), adminController.updateReportSettings);
 router.post("/reports/run", requireAuth, requireRole("admin"), adminController.runReport);
+router.post("/inventory/automation", requireAuth, requireRole("admin"), adminController.runInventoryAutomation);
+
 
 module.exports = router;

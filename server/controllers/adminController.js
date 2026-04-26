@@ -147,6 +147,21 @@ async function runReport(req, res) {
   return res.status(201).json(payload);
 }
 
+async function runInventoryAutomation(req, res) {
+  const { autoMarkDownSlowMovers } = require("../services/inventoryAutomationService");
+  const result = await autoMarkDownSlowMovers();
+  
+  await storage.audit.add({
+    actorId: req.user?.sub || null,
+    action: "add",
+    entityType: "inventory",
+    entityId: null,
+    summary: `Manually triggered inventory automation: ${result.count} markdowns applied`,
+  });
+
+  return res.json(result);
+}
+
 module.exports = {
   recentActions,
   analyticsOverview,
@@ -156,4 +171,5 @@ module.exports = {
   updateReportSettings,
   updateDeliverySettings,
   runReport,
+  runInventoryAutomation,
 };

@@ -1634,3 +1634,11 @@ body.admin {
 .drawer-close:hover { background: var(--admin-panel-soft); color: var(--admin-text); }
 .drawer-content { padding: 24px; overflow-y: auto; flex: 1; background: #fbfcfd; }
 .drawer-footer { padding: 20px 24px; border-top: 1px solid var(--admin-border); background: #fff; display: flex; gap: 12px; justify-content: flex-end; }
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(47, 107, 255, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(47, 107, 255, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(47, 107, 255, 0); }
+}
+.ai-pulse {
+  animation: pulse 2s infinite;
+}

@@ -2041,6 +2041,7 @@
     async function requestProductDescriptionSuggestion() {
       const nameInput = document.getElementById("f_name");
       const descriptionInput = document.getElementById("f_desc");
+      const categoryInput = document.getElementById("f_categories");
       const button = document.getElementById("btnSuggestProductDescription");
       if (!nameInput || !descriptionInput || !button) return;
       if (!nameInput.value.trim()) {
@@ -2049,14 +2050,14 @@
         return;
       }
 
-      const originalLabel = button.textContent;
+      const originalLabel = button.innerHTML;
       button.disabled = true;
-      button.textContent = "Suggesting...";
-      setProductDescriptionStatus("Generating a product description from the current item details...");
+      button.innerHTML = '<span class="ai-pulse" style="display:inline-block; width:10px; height:10px; background:var(--admin-link); border-radius:50%; margin-right:8px; box-shadow:0 0 8px var(--admin-link);"></span>Optimizing...';
+      setProductDescriptionStatus("Generating a premium catalog entry with AI...");
 
       try {
         const payload = getProductPayload();
-        const { description, provider } = await api("/api/ai/product-description", {
+        const { description, tags, seoTitle, provider } = await api("/api/ai/product-description", {
           method: "POST",
           body: JSON.stringify({
             name: payload.name,
@@ -2068,19 +2069,27 @@
             currentDescription: payload.description || "",
           }),
         });
-        descriptionInput.value = description || "";
+        
+        descriptionInput.value = description || descriptionInput.value;
+        if (tags && tags.length && categoryInput) {
+          categoryInput.value = tags.join(", ");
+        }
+        if (seoTitle && nameInput) {
+          nameInput.value = seoTitle;
+        }
+
         renderProductPreview();
         setProductDescriptionStatus(
           provider === "openai"
-            ? "AI suggestion ready. You can edit the wording before saving."
-            : "Draft created from the product details. You can refine it before saving.",
+            ? "Premium optimization complete. Description, tags, and SEO title updated."
+            : "Optimization complete using local patterns.",
           "success"
         );
       } catch (e) {
-        setProductDescriptionStatus(e.message || "Failed to generate a description suggestion.", "error");
+        setProductDescriptionStatus(e.message || "Failed to generate suggestions.", "error");
       } finally {
         button.disabled = false;
-        button.textContent = originalLabel;
+        button.innerHTML = originalLabel;
       }
     }
     function buildProductRequestOptions() {
@@ -2538,6 +2547,7 @@
           <button class="btn-admin" type="button" id="runDailyReport">Run daily report</button>
           <button class="btn-admin" type="button" id="runWeeklyReport">Run weekly report</button>
           <button class="btn-admin" type="button" id="runInventoryReport">Run inventory report</button>
+          <button class="btn-admin primary" style="background:#b91c1c; border-color:#991b1b;" type="button" id="runInventoryAutomation">🚀 Run slow-mover automation</button>
           <button class="btn-admin primary" type="button" id="saveReportSettings">Save schedule</button>
         </div>
         <div class="panel-header" style="margin-top:18px;">Recent report history</div>
@@ -2587,6 +2597,18 @@
       bindRunButton("runDailyReport", "daily");
       bindRunButton("runWeeklyReport", "weekly");
       bindRunButton("runInventoryReport", "inventory");
+
+      document.getElementById("runInventoryAutomation").addEventListener("click", async () => {
+        if (!confirm("This will automatically apply a 15% markdown to products with no sales in 30 days and add them to the Clearance deal. Proceed?")) return;
+        try {
+          const result = await api("/api/admin/inventory/automation", { method: "POST" });
+          alert(`Success! ${result.count} items were marked down and added to Clearance.`);
+          await refreshDashboard();
+          await openReportsDashboard();
+        } catch (error) {
+          alert(error.message || "Failed to run inventory automation");
+        }
+      });
     }
 
     // Shop filters - label, value (dropdown), visibility (dropdown)

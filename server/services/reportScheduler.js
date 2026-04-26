@@ -1,6 +1,8 @@
 const cron = require("node-cron");
 const { getReportSettings, generateAndStoreReport } = require("./reportingService");
 
+const { autoMarkDownSlowMovers } = require("./inventoryAutomationService");
+
 let scheduledTasks = [];
 let started = false;
 let scheduledDefinitions = [];
@@ -33,6 +35,9 @@ async function scheduleReports() {
       async () => {
         try {
           await generateAndStoreReport(definition.type, { source: "cron" });
+          if (definition.type === "inventory") {
+            await autoMarkDownSlowMovers().catch(err => console.error("Slow-mover automation failed:", err));
+          }
         } catch (error) {
           console.error(`Failed to run ${definition.type} report:`, error?.message || error);
         }

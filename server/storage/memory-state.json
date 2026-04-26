@@ -7156,6 +7156,194 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
       "createdAt": "2026-04-26T15:30:44.739Z"
+    },
+    {
+      "_id": "f2274de1-9ef0-4d15-86b4-504ca49ab204",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:36:05.187Z"
+    },
+    {
+      "_id": "d218221f-0ead-475f-b031-de6d739cb686",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "product_view",
+      "eventData": {
+        "productId": "982655d9-92c3-4351-850c-66baf9ae9043",
+        "productName": "Toy Car",
+        "category": "Toys & Games",
+        "price": 1300,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:36:07.294Z"
+    },
+    {
+      "_id": "11fa3695-2d02-4f88-b39c-1912df702b61",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "product"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:36:07.305Z"
+    },
+    {
+      "_id": "eb0a1bb7-cab3-493d-88a5-d53fd9d95e3f",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:36:19.732Z"
+    },
+    {
+      "_id": "dc824cee-c777-43da-96eb-efce410e50be",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:36:28.141Z"
+    },
+    {
+      "_id": "3f5e667b-0231-448c-9aec-c60285b1a587",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "home"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:39:44.832Z"
+    },
+    {
+      "_id": "e5f04461-7243-4167-9863-fbedc0ad361e",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "orders"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:04.549Z"
+    },
+    {
+      "_id": "bb43c4fc-d96f-455c-97d7-bbdb8db2e558",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:23.564Z"
+    },
+    {
+      "_id": "eb3ccc62-68f2-478c-a187-4ba8e09a22c4",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:25.173Z"
+    },
+    {
+      "_id": "7a53bc6e-a2c0-4bcd-9568-5875fd2d30aa",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:26.723Z"
+    },
+    {
+      "_id": "57add90c-9fbd-4de2-92f0-a350c9159ad0",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "add_to_cart",
+      "eventData": {
+        "productId": "570fbc75-ec78-4022-8a4d-ae5dbc7cb0d8",
+        "productName": "Oraimo Maxi Watch1",
+        "category": "electronics",
+        "price": 0,
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:34.051Z"
+    },
+    {
+      "_id": "ab3968b9-e3a0-4c8a-ba7b-d61070940dcf",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:36.389Z"
+    },
+    {
+      "_id": "62063360-0695-4e9c-aa91-424eef6c78d7",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "checkout"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:42:47.967Z"
+    },
+    {
+      "_id": "af718526-22bf-4729-b9d0-44873a6cc315",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "cart"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:43:05.167Z"
+    },
+    {
+      "_id": "f2d9ff02-f0f3-4f5f-b15f-6ec63342ff3c",
+      "userId": "5769bc9a-dc22-47ec-83f6-317720c6c4b5",
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-26T15:43:13.153Z"
     }
   ],
   "audit": [
