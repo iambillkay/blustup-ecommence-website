@@ -684,6 +684,20 @@ async function updateUserProfile(id, payload = {}) {
   return user;
 }
 
+async function getUserCart(id) {
+  const user = await findUserById(id);
+  return user?.cart || [];
+}
+
+async function setUserCart(id, cartItems) {
+  const user = await findUserById(id);
+  if (user) {
+    user.cart = Array.isArray(cartItems) ? cartItems : [];
+    await persistState();
+  }
+  return user?.cart || [];
+}
+
 async function listUsersAdmin() {
   const users = [...state.users].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   return {
@@ -999,6 +1013,8 @@ module.exports = {
     findById: findUserById,
     create: createUser,
     updateProfile: updateUserProfile,
+    getCart: getUserCart,
+    updateCart: setUserCart,
     listAdmin: listUsersAdmin,
   },
   product: {

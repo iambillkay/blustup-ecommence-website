@@ -11,6 +11,8 @@ const cmsRoutes = require("./routes/cms");
 const aiRoutes = require("./routes/ai");
 const trackingRoutes = require("./routes/tracking");
 const orderRoutes = require("./routes/orders");
+const paymentRoutes = require("./routes/payment");
+const wishlistRoutes = require("./routes/wishlist");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const rootDir = path.join(__dirname, "..");
@@ -128,6 +130,8 @@ app.use("/api/cms", cmsRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/tracking", trackingRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 // SPA-ish fallback: serve index for unknown routes (except /api)
 app.get(/^\/(?!api\/).*/, (_req, res) => {

@@ -62,7 +62,7 @@ function cartItemFromProduct(product, qty) {
   };
 }
 
-function loadCartFromStorage() {
+async function loadCartFromStorage() {
   try {
     const user = typeof getStoredUser === "function" ? getStoredUser() : null;
     const key = user?.id ? `${CART_KEY}_u${user.id}` : `${CART_KEY}_guest`;
@@ -82,16 +82,33 @@ function loadCartFromStorage() {
       price: Number(row.price),
       qty: Math.max(1, Number(row.qty) || 1),
     }));
+
+    // Sync from server if logged in
+    if (user?.id && typeof api === "function") {
+      try {
+        const response = await api("/api/cart");
+        if (response && Array.isArray(response.cart)) {
+          cart = response.cart;
+          updateCartCount();
+          renderCart();
+        }
+      } catch (err) {
+        console.warn("Could not sync cart from server", err);
+      }
+    }
   } catch (_e) {
     cart = [];
   }
 }
 
-function saveCartToStorage() {
+async function saveCartToStorage() {
   try {
     const user = typeof getStoredUser === "function" ? getStoredUser() : null;
     const key = user?.id ? `${CART_KEY}_u${user.id}` : `${CART_KEY}_guest`;
     localStorage.setItem(key, JSON.stringify(cart));
+    if (user?.id && typeof api === "function") {
+      api("/api/cart", { method: "PUT", body: JSON.stringify({ cart }) }).catch(() => {});
+    }
   } catch (_e) {}
 }
 

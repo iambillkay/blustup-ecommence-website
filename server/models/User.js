@@ -17,6 +17,11 @@ const userSchema = new mongoose.Schema(
       country: { type: String, trim: true, maxlength: 80, default: null },
     },
     role: { type: String, required: true, enum: ["user", "admin"], default: "user" },
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    emailVerified: { type: Boolean, default: false },
+    verificationToken: { type: String, default: null },
+    resetToken: { type: String, default: null },
+    resetTokenExpiry: { type: Date, default: null },
   },
   { timestamps: true }
 );

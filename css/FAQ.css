@@ -27,6 +27,13 @@ margin-top:60px;
 background:#e7e1d4;
 padding:30px;
 border-radius:14px;
+transition: transform .3s ease, box-shadow .3s ease;
+box-shadow: 0 12px 28px rgba(15,23,42,.05);
+}
+
+.faq-help:hover{
+transform: translateY(-3px);
+box-shadow: 0 20px 36px rgba(15,23,42,.08);
 }
 
 .faq-help h3{
@@ -73,6 +80,18 @@ background:#e7e1d4;
 padding:18px;
 border-radius:12px;
 cursor:pointer;
+transition: transform .28s ease, box-shadow .28s ease, background .28s ease;
+box-shadow: 0 10px 24px rgba(15,23,42,.05);
+}
+
+.faq-item:hover{
+transform: translateY(-2px);
+box-shadow: 0 16px 30px rgba(15,23,42,.08);
+}
+
+.faq-item.active{
+background:#eee8dc;
+box-shadow: 0 18px 32px rgba(15,23,42,.09);
 }
 
 .faq-question{
@@ -94,15 +113,26 @@ cursor:pointer;
 margin-top:12px;
 color:#666;
 font-size:14px;
-display:none;
+display:block;
+max-height:0;
+overflow:hidden;
+opacity:0;
+transform: translateY(-6px);
+transition:max-height .38s cubic-bezier(0.16, 1, 0.3, 1), opacity .24s ease, transform .38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .faq-item.active .faq-answer{
-display:block;
+opacity:1;
+transform: translateY(0);
 }
 
 .faq-icon{
 font-size:14px;
+transition: transform .26s ease, color .26s ease;
+}
+
+.faq-item.active .faq-icon{
+transform: rotate(180deg);
 }
 
 .faq-intro{
@@ -144,6 +174,12 @@ font-size:14px;
   box-shadow:0 8px 28px rgba(15,23,42,.06);
   display:flex;
   flex-direction:column;
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.board-card:hover{
+  transform: translateY(-5px);
+  box-shadow:0 20px 40px rgba(15,23,42,.10);
 }
 .board-photo{
   width:100%;

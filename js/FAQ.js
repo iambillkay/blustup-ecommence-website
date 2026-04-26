@@ -10,8 +10,15 @@ function escapeHtml(s) {
 
 function setFaqItemState(item, isActive) {
   item.classList.toggle("active", isActive);
+  const trigger = item.querySelector(".faq-question");
   const icon = item.querySelector(".faq-icon");
+  const answer = item.querySelector(".faq-answer");
+  if (trigger) trigger.setAttribute("aria-expanded", isActive ? "true" : "false");
   if (icon) icon.innerHTML = isActive ? "&#9650;" : "&#9660;";
+  if (answer) {
+    answer.style.maxHeight = isActive ? `${answer.scrollHeight}px` : "0px";
+    answer.setAttribute("aria-hidden", isActive ? "false" : "true");
+  }
 }
 function wireFaqAccordion(container) {
   const items = Array.from(container.querySelectorAll(".faq-item"));
@@ -95,6 +102,10 @@ function renderFaqPage(settings) {
       </article>`;
       })
       .join("");
+  }
+
+  if (typeof window.queueMotionRefresh === "function") {
+    window.queueMotionRefresh(document.getElementById("page-faq"));
   }
 }
 

@@ -360,22 +360,44 @@ body.product-detail-open {
 .product-detail-gallery {
   position: sticky;
   top: 24px;
-  min-height: 420px;
-  border-radius: 24px;
-  padding: 26px;
+  min-height: 480px;
+  border-radius: 28px;
+  padding: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid rgba(228, 234, 248, 0.92);
+  box-shadow: inset 0 2px 24px rgba(0,0,0,0.04);
+  border: none;
 }
 
 .product-detail-gallery img {
   width: 100%;
   height: 100%;
-  max-height: 460px;
+  max-height: 520px;
   object-fit: cover;
   border-radius: 20px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.product-detail-gallery:hover img {
+  transform: scale(1.03);
+}
+
+.premium-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #111;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 12px;
 }
 
 .product-detail-image-fallback {
@@ -386,16 +408,15 @@ body.product-detail-open {
 
 .product-detail-content {
   display: grid;
-  gap: 18px;
-  padding-bottom: 8px;
+  gap: 20px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 .product-detail-headline {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .product-detail-category-list {
@@ -406,37 +427,102 @@ body.product-detail-open {
 
 .product-detail-title {
   font-family: "Sora", sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  line-height: 1.12;
-  color: var(--text-dark);
+  font-size: clamp(2.2rem, 4.5vw, 3rem);
+  line-height: 1.1;
+  color: #0b0b0c;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #0b0b0c 0%, #434c5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .product-detail-pricing {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
   flex-wrap: wrap;
+  margin-top: 6px;
 }
 
 .product-detail-pricing strong {
   font-family: "Sora", sans-serif;
-  font-size: 1.65rem;
-  color: var(--text-dark);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1b1e;
 }
 
 .product-detail-pricing span {
-  color: var(--text-light);
+  color: #a1a9b8;
   text-decoration: line-through;
-  font-size: 0.95rem;
+  text-decoration-color: #ff5f78;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.product-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+  height: 56px;
+  flex: 1;
+  border-radius: 18px;
+  background: #0b0b0c;
+  color: #ffffff;
+  font-family: "Sora", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 24px rgba(11, 11, 12, 0.2);
+}
+
+.shimmer-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(11, 11, 12, 0.28);
+}
+
+.shimmer-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 3s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.modal-wishlist-heart {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+  font-size: 1.5rem !important;
 }
 
 .product-detail-summary {
   display: grid;
   gap: 10px;
-  padding: 18px;
-  border-radius: 20px;
-  background: #fff;
-  border: 1px solid #e8edf9;
+  padding: 20px;
+  border-radius: 24px;
+  background: #fcfdff;
+  border: 1px solid #eef2fa;
 }
 
 .product-detail-columns {
@@ -499,6 +585,12 @@ body.product-detail-open {
   border-radius: 18px;
   background: #f8faff;
   border: 1px solid #e7ecfa;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+}
+
+.product-detail-meta-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(12, 23, 52, 0.08);
 }
 
 .product-detail-meta-card strong {

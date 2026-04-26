@@ -31,7 +31,7 @@ const addressSchema = z.object({
 
 const createOrderSchema = z.object({
   sessionId: z.string().trim().max(120).optional().nullable(),
-  paymentMethod: z.enum(["card", "cod", "paypal", "apple", "google"]),
+  paymentMethod: z.enum(["card", "cod", "paypal", "apple", "google", "paystack"]),
   promoCode: z.union([z.string().trim().max(40), z.literal(""), z.null()]).optional(),
   customer: z.object({
     firstName: z.string().trim().min(1).max(80),

@@ -308,9 +308,14 @@ function setupHeroSlider(homeSettings) {
   function update() {
     const dots = Array.from(dotsContainer.querySelectorAll("span"));
     track.style.transform = `translateX(-${index * 100}%)`;
+    slides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("is-active", slideIndex === index);
+    });
     dots.forEach((d) => d.classList.remove("active"));
     if (dots[index]) dots[index].classList.add("active");
   }
+
+  update();
 
   nextBtn.onclick = () => {
     index = (index + 1) % slides.length;
@@ -347,6 +352,10 @@ async function loadHomeContent(options = {}) {
   setupHeroSlider(homeSettings || {});
   renderDeals(deals || [], products || []);
   startTimers();
+
+  if (typeof window.queueMotionRefresh === "function") {
+    window.queueMotionRefresh(document.getElementById("page-home"));
+  }
 }
 
 window.loadHomeContent = loadHomeContent;

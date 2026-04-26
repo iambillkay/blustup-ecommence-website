@@ -158,7 +158,7 @@ function syncStorefrontProductRecord(nextProduct) {
 
 function getProductDetailNodes() {
   return {
-    backdrop: document.getElementById("productDetailBackdrop"),
+    backdrop: document.getElementById("page-product"),
     body: document.getElementById("productDetailBody"),
   };
 }
@@ -355,9 +355,12 @@ function renderProductDetailMarkup(product = {}) {
 
   return `
     <div class="product-detail-shell">
+      <div class="product-detail-page-nav">
+        <button class="btn-back" onclick="showPage('shop')">← Back to Shop</button>
+      </div>
       <section class="product-detail-hero">
-        <div class="product-detail-gallery" style="background:${escapeStorefrontHtml(product.color || "#f5f7ff")}">
-        ${product.badge ? `<div class="product-badge-tag ${escapeStorefrontHtml(product.badgeType || "")}">${escapeStorefrontHtml(product.badge)}</div>` : ""}
+        <div class="product-detail-gallery" style="background:${escapeStorefrontHtml(product.color || "radial-gradient(ellipse at center, #ffffff 0%, #f4f6fb 100%)")}">
+        ${product.badge ? `<div class="product-badge-tag premium-badge ${escapeStorefrontHtml(product.badgeType || "")}">${escapeStorefrontHtml(product.badge)}</div>` : ""}
         ${
           product.imageUrl
             ? `<img src="${escapeStorefrontHtml(product.imageUrl)}" alt="${escapeStorefrontHtml(product.name || "Product image")}">`
@@ -376,7 +379,15 @@ function renderProductDetailMarkup(product = {}) {
                 ${product.oldPrice ? `<span>${escapeStorefrontHtml(formatStorefrontMoney(product.oldPrice))}</span>` : ""}
               </div>
             </div>
-            <button class="add-to-cart-btn product-detail-add-btn" type="button" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">+ Add to cart</button>
+            <div class="product-detail-actions">
+              <button class="add-to-cart-btn product-detail-add-btn shimmer-btn" type="button" onclick="addToCart('${String(product.id).replace(/'/g, "\\'")}', event)">
+                <span class="btn-text">Add to cart</span>
+              </button>
+              <button class="wishlist-heart modal-wishlist-heart ${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'wishlist-active' : ''}" type="button" data-wishlist-id="${escapeStorefrontHtml(product.id)}"
+                onclick="toggleWishlist('${String(product.id).replace(/'/g, "\\'")}', event)"
+                aria-pressed="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'true' : 'false'}"
+                aria-label="${typeof isInWishlist === 'function' && isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}">${typeof isInWishlist === 'function' && isInWishlist(product.id) ? '&#9829;' : '&#9825;'}</button>
+            </div>
           </div>
           <div class="product-detail-summary">
             ${renderProductReviewMarkup(product)}
@@ -436,19 +447,16 @@ function renderProductDetailMarkup(product = {}) {
 }
 
 function closeProductSelection() {
-  const { backdrop } = getProductDetailNodes();
-  if (!backdrop) return;
-  backdrop.hidden = true;
-  backdrop.classList.remove("open");
-  backdrop.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("product-detail-open");
+  if (typeof showPage === "function") {
+    showPage("shop");
+  }
 }
 
 function openProductSelection(productId, event) {
   event?.preventDefault?.();
   const product = findStorefrontProductById(productId);
-  const { backdrop, body } = getProductDetailNodes();
-  if (!product || !backdrop || !body) return;
+  const { body } = getProductDetailNodes();
+  if (!product || !body) return;
 
   if (window.tracker) {
     window.tracker.track("product_view", {
@@ -461,16 +469,6 @@ function openProductSelection(productId, event) {
   }
 
   body.innerHTML = renderProductDetailMarkup(product);
-  backdrop.hidden = false;
-  backdrop.classList.add("open");
-  backdrop.setAttribute("aria-hidden", "false");
-  document.body.classList.add("product-detail-open");
-}
-
-function handleProductCardKeydown(event, productId) {
-  if (!event || (event.key !== "Enter" && event.key !== " ")) return;
-  event.preventDefault();
-  openProductSelection(productId);
 }
 
 function buildFallbackLoyalty(pointsValue) {

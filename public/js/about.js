@@ -91,6 +91,10 @@ async function loadAboutContent() {
     renderAboutStats(settings.stats || []);
     renderAboutCards(settings.cards || []);
     renderAboutPillars(settings.pillars || []);
+
+    if (typeof window.queueMotionRefresh === "function") {
+      window.queueMotionRefresh(document.getElementById("page-about"));
+    }
   } catch (_error) {
     // Keep the inline fallback copy if the CMS request fails.
   }

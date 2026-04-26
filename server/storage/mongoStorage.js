@@ -542,8 +542,8 @@ module.exports = {
     };
   },
   user: {
-    findByEmail: (email) => User.findOne({ email }).select("_id name email role passwordHash phone loyaltyPoints billingProfile"),
-    findById: (id) => User.findById(id).select("_id name email role passwordHash phone loyaltyPoints billingProfile"),
+    findByEmail: (email) => User.findOne({ email }).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist"),
+    findById: (id) => User.findById(id).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist"),
     create: (payload) => User.create(payload),
     updateProfile: async (id, payload = {}) => {
       const update = {};
@@ -551,7 +551,37 @@ module.exports = {
       if (payload.phone !== undefined) update.phone = payload.phone || null;
       if (payload.loyaltyPoints !== undefined) update.loyaltyPoints = Math.max(0, Math.floor(Number(payload.loyaltyPoints || 0)));
       if (payload.billingProfile !== undefined) update.billingProfile = normalizeBillingProfile(payload.billingProfile);
-      return User.findByIdAndUpdate(id, update, { new: true }).select("_id name email role passwordHash phone loyaltyPoints billingProfile");
+      return User.findByIdAndUpdate(id, update, { new: true }).select("_id name email role passwordHash phone loyaltyPoints billingProfile wishlist");
+    },
+    getCart: async (id) => {
+      const user = await User.findById(id).select("cart");
+      return user?.cart || [];
+    },
+    updateCart: async (id, cartItems) => {
+      const updated = await User.findByIdAndUpdate(id, { $set: { cart: cartItems } }, { new: true });
+      return updated?.cart || [];
+    },
+    getWishlist: async (id) => {
+      const user = await User.findById(id).select("wishlist").populate({
+        path: "wishlist",
+        match: { isActive: true },
+      });
+      if (!user) return [];
+      return (user.wishlist || []).filter(Boolean).map(mapProductOut);
+    },
+    addToWishlist: async (id, productId) => {
+      const user = await User.findById(id).select("wishlist");
+      if (!user) throw new Error("User not found");
+      const ids = (user.wishlist || []).map((wId) => wId.toString());
+      if (ids.includes(productId)) return (await User.findById(id).select("wishlist").populate({ path: "wishlist", match: { isActive: true } })).wishlist.filter(Boolean).map(mapProductOut);
+      await User.findByIdAndUpdate(id, { $addToSet: { wishlist: productId } });
+      const updated = await User.findById(id).select("wishlist").populate({ path: "wishlist", match: { isActive: true } });
+      return (updated.wishlist || []).filter(Boolean).map(mapProductOut);
+    },
+    removeFromWishlist: async (id, productId) => {
+      await User.findByIdAndUpdate(id, { $pull: { wishlist: productId } });
+      const updated = await User.findById(id).select("wishlist").populate({ path: "wishlist", match: { isActive: true } });
+      return (updated.wishlist || []).filter(Boolean).map(mapProductOut);
     },
     listAdmin: async () => {
       const users = await User.find({}).sort({ createdAt: -1 }).select("_id name email role phone loyaltyPoints billingProfile createdAt updatedAt");

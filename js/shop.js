@@ -218,10 +218,16 @@ function renderProducts(filterValue) {
     if (loadError && !getCatalogProducts().length) {
       const apiBase = typeof window.getSiteBaseUrl === "function" ? window.getSiteBaseUrl() : "";
       grid.innerHTML = `<div class="shop-filter-fallback">We couldn't load the shop data. Make sure the backend is running at ${escapeShopHtml(apiBase || "http://127.0.0.1:3000")} and reload this page.</div>`;
+      if (typeof window.queueMotionRefresh === "function") {
+        window.queueMotionRefresh(document.getElementById("page-shop"));
+      }
       return;
     }
     const label = activeToken === "all" ? "all products" : getActiveFilterLabel(filterValue);
     grid.innerHTML = `<div class="shop-filter-fallback">No products are available in ${escapeShopHtml(label)} yet.</div>`;
+    if (typeof window.queueMotionRefresh === "function") {
+      window.queueMotionRefresh(document.getElementById("page-shop"));
+    }
     return;
   }
 
@@ -263,6 +269,10 @@ function renderProducts(filterValue) {
       </div>
     `)
     .join("");
+
+  if (typeof window.queueMotionRefresh === "function") {
+    window.queueMotionRefresh(document.getElementById("page-shop"));
+  }
 }
 
 function setActiveFilterButton(filterValue) {
@@ -347,10 +357,16 @@ async function loadShopSettings() {
 
     setShopLoadingState(false);
     renderShopFilters(shopSettings.filters || []);
+    if (typeof window.queueMotionRefresh === "function") {
+      window.queueMotionRefresh(document.getElementById("page-shop"));
+    }
   } catch (_e) {
     shopSettings = { title: "", subtitle: "", filters: [{ label: "All Products", value: "all", showInShop: true }] };
     setShopLoadingState(false);
     renderShopFilters(shopSettings.filters);
+    if (typeof window.queueMotionRefresh === "function") {
+      window.queueMotionRefresh(document.getElementById("page-shop"));
+    }
   }
 }
 
