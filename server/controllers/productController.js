@@ -69,6 +69,7 @@ function toBaseFields(body) {
     price: body?.price,
     oldPrice: body?.oldPrice,
     imageUrl: body?.imageUrl,
+    images: body?.images,
     badge: body?.badge,
     badgeType: body?.badgeType,
     icon: body?.icon,
@@ -174,6 +175,7 @@ const createProductSchema = z.object({
   oldPrice: z.number().min(0).nullable().optional(),
   // Your UI currently doesn't enforce strict URL formatting, so keep this permissive.
   imageUrl: z.string().trim().nullable().optional(),
+  images: z.array(z.string().trim()).optional().default([]),
   badge: z.string().trim().nullable().optional(),
   badgeType: z.string().trim().nullable().optional(),
   icon: z.string().trim().nullable().optional(),
@@ -206,8 +208,13 @@ async function listAdmin(req, res) {
 }
 
 async function createProduct(req, res) {
-  const body = toBaseFields(req.body || {});
-  const imageUrlFromUpload = req.file ? `/uploads/${req.file.filename}` : undefined;
+  try {
+    console.log("createProduct - body:", req.body);
+    console.log("createProduct - files:", req.files);
+    const body = toBaseFields(req.body || {});
+    const uploadedImages = (req.files || []).map(f => `/uploads/${f.filename}`);
+    const providedImages = Array.isArray(body.images) ? body.images : [body.images].filter(Boolean);
+    const allImages = [...new Set([...uploadedImages, ...providedImages])].filter(Boolean);
 
   const payload = {
     name: body.name,
@@ -217,7 +224,8 @@ async function createProduct(req, res) {
     categories: normalizeCategoryList(body.categories, body.category),
     stockQty: body.stockQty == null ? 0 : body.stockQty,
     oldPrice: body.oldPrice,
-    imageUrl: imageUrlFromUpload ?? body.imageUrl,
+    imageUrl: allImages[0] || body.imageUrl || null,
+    images: allImages,
     badge: body.badge,
     badgeType: body.badgeType,
     icon: body.icon,
@@ -253,6 +261,7 @@ async function createProduct(req, res) {
     stockQty: parsed.data.stockQty,
     oldPrice: parsed.data.oldPrice ?? null,
     imageUrl: parsed.data.imageUrl ?? null,
+    images: parsed.data.images || [],
     badge: parsed.data.badge ?? null,
     badgeType: parsed.data.badgeType ?? null,
     icon: parsed.data.icon ?? null,
@@ -270,15 +279,22 @@ async function createProduct(req, res) {
     summary: `Created product: ${created.name}`,
   });
 
-  return res.status(201).json({ product: created });
+  } catch (err) {
+    console.error("DEBUG - createProduct failed:", err);
+    return res.status(500).json({ error: "Internal server error: " + err.message });
+  }
 }
 
 async function updateProduct(req, res) {
-  const id = req.params.id;
+  try {
+    console.log("updateProduct - body:", req.body);
+    console.log("updateProduct - files:", req.files);
+    const id = req.params.id;
   if (!storage.isValidId(id)) return res.status(400).json({ error: "Invalid id" });
 
   const body = toBaseFields(req.body || {});
-  const imageUrlFromUpload = req.file ? `/uploads/${req.file.filename}` : undefined;
+  const uploadedImages = (req.files || []).map(f => `/uploads/${f.filename}`);
+  const providedImages = Array.isArray(body.images) ? body.images : [body.images].filter(Boolean);
 
   const candidate = {
     name: body.name,
@@ -296,13 +312,17 @@ async function updateProduct(req, res) {
           ? null
           : Number(body.oldPrice),
     imageUrl:
-      imageUrlFromUpload !== undefined
-        ? imageUrlFromUpload
+      uploadedImages.length > 0
+        ? uploadedImages[0]
         : body.imageUrl === undefined
           ? undefined
           : body.imageUrl === "" || body.imageUrl == null
             ? null
             : String(body.imageUrl),
+    images:
+      uploadedImages.length > 0 || body.images !== undefined
+        ? [...new Set([...uploadedImages, ...providedImages])].filter(Boolean)
+        : undefined,
     badge: body.badge === undefined ? undefined : body.badge === "" ? null : String(body.badge),
     badgeType:
       body.badgeType === undefined ? undefined : body.badgeType === "" ? null : String(body.badgeType),
@@ -328,6 +348,7 @@ async function updateProduct(req, res) {
   if (parsed.data.stockQty !== undefined) updatePayload.stockQty = parsed.data.stockQty;
   if (parsed.data.oldPrice !== undefined) updatePayload.oldPrice = parsed.data.oldPrice;
   if (parsed.data.imageUrl !== undefined) updatePayload.imageUrl = parsed.data.imageUrl;
+  if (parsed.data.images !== undefined) updatePayload.images = parsed.data.images;
   if (parsed.data.badge !== undefined) updatePayload.badge = parsed.data.badge;
   if (parsed.data.badgeType !== undefined) updatePayload.badgeType = parsed.data.badgeType;
   if (parsed.data.icon !== undefined) updatePayload.icon = parsed.data.icon;
@@ -349,6 +370,10 @@ async function updateProduct(req, res) {
   });
 
   return res.json({ product: updated });
+  } catch (err) {
+    console.error("DEBUG - updateProduct failed:", err);
+    return res.status(500).json({ error: "Internal server error: " + err.message });
+  }
 }
 
 async function deleteProduct(req, res) {

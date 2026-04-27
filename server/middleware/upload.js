@@ -3,7 +3,7 @@ const fs = require("fs");
 const multer = require("multer");
 
 const rootDir = path.join(__dirname, "..", "..");
-const uploadsDir = path.join(rootDir, "uploads");
+const uploadsDir = path.join(rootDir, "public", "uploads");
 
 function ensureUploadsDir() {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -40,7 +40,7 @@ const upload = multer({
   }),
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB
+    fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
 

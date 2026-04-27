@@ -80,6 +80,7 @@ function mapProductOut(p) {
     categories,
     oldPrice: p.oldPrice ?? null,
     imageUrl: p.imageUrl ?? null,
+    images: Array.isArray(p.images) ? p.images : [],
     badge: p.badge ?? null,
     badgeType: p.badgeType ?? null,
     icon: p.icon ?? null,

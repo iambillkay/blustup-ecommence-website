@@ -264,13 +264,13 @@
 
 .product-img {
   height: 280px;
-  background: #ffffff; /* Solid white background for best 'multiply' results */
+  background: radial-gradient(circle at center, #ffffff 0%, var(--product-theme-color, #ffffff) 100%);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px; /* Small padding so products don't touch the very edge */
+  padding: 12px;
   transition: background 0.4s ease;
 }
 

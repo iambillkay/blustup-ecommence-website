@@ -21,6 +21,7 @@ const productSchema = new mongoose.Schema(
     stockQty: { type: Number, required: true, min: 0, default: 0 },
 
     imageUrl: { type: String, default: null },
+    images: { type: [String], default: [] },
 
     // Optional fields used by your existing UI.
     oldPrice: { type: Number, default: null, min: 0 },

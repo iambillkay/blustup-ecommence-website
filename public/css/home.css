@@ -363,7 +363,7 @@ display:none;
 }
 
 .product-row .product-img {
-  height: 180px;
+  height: 140px;
   background: radial-gradient(circle at center, #ffffff 0%, var(--product-theme-color, #f1f5f9) 100%);
   position: relative;
   overflow: hidden;

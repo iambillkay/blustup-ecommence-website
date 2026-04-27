@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="logos/Layer%202.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="logos/Layer%202.png" />
   <link rel="stylesheet" href="css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body class="admin">
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -2025,8 +2026,14 @@
       previewFields.forEach((id) => document.getElementById(id)?.addEventListener("input", renderProductPreview));
       document.getElementById("f_image_file")?.addEventListener("change", () => {
         const fileName = document.getElementById("f_image_file_name");
-        const file = document.getElementById("f_image_file")?.files?.[0];
-        if (fileName) fileName.textContent = file ? file.name : "No file selected";
+        const files = document.getElementById("f_image_file")?.files;
+        if (fileName) {
+          if (files && files.length > 0) {
+            fileName.textContent = files.length === 1 ? files[0].name : `${files.length} files selected`;
+          } else {
+            fileName.textContent = "No files selected";
+          }
+        }
         renderProductPreview();
       });
       document.getElementById("btnSuggestProductDescription")?.addEventListener("click", requestProductDescriptionSuggestion);
@@ -2094,21 +2101,41 @@
     }
     function buildProductRequestOptions() {
       const payload = getProductPayload();
-      const imageFile = document.getElementById("f_image_file")?.files?.[0];
-      if (!imageFile) {
+      const imageFiles = document.getElementById("f_image_file")?.files;
+      
+      if (!imageFiles || imageFiles.length === 0) {
         return { body: JSON.stringify(payload) };
       }
 
       const form = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
         if (value == null) return;
-        form.append(key, value);
+        if (Array.isArray(value)) {
+          value.forEach(v => form.append(key, v));
+        } else {
+          form.append(key, value);
+        }
       });
-      form.append("image", imageFile);
+      
+      Array.from(imageFiles).forEach(file => form.append("images", file));
       return { body: form };
     }
+    function renderMultipleImageInputs(images = []) {
+      const list = Array.isArray(images) ? images : [images].filter(Boolean);
+      if (!list.length) list.push(""); // Always show at least one
+      return list.map((url, i) => `
+        <div class="f-image-row" style="display:flex; gap:8px; margin-bottom:8px;">
+          <input class="f-image-url" data-index="${i}" value="${esc(url)}" placeholder="https://..." style="flex:1;" />
+          <button type="button" class="btn-admin danger" onclick="this.closest('.f-image-row').remove()" style="padding:8px 12px;">X</button>
+        </div>
+      `).join("");
+    }
+
     function productForm(item = {}, context = {}) {
-      const categoryValue = formatAdminProductCategories(item).join(", ") || context.categories?.[0] || "general";
+      const currentCats = formatAdminProductCategories(item);
+      const categoryValue = currentCats.join(", ") || context.categories?.[0] || "general";
+      const availableFilters = (context.shop?.filters || []).map(f => f.value).filter(v => v !== 'all');
+      
       return `
         <div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.95fr);gap:18px;align-items:start;">
           <div>
@@ -2119,14 +2146,20 @@
                 <button class="btn-admin ghost" id="btnSuggestProductDescription" type="button">Suggest with AI</button>
               </div>
               <textarea id="f_desc">${esc(item.description || item.desc || "")}</textarea>
-              <div class="muted" id="f_desc_ai_status" style="font-size:12px;margin-top:6px;">Use the current product details to draft a clean storefront description.</div>
             </div>
             <div class="grid2" style="margin-top:12px;">
               <div class="field">
-                <label>Categories</label>
-                <input id="f_categories" list="adminProductCategories" value="${esc(categoryValue)}" placeholder="electronics, essentials, travel" />
-                <datalist id="adminProductCategories">${productCategoryOptions(context.categories || [], categoryValue)}</datalist>
-                <div class="muted" style="font-size:12px;">Separate categories with commas. The first category becomes the primary label, and every category can appear in shop filters.</div>
+                <label>Categories (Select from existing filters)</label>
+                <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+                  ${availableFilters.map(f => `
+                    <label style="display:inline-flex; align-items:center; gap:4px; background:#f1f5f9; padding:4px 10px; border-radius:999px; cursor:pointer; font-size:12px;">
+                      <input type="checkbox" name="f_cat_check" value="${esc(f)}" ${currentCats.includes(f) ? 'checked' : ''}>
+                      ${esc(humanizeAdminValue(f))}
+                    </label>
+                  `).join("")}
+                </div>
+                <input id="f_categories" value="${esc(categoryValue)}" placeholder="Or type custom: electronics, travel" />
+                <div class="muted" style="font-size:11px; margin-top:4px;">Checking a box adds it to the text list. Separate custom ones with commas.</div>
               </div>
               <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
             </div>
@@ -2134,18 +2167,38 @@
               <div class="field"><label>Stock Qty</label><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" /></div>
               <div class="field"><label>Old Price</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" /></div>
             </div>
+            
+            <div class="panel-header" style="margin-top:18px;">Product Media</div>
+            <div class="field">
+              <label>Gallery Images (URLs)</label>
+              <div id="f_images_wrap">${renderMultipleImageInputs(item.images || item.imageUrl)}</div>
+              <button type="button" class="btn-admin" id="btnAddImageUrl">+ Add gallery image</button>
+            </div>
+            <div class="field" style="margin-top:12px; padding:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px;">
+              <label>Bulk Image Upload (Gallery)</label>
+              <input id="f_image_file" type="file" accept="image/*" multiple />
+              <div class="muted" id="f_image_file_name" style="font-size:11px; margin-top:4px;">No files selected</div>
+              <div class="muted" style="font-size:11px;">Select multiple files at once to build your product gallery.</div>
+            </div>
+
             <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Badge</label><input id="f_badge" value="${esc(item.badge || "")}" /></div>
+              <div class="field">
+                <label>Badge</label>
+                <input id="f_badge" value="${esc(item.badge || "")}" list="badgeRecommendations" placeholder="e.g. Best Seller" />
+                <datalist id="badgeRecommendations">
+                  <option value="New Arrival">
+                  <option value="Best Seller">
+                  <option value="Limited Edition">
+                  <option value="Staff Pick">
+                  <option value="Trending">
+                  <option value="On Sale">
+                  <option value="Exclusive">
+                  <option value="Pre-order">
+                </datalist>
+              </div>
               <div class="field"><label>Active</label>
                 <select id="f_active"><option value="1" ${item.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${item.isActive === false ? "selected" : ""}>No</option></select>
               </div>
-            </div>
-            <div class="field" style="margin-top:12px;"><label>Image URL</label><input id="f_image" value="${esc(item.imageUrl || "")}" placeholder="https://example.com/product.jpg or /uploads/my-image.jpg" /></div>
-            <div class="field" style="margin-top:12px;">
-              <label>Upload image file</label>
-              <input id="f_image_file" type="file" accept="image/*" />
-              <div class="muted" id="f_image_file_name" style="font-size:12px;">No file selected</div>
-              <div class="muted" style="font-size:12px;">You can use either a direct image URL or an uploaded file. If both are provided, the uploaded file wins.</div>
             </div>
           </div>
           <aside style="display:grid;gap:10px;">
@@ -2154,8 +2207,35 @@
           </aside>
         </div>`;
     }
+
+    function bindProductFormEvents() {
+      document.getElementById("btnAddImageUrl")?.addEventListener("click", () => {
+        const wrap = document.getElementById("f_images_wrap");
+        const div = document.createElement("div");
+        div.innerHTML = renderMultipleImageInputs([""]);
+        wrap.appendChild(div.firstElementChild);
+      });
+
+      const catInput = document.getElementById("f_categories");
+      document.querySelectorAll("input[name='f_cat_check']").forEach(cb => {
+        cb.addEventListener("change", () => {
+          let current = parseAdminCategoryInput(catInput.value);
+          const val = cb.value;
+          if (cb.checked) {
+             if (!current.includes(val)) current.push(val);
+          } else {
+             current = current.filter(c => c !== val);
+          }
+          catInput.value = current.join(", ");
+        });
+      });
+    }
     function getProductPayload() {
       const categories = parseAdminCategoryInput(document.getElementById("f_categories").value.trim());
+      const imageUrls = Array.from(document.querySelectorAll(".f-image-url"))
+        .map(input => input.value.trim())
+        .filter(Boolean);
+      
       return {
         name: document.getElementById("f_name").value.trim(),
         description: document.getElementById("f_desc").value.trim(),
@@ -2163,7 +2243,8 @@
         categories,
         price: Number(document.getElementById("f_price").value),
         stockQty: Number(document.getElementById("f_stock").value),
-        imageUrl: document.getElementById("f_image").value.trim(),
+        imageUrl: imageUrls[0] || "",
+        images: imageUrls,
         badge: document.getElementById("f_badge").value.trim() || null,
         oldPrice: document.getElementById("f_old_price").value || null,
         isActive: document.getElementById("f_active").value === "1",
@@ -2197,6 +2278,7 @@
       const draft = { categories: [context.categories?.[0] || "general"], isActive: true };
       openModal("Add Product", `${productForm(draft, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
       bindProductFormPreview();
+      bindProductFormEvents();
       document.getElementById("btnSaveProduct").addEventListener("click", async () => {
         try {
           await api("/api/products/admin", { method: "POST", ...buildProductRequestOptions() });
@@ -2214,6 +2296,7 @@
       if (!item) return alert("Product not found");
       openModal("Edit Product", `${productForm(item, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
       bindProductFormPreview();
+      bindProductFormEvents();
       document.getElementById("btnSaveProduct").addEventListener("click", async () => {
         try {
           await api(`/api/products/admin/${id}`, { method: "PATCH", ...buildProductRequestOptions() });
@@ -2612,10 +2695,40 @@
     }
 
     // Shop filters - label, value (dropdown), visibility (dropdown)
-    function filterValueOptions(current, cats) {
+    function getCategoryCounts(products) {
+      const counts = {};
+      (products || []).forEach(p => {
+        const cats = Array.isArray(p.categories) ? p.categories : [p.cat];
+        cats.forEach(c => {
+          if (!c) return;
+          counts[c] = (counts[c] || 0) + 1;
+        });
+      });
+      return counts;
+    }
+
+    function filterValueOptions(current, cats, counts = {}) {
       const values = uniqueAdminValues([...(cats || []), current]).filter((value) => value.toLowerCase() !== "all");
       if (!values.length) return `<option value="">No active categories yet</option>`;
-      return values.map((value) => `<option value="${esc(value)}" ${String(current) === String(value) ? "selected" : ""}>${esc(humanizeAdminValue(value))}</option>`).join("");
+      return values.map((value) => {
+        const count = counts[value] || 0;
+        const display = `${humanizeAdminValue(value)} (${count} products)`;
+        return `<option value="${esc(value)}" ${String(current) === String(value) ? "selected" : ""}>${esc(display)}</option>`;
+      }).join("");
+    }
+
+    function renderFilterRows(filters, cats, counts = {}) {
+      return filters.map((f, i) => `
+        <div class="admin-filter-row" data-id="${i}" style="display:grid;grid-template-columns:30px 1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;padding:10px;background:#fdfdff;border:1px solid #edf2f7;border-radius:12px;">
+          <div class="drag-handle" style="cursor:grab;color:#94a3b8;font-size:18px;">≡</div>
+          <input data-filter-row="${i}" data-k="label" placeholder="Label (e.g. Electronics)" value="${esc(f.label)}" style="margin:0;" />
+          <select data-filter-row="${i}" data-k="value" style="margin:0;">${filterValueOptions(f.value, cats, counts)}</select>
+          <select data-filter-row="${i}" data-k="showInShop" style="margin:0;">
+            <option value="1" ${f.showInShop !== false ? "selected" : ""}>Visible on shop</option>
+            <option value="0" ${f.showInShop === false ? "selected" : ""}>Hidden on shop</option>
+          </select>
+          <button type="button" class="btn-admin danger" data-action="remove-filter-row" style="margin:0;padding:8px 12px;">X</button>
+        </div>`).join("");
     }
     function normalizeShopFiltersDraft(filters, categories) {
       const seen = new Set(["all"]);
@@ -2666,20 +2779,10 @@
         </div>
         <div class="muted" style="font-size:12px;margin-top:8px;">"All Products" is pinned automatically, duplicate values are merged, and missing live categories are added for you.</div>`;
     }
-    function renderFilterRows(filters, cats) {
-      return filters.map((f, i) => `
-        <div class="admin-filter-row" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;">
-          <input data-filter-row="${i}" data-k="label" placeholder="Label (e.g. Electronics)" value="${esc(f.label)}" />
-          <select data-filter-row="${i}" data-k="value">${filterValueOptions(f.value, cats)}</select>
-          <select data-filter-row="${i}" data-k="showInShop">
-            <option value="1" ${f.showInShop !== false ? "selected" : ""}>Visible on shop</option>
-            <option value="0" ${f.showInShop === false ? "selected" : ""}>Hidden on shop</option>
-          </select>
-          <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>
-        </div>`).join("");
-    }
+
     async function openShopCms(targetElement) {
       const context = await loadAdminCatalogContext();
+      const counts = getCategoryCounts(context.products);
       const settings = context.shop || { title: "", subtitle: "", filters: [] };
       const filters = normalizeShopFiltersDraft(Array.isArray(settings.filters) ? settings.filters : [], context.activeCategories);
       const editableFilters = filters.filter((filter) => String(filter.value || "").trim().toLowerCase() !== "all");
@@ -2702,21 +2805,36 @@
           <div class="muted" style="font-size:11px; margin-top:8px;">This bar appears at the very top of the storefront for all users.</div>
         </div>
 
+        <div class="panel-header" style="margin-top:18px;">Navigation Filters & Categories</div>
+        <div class="field">
+          <label>Live category preview (Order of storefront chips)</label>
+          <div id="shopFilterPreview" style="padding:14px;border:1px solid #e4eaf8;border-radius:16px;background:#fff;"></div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+             <label>Manage filters</label>
+             <button type="button" class="btn-admin" id="btnSyncFilters" title="Auto-add categories that exist on products but aren't in your filter list yet.">Auto-sync missing</button>
+          </div>
+          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(editableFilters, context.activeCategories, counts)}</div>
+          <button type="button" class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
+        </div>
+
         <div class="panel-header" style="margin-top:18px;">SEO & Social Presence</div>
         <div class="field"><label>Meta title</label><input id="s_seo_title" value="${esc(settings.seo?.title || "")}" placeholder="Blustup | Premium E-commerce Store" /></div>
         <div class="field" style="margin-top:10px;"><label>Meta description</label><textarea id="s_seo_desc" rows="2" placeholder="Discover curated products and premium value...">${esc(settings.seo?.description || "")}</textarea></div>
         <div class="field" style="margin-top:10px;"><label>OG Preview image URL</label><input id="s_seo_image" value="${esc(settings.seo?.ogImage || "")}" placeholder="https://..." /></div>
 
-        <div class="panel-header" style="margin-top:18px;">Navigation Filters</div>
-        <div class="field">
-          <label>Live category preview</label>
-          <div id="shopFilterPreview" style="padding:14px;border:1px solid #e4eaf8;border-radius:16px;background:#fff;"></div>
+        <div class="panel-header" style="margin-top:18px;">Global Category Manager (Sitewide)</div>
+        <div class="field" style="padding:16px; background:#fff8eb; border:1px solid #ffe8cc; border-radius:16px;">
+          <p class="muted" style="font-size:12px; margin-bottom:12px;">Rename or merge categories across your entire catalog. This updates every product instantly.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end;">
+            <div class="field" style="margin:0;"><label style="font-size:11px;">Current category</label><select id="g_cat_old">${context.activeCategories.map(c => `<option value="${esc(c)}">${esc(humanizeAdminValue(c))} (${counts[c] || 0} items)</option>`).join("")}</select></div>
+            <div class="field" style="margin:0;"><label style="font-size:11px;">New name / Merge into</label><input id="g_cat_new" placeholder="e.g. Apparel" /></div>
+            <button type="button" class="btn-admin warning" id="btnGlobalRename" style="margin:0;">Rename All</button>
+          </div>
         </div>
-        <div class="field" style="margin-top:12px;"><label>Filters</label>
-          <div id="filtersWrap" style="margin-top:8px;">${renderFilterRows(editableFilters, context.activeCategories)}</div>
-          <button type="button" class="btn-admin" id="btnAddFilterRow" style="margin-top:8px;">+ Add filter</button>
-        </div>
-        <div style="margin-top:14px;"><button type="button" class="btn-admin primary" id="saveShop">Save</button></div>`;
+
+        <div style="margin-top:24px; padding-top:16px; border-top:1px solid #edf2f7;"><button type="button" class="btn-admin primary" id="saveShop">Save all settings</button></div>`;
 
       if (targetElement) {
         targetElement.innerHTML = html;
@@ -2725,23 +2843,87 @@
       }
       renderShopFilterPreview(context.activeCategories);
 
+      // Initialize Sortable
+      if (typeof Sortable !== 'undefined') {
+        new Sortable(document.getElementById('filtersWrap'), {
+          animation: 150,
+          handle: '.drag-handle',
+          onEnd: () => renderShopFilterPreview(context.activeCategories)
+        });
+      }
+
+      document.getElementById("btnSyncFilters").addEventListener("click", () => {
+        const currentFilters = buildShopFiltersFromEditor(context.activeCategories);
+        const seenValues = new Set(currentFilters.map(f => f.value.toLowerCase()));
+        const missing = context.activeCategories.filter(cat => !seenValues.has(cat.toLowerCase()));
+        
+        if (!missing.length) return alert("All product categories are already in your filter list!");
+        
+        const wrap = document.getElementById("filtersWrap");
+        missing.forEach(cat => {
+          const div = document.createElement("div");
+          const nextIdx = wrap.querySelectorAll(".admin-filter-row").length;
+          div.innerHTML = renderFilterRows([{ label: humanizeAdminValue(cat), value: cat, showInShop: true }], context.activeCategories, counts).replace(/data-filter-row="0"/g, `data-filter-row="${nextIdx}"`);
+          wrap.appendChild(div.firstElementChild);
+        });
+        renderShopFilterPreview(context.activeCategories);
+        alert(`Added ${missing.length} missing categories.`);
+      });
+
+      document.getElementById("btnGlobalRename").addEventListener("click", async () => {
+        const oldCat = document.getElementById("g_cat_old").value;
+        const newCat = document.getElementById("g_cat_new").value.trim();
+        if (!newCat) return alert("Please enter a new name or category to merge into.");
+        if (oldCat === newCat) return alert("New name must be different from the old name.");
+
+        if (!confirm(`Are you sure you want to rename "${oldCat}" to "${newCat}" across ALL products? This cannot be undone.`)) return;
+
+        const affected = context.products.filter(p => {
+          const cats = formatAdminProductCategories(p);
+          return cats.some(c => c === oldCat);
+        });
+
+        if (!affected.length) return alert("No products found in this category.");
+
+        const btn = document.getElementById("btnGlobalRename");
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = `Updating ${affected.length} items...`;
+
+        try {
+          let count = 0;
+          for (const p of affected) {
+            const nextCats = formatAdminProductCategories(p)
+              .map(c => c === oldCat ? newCat : c);
+            
+            // Dedupe if merging
+            const deduped = [...new Set(nextCats)];
+            
+            await api(`/api/products/admin/${p.id}`, {
+              method: "PATCH",
+              body: JSON.stringify({ ...p, cat: deduped[0], categories: deduped })
+            });
+            count++;
+            btn.textContent = `Progress: ${count}/${affected.length}`;
+          }
+          alert(`Successfully updated ${count} products.`);
+          await refreshDashboard();
+          openShopCms(targetElement); // Refresh view
+        } catch (e) {
+          alert(`Error during bulk update: ${e.message}`);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+
       document.getElementById("btnAddFilterRow").addEventListener("click", () => {
         const wrap = document.getElementById("filtersWrap");
-        const rows = wrap.querySelectorAll(".admin-filter-row");
-        const next = rows.length;
+        const nextIdx = wrap.querySelectorAll(".admin-filter-row").length;
         const firstCat = context.activeCategories[0] || "";
         const div = document.createElement("div");
-        div.className = "admin-filter-row";
-        div.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;";
-        div.innerHTML = `
-          <input data-filter-row="${next}" data-k="label" placeholder="Label">
-          <select data-filter-row="${next}" data-k="value">${filterValueOptions(firstCat, context.activeCategories)}</select>
-          <select data-filter-row="${next}" data-k="showInShop">
-            <option value="1" selected>Visible on shop</option>
-            <option value="0">Hidden on shop</option>
-          </select>
-          <button type="button" class="btn-admin danger" data-action="remove-filter-row">X</button>`;
-        wrap.appendChild(div);
+        div.innerHTML = renderFilterRows([{ label: "", value: firstCat, showInShop: true }], context.activeCategories, counts).replace(/data-filter-row="0"/g, `data-filter-row="${nextIdx}"`);
+        wrap.appendChild(div.firstElementChild);
         renderShopFilterPreview(context.activeCategories);
       });
       document.getElementById("filtersWrap").addEventListener("input", () => renderShopFilterPreview(context.activeCategories));
