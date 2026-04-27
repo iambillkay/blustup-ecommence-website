@@ -247,7 +247,7 @@ function renderProducts(filterValue) {
           </button>
         </div>
 
-        <div class="product-img" style="background:${product.color || "#f8fafc"}">
+        <div class="product-img" style="--product-theme-color: ${product.color || "#ffffff"}">
           ${product.badge ? `<div class="product-badge-tag ${product.badgeType || ""}">${escapeShopHtml(product.badge)}</div>` : ""}
           ${
             product.imageUrl

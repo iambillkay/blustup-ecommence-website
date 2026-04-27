@@ -6,7 +6,7 @@
   --admin-border: rgba(121, 139, 180, 0.2);
   --admin-text: #172033;
   --admin-muted: #7f8aa3;
-  --admin-link: #2f6bff;
+  --admin-link: #C2A56D;
   --admin-accent: #000000;
   --admin-accent-soft: #e9f0ff;
   --admin-shadow: 0 12px 32px rgba(38, 57, 102, 0.08);
@@ -558,7 +558,7 @@ body.admin {
   border-radius: 22px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #2f6bff 0%, #7f89ff 100%);
+  background: linear-gradient(135deg, #C2A56D 0%, #7f89ff 100%);
   color: #fff;
   font-size: 1.5rem;
   font-weight: 800;

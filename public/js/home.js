@@ -98,12 +98,12 @@ function homeProductCard(p) {
       onkeydown="handleProductCardKeydown(event, '${String(p.id).replace(/'/g, "\\'")}')"
       aria-label="View details for ${escapeHomeHtml(p.name)}"
     >
-      <div class="product-img" style="background:${p.color || "#f5f7ff"}">
+      <div class="product-img" style="--product-theme-color: ${p.color || "#ffffff"}">
         ${p.badge ? `<div class="product-badge-tag ${escapeHomeHtml(p.badgeType || "")}">${escapeHomeHtml(p.badge)}</div>` : ""}
         ${
           p.imageUrl
-            ? `<img src="${escapeHomeHtml(p.imageUrl)}" alt="${escapeHomeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
-            : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5f6b95;font-weight:600;">No image</div>`
+            ? `<img src="${escapeHomeHtml(p.imageUrl)}" alt="${escapeHomeHtml(p.name)}">`
+            : `<div class="no-image-placeholder">No image</div>`
         }
       </div>
       <div class="product-info">

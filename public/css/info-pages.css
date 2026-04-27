@@ -64,7 +64,7 @@
 .trust-stat-item span {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #3d5eff;
+  color: #C2A56D;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -231,7 +231,7 @@
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #3d5eff;
+  color: #C2A56D;
   letter-spacing: 0.1em;
 }
 
@@ -336,7 +336,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3d5eff, #5a7bff);
+  background: linear-gradient(135deg, #C2A56D, #5a7bff);
 }
 
 /* ── BOARD OF DIRECTORS ── */
@@ -427,7 +427,7 @@
 .board-role {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #3d5eff;
+  color: #C2A56D;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -590,7 +590,7 @@
 .loyalty-progress-bar span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #3d5eff, #8b5cf6);
+  background: linear-gradient(90deg, #C2A56D, #8b5cf6);
   border-radius: inherit;
   transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -628,7 +628,7 @@
   width: 44px;
   height: 44px;
   background: #f1f5ff;
-  color: #3d5eff;
+  color: #C2A56D;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -675,7 +675,7 @@
 .perk-bullet {
   width: 8px;
   height: 8px;
-  background: #3d5eff;
+  background: #C2A56D;
   border-radius: 50%;
 }
 
@@ -712,7 +712,7 @@
 
 .loyalty-step-card.highlighted {
   background: linear-gradient(135deg, #f8faff 0%, #fff 100%);
-  border-color: #3d5eff;
+  border-color: #C2A56D;
 }
 
 .loyalty-step-card .step-num {
@@ -784,7 +784,7 @@
   width: 44px;
   height: 44px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #0a1040, #3d5eff);
+  background: linear-gradient(135deg, #0a1040, #C2A56D);
   color: #fff;
   display: flex;
   align-items: center;
