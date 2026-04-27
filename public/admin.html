@@ -1140,7 +1140,7 @@
           : "<span>Dispatch ready</span>";
       }
       if (reportsStat) reportsStat.innerHTML = analyticsSnapshot?.sales?.weekOrders ? `<span>${analyticsSnapshot.sales.weekOrders} orders this week</span>${sparklineGreen}` : "<span>Reports ready</span>";
-      aiStat.textContent = "Assistant online";
+      if (aiStat) aiStat.textContent = "Assistant online";
 
       if (dashboardState.user) {
         const name = getDisplayName(dashboardState.user);
