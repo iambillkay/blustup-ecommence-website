@@ -17,7 +17,7 @@
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": ["server/storage/memory-state.json", "public/index.html"],
+      "includeFiles": "server/storage/memory-state.json",
       "maxDuration": 15
     }
   }
