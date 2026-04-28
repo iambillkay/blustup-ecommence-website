@@ -361,10 +361,13 @@
 
       <div class="page-container" id="productsPage" hidden>
         <section class="workspace-hero">
-          <div class="hero-copy">
-            <p class="eyebrow">Product catalog</p>
-            <h1>Products</h1>
-            <p>Manage your product catalog, inventory levels, and pricing.</p>
+          <div class="hero-copy" style="display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap;">
+            <div>
+              <p class="eyebrow">Product catalog</p>
+              <h1>Products</h1>
+              <p>Manage your product catalog, inventory levels, and pricing.</p>
+            </div>
+            <button class="btn-admin primary" data-action="add-product" style="padding:12px 24px; border-radius:14px; font-weight:700;">+ Add Product</button>
           </div>
         </section>
         <div id="productsContent"></div>
@@ -3815,7 +3818,11 @@
       };
 
       if (hashMap[action]) {
-        window.location.hash = hashMap[action];
+        if (window.location.hash === hashMap[action]) {
+          handleHashChange();
+        } else {
+          window.location.hash = hashMap[action];
+        }
         return;
       }
 
