@@ -8,6 +8,103 @@
   <link rel="apple-touch-icon" sizes="180x180" href="logos/Layer%202.png" />
   <link rel="stylesheet" href="css/admin.css" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <style>
+    /* Toast System */
+    #toastContainer {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .toast {
+      min-width: 300px;
+      max-width: 450px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      pointer-events: auto;
+      animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      border-left: 4px solid #C2A56D;
+      position: relative;
+      overflow: hidden;
+    }
+    .toast.hide {
+      animation: toastOut 0.3s ease-in forwards;
+    }
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .toast-content {
+      flex: 1;
+    }
+    .toast-title {
+      font-weight: 800;
+      font-size: 14px;
+      color: #1e293b;
+      margin-bottom: 2px;
+    }
+    .toast-message {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .toast-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: rgba(194, 165, 109, 0.2);
+      width: 100%;
+    }
+    .toast-progress-bar {
+      height: 100%;
+      background: #C2A56D;
+      width: 100%;
+      animation: toastProgress var(--duration) linear forwards;
+    }
+    
+    .toast.success { border-left-color: #10b981; }
+    .toast.success .toast-progress-bar { background: #10b981; }
+    .toast.error { border-left-color: #ef4444; }
+    .toast.error .toast-progress-bar { background: #ef4444; }
+    .toast.info { border-left-color: #3b82f6; }
+    .toast.info .toast-progress-bar { background: #3b82f6; }
+    .toast.process { border-left-color: #C2A56D; }
+    
+    @keyframes toastIn {
+      from { transform: translateX(100%) scale(0.9); opacity: 0; }
+      to { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    @keyframes toastOut {
+      to { transform: translateX(100%); opacity: 0; }
+    }
+    @keyframes toastProgress {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+    
+    .ai-pulse {
+      animation: aiPulse 2s infinite ease-in-out;
+    }
+    @keyframes aiPulse {
+      0% { transform: scale(0.9); opacity: 0.4; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(0.9); opacity: 0.4; }
+    }
+  </style>
 </head>
 <body class="admin">
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -360,6 +457,20 @@
         </section>
         <div id="aiContent"></div>
       </div>
+
+      <div class="page-container" id="productEditorPage" hidden>
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px;">
+               <button class="btn-admin ghost" data-action="list-products" style="padding:8px 12px; border-radius:12px;">&larr; Back to Products</button>
+               <p class="eyebrow" id="productEditorEyebrow" style="margin:0;">Catalog Control</p>
+            </div>
+            <h1 id="productEditorTitle">Product Editor</h1>
+            <p id="productEditorSubtitle">Update your storefront catalog details and media assets.</p>
+          </div>
+        </section>
+        <div id="productEditorContent"></div>
+      </div>
     </main>
 
     <aside class="admin-rail">
@@ -422,6 +533,9 @@
     </aside>
   </div>
 
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Admin modal">
       <div class="modal-top">
@@ -431,6 +545,8 @@
       <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
+
+  <div id="toastContainer"></div>
 
   <script src="js/api.js"></script>
   <script>
@@ -583,6 +699,61 @@
       const rgb = hexToRgbParts(hex);
       const brightness = ((rgb.r * 299) + (rgb.g * 587) + (rgb.b * 114)) / 1000;
       return brightness >= 150 ? "#172033" : "#ffffff";
+    }
+
+    function showToast(title, message, type = 'success', duration = 4000) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.style.setProperty('--duration', `${duration}ms`);
+      
+      const icons = {
+        success: '<svg width="20" height="20" viewBox="0 0 20 20" fill="#10b981"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z"/></svg>',
+        error: '<svg width="20" height="20" viewBox="0 0 20 20" fill="#ef4444"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 15H9v-2h2v2zm0-4H9V5h2v6z"/></svg>',
+        info: '<svg width="20" height="20" viewBox="0 0 20 20" fill="#3b82f6"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 15H9v-6h2v6zm0-8H9V5h2v2z"/></svg>',
+        process: '<div class="ai-pulse" style="width:12px; height:12px; background:#C2A56D; border-radius:50%;"></div>'
+      };
+
+      toast.innerHTML = `
+        <div class="toast-icon">${icons[type] || icons.info}</div>
+        <div class="toast-content">
+          <div class="toast-title">${esc(title)}</div>
+          <div class="toast-message">${esc(message)}</div>
+        </div>
+        ${type !== 'process' ? `<div class="toast-progress"><div class="toast-progress-bar"></div></div>` : ''}
+      `;
+
+      container.appendChild(toast);
+
+      if (type !== 'process') {
+        setTimeout(() => {
+          toast.classList.add('hide');
+          setTimeout(() => toast.remove(), 300);
+        }, duration);
+      }
+
+      return {
+        close: () => {
+          toast.classList.add('hide');
+          setTimeout(() => toast.remove(), 300);
+        },
+        update: (newTitle, newMessage, newType = 'success') => {
+          toast.className = `toast ${newType}`;
+          toast.querySelector('.toast-title').textContent = newTitle;
+          toast.querySelector('.toast-message').textContent = newMessage;
+          toast.querySelector('.toast-icon').innerHTML = icons[newType] || icons.info;
+          if (newType !== 'process' && !toast.querySelector('.toast-progress')) {
+            const progress = document.createElement('div');
+            progress.className = 'toast-progress';
+            progress.innerHTML = '<div class="toast-progress-bar"></div>';
+            toast.appendChild(progress);
+            setTimeout(() => {
+              toast.classList.add('hide');
+              setTimeout(() => toast.remove(), 300);
+            }, duration);
+          }
+        }
+      };
     }
     function darkenHex(hex, factor = 0.18) {
       const rgb = hexToRgbParts(hex);
@@ -1939,7 +2110,16 @@
         .replace(/[-_]+/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
     }
-    async function loadAdminCatalogContext() {
+    let adminCatalogContextCache = null;
+    let adminCatalogContextCacheTime = 0;
+    const CONTEXT_CACHE_TTL = 60000; // 1 minute cache
+
+    async function loadAdminCatalogContext(force = false) {
+      const now = Date.now();
+      if (!force && adminCatalogContextCache && (now - adminCatalogContextCacheTime < CONTEXT_CACHE_TTL)) {
+        return adminCatalogContextCache;
+      }
+
       const [{ products }, { settings: shop }] = await Promise.all([api("/api/products/admin"), api("/api/cms/shop")]);
       const productList = Array.isArray(products) ? products : [];
       const shopSettings = shop && typeof shop === "object" ? shop : { filters: [] };
@@ -1957,7 +2137,8 @@
           label: matchingFilter?.label || (value === "all" ? "All Products" : humanizeAdminValue(value)),
         };
       });
-      return {
+      
+      adminCatalogContextCache = {
         products: productList,
         productMap: new Map(productList.map((product) => [String(product?.id || ""), product])),
         shop: shopSettings,
@@ -1967,6 +2148,8 @@
         seeMoreFilters,
         seeMoreFilterMap: new Map(seeMoreFilters.map((filter) => [normalizeAdminCategoryToken(filter.value), filter])),
       };
+      adminCatalogContextCacheTime = now;
+      return adminCatalogContextCache;
     }
     function productCategoryOptions(values, currentValue) {
       return uniqueAdminValues([...(values || []), ...parseAdminCategoryInput(currentValue || "")]).map((value) => `<option value="${esc(value)}"></option>`).join("");
@@ -1979,14 +2162,15 @@
       }
     }
     function getProductPreviewImageSrc() {
-      const file = document.getElementById("f_image_file")?.files?.[0];
-      if (file) {
+      const fileInput = document.getElementById("f_image_file");
+      if (fileInput && fileInput.files && fileInput.files[0]) {
         releaseProductPreviewObjectUrl();
-        productPreviewObjectUrl = URL.createObjectURL(file);
+        productPreviewObjectUrl = URL.createObjectURL(fileInput.files[0]);
         return productPreviewObjectUrl;
       }
       releaseProductPreviewObjectUrl();
-      return document.getElementById("f_image")?.value.trim() || "";
+      const firstUrlInput = document.querySelector(".f-image-url");
+      return firstUrlInput ? firstUrlInput.value.trim() : "";
     }
     function createProductPreviewMarkup() {
       const name = document.getElementById("f_name")?.value.trim() || "Product name";
@@ -2024,6 +2208,7 @@
     function bindProductFormPreview() {
       const previewFields = ["f_name", "f_desc", "f_categories", "f_price", "f_stock", "f_image", "f_badge", "f_old_price"];
       previewFields.forEach((id) => document.getElementById(id)?.addEventListener("input", renderProductPreview));
+      document.getElementById("f_active")?.addEventListener("change", renderProductPreview);
       document.getElementById("f_image_file")?.addEventListener("change", () => {
         const fileName = document.getElementById("f_image_file_name");
         const files = document.getElementById("f_image_file")?.files;
@@ -2124,9 +2309,12 @@
       const list = Array.isArray(images) ? images : [images].filter(Boolean);
       if (!list.length) list.push(""); // Always show at least one
       return list.map((url, i) => `
-        <div class="f-image-row" style="display:flex; gap:8px; margin-bottom:8px;">
-          <input class="f-image-url" data-index="${i}" value="${esc(url)}" placeholder="https://..." style="flex:1;" />
-          <button type="button" class="btn-admin danger" onclick="this.closest('.f-image-row').remove()" style="padding:8px 12px;">X</button>
+        <div class="f-image-row" style="display:flex; align-items:center; gap:10px; margin-bottom:10px; background:#f8fafc; padding:8px; border-radius:12px; border:1px solid #eef2ff;">
+          <div style="width:40px; height:40px; border-radius:8px; background:#e2e8f0; overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            ${url ? `<img src="${esc(url)}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=\'font-size:10px;color:#94a3b8\'>!</span>'">` : `<span style="font-size:18px;color:#94a3b8">🖼️</span>`}
+          </div>
+          <input class="f-image-url" data-index="${i}" value="${esc(url)}" placeholder="https://..." style="flex:1; border:none; background:transparent; padding:4px; font-size:13px;" oninput="renderProductPreview(); const img = this.closest('.f-image-row').querySelector('img'); if(img) img.src = this.value; else if(this.value) this.closest('.f-image-row').firstElementChild.innerHTML = '<img src=\\''+esc(this.value)+'\\' style=\\'width:100%; height:100%; object-fit:cover\\'>'" />
+          <button type="button" class="btn-admin ghost danger" onclick="this.closest('.f-image-row').remove(); renderProductPreview();" style="padding:4px 8px; font-size:12px; border:none;">&times;</button>
         </div>
       `).join("");
     }
@@ -2137,73 +2325,88 @@
       const availableFilters = (context.shop?.filters || []).map(f => f.value).filter(v => v !== 'all');
       
       return `
-        <div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.95fr);gap:18px;align-items:start;">
-          <div>
-            <div class="field"><label>Name</label><input id="f_name" value="${esc(item.name || "")}" /></div>
-            <div class="field" style="margin-top:12px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
-                <label for="f_desc" style="margin:0;">Description</label>
-                <button class="btn-admin ghost" id="btnSuggestProductDescription" type="button">Suggest with AI</button>
+        <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,0.8fr);gap:24px;align-items:start;">
+          <div style="display:grid;gap:24px;">
+            <!-- Section: General Information -->
+            <div style="background:#fff;border:1px solid #eef2ff;border-radius:20px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.02);">
+              <h3 style="margin:0 0 16px 0;font-size:16px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                <span style="width:8px;height:16px;background:#C2A56D;border-radius:4px;"></span>
+                General Information
+              </h3>
+              <div class="field"><label>Product Name</label><input id="f_name" value="${esc(item.name || "")}" placeholder="e.g. Premium Leather Bag" /></div>
+              <div class="field" style="margin-top:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+                  <label for="f_desc" style="margin:0;">Storefront Description</label>
+                  <button class="btn-admin ghost" id="btnSuggestProductDescription" type="button" style="font-size:12px;padding:4px 12px;">✨ AI Draft</button>
+                </div>
+                <textarea id="f_desc" rows="4" placeholder="Tell shoppers about your product...">${esc(item.description || item.desc || "")}</textarea>
               </div>
-              <textarea id="f_desc">${esc(item.description || item.desc || "")}</textarea>
             </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field">
-                <label>Categories (Select from existing filters)</label>
-                <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+
+            <!-- Section: Classification & Pricing -->
+            <div style="background:#fff;border:1px solid #eef2ff;border-radius:20px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.02);">
+              <h3 style="margin:0 0 16px 0;font-size:16px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                <span style="width:8px;height:16px;background:#C2A56D;border-radius:4px;"></span>
+                Pricing & Categories
+              </h3>
+              <div class="grid2">
+                <div class="field"><label>Current Price ($)</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
+                <div class="field"><label>Compare-at Price ($)</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" placeholder="Optional sale price" /></div>
+              </div>
+              <div class="field" style="margin-top:16px;">
+                <label>Inventory & Availability</label>
+                <div class="grid2">
+                  <div class="field" style="margin:0;"><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" placeholder="Qty in stock" /></div>
+                  <select id="f_active" style="height:44px;"><option value="1" ${item.isActive !== false ? "selected" : ""}>Online & Visible</option><option value="0" ${item.isActive === false ? "selected" : ""}>Draft / Hidden</option></select>
+                </div>
+              </div>
+              <div class="field" style="margin-top:16px;">
+                <label>Product Tags (Select from existing filters)</label>
+                <div style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
                   ${availableFilters.map(f => `
-                    <label style="display:inline-flex; align-items:center; gap:4px; background:#f1f5f9; padding:4px 10px; border-radius:999px; cursor:pointer; font-size:12px;">
-                      <input type="checkbox" name="f_cat_check" value="${esc(f)}" ${currentCats.includes(f) ? 'checked' : ''}>
-                      ${esc(humanizeAdminValue(f))}
+                    <label style="display:inline-flex; align-items:center; gap:6px; background:#f8fafc; border:1px solid #e2e8f0; padding:6px 12px; border-radius:999px; cursor:pointer; font-size:12px; transition:all 0.2s;">
+                      <input type="checkbox" name="f_cat_check" value="${esc(f)}" ${currentCats.includes(f) ? 'checked' : ''} style="margin:0;">
+                      <span style="color:#475569;font-weight:500;">${esc(humanizeAdminValue(f))}</span>
                     </label>
                   `).join("")}
                 </div>
-                <input id="f_categories" value="${esc(categoryValue)}" placeholder="Or type custom: electronics, travel" />
-                <div class="muted" style="font-size:11px; margin-top:4px;">Checking a box adds it to the text list. Separate custom ones with commas.</div>
+                <input id="f_categories" value="${esc(categoryValue)}" placeholder="Type tags: apparel, sale, new" />
               </div>
-              <div class="field"><label>Price</label><input id="f_price" type="number" step="0.01" value="${esc(item.price ?? 0)}" /></div>
-            </div>
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field"><label>Stock Qty</label><input id="f_stock" type="number" value="${esc(item.stockQty ?? 0)}" /></div>
-              <div class="field"><label>Old Price</label><input id="f_old_price" type="number" step="0.01" value="${esc(item.oldPrice ?? "")}" /></div>
             </div>
             
-            <div class="panel-header" style="margin-top:18px;">Product Media</div>
-            <div class="field">
-              <label>Gallery Images (URLs)</label>
-              <div id="f_images_wrap">${renderMultipleImageInputs(item.images || item.imageUrl)}</div>
-              <button type="button" class="btn-admin" id="btnAddImageUrl">+ Add gallery image</button>
-            </div>
-            <div class="field" style="margin-top:12px; padding:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px;">
-              <label>Bulk Image Upload (Gallery)</label>
-              <input id="f_image_file" type="file" accept="image/*" multiple />
-              <div class="muted" id="f_image_file_name" style="font-size:11px; margin-top:4px;">No files selected</div>
-              <div class="muted" style="font-size:11px;">Select multiple files at once to build your product gallery.</div>
+            <!-- Section: Product Media -->
+            <div style="background:#fff;border:1px solid #eef2ff;border-radius:20px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.02);">
+              <h3 style="margin:0 0 16px 0;font-size:16px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                <span style="width:8px;height:16px;background:#C2A56D;border-radius:4px;"></span>
+                Visual Assets
+              </h3>
+              <div class="field">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                  <label style="margin:0;">Image Gallery (URLs)</label>
+                  <button type="button" class="btn-admin ghost" id="btnAddImageUrl" style="font-size:12px;padding:4px 10px;">+ Add URL</button>
+                </div>
+                <div id="f_images_wrap">${renderMultipleImageInputs(item.images || item.imageUrl)}</div>
+              </div>
+              <div style="margin-top:20px; padding:20px; background:#fdfcf9; border:2px dashed #e2e8f0; border-radius:20px; text-align:center;">
+                <label style="display:block;margin-bottom:10px;font-weight:700;color:#C2A56D;">Bulk Image Upload</label>
+                <input id="f_image_file" type="file" accept="image/*" multiple style="width:100%;max-width:260px;margin:0 auto;" />
+                <div class="muted" id="f_image_file_name" style="font-size:11px; margin-top:8px; color:#94a3b8;">Supported: JPG, PNG, WEBP (Max 5MB/file)</div>
+              </div>
             </div>
 
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field">
-                <label>Badge</label>
-                <input id="f_badge" value="${esc(item.badge || "")}" list="badgeRecommendations" placeholder="e.g. Best Seller" />
-                <datalist id="badgeRecommendations">
-                  <option value="New Arrival">
-                  <option value="Best Seller">
-                  <option value="Limited Edition">
-                  <option value="Staff Pick">
-                  <option value="Trending">
-                  <option value="On Sale">
-                  <option value="Exclusive">
-                  <option value="Pre-order">
-                </datalist>
-              </div>
-              <div class="field"><label>Active</label>
-                <select id="f_active"><option value="1" ${item.isActive !== false ? "selected" : ""}>Yes</option><option value="0" ${item.isActive === false ? "selected" : ""}>No</option></select>
-              </div>
+            <div class="field" style="background:#fff;border:1px solid #eef2ff;border-radius:20px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.02);">
+              <label>Promotional Badge (Sticker)</label>
+              <input id="f_badge" value="${esc(item.badge || "")}" list="badgeRecommendations" placeholder="e.g. Best Seller, New Arrival" />
+              <datalist id="badgeRecommendations">
+                <option value="New Arrival"><option value="Best Seller"><option value="Limited Edition"><option value="Staff Pick"><option value="Trending"><option value="On Sale"><option value="Exclusive"><option value="Pre-order">
+              </datalist>
             </div>
           </div>
-          <aside style="display:grid;gap:10px;">
-            <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:0.12em;">Product preview</div>
+
+          <aside style="position:sticky;top:20px;display:grid;gap:16px;">
+            <div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;">Live Storefront Preview</div>
             <div id="productPreviewCard"></div>
+            <div id="saveBtnContainer" style="margin-top:16px;"></div>
           </aside>
         </div>`;
     }
@@ -2217,6 +2420,18 @@
       });
 
       const catInput = document.getElementById("f_categories");
+      const syncCheckboxesFromInput = () => {
+        const current = parseAdminCategoryInput(catInput.value).map(v => v.toLowerCase());
+        document.querySelectorAll("input[name='f_cat_check']").forEach(cb => {
+          cb.checked = current.includes(cb.value.toLowerCase());
+        });
+      };
+
+      catInput?.addEventListener("input", () => {
+        syncCheckboxesFromInput();
+        renderProductPreview();
+      });
+
       document.querySelectorAll("input[name='f_cat_check']").forEach(cb => {
         cb.addEventListener("change", () => {
           let current = parseAdminCategoryInput(catInput.value);
@@ -2224,9 +2439,10 @@
           if (cb.checked) {
              if (!current.includes(val)) current.push(val);
           } else {
-             current = current.filter(c => c !== val);
+             current = current.filter(c => c.toLowerCase() !== val.toLowerCase());
           }
           catInput.value = current.join(", ");
+          renderProductPreview();
         });
       });
     }
@@ -2250,8 +2466,8 @@
         isActive: document.getElementById("f_active").value === "1",
       };
     }
-    async function openProductsTable(targetElement) {
-      const { products } = await loadAdminCatalogContext();
+    async function openProductsTable(targetElement, forceRefresh = false) {
+      const { products } = await loadAdminCatalogContext(forceRefresh);
       const html = `
         <div class="muted" style="margin-bottom:12px;">Categories now sync with the shop filter system automatically, and deals remove deleted or hidden featured products.</div>
         <table class="admin-table">
@@ -2276,17 +2492,40 @@
     async function openAddProduct() {
       const context = await loadAdminCatalogContext();
       const draft = { categories: [context.categories?.[0] || "general"], isActive: true };
-      openModal("Add Product", `${productForm(draft, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
+      
+      document.getElementById("productEditorTitle").textContent = "Add New Product";
+      document.getElementById("productEditorSubtitle").textContent = "Fill in the details to create a new premium catalog entry.";
+      const content = document.getElementById("productEditorContent");
+      content.innerHTML = productForm(draft, context);
+      
+      showPage("productEditorPage");
+      
+      const btnContainer = document.getElementById("saveBtnContainer");
+      if (btnContainer) {
+        btnContainer.innerHTML = `
+          <button class="btn-admin primary" id="btnSaveProduct" type="button" style="width:100%; padding:14px; font-weight:800; border-radius:14px; background:#C2A56D; border:none; color:#fff; box-shadow:0 4px 12px rgba(194, 165, 109, 0.3); cursor:pointer; font-size:15px; transition:all 0.2s;">
+            Publish Product
+          </button>`;
+      }
+
       bindProductFormPreview();
       bindProductFormEvents();
-      document.getElementById("btnSaveProduct").addEventListener("click", async () => {
+      document.getElementById("btnSaveProduct").addEventListener("click", async (e) => {
+        const btn = e.currentTarget;
+        const originalText = btn.textContent;
+        const toast = showToast("Publishing...", "Uploading assets and synchronizing catalog...", "process");
         try {
+          btn.disabled = true;
+          btn.textContent = "Publishing...";
           await api("/api/products/admin", { method: "POST", ...buildProductRequestOptions() });
           releaseProductPreviewObjectUrl();
           await refreshDashboard();
-          await openProductsTable();
+          toast.update("Success", "New product has been published to the storefront.", "success");
+          window.location.hash = "#products";
         } catch (e) {
-          alert(e.message || "Failed to save product");
+          toast.update("Error", e.message || "Failed to save product", "error");
+          btn.disabled = false;
+          btn.textContent = originalText;
         }
       });
     }
@@ -2294,28 +2533,53 @@
       const context = await loadAdminCatalogContext();
       const item = context.products.find((product) => String(product.id) === String(id));
       if (!item) return alert("Product not found");
-      openModal("Edit Product", `${productForm(item, context)}<div style="margin-top:14px;"><button class="btn-admin primary" id="btnSaveProduct" type="button">Save</button></div>`);
+      
+      document.getElementById("productEditorTitle").textContent = `Edit ${item.name || "Product"}`;
+      document.getElementById("productEditorSubtitle").textContent = "Modify your product's visual assets, pricing, and classification.";
+      const content = document.getElementById("productEditorContent");
+      content.innerHTML = productForm(item, context);
+      
+      showPage("productEditorPage");
+
+      const btnContainer = document.getElementById("saveBtnContainer");
+      if (btnContainer) {
+        btnContainer.innerHTML = `
+          <button class="btn-admin primary" id="btnSaveProduct" type="button" style="width:100%; padding:14px; font-weight:800; border-radius:14px; background:#C2A56D; border:none; color:#fff; box-shadow:0 4px 12px rgba(194, 165, 109, 0.3); cursor:pointer; font-size:15px; transition:all 0.2s;">
+            Save Changes
+          </button>`;
+      }
+
       bindProductFormPreview();
       bindProductFormEvents();
-      document.getElementById("btnSaveProduct").addEventListener("click", async () => {
+      document.getElementById("btnSaveProduct").addEventListener("click", async (e) => {
+        const btn = e.currentTarget;
+        const originalText = btn.textContent;
+        const toast = showToast("Saving...", "Updating product details and syncing media...", "process");
         try {
+          btn.disabled = true;
+          btn.textContent = "Saving...";
           await api(`/api/products/admin/${id}`, { method: "PATCH", ...buildProductRequestOptions() });
           releaseProductPreviewObjectUrl();
           await refreshDashboard();
-          await openProductsTable();
+          toast.update("Saved", "Product changes are now live on the storefront.", "success");
+          window.location.hash = "#products";
         } catch (e) {
-          alert(e.message || "Failed to update product");
+          toast.update("Failed", e.message || "Failed to update product", "error");
+          btn.disabled = false;
+          btn.textContent = originalText;
         }
       });
     }
     async function deleteProduct(id) {
       if (!confirm("Delete this product?")) return;
+      const toast = showToast("Deleting...", "Removing product from catalog...", "process");
       try {
         await api(`/api/products/admin/${id}`, { method: "DELETE" });
         await refreshDashboard();
         await openProductsTable();
+        toast.update("Deleted", "Product has been removed.", "success");
       } catch (e) {
-        alert(e.message || "Failed to delete product");
+        toast.update("Error", e.message || "Failed to delete product", "error");
       }
     }
 
@@ -2890,6 +3154,7 @@
         btn.disabled = true;
         btn.textContent = `Updating ${affected.length} items...`;
 
+        const toast = showToast("Updating Catalog...", `Updating ${affected.length} products...`, "process");
         try {
           let count = 0;
           for (const p of affected) {
@@ -2905,12 +3170,13 @@
             });
             count++;
             btn.textContent = `Progress: ${count}/${affected.length}`;
+            toast.update("Updating...", `Progress: ${count}/${affected.length} items updated.`, "process");
           }
-          alert(`Successfully updated ${count} products.`);
+          toast.update("Success", `Bulk renamed ${count} products to "${newCat}".`, "success");
           await refreshDashboard();
           openShopCms(targetElement); // Refresh view
         } catch (e) {
-          alert(`Error during bulk update: ${e.message}`);
+          toast.update("Error", `Bulk update failed: ${e.message}`, "error");
         } finally {
           btn.disabled = false;
           btn.textContent = originalText;
@@ -3426,12 +3692,19 @@
       }
     }
 
-    async function loadPageContent(pageId) {
+    async function loadPageContent(pageId, force = false) {
       const contentElement = document.getElementById(pageId.replace('Page', 'Content'));
       if (!contentElement) return;
       
-      // Clear existing content
-      contentElement.innerHTML = '<div class="muted">Loading...</div>';
+      // Only show loading if we are forcing a refresh or if it's the first time
+      const hasContent = contentElement.children.length > 0 && contentElement.querySelector('.muted')?.textContent !== 'Loading...';
+      if (force || !hasContent) {
+        contentElement.innerHTML = `
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:16px;">
+            <div class="ai-pulse" style="width:40px; height:40px; background:#C2A56D; border-radius:50%; opacity:0.6;"></div>
+            <div class="muted" style="font-weight:600; letter-spacing:0.05em;">SECURELY LOADING...</div>
+          </div>`;
+      }
       
       try {
         // Load content based on page
@@ -3446,7 +3719,7 @@
             await openUsersTable({}, contentElement);
             break;
           case 'productsPage':
-            await openProductsTable(contentElement);
+            await openProductsTable(contentElement, force);
             break;
           case 'reportsPage':
             await openReportsDashboard(contentElement);
@@ -3474,7 +3747,7 @@
             break;
         }
       } catch (error) {
-        contentElement.innerHTML = `<div class="error">Failed to load content: ${error.message}</div>`;
+        contentElement.innerHTML = `<div class="error" style="padding:20px; background:#fff1f0; border:1px solid #ffa39e; border-radius:12px; color:#cf1322;">Failed to load content: ${error.message}</div>`;
       }
     }
 
