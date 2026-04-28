@@ -494,8 +494,14 @@ const DEFAULT_FAQ = {
     },
   ],
 };
+const cmsCache = new Map();
+const CMS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 async function getCmsByKey(key, fallback) {
+  const cached = cmsCache.get(key);
+  if (cached && (Date.now() - cached.timestamp < CMS_CACHE_TTL)) {
+    return cached.value;
+  }
   const doc = await CmsConfig.findOne({ key }).select("value");
   const rawValue = doc?.value;
   const value =
@@ -514,7 +520,9 @@ async function getCmsByKey(key, fallback) {
     return value && typeof value === "object" && !Array.isArray(value) ? value : fallback;
   }
 
-  return value == null ? fallback : value;
+  const result = value == null ? fallback : value;
+  cmsCache.set(key, { value: result, timestamp: Date.now() });
+  return result;
 }
 
 async function upsertCmsByKey(key, value) {
@@ -523,6 +531,7 @@ async function upsertCmsByKey(key, value) {
     { $set: { value } },
     { upsert: true, new: true }
   );
+  cmsCache.delete(key);
   return value;
 }
 

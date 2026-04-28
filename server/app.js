@@ -3,6 +3,8 @@ const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const compression = require("compression");
+const rateLimit = require("express-rate-limit");
 
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
@@ -87,6 +89,7 @@ function isAllowedCorsOrigin(origin, req) {
 }
 
 app.use(helmet({ contentSecurityPolicy: false }));
+app.use(compression());
 app.use(cors((req, callback) => {
   const allowed = isAllowedCorsOrigin(req.headers.origin, req);
   if (allowed) {
@@ -112,13 +115,30 @@ app.use(express.static(publicDir));
 // Uploads (image URL support)
 app.use("/uploads", express.static(path.join(publicDir, "uploads")));
 
+// Rate limiting for sensitive routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 requests per windowMs
+  message: { error: "Too many attempts, please try again after 15 minutes" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const aiLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 50, // Limit each IP to 50 requests per hour
+  message: { error: "AI limit reached for this hour, please try again later" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // API
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cms", cmsRoutes);
-app.use("/api/ai", aiRoutes);
+app.use("/api/ai", aiLimiter, aiRoutes);
 app.use("/api/tracking", trackingRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);

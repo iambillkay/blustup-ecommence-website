@@ -66,4 +66,9 @@ productSchema.pre("validate", function syncPrimaryCategory(next) {
   if (typeof next === "function") next();
 });
 
+productSchema.index({ category: 1 });
+productSchema.index({ categories: 1 });
+productSchema.index({ price: 1 });
+productSchema.index({ name: "text", description: "text" });
+
 module.exports = mongoose.model("Product", productSchema);

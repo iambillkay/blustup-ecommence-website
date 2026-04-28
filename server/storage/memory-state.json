@@ -7416,6 +7416,54 @@
       "ipAddress": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
       "createdAt": "2026-04-26T15:50:09.565Z"
+    },
+    {
+      "_id": "08684d45-8073-4c59-994e-7c6fbdf29f4f",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-28T13:12:11.943Z"
+    },
+    {
+      "_id": "44a16d5e-8b59-4acc-9321-10a51c5b011d",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "shop"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-28T13:15:54.357Z"
+    },
+    {
+      "_id": "0d5596d4-8a7f-43c8-a927-e1cc4b15f166",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "about"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-28T13:15:58.397Z"
+    },
+    {
+      "_id": "021fa8ec-2c8a-4ce3-9e78-8fd15583a732",
+      "userId": null,
+      "sessionId": "1774917573448-04vsa8any",
+      "eventType": "pageview",
+      "eventData": {
+        "page": "faq"
+      },
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+      "createdAt": "2026-04-28T13:16:05.177Z"
     }
   ],
   "audit": [
@@ -8260,6 +8308,16 @@
     "shop": {
       "title": "Welcome to the Shop",
       "subtitle": "Discover products tailored to your needs",
+      "announcement": {
+        "text": "",
+        "color": "#172033",
+        "isActive": false
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "ogImage": ""
+      },
       "filters": [
         {
           "label": "All Products",
