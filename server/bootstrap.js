@@ -15,10 +15,18 @@ async function prepareApp() {
 
   preparePromise = (async () => {
     if (storage.mode === "mongo") {
+      console.log("[bootstrap] Connecting to MongoDB...");
       await connectDB();
+      
+      console.log("[bootstrap] Running memory state backfill...");
       await backfillMongoStorefrontFromMemoryState();
+      
+      console.log("[bootstrap] Seeding admin if needed...");
       await seedAdminIfConfigured();
+      
+      console.log("[bootstrap] Seeding catalog if empty...");
       await seedCatalogIfEmpty();
+      console.log("[bootstrap] Mongo initialization complete.");
     } else if (typeof storage.ensureAdminSeed === "function") {
       await storage.ensureAdminSeed();
     }

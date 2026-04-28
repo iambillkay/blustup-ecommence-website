@@ -45,8 +45,8 @@ async function connectDB() {
   try {
     await mongoose.connect(uri, {
       autoIndex: true,
-      serverSelectionTimeoutMS: readPositiveInt(process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS, 10000),
-      connectTimeoutMS: readPositiveInt(process.env.MONGODB_CONNECT_TIMEOUT_MS, 10000),
+      serverSelectionTimeoutMS: readPositiveInt(process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS, 15000),
+      connectTimeoutMS: readPositiveInt(process.env.MONGODB_CONNECT_TIMEOUT_MS, 15000),
     });
     isConnected = true;
   } catch (error) {

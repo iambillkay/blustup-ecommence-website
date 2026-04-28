@@ -14,5 +14,11 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "server/storage/memory-state.json",
+      "maxDuration": 15
+    }
+  }
 }
